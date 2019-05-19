@@ -5,7 +5,7 @@ var target = Argument("target", "default");
 var configuration = Argument("config", "Release");
 
 var artifactOutput = "./artifacts";
-var testResults = "./results.trx";
+var testResults = "results.trx";
 string projectPath = "./src/LocalStack.Client/LocalStack.Client.csproj";
 
 Task("default")
@@ -54,7 +54,6 @@ Task("tests")
         settings.NoRestore = true;
         settings.NoBuild = true;
         settings.Configuration = configuration;
-        settings.ArgumentCustomization  = args => args.Append($" --logger \"trx;LogFileName={testResults}\"");
 
         IList<TestProjMetadata> testProjMetadatas = GetProjMetadata();
 
@@ -75,6 +74,8 @@ Task("tests")
                 }
                 else
                 {
+                    string testFilePrefix = targetFramework.Replace(".","-");
+                    settings.ArgumentCustomization  = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
                     DotNetCoreTest(testProjectPath, settings);
                 }
            }

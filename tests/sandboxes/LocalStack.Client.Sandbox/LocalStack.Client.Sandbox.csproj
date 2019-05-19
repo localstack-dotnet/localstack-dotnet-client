@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net461;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.1</Version>
 
     <!-- When compiling .NET SDK 2.0 projects targeting .NET 4.x on Mono using 'dotnet build' you -->
     <!-- have to teach MSBuild where the Mono copy of the reference asssemblies is -->
@@ -24,6 +24,7 @@
     <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
 
+
   <ItemGroup>
     <!-- When using 'dotnet build' to compile against Mono reference assemblies it seems necessary to add some explicit references to some facade DLLs  -->
     <Reference Include="System.Runtime" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
@@ -31,9 +32,12 @@
     <Reference Include="System.Threading.Tasks" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.3.102.1" />
+  </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="[3.3.32.2,3.4.0)" />
+    <ProjectReference Include="..\..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
   </ItemGroup>
 
 </Project>

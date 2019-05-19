@@ -4,6 +4,8 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
+using LocalStack.Client.Models;
+using LocalStack.Client.Utils;
 
 namespace LocalStack.Client.Sandbox
 {
@@ -11,8 +13,8 @@ namespace LocalStack.Client.Sandbox
     {
         static async Task Main(string[] args)
         {
-            Session session = new Session();
-            var amazonS3Client = session.GetClient<AmazonS3Client>();
+            Session session = new Session(new SessionOptions(), new Config(), new SessionReflection());
+            var amazonS3Client = session.CreateClient<AmazonS3Client>();
 
             var listBucketsResponse = await amazonS3Client.ListBucketsAsync();
 

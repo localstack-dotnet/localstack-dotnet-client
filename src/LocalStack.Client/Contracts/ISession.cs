@@ -4,6 +4,6 @@ namespace LocalStack.Client.Contracts
 {
     public interface ISession
     {
-        TClient GetClient<TClient>() where TClient : AmazonServiceClient, new();
+        TClient CreateClient<TClient>() where TClient : AmazonServiceClient, new();
     }
 }

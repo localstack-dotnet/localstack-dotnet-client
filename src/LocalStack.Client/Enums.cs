@@ -40,7 +40,7 @@ namespace LocalStack.Client
         public static readonly AwsServiceEndpointMetadata Cloudsearch = new AwsServiceEndpointMetadata("CloudSearch", "cloudsearch", CommonEndpointPattern, 4595, AwsServiceEnum.Cloudsearch);
         public static readonly AwsServiceEndpointMetadata Swf = new AwsServiceEndpointMetadata("SWF", "swf", CommonEndpointPattern, 4596, AwsServiceEnum.Swf);
 
-        public static readonly AwsServiceEndpointMetadata[] ServicesEndpointMetadata =
+        public static readonly AwsServiceEndpointMetadata[] All =
         {
             ApiGateway,
             Kinesis,
@@ -81,12 +81,12 @@ namespace LocalStack.Client
                 throw  new ArgumentNullException(nameof(name));
             }
 
-            return ServicesEndpointMetadata.SingleOrDefault(service => service.ServiceId == name);
+            return All.SingleOrDefault(service => service.ServiceId == name);
         }
 
         public static AwsServiceEndpointMetadata ByEnum(AwsServiceEnum @enum)
         {
-            return ServicesEndpointMetadata.SingleOrDefault(service => service.Enum == @enum);
+            return All.SingleOrDefault(service => service.Enum == @enum);
         }
 
         public static AwsServiceEndpointMetadata ByPort(int port)
@@ -96,7 +96,7 @@ namespace LocalStack.Client
                 throw new ArgumentException("Your port number must be greater than 0", nameof(port));
             }
 
-            return ServicesEndpointMetadata.SingleOrDefault(service => service.Port == port);
+            return All.SingleOrDefault(service => service.Port == port);
         }
 
         private AwsServiceEndpointMetadata()

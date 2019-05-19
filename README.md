@@ -117,18 +117,23 @@ GetObjectResponse getObjectResponse = await amazonS3Client.GetObjectAsync(bucket
 
 See [sandbox projects](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes) for more examples.
 
-<!-- ## Developing
+## Developing
 
 We welcome feedback, bug reports, and pull requests!
 
 Use these commands to get you started and test your code:
 
+Windows
 ```
-make install
-make test
+build.ps1
 ```
 
-## Changelog
+Linux
+```
+./build.sh
+```
+
+<!-- ## Changelog
 
 * v0.8: Add more service endpoint mappings that will be implemented in the near future -->
 

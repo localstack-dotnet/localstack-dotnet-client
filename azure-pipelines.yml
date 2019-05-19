@@ -13,8 +13,28 @@ steps:
   displayName: 'Init Task'
 
 - task: Bash@3
-  displayName: 'Cake Build - Bash'
+  displayName: 'Compile'
   inputs:
     targetType: filePath
     filePath: ./build.sh
+    arguments: --target=compile
+
+- task: Bash@3
+  displayName: 'Tests'
+  inputs:
+    targetType: filePath
+    filePath: ./build.sh
+    arguments: --target=tests
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: './tests/LocalStack.Client.Tests/*.trx'
+    testRunTitle: 'LocalStack.Client.Tests'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: './tests/LocalStack.Client.Integration.Tests/*.trx'
+    testRunTitle: 'LocalStack.Client.Integration.Tests'
 

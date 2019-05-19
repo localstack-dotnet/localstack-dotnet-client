@@ -21,12 +21,12 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'
-    testResultsFiles: '*.trx'
+    testResultsFiles: '**/*.trx'
     testRunTitle: 'LocalStack.Client.Tests'
 
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'
-    testResultsFiles: '*.trx'
+    testResultsFiles: '**/*.trx'
     testRunTitle: 'LocalStack.Client.Integration.Tests'
 

@@ -25,13 +25,14 @@ using Amazon.SimpleSystemsManagement;
 using Amazon.SimpleWorkflow;
 using Amazon.SQS;
 using Amazon.StepFunctions;
+using LocalStack.Client.Contracts;
 using Xunit;
 
 namespace LocalStack.Client.Integration.Tests
 {
     public class ClientCreationTests
     {
-        private static readonly Session Session;
+        private static readonly ISession Session;
 
         static ClientCreationTests()
         {

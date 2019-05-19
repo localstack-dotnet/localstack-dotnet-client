@@ -3,26 +3,35 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.S3.Util;
 using LocalStack.Client.Contracts;
+using LocalStack.Client.Models;
+using LocalStack.Client.Utils;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace LocalStack.Client.Sandbox
+namespace LocalStack.Client.Sandbox.DependencyInjection
 {
-    internal class Program
+    internal static class Program
     {
         private static async Task Main(string[] args)
         {
+            var collection = new ServiceCollection();
+
             var awsAccessKeyId = "Key Id";
             var awsAccessKey = "Secret Key";
             var awsSessionToken = "Token";
             var regionName = "us-west-1";
             var localStackHost = "localhost";
 
-            ISession session = SessionStandalone
-                .Init()
-                .WithSessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName)
-                .WithConfig(localStackHost)
-                .Create();
+            collection
+                .AddScoped<ISessionOptions, SessionOptions>(provider =>
+                    new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName))
+                .AddScoped<IConfig, Config>(provider => new Config(localStackHost))
+                .AddScoped<ISessionReflection, SessionReflection>()
+                .AddScoped<ISession, Session>();
+
+            ServiceProvider serviceProvider = collection.BuildServiceProvider();
+            var session = serviceProvider.GetRequiredService<ISession>();
 
             var amazonS3Client = session.CreateClient<AmazonS3Client>();
 

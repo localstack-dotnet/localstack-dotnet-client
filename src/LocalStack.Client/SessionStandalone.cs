@@ -42,7 +42,7 @@ namespace LocalStack.Client
             return this;
         }
 
-        public Session Create()
+        public ISession Create()
         {
             var sessionOptions = new SessionOptions(_awsAccessKeyId, _awsAccessKey, _awsSessionToken, _regionName);
             var config = new Config(_localStackHost);

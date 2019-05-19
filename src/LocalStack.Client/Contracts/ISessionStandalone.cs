@@ -10,6 +10,6 @@
 
         ISessionStandalone WithConfig(string localStackHost = null);
 
-        Session Create();
+        ISession Create();
     }
 }

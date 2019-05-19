@@ -4,16 +4,17 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- *
 
 pool:
-  vmImage: 'ubuntu-latest'
-
+  name: Hosted Ubuntu 1604
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- bash: 'sudo apt install nuget && mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls'
+  displayName: 'Init Task'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: Bash@3
+  displayName: 'Cake Build - Bash'
+  inputs:
+    targetType: filePath
+    filePath: ./build.sh
+

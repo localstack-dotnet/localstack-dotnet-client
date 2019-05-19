@@ -13,18 +13,10 @@ steps:
   displayName: 'Init Task'
 
 - task: Bash@3
-  displayName: 'Compile'
+  displayName: 'Compile & Tests'
   inputs:
     targetType: filePath
     filePath: ./build.sh
-    arguments: --target=compile
-
-- task: Bash@3
-  displayName: 'Tests'
-  inputs:
-    targetType: filePath
-    filePath: ./build.sh
-    arguments: --target=tests
 
 - task: PublishTestResults@2
   inputs:

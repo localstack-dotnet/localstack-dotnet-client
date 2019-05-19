@@ -1,0 +1,36 @@
+﻿namespace LocalStack.Client.Enums
+{
+    public enum AwsServiceEnum
+    {
+        ApiGateway,
+        Kinesis,
+        DynamoDb,
+        DynamoDbStreams,
+        ElasticSearch,
+        S3,
+        Firehose,
+        Lambda,
+        Sns,
+        Sqs,
+        Redshift,
+        Es,
+        Ses,
+        Route53,
+        Cloudformation,
+        Cloudwatch,
+        Ssm,
+        SecretsManager,
+        StepFunctions,
+        Logs,
+        Events,
+        Elb,
+        Iot,
+        CognitoIdp,
+        CognitoIdentity,
+        Sts,
+        Iam,
+        Rds,
+        Cloudsearch,
+        Swf
+    }
+}

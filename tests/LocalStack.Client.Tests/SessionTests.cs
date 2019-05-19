@@ -1,6 +1,7 @@
 ﻿using Amazon.Runtime;
 using Amazon.Runtime.Internal;
 using LocalStack.Client.Tests.Mocks;
+using LocalStack.Client.Tests.Mocks.MockServiceClients;
 using Moq;
 using System;
 using Xunit;
@@ -41,7 +42,6 @@ namespace LocalStack.Client.Tests
             const string awsAccessKeyId = "AwsAccessKeyId";
             const string awsAccessKey = "AwsAccessKey";
             const string awsSessionToken = "AwsSessionToken";
-
 
             mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns(awsAccessKeyId);
             mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns(awsAccessKey);
@@ -169,7 +169,7 @@ namespace LocalStack.Client.Tests
             Assert.NotNull(mockAmazonServiceClient);
 
             mockSession.ConfigMock
-                .Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId =>serviceId == mockServiceMetadata.ServiceId)), Times.Once);
+                .Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId => serviceId == mockServiceMetadata.ServiceId)), Times.Once);
             mockSession.SessionReflectionMock
                 .Verify(reflection => reflection.ExtractServiceMetadata<MockAmazonServiceClient>(), Times.Once);
             mockSession.SessionReflectionMock

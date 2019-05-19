@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace LocalStack.Client
+namespace LocalStack.Client.Enums
 {
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public class AwsServiceEndpointMetadata
@@ -15,10 +15,10 @@ namespace LocalStack.Client
         public static readonly AwsServiceEndpointMetadata DynamoDbStreams = new AwsServiceEndpointMetadata("DynamoDB Streams", "dynamodbstreams", CommonEndpointPattern, 4570, AwsServiceEnum.DynamoDbStreams);
         public static readonly AwsServiceEndpointMetadata ElasticSearch = new AwsServiceEndpointMetadata("Elasticsearch Service", "elasticsearch", CommonEndpointPattern, 4571, AwsServiceEnum.ElasticSearch);
         public static readonly AwsServiceEndpointMetadata S3 = new AwsServiceEndpointMetadata("S3", "s3", CommonEndpointPattern, 4572, AwsServiceEnum.S3);
-        public static readonly AwsServiceEndpointMetadata Firehose = new AwsServiceEndpointMetadata("Firehose","firehose", CommonEndpointPattern, 4573, AwsServiceEnum.Firehose);
-        public static readonly AwsServiceEndpointMetadata Lambda = new AwsServiceEndpointMetadata("Lambda","lambda", CommonEndpointPattern, 4574, AwsServiceEnum.Lambda);
+        public static readonly AwsServiceEndpointMetadata Firehose = new AwsServiceEndpointMetadata("Firehose", "firehose", CommonEndpointPattern, 4573, AwsServiceEnum.Firehose);
+        public static readonly AwsServiceEndpointMetadata Lambda = new AwsServiceEndpointMetadata("Lambda", "lambda", CommonEndpointPattern, 4574, AwsServiceEnum.Lambda);
         public static readonly AwsServiceEndpointMetadata Sns = new AwsServiceEndpointMetadata("SNS", "sns", CommonEndpointPattern, 4575, AwsServiceEnum.Sns);
-        public static readonly AwsServiceEndpointMetadata Sqs = new AwsServiceEndpointMetadata("SQS","sqs", CommonEndpointPattern, 4576, AwsServiceEnum.Sqs);
+        public static readonly AwsServiceEndpointMetadata Sqs = new AwsServiceEndpointMetadata("SQS", "sqs", CommonEndpointPattern, 4576, AwsServiceEnum.Sqs);
         public static readonly AwsServiceEndpointMetadata Redshift = new AwsServiceEndpointMetadata("Redshift", "redshift", CommonEndpointPattern, 4577, AwsServiceEnum.Redshift);
         public static readonly AwsServiceEndpointMetadata Es = new AwsServiceEndpointMetadata("ES", "es", CommonEndpointPattern, 4578, AwsServiceEnum.Es);
         public static readonly AwsServiceEndpointMetadata Ses = new AwsServiceEndpointMetadata("SES", "ses", CommonEndpointPattern, 4579, AwsServiceEnum.Ses);
@@ -78,7 +78,7 @@ namespace LocalStack.Client
         {
             if (name == null)
             {
-                throw  new ArgumentNullException(nameof(name));
+                throw new ArgumentNullException(nameof(name));
             }
 
             return All.SingleOrDefault(service => service.ServiceId == name);
@@ -127,39 +127,5 @@ namespace LocalStack.Client
             : string.Format(EndPointPattern, proto, host, Port);
 
         public override string ToString() => $"{ServiceId} - {CliName} - {Port}";
-    }
-
-    public enum AwsServiceEnum
-    {
-        ApiGateway,
-        Kinesis,
-        DynamoDb,
-        DynamoDbStreams,
-        ElasticSearch,
-        S3,
-        Firehose,
-        Lambda,
-        Sns,
-        Sqs,
-        Redshift,
-        Es,
-        Ses,
-        Route53,
-        Cloudformation,
-        Cloudwatch,
-        Ssm,
-        SecretsManager,
-        StepFunctions,
-        Logs,
-        Events,
-        Elb,
-        Iot,
-        CognitoIdp,
-        CognitoIdentity,
-        Sts,
-        Iam,
-        Rds,
-        Cloudsearch,
-        Swf
     }
 }

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using LocalStack.Client.Models;
+﻿using LocalStack.Client.Models;
+using System.Collections.Generic;
+using LocalStack.Client.Enums;
 
 namespace LocalStack.Client.Contracts
 {

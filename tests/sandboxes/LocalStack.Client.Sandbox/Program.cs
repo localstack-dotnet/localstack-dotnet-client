@@ -1,17 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using Amazon.Runtime;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Util;
 using LocalStack.Client.Models;
 using LocalStack.Client.Utils;
+using System;
+using System.Threading.Tasks;
 
 namespace LocalStack.Client.Sandbox
 {
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             Session session = new Session(new SessionOptions(), new Config(), new SessionReflection());
             var amazonS3Client = session.CreateClient<AmazonS3Client>();
@@ -21,7 +20,7 @@ namespace LocalStack.Client.Sandbox
             await CreateBucketAsync(amazonS3Client, "test-bucket");
         }
 
-        static async Task CreateBucketAsync(AmazonS3Client s3Client, string bucketName)
+        private static async Task CreateBucketAsync(AmazonS3Client s3Client, string bucketName)
         {
             try
             {
@@ -48,7 +47,7 @@ namespace LocalStack.Client.Sandbox
             }
         }
 
-        static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
+        private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
         {
             var request = new GetBucketLocationRequest()
             {

@@ -34,7 +34,6 @@ namespace LocalStack.Client
             clientConfig.ProxyHost = awsServiceEndpoint.Host;
             clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
-
             var clientInstance = (TClient)Activator.CreateInstance(typeof(TClient), awsCredentials, clientConfig);
 
             return clientInstance;

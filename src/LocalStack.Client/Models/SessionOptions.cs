@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LocalStack.Client.Contracts;
+﻿using LocalStack.Client.Contracts;
 
 namespace LocalStack.Client.Models
 {
     public class SessionOptions : ISessionOptions
     {
+        private const string AwsAccessKeyIdConst = "accessKey";
+        private const string AwsAccessKeyConst = "secretKey";
+        private const string AwsSessionTokenConst = "token";
+        private const string RegionNameConst = "us-east-1";
+
         public SessionOptions(
-            string awsAccessKeyId = "accessKey", 
-            string awsAccessKey = "secretKey", 
-            string awsSessionToken = "token", 
-            string regionName = "us-east-1", 
-            string localStackHost = null)
+            string awsAccessKeyId = AwsAccessKeyIdConst,
+            string awsAccessKey = AwsAccessKeyConst,
+            string awsSessionToken = AwsSessionTokenConst,
+            string regionName = RegionNameConst)
         {
-            AwsAccessKeyId = awsAccessKeyId;
-            AwsAccessKey = awsAccessKey;
-            AwsSessionToken = awsSessionToken;
-            RegionName = regionName;
-            LocalStackHost = localStackHost;
+            AwsAccessKeyId = awsAccessKeyId ?? AwsAccessKeyIdConst;
+            AwsAccessKey = awsAccessKey ?? AwsAccessKeyConst;
+            AwsSessionToken = awsSessionToken ?? AwsSessionTokenConst;
+            RegionName = regionName ?? RegionNameConst;
         }
 
         public string AwsAccessKeyId { get; }
@@ -28,7 +28,5 @@ namespace LocalStack.Client.Models
         public string AwsSessionToken { get; }
 
         public string RegionName { get; }
-
-        public string LocalStackHost { get; }
     }
 }

@@ -9,7 +9,5 @@
         string AwsSessionToken { get; }
 
         string RegionName { get; }
-
-        string LocalStackHost { get; }
     }
 }

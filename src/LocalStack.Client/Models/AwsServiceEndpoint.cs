@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Models
+﻿using LocalStack.Client.Enums;
+
+namespace LocalStack.Client.Models
 {
     public class AwsServiceEndpoint
     {

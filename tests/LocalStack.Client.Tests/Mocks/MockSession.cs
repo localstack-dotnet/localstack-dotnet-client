@@ -5,7 +5,7 @@ namespace LocalStack.Client.Tests.Mocks
 {
     public class MockSession : Session
     {
-        private MockSession(Mock<ISessionOptions> sessionOptionsMock, Mock<IConfig> configMock, Mock<ISessionReflection> sessionReflectionMock) 
+        private MockSession(Mock<ISessionOptions> sessionOptionsMock, Mock<IConfig> configMock, Mock<ISessionReflection> sessionReflectionMock)
             : base(sessionOptionsMock.Object, configMock.Object, sessionReflectionMock.Object)
         {
             SessionOptionsMock = sessionOptionsMock;
@@ -19,7 +19,7 @@ namespace LocalStack.Client.Tests.Mocks
 
         public Mock<ISessionReflection> SessionReflectionMock { get; }
 
-        public static MockSession Create() 
+        public static MockSession Create()
             => new MockSession(new Mock<ISessionOptions>(MockBehavior.Strict), new Mock<IConfig>(MockBehavior.Strict), new Mock<ISessionReflection>(MockBehavior.Strict));
     }
 }

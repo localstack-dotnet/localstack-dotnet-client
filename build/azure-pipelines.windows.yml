@@ -1,0 +1,33 @@
+trigger:
+  branches:
+    include:
+      - "*"
+  paths:
+    include:
+      - "*"
+    exclude:
+      - "**/*.md"
+pr:
+  branches:
+    include:
+      - "*"
+pool:
+  name: Hosted VS2017
+steps:
+  - task: PowerShell@2
+    displayName: "Compile & Tests"
+    inputs:
+      targetType: filePath
+      filePath: ./build.ps1
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: "VSTest"
+      testResultsFiles: "**/*.trx"
+      testRunTitle: "LocalStack.Client.Tests"
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: "VSTest"
+      testResultsFiles: "**/*.trx"
+      testRunTitle: "LocalStack.Client.Integration.Tests"

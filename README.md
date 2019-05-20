@@ -1,5 +1,7 @@
 # LocalStack .Net Core and .Net Framework Client
 
+![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
+
 This is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack).
 The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which
 automatically configures the target endpoints to use LocalStack for your local cloud

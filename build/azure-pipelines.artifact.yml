@@ -17,12 +17,12 @@ steps:
       targetType: filePath
       filePath: ./build.sh
 
-  - bash: sudo ./build.sh --target=get-version --buildnumber=$BUILD_ID
+  - bash: chmod +x ./build.sh && sudo ./build.sh --target=get-version --buildnumber=$BUILD_ID
     displayName: "Package Version"
     env:
       BUILD_ID: $(Build.BuildId)
 
-  - bash: sudo ./build.sh --target=nuget-pack --buildnumber=$BUILD_ID
+  - bash: chmod +x ./build.sh && sudo ./build.sh --target=nuget-pack --buildnumber=$BUILD_ID
     displayName: "Nuget Pack"
     env:
       BUILD_ID: $(Build.BuildId)

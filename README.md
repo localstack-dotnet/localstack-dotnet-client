@@ -15,6 +15,14 @@ application development.
 To make use of this library, you need to have [LocalStack](https://github.com/localstack/localstack)
 installed on your local machine. In particular, the `localstack` command needs to be available.
 
+## Continuous integration
+
+| Build server                | Platform      | Build status                                                                                                                                                                                                                                                                                                       |
+|-----------------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Azure Pipelines             | Ubuntu        | [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/localstack-dotnet.localstack-dotnet-client?branchName=master)](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master) | 
+
+
+
 ## Installation
 
 The easiest way to install *LocalStack .NET Client* is via `nuget`:

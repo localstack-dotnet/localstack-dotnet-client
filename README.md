@@ -5,25 +5,35 @@ The client library provides a thin wrapper around [aws-sdk-net](https://github.c
 automatically configures the target endpoints to use LocalStack for your local cloud
 application development.
 
-## Supported Platforms
-
-* .NET 4.6.1 (Desktop / Server)
-* [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
-
-## Prerequisites
-
-To make use of this library, you need to have [LocalStack](https://github.com/localstack/localstack)
-installed on your local machine. In particular, the `localstack` command needs to be available.
-
 ## Continuous integration
 
 | Build server    	| Platform 	| Build status                                                                                                                                                                                                                                                                         	|
 |-----------------	|----------	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | Azure Pipelines 	| Ubuntu   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/localstack-dotnet.localstack-dotnet-client?branchName=master) ](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master ) 	|
 
+## Table of Contents
 
+1. [Supported Platforms](#supported-platforms)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+4. [Usage](#usage)
+    - [Standalone Initialization](#standalone-initialization)
+    - [Microsoft.Extensions.DependencyInjection Initialization](#di)
+    - [Create and use AWS SDK Clients](#create-client)
+5. [Developing](#developing)
+6. [License](#license)
 
-## Installation
+## <a name="supported-platforms"></a> Supported Platforms
+
+* .NET 4.6.1 (Desktop / Server)
+* [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+
+## <a name="prerequisites"></a> Prerequisites
+
+To make use of this library, you need to have [LocalStack](https://github.com/localstack/localstack)
+installed on your local machine. In particular, the `localstack` command needs to be available.
+
+## <a name="installation"></a>  Installation
 
 The easiest way to install *LocalStack .NET Client* is via `nuget`:
 
@@ -37,7 +47,7 @@ Or use `dotnet cli`
 dotnet add package LocalStack.Client
 ```
 
-## Usage
+## <a name="usage"></a> Usage
 
 This library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net). 
 Therefore the usage of this library is same as using `AWS SDK for .NET`.
@@ -46,7 +56,7 @@ See [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-
 
 This library can be used with any DI library, or it can be used as standalone.
 
-### Standalone Initialization
+### <a name="standalone-initialization"></a>  Standalone Initialization
 
 If you do not want to use any DI library, you have to instantiate `SessionStandalone` as follows.
 
@@ -66,7 +76,7 @@ ISession session = SessionStandalone
 
 All parameters are optional and in case of passed `null`, default values will be setted. Since its workin on local machine, the real aws credantials are not needed for `awsAccessKeyId`, `awsAccessKey`, `awsSessionToken` parameters.
 
-### Microsoft.Extensions.DependencyInjection Initialization
+### <a name="di"></a>  Microsoft.Extensions.DependencyInjection Initialization
 
 First, you need to install `Microsoft.Extensions.DependencyInjection` nuget package as follows
 
@@ -99,7 +109,7 @@ var session = serviceProvider.GetRequiredService<ISession>();
 
 All parameters are optional and in case of passed `null`, default values will be setted. Since its workin on local machine, the real aws credantials are not needed for `awsAccessKeyId`, `awsAccessKey`, `awsSessionToken` parameters.
 
-### Create and use AWS SDK Clients
+### <a name="create-client"></a>  Create and use AWS SDK Clients
 
 For all local services supported by [LocalStack](https://github.com/localstack/localstack#overview), the corresponding [AWSSDK packages](https://www.nuget.org/profiles/awsdotnet) can be use.
 
@@ -125,7 +135,7 @@ GetObjectResponse getObjectResponse = await amazonS3Client.GetObjectAsync(bucket
 
 See [sandbox projects](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes) for more examples.
 
-## Developing
+## <a name="developing"></a> Developing
 
 We welcome feedback, bug reports, and pull requests!
 
@@ -145,5 +155,5 @@ Linux
 
 * v0.8: Add more service endpoint mappings that will be implemented in the near future -->
 
-## License
+## <a name="license"></a> License
 Licensed under MIT, see [LICENSE](LICENSE) for the full text.

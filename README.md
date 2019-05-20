@@ -51,6 +51,10 @@ Or use `dotnet cli`
 dotnet add package LocalStack.Client
 ```
 
+| Stable                                                                                                              | Nightly                                                                                                                                                                        |
+|---------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client) |
+
 ## <a name="usage"></a> Usage
 
 This library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net). 

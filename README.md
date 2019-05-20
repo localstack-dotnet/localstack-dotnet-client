@@ -11,7 +11,9 @@ application development.
 
 | Build server    	| Platform 	| Build status                                                                                                                                                                                                                                                                         	|
 |-----------------	|----------	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Azure Pipelines 	| Ubuntu   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/localstack-dotnet.localstack-dotnet-client?branchName=master) ](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master ) 	|
+| Azure Pipelines 	| Ubuntu   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/Ubuntu?branchName=master)](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master) 	|
+| Azure Pipelines 	| macOs   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/macOS?branchName=master)](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=10&branchName=master) 	|
+| Azure Pipelines 	| Windows   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/Windows?branchName=master)](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=9&branchName=master)	|
 
 ## Table of Contents
 

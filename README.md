@@ -17,9 +17,9 @@ installed on your local machine. In particular, the `localstack` command needs t
 
 ## Continuous integration
 
-| Build server                | Platform      | Build status                                                                                                                                                                                                                                                                                                       |
-|-----------------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Azure Pipelines             | Ubuntu        | [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/localstack-dotnet.localstack-dotnet-client?branchName=master)](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master) | 
+| Build server    	| Platform 	| Build status                                                                                                                                                                                                                                                                         	|
+|-----------------	|----------	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| Azure Pipelines 	| Ubuntu   	| [![Build Status](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_apis/build/status/localstack-dotnet.localstack-dotnet-client?branchName=master) ](https://denizirgindev.visualstudio.com/localstack-dotnet-client/_build/latest?definitionId=8&branchName=master ) 	|
 
 
 

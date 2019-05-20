@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 var target = Argument("target", "default");
 var configuration = Argument("config", "Release");
+var buildNumber = Argument<int>("buildnumber", 1);
 
 var artifactOutput = "./artifacts";
 var testResults = "results.trx";
@@ -96,7 +98,17 @@ Task("nuget-pack")
         var settings = new DotNetCorePackSettings();
         settings.Configuration = configuration;
         settings.OutputDirectory = artifactOutput;
+        settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
+        settings.MSBuildSettings.SetVersion(GetProjectVersion());
+
         DotNetCorePack(projectFullPath, settings);
+    });
+
+Task("get-version")
+    .Description("Get version")
+    .Does(() =>
+    {
+        Warning(GetProjectVersion());
     });
 
 RunTarget(target);
@@ -190,6 +202,43 @@ private string GetAssemblyName(string csprojPath)
     }
 
     return assemblyName;
+}
+
+private void UpdateProjectVersion(string version)
+{
+    Information("Setting version to " + version);
+
+    if(string.IsNullOrWhiteSpace(version))
+    {
+        throw new CakeException("No version specified! You need to pass in --targetversion=\"x.y.z\"");
+    }
+
+    var file =  MakeAbsolute(File("./src/Directory.Build.props"));
+
+    Information(file.FullPath);
+
+    var project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
+
+    var projectVersion = new Regex(@"<Version>.+<\/Version>");
+    project = projectVersion.Replace(project, string.Concat("<Version>", version, "</Version>"));
+
+    System.IO.File.WriteAllText(file.FullPath, project, Encoding.UTF8);
+}
+
+private string GetProjectVersion()
+{
+    var file =  MakeAbsolute(File("./src/Directory.Build.props"));
+
+    Information(file.FullPath);
+
+    var project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
+    int startIndex = project.IndexOf("<Version>") + "<Version>".Length;
+    int endIndex = project.IndexOf("</Version>", startIndex);
+
+    string version = project.Substring(startIndex, endIndex - startIndex);
+    version = $"{version}.{buildNumber}";
+
+    return version;
 }
 
 /*

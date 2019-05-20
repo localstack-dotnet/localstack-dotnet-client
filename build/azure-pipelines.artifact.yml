@@ -1,0 +1,34 @@
+trigger:
+  branches:
+    include:
+      - master
+      - releases/*
+      - feature/*
+pr: none
+pool:
+  name: Hosted Ubuntu 1604
+steps:
+  - bash: "sudo apt install nuget && mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls"
+    displayName: "Init Task"
+
+  - task: Bash@3
+    displayName: "Compile & Tests"
+    inputs:
+      targetType: filePath
+      filePath: ./build.sh
+
+  - bash: sudo ./build.sh --target=get-version --buildnumber=$BUILD_ID
+    displayName: "Package Version"
+    env:
+      BUILD_ID: $(Build.BuildId)
+
+  - bash: sudo ./build.sh --target=nuget-pack --buildnumber=$BUILD_ID
+    displayName: "Nuget Pack"
+    env:
+      BUILD_ID: $(Build.BuildId)
+
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: LocalStack.Client"
+    inputs:
+      PathtoPublish: artifacts/
+      ArtifactName: LocalStack.Client

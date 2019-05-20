@@ -3,8 +3,16 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <AssemblyName>LocalStack.Client</AssemblyName>
+    <RootNamespace>LocalStack.Client</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.1</Version>
+
+    <Title>LocalStack.NET Client</Title>
+    <Description>
+      This is an easy-to-use .NET client for LocalStack. The client library provides a thin wrapper around aws-sdk-net which automatically configures the target endpoints to use LocalStack for your local cloud application development.
+    </Description>
+    <PackageTags>aws-sdk, localstack, client-library, dotnet;dotnet-core</PackageTags>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 
     <!-- When compiling .NET SDK 2.0 projects targeting .NET 4.x on Mono using 'dotnet build' you -->
     <!-- have to teach MSBuild where the Mono copy of the reference asssemblies is -->
@@ -23,6 +31,19 @@
     <!-- Add the Facades directory.  Not sure how else to do this. Necessary at least for .NET 4.5 -->
     <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <LicenseFile Include="../../LICENSE" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LicenseFile)" DestinationFiles="@(LicenseFile->'./LICENSE.txt')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <!-- When using 'dotnet build' to compile against Mono reference assemblies it seems necessary to add some explicit references to some facade DLLs  -->

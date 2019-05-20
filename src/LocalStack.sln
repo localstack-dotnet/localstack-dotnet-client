@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Integration.Tests", "..\tests\LocalStack.Client.Integration.Tests\LocalStack.Client.Integration.Tests.csproj", "{691A4094-2074-474A-81A3-E33B728AE54E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalStack.Client.Sandbox.DependencyInjection", "..\tests\sandboxes\LocalStack.Client.Sandbox.DependencyInjection\LocalStack.Client.Sandbox.DependencyInjection.csproj", "{4E90D3D1-D570-4205-9C6E-B917B5508912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox.DependencyInjection", "..\tests\sandboxes\LocalStack.Client.Sandbox.DependencyInjection\LocalStack.Client.Sandbox.DependencyInjection.csproj", "{4E90D3D1-D570-4205-9C6E-B917B5508912}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

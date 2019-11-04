@@ -31,6 +31,18 @@
         Iam,
         Rds,
         Cloudsearch,
-        Swf
+        Swf,
+        Ec2,
+        ElastiCache,
+        Kms,
+        Emr,
+        Ecs,
+        Eks,
+        XRay,
+        ElasticBeanstalk,
+        AppSync,
+        CloudFront,
+        Athena,
+        Glue
     }
 }

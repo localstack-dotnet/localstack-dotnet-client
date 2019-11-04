@@ -1,8 +1,10 @@
 ﻿using LocalStack.Client.Contracts;
 using LocalStack.Client.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using LocalStack.Client.Enums;
 
 namespace LocalStack.Client
@@ -20,15 +22,23 @@ namespace LocalStack.Client
             localStackHost = localStackHost ?? (EnvLocalStackHost ?? "localhost");
             string protocol = EnvUseSsl != null && (EnvUseSsl == "1" || EnvUseSsl == "true") ? "https" : "http";
 
-            _awsServiceEndpoints = ServiceEndpointMetadata
-                .Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum,
-                    metadata.Port, localStackHost, metadata.ToString(protocol, localStackHost)));
+            _awsServiceEndpoints = ServiceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum, metadata.Port,
+                                                                                                     localStackHost, metadata.ToString(protocol, localStackHost)));
         }
 
-        public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints() => _awsServiceEndpoints;
+        public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints()
+        {
+            return _awsServiceEndpoints;
+        }
 
-        public AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum) => _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.AwsServiceEnum == awsServiceEnum);
+        public AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum)
+        {
+            return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.AwsServiceEnum == awsServiceEnum);
+        }
 
-        public AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId) => _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.ServiceId == serviceId);
+        public AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId)
+        {
+            return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.ServiceId == serviceId);
+        }
     }
 }

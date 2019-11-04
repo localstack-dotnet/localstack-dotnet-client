@@ -26,6 +26,9 @@ namespace LocalStack.Client.Models
 
         public string ServiceUrl { get; }
 
-        public override string ToString() => $"{ServiceId} - {ServiceUrl}";
+        public override string ToString()
+        {
+            return $"{ServiceId} - {ServiceUrl}";
+        }
     }
 }

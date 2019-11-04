@@ -6,26 +6,17 @@ namespace LocalStack.Client
 {
     public class SessionStandalone : ISessionStandalone
     {
-        private string _awsAccessKeyId;
         private string _awsAccessKey;
+        private string _awsAccessKeyId;
         private string _awsSessionToken;
-        private string _regionName;
         private string _localStackHost;
+        private string _regionName;
 
         private SessionStandalone()
         {
         }
 
-        public static ISessionStandalone Init()
-        {
-            return new SessionStandalone();
-        }
-
-        public ISessionStandalone WithSessionOptions(
-            string awsAccessKeyId = null,
-            string awsAccessKey = null,
-            string awsSessionToken = null,
-            string regionName = null)
+        public ISessionStandalone WithSessionOptions(string awsAccessKeyId = null, string awsAccessKey = null, string awsSessionToken = null, string regionName = null)
         {
             _awsAccessKeyId = awsAccessKeyId;
             _awsAccessKey = awsAccessKey;
@@ -49,6 +40,11 @@ namespace LocalStack.Client
             var sessionReflection = new SessionReflection();
 
             return new Session(sessionOptions, config, sessionReflection);
+        }
+
+        public static ISessionStandalone Init()
+        {
+            return new SessionStandalone();
         }
     }
 }

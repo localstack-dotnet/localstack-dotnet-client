@@ -5,6 +5,6 @@
     <Owners>LocalStack.NET</Owners>
     <PackageIconUrl>https://raw.githubusercontent.com/localstack-dotnet/localstack-dotnet-client/master/assets/localstack-dotnet-square.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/localstack-dotnet/localstack-dotnet-client</PackageProjectUrl>
-    <Version>0.8.0</Version>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 </Project>

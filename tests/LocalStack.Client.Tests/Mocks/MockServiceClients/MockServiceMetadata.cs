@@ -1,4 +1,5 @@
 ﻿using Amazon.Runtime.Internal;
+
 using System.Collections.Generic;
 
 namespace LocalStack.Client.Tests.Mocks.MockServiceClients

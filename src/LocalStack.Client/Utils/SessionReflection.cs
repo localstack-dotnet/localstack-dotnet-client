@@ -1,6 +1,8 @@
 ﻿using Amazon.Runtime;
 using Amazon.Runtime.Internal;
+
 using LocalStack.Client.Contracts;
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -13,11 +15,10 @@ namespace LocalStack.Client.Utils
         {
             Type clientType = typeof(TClient);
 
-            FieldInfo serviceMetadataField = clientType
-                                           .GetField("serviceMetadata", BindingFlags.Static | BindingFlags.NonPublic)
-                                       ?? throw new InvalidOperationException($"Invalid service type {typeof(TClient)}");
+            FieldInfo serviceMetadataField = clientType.GetField("serviceMetadata", BindingFlags.Static | BindingFlags.NonPublic) ??
+                                             throw new InvalidOperationException($"Invalid service type {typeof(TClient)}");
 
-            var serviceMetadata = (IServiceMetadata)serviceMetadataField.GetValue(null);
+            var serviceMetadata = (IServiceMetadata) serviceMetadataField.GetValue(null);
 
             return serviceMetadata;
         }
@@ -27,7 +28,7 @@ namespace LocalStack.Client.Utils
             ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(typeof(TClient));
             ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];
 
-            return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType);
+            return (ClientConfig) Activator.CreateInstance(clientConfigParam.ParameterType);
         }
 
         public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
@@ -40,30 +41,31 @@ namespace LocalStack.Client.Utils
             }
 
             forcePathStyleProperty.SetValue(clientConfig, value);
+
             return true;
         }
 
         private static ConstructorInfo FindConstructorWithCredentialsAndClientConfig(Type clientType)
         {
-            return clientType
-                .GetConstructors(BindingFlags.Instance | BindingFlags.Public)
-                .Where(info =>
-                {
-                    var parameterInfos = info.GetParameters();
+            return clientType.GetConstructors(BindingFlags.Instance | BindingFlags.Public)
+                             .Where(info =>
+                             {
+                                 ParameterInfo[] parameterInfos = info.GetParameters();
 
-                    if (parameterInfos.Length != 2)
-                    {
-                        return false;
-                    }
+                                 if (parameterInfos.Length != 2)
+                                 {
+                                     return false;
+                                 }
 
-                    ParameterInfo credentialsParameter = parameterInfos[0];
-                    ParameterInfo clientConfigParameter = parameterInfos[1];
+                                 ParameterInfo credentialsParameter = parameterInfos[0];
+                                 ParameterInfo clientConfigParameter = parameterInfos[1];
 
-                    return credentialsParameter.Name == "credentials"
-                           && credentialsParameter.ParameterType == typeof(AWSCredentials)
-                           && clientConfigParameter.Name == "clientConfig"
-                           && clientConfigParameter.ParameterType.IsSubclassOf(typeof(ClientConfig));
-                }).Single();
+                                 return credentialsParameter.Name == "credentials" &&
+                                        credentialsParameter.ParameterType == typeof(AWSCredentials) &&
+                                        clientConfigParameter.Name == "clientConfig" &&
+                                        clientConfigParameter.ParameterType.IsSubclassOf(typeof(ClientConfig));
+                             })
+                             .Single();
         }
     }
 }

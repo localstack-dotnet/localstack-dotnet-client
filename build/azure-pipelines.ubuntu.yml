@@ -12,7 +12,7 @@ pr:
     include:
       - "*"
 pool:
-  name: Hosted Ubuntu 1604
+  vmImage: ubuntu-16.04
 steps:
   - bash: "sudo apt install nuget && mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls"
     displayName: "Init Task"

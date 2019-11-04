@@ -22,7 +22,7 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata Redshift = new AwsServiceEndpointMetadata("Redshift", "redshift", CommonEndpointPattern, 4577, AwsServiceEnum.Redshift);
         public static readonly AwsServiceEndpointMetadata Es = new AwsServiceEndpointMetadata("ES", "es", CommonEndpointPattern, 4578, AwsServiceEnum.Es);
         public static readonly AwsServiceEndpointMetadata Ses = new AwsServiceEndpointMetadata("SES", "ses", CommonEndpointPattern, 4579, AwsServiceEnum.Ses);
-        public static readonly AwsServiceEndpointMetadata Route53 = new AwsServiceEndpointMetadata("Route 53", "route53", CommonEndpointPattern, 4580, AwsServiceEnum.Route53);
+        public static readonly AwsServiceEndpointMetadata Route53 =new AwsServiceEndpointMetadata("Route 53", "route53", CommonEndpointPattern, 4580, AwsServiceEnum.Route53);
         public static readonly AwsServiceEndpointMetadata Cloudformation = new AwsServiceEndpointMetadata("CloudFormation", "cloudformation", CommonEndpointPattern, 4581, AwsServiceEnum.Cloudformation);
         public static readonly AwsServiceEndpointMetadata Cloudwatch = new AwsServiceEndpointMetadata("CloudWatch", "cloudwatch", CommonEndpointPattern, 4582, AwsServiceEnum.Cloudwatch);
         public static readonly AwsServiceEndpointMetadata Ssm = new AwsServiceEndpointMetadata("SSM", "ssm", CommonEndpointPattern, 4583, AwsServiceEnum.Ssm);
@@ -37,42 +37,50 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata Sts = new AwsServiceEndpointMetadata("STS", "sts", CommonEndpointPattern, 4592, AwsServiceEnum.Sts);
         public static readonly AwsServiceEndpointMetadata Iam = new AwsServiceEndpointMetadata("IAM", "iam", CommonEndpointPattern, 4593, AwsServiceEnum.Iam);
         public static readonly AwsServiceEndpointMetadata Rds = new AwsServiceEndpointMetadata("RDS", "rds", CommonEndpointPattern, 4594, AwsServiceEnum.Rds);
-        public static readonly AwsServiceEndpointMetadata Cloudsearch = new AwsServiceEndpointMetadata("CloudSearch", "cloudsearch", CommonEndpointPattern, 4595, AwsServiceEnum.Cloudsearch);
+        public static readonly AwsServiceEndpointMetadata CloudSearch = new AwsServiceEndpointMetadata("CloudSearch", "cloudsearch", CommonEndpointPattern, 4595, AwsServiceEnum.Cloudsearch);
         public static readonly AwsServiceEndpointMetadata Swf = new AwsServiceEndpointMetadata("SWF", "swf", CommonEndpointPattern, 4596, AwsServiceEnum.Swf);
+        public static readonly AwsServiceEndpointMetadata Ec2 = new AwsServiceEndpointMetadata("EC2", "ec2", CommonEndpointPattern, 4597, AwsServiceEnum.Ec2);
+        public static readonly AwsServiceEndpointMetadata ElastiCache = new AwsServiceEndpointMetadata("ElastiCache", "elasticache", CommonEndpointPattern, 4598, AwsServiceEnum.ElastiCache);
+        public static readonly AwsServiceEndpointMetadata Kms = new AwsServiceEndpointMetadata("KMS", "kms", CommonEndpointPattern, 4599, AwsServiceEnum.Kms);
+        public static readonly AwsServiceEndpointMetadata Emr = new AwsServiceEndpointMetadata("EMR", "emr", CommonEndpointPattern, 4600, AwsServiceEnum.Emr);
+        public static readonly AwsServiceEndpointMetadata Ecs = new AwsServiceEndpointMetadata("ECS", "ecs", CommonEndpointPattern, 4601, AwsServiceEnum.Ecs);
+        public static readonly AwsServiceEndpointMetadata Eks = new AwsServiceEndpointMetadata("EKS", "eks", CommonEndpointPattern, 4602, AwsServiceEnum.Eks);
+        public static readonly AwsServiceEndpointMetadata XRay = new AwsServiceEndpointMetadata("XRay", "xray", CommonEndpointPattern, 4603, AwsServiceEnum.XRay);
+        public static readonly AwsServiceEndpointMetadata ElasticBeanstalk = new AwsServiceEndpointMetadata("Elastic Beanstalk", "elasticbeanstalk", CommonEndpointPattern, 4604, AwsServiceEnum.ElasticBeanstalk);
+        public static readonly AwsServiceEndpointMetadata AppSync = new AwsServiceEndpointMetadata("AppSync", "appsync", CommonEndpointPattern, 4605, AwsServiceEnum.AppSync);
+        public static readonly AwsServiceEndpointMetadata CloudFront = new AwsServiceEndpointMetadata("CloudFront", "cloudfront", CommonEndpointPattern, 4606, AwsServiceEnum.CloudFront);
+        public static readonly AwsServiceEndpointMetadata Athena = new AwsServiceEndpointMetadata("Athena", "athena", CommonEndpointPattern, 4607, AwsServiceEnum.Athena);
+        public static readonly AwsServiceEndpointMetadata Glue = new AwsServiceEndpointMetadata("Glue", "glue", CommonEndpointPattern, 4608, AwsServiceEnum.Athena);
 
         public static readonly AwsServiceEndpointMetadata[] All =
         {
-            ApiGateway,
-            Kinesis,
-            DynamoDb,
-            DynamoDbStreams,
-            ElasticSearch,
-            S3,
-            Firehose,
-            Lambda,
-            Sns,
-            Sqs,
-            Redshift,
-            Es,
-            Ses,
-            Route53,
-            Cloudformation,
-            Cloudwatch,
-            Ssm,
-            SecretsManager,
-            StepFunctions,
-            Logs,
-            Events,
-            Elb,
-            Iot,
-            CognitoIdp,
-            CognitoIdentity,
-            Sts,
-            Iam,
-            Rds,
-            Cloudsearch,
-            Swf
+            ApiGateway, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, Es, Ses, Route53, Cloudformation, Cloudwatch,
+            Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, CognitoIdp, CognitoIdentity, Sts, Iam, Rds, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs,
+            Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue
         };
+
+        private AwsServiceEndpointMetadata()
+        {
+        }
+
+        private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsServiceEnum @enum)
+        {
+            ServiceId = serviceId;
+            CliName = cliName;
+            EndPointPattern = endPointPattern;
+            Enum = @enum;
+            Port = port;
+        }
+
+        public string ServiceId { get; }
+
+        public string CliName { get; }
+
+        public string EndPointPattern { get; }
+
+        public int Port { get; }
+
+        public AwsServiceEnum Enum { get; }
 
         public static AwsServiceEndpointMetadata ByName(string name)
         {
@@ -99,33 +107,16 @@ namespace LocalStack.Client.Enums
             return All.SingleOrDefault(service => service.Port == port);
         }
 
-        private AwsServiceEndpointMetadata()
+        public string ToString(string proto, string host)
         {
+            return proto == null || host == null
+                       ? throw new ArgumentNullException(proto == null ? nameof(proto) : nameof(host))
+                       : string.Format(EndPointPattern, proto, host, Port);
         }
 
-        private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsServiceEnum @enum)
+        public override string ToString()
         {
-            ServiceId = serviceId;
-            CliName = cliName;
-            EndPointPattern = endPointPattern;
-            Enum = @enum;
-            Port = port;
+            return $"{ServiceId} - {CliName} - {Port}";
         }
-
-        public string ServiceId { get; }
-
-        public string CliName { get; }
-
-        public string EndPointPattern { get; }
-
-        public int Port { get; }
-
-        public AwsServiceEnum Enum { get; }
-
-        public string ToString(string proto, string host) => proto == null || host == null
-            ? throw new ArgumentNullException(proto == null ? nameof(proto) : nameof(host))
-            : string.Format(EndPointPattern, proto, host, Port);
-
-        public override string ToString() => $"{ServiceId} - {CliName} - {Port}";
     }
 }

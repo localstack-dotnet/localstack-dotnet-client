@@ -2,7 +2,9 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.S3.Util;
+
 using LocalStack.Client.Contracts;
+
 using System;
 using System.Threading.Tasks;
 
@@ -18,11 +20,7 @@ namespace LocalStack.Client.Sandbox
             var regionName = "us-west-1";
             var localStackHost = "localhost";
 
-            ISession session = SessionStandalone
-                .Init()
-                .WithSessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName)
-                .WithConfig(localStackHost)
-                .Create();
+            ISession session = SessionStandalone.Init().WithSessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName).WithConfig(localStackHost).Create();
 
             var amazonS3Client = session.CreateClient<AmazonS3Client>();
 
@@ -37,16 +35,13 @@ namespace LocalStack.Client.Sandbox
         {
             try
             {
-                if (!(await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName)))
+                if (!await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName))
                 {
-                    var putBucketRequest = new PutBucketRequest
-                    {
-                        BucketName = bucketName,
-                        UseClientRegion = true
-                    };
+                    var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
 
                     PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
                 }
+
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
 
@@ -66,12 +61,10 @@ namespace LocalStack.Client.Sandbox
 
         private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
         {
-            var request = new GetBucketLocationRequest()
-            {
-                BucketName = bucketName
-            };
+            var request = new GetBucketLocationRequest() {BucketName = bucketName};
             GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
             string bucketLocation = response.Location.ToString();
+
             return bucketLocation;
         }
     }

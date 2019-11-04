@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <LangVersion>latest</LangVersion>
 
@@ -10,16 +10,13 @@
     <TargetIsMono Condition="$(TargetFramework.StartsWith('net4')) and '$(OS)' == 'Unix'">true</TargetIsMono>
 
     <!-- Look in the standard install locations -->
-    <BaseFrameworkPathOverrideForMono
-      Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/Library/Frameworks/Mono.framework/Versions/Current/lib/mono')">
+    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/Library/Frameworks/Mono.framework/Versions/Current/lib/mono')">
       /Library/Frameworks/Mono.framework/Versions/Current/lib/mono
     </BaseFrameworkPathOverrideForMono>
-    <BaseFrameworkPathOverrideForMono
-      Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/lib/mono')">
+    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/lib/mono')">
       /usr/lib/mono
     </BaseFrameworkPathOverrideForMono>
-    <BaseFrameworkPathOverrideForMono
-      Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/local/lib/mono')">
+    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND '$(TargetIsMono)' == 'true' AND EXISTS('/usr/local/lib/mono')">
       /usr/local/lib/mono
     </BaseFrameworkPathOverrideForMono>
 
@@ -35,46 +32,55 @@
 
   <ItemGroup>
     <!-- When using 'dotnet build' to compile against Mono reference assemblies it seems necessary to add some explicit references to some facade DLLs  -->
-    <Reference Include="System.Runtime"
-               Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="System.IO"
-               Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="System.Threading.Tasks"
-               Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
+    <Reference Include="System.Runtime" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
+    <Reference Include="System.IO" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
+    <Reference Include="System.Threading.Tasks" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.APIGateway" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CloudFormation" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CloudSearch" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.101.17" />
-    <PackageReference Include="AWSSDK.CloudWatchEvents" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.102.5" />
-    <PackageReference Include="AWSSDK.Core" Version="3.3.101.11" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.10" />
-    <PackageReference Include="AWSSDK.ElasticLoadBalancing" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.Elasticsearch" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.IdentityManagement" Version="3.3.101.10" />
-    <PackageReference Include="AWSSDK.IoT" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.Kinesis" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.KinesisFirehose" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.Lambda" Version="3.3.102.2" />
-    <PackageReference Include="AWSSDK.RDS" Version="3.3.102.12" />
-    <PackageReference Include="AWSSDK.Redshift" Version="3.3.101.14" />
-    <PackageReference Include="AWSSDK.Route53" Version="3.3.101.12" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.102.1" />
-    <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.101.2" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.9" />
-    <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.3.102.4" />
-    <PackageReference Include="AWSSDK.SimpleWorkflow" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.SQS" Version="3.3.100.20" />
-    <PackageReference Include="AWSSDK.StepFunctions" Version="3.3.100.20" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
-    <PackageReference Include="Moq" Version="4.10.1" />
+    <PackageReference Include="AWSSDK.APIGateway" Version="3.3.103.17" />
+    <PackageReference Include="AWSSDK.AppSync" Version="3.3.102.31" />
+    <PackageReference Include="AWSSDK.Athena" Version="3.3.102.18" />
+    <PackageReference Include="AWSSDK.CloudFormation" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.CloudFront" Version="3.3.101.60" />
+    <PackageReference Include="AWSSDK.CloudSearch" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.103.6" />
+    <PackageReference Include="AWSSDK.CloudWatchEvents" Version="3.3.101.47" />
+    <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.3.101.41" />
+    <PackageReference Include="AWSSDK.CognitoIdentity" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.103.12" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103.58" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.84" />
+    <PackageReference Include="AWSSDK.EC2" Version="3.3.134.4" />
+    <PackageReference Include="AWSSDK.ECS" Version="3.3.110.13" />
+    <PackageReference Include="AWSSDK.EKS" Version="3.3.103.19" />
+    <PackageReference Include="AWSSDK.ElastiCache" Version="3.3.107.1" />
+    <PackageReference Include="AWSSDK.ElasticBeanstalk" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.ElasticLoadBalancing" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.3.102.28" />
+    <PackageReference Include="AWSSDK.Elasticsearch" Version="3.3.102.12" />
+    <PackageReference Include="AWSSDK.Glue" Version="3.3.111.12" />
+    <PackageReference Include="AWSSDK.IdentityManagement" Version="3.3.103.46" />
+    <PackageReference Include="AWSSDK.IoT" Version="3.3.102.33" />
+    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.3.101.79" />
+    <PackageReference Include="AWSSDK.Kinesis" Version="3.3.100.93" />
+    <PackageReference Include="AWSSDK.KinesisFirehose" Version="3.3.102.11" />
+    <PackageReference Include="AWSSDK.Lambda" Version="3.3.103.25" />
+    <PackageReference Include="AWSSDK.RDS" Version="3.3.112.7" />
+    <PackageReference Include="AWSSDK.Redshift" Version="3.3.104.14" />
+    <PackageReference Include="AWSSDK.Route53" Version="3.3.102.39" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.106" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.101.43" />
+    <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.103.7" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.64" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.82" />
+    <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.3.107.14" />
+    <PackageReference Include="AWSSDK.SimpleWorkflow" Version="3.3.101.50" />
+    <PackageReference Include="AWSSDK.SQS" Version="3.3.102.25" />
+    <PackageReference Include="AWSSDK.StepFunctions" Version="3.3.102.21" />
+    <PackageReference Include="AWSSDK.XRay" Version="3.3.101.80" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
     <PackageReference Include="xunit.runner.console" Version="2.4.1">

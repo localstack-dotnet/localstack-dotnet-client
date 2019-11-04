@@ -25,7 +25,9 @@ using Amazon.SimpleSystemsManagement;
 using Amazon.SimpleWorkflow;
 using Amazon.SQS;
 using Amazon.StepFunctions;
+
 using LocalStack.Client.Contracts;
+
 using Xunit;
 
 namespace LocalStack.Client.Integration.Tests
@@ -36,9 +38,7 @@ namespace LocalStack.Client.Integration.Tests
 
         static ClientCreationTests()
         {
-            Session = SessionStandalone
-                .Init()
-                .Create();
+            Session = SessionStandalone.Init().Create();
         }
 
         [Fact]

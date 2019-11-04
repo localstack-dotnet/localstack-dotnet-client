@@ -2,10 +2,13 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.S3.Util;
+
 using LocalStack.Client.Contracts;
 using LocalStack.Client.Models;
 using LocalStack.Client.Utils;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using System;
 using System.Threading.Tasks;
 
@@ -23,12 +26,10 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
             var regionName = "us-west-1";
             var localStackHost = "localhost";
 
-            collection
-                .AddScoped<ISessionOptions, SessionOptions>(provider =>
-                    new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName))
-                .AddScoped<IConfig, Config>(provider => new Config(localStackHost))
-                .AddScoped<ISessionReflection, SessionReflection>()
-                .AddScoped<ISession, Session>();
+            collection.AddScoped<ISessionOptions, SessionOptions>(provider => new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName))
+                      .AddScoped<IConfig, Config>(provider => new Config(localStackHost))
+                      .AddScoped<ISessionReflection, SessionReflection>()
+                      .AddScoped<ISession, Session>();
 
             ServiceProvider serviceProvider = collection.BuildServiceProvider();
             var session = serviceProvider.GetRequiredService<ISession>();
@@ -46,16 +47,13 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
         {
             try
             {
-                if (!(await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName)))
+                if (!await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName))
                 {
-                    var putBucketRequest = new PutBucketRequest
-                    {
-                        BucketName = bucketName,
-                        UseClientRegion = true
-                    };
+                    var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
 
                     PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
                 }
+
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
 
@@ -75,12 +73,10 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
 
         private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
         {
-            var request = new GetBucketLocationRequest()
-            {
-                BucketName = bucketName
-            };
+            var request = new GetBucketLocationRequest() {BucketName = bucketName};
             GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
             string bucketLocation = response.Location.ToString();
+
             return bucketLocation;
         }
     }

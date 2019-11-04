@@ -9,11 +9,8 @@ namespace LocalStack.Client.Models
         private const string AwsSessionTokenConst = "token";
         private const string RegionNameConst = "us-east-1";
 
-        public SessionOptions(
-            string awsAccessKeyId = AwsAccessKeyIdConst,
-            string awsAccessKey = AwsAccessKeyConst,
-            string awsSessionToken = AwsSessionTokenConst,
-            string regionName = RegionNameConst)
+        public SessionOptions(string awsAccessKeyId = AwsAccessKeyIdConst, string awsAccessKey = AwsAccessKeyConst, string awsSessionToken = AwsSessionTokenConst,
+                              string regionName = RegionNameConst)
         {
             AwsAccessKeyId = awsAccessKeyId ?? AwsAccessKeyIdConst;
             AwsAccessKey = awsAccessKey ?? AwsAccessKeyConst;

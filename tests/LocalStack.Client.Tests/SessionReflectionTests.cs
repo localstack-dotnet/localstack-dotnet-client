@@ -1,8 +1,11 @@
 ﻿using Amazon.Runtime;
 using Amazon.Runtime.Internal;
+
 using LocalStack.Client.Tests.Mocks.MockServiceClients;
 using LocalStack.Client.Utils;
+
 using System;
+
 using Xunit;
 
 namespace LocalStack.Client.Tests
@@ -10,8 +13,7 @@ namespace LocalStack.Client.Tests
     public class SessionReflectionTests
     {
         [Fact]
-        public void
-            ExtractServiceMetadata_Should_Throw_InvalidOperationException_If_Given_Generic_Service_Client_Type_Has_Not_Service_Metadata_Field()
+        public void ExtractServiceMetadata_Should_Throw_InvalidOperationException_If_Given_Generic_Service_Client_Type_Has_Not_Service_Metadata_Field()
         {
             var sessionReflection = new SessionReflection();
 

@@ -6,7 +6,10 @@ trigger:
       - feature/*
 pr: none
 pool:
-  name: Hosted Ubuntu 1604
+  vmImage: ubuntu-16.04
+variables:
+  Version.MajorMinor: 1.0.0
+  Version.Revision: $[counter(variables['Version.MajorMinor'], 0)]
 steps:
   - bash: "sudo apt install nuget && mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls"
     displayName: "Init Task"
@@ -17,15 +20,15 @@ steps:
       targetType: filePath
       filePath: ./build.sh
 
-  - bash: chmod +x ./build.sh && sudo ./build.sh --target=get-version --buildnumber=$BUILD_ID
+  - bash: echo $(Version.Revision) && chmod +x ./build.sh && sudo ./build.sh --target=get-version --buildnumber=$BUILD_ID
     displayName: "Package Version"
     env:
-      BUILD_ID: $(Build.BuildId)
+      BUILD_ID: $(Version.Revision)
 
   - bash: chmod +x ./build.sh && sudo ./build.sh --target=nuget-pack --buildnumber=$BUILD_ID
     displayName: "Nuget Pack"
     env:
-      BUILD_ID: $(Build.BuildId)
+      BUILD_ID: $(Version.Revision)
 
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: LocalStack.Client"

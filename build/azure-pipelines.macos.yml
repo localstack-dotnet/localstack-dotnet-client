@@ -12,10 +12,31 @@ pr:
     include:
       - "*"
 pool:
-  name: Hosted macOS
+  name: "Hosted macOS High Sierra"
 steps:
+  - task: UseDotNet@2
+    displayName: "Install .net core 2.1"
+    inputs:
+      packageType: sdk
+      version: "2.1.802"
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - task: UseDotNet@2
+    displayName: "Install .net core 2.2"
+    inputs:
+      packageType: sdk
+      version: "2.2.402"
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
+  - task: UseDotNet@2
+    displayName: "Install .net core 3.0"
+    inputs:
+      packageType: sdk
+      version: "3.0.100"
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+
   - task: Bash@3
-    displayName: 'Compile & Tests'
+    displayName: "Compile & Tests"
     inputs:
       targetType: filePath
       filePath: ./build.sh

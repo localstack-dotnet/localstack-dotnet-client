@@ -8,12 +8,15 @@ trigger:
     exclude:
       - "**/*.md"
 pr:
-  branches:
+  # branches:
     include:
       - "*"
 pool:
   name: "Hosted macOS High Sierra"
 steps:
+  - bash: SYMLINK=5_4_1 && MONOPREFIX=/Library/Frameworks/Mono.framework/Versions/$SYMLINK && echo "##vso[task.setvariable variable=DYLD_FALLBACK_LIBRARY_PATH;]$MONOPREFIX/lib:/lib:/usr/lib:$DYLD_LIBRARY_FALLBACK_PATH" && echo "##vso[task.setvariable variable=PKG_CONFIG_PATH;]$MONOPREFIX/lib/pkgconfig:$MONOPREFIX/share/pkgconfig:$PKG_CONFIG_PATH" && echo "##vso[task.setvariable variable=PATH;]$MONOPREFIX/bin:$PATH"
+    displayName: "Set Mono Version"
+
   - task: UseDotNet@2
     displayName: "Install .net core 2.1"
     inputs:

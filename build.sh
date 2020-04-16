@@ -6,7 +6,7 @@
 # Feel free to change this file to fit your needs.
 ##########################################################################
 
-CAKE_VERSION=0.34.1
+CAKE_VERSION=0.37.0
 
 # Define directories.
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
@@ -50,7 +50,7 @@ if [ ! -f "$CAKE_EXE" ]; then
     # Make sure that tools.csproj exist.
     if [ ! -f "$TOOLS_DIR/tools.csproj" ]; then
         echo "Creating tools.csproj..."
-        echo "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp3.0</TargetFramework></PropertyGroup></Project>" > $TOOLS_DIR/tools.csproj
+        echo "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp3.1</TargetFramework></PropertyGroup></Project>" > $TOOLS_DIR/tools.csproj
         if [ $? -ne 0 ]; then
             echo "An error occurred while creating tools.csproj."
             exit 1

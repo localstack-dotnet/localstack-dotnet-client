@@ -35,7 +35,7 @@ namespace LocalStack.Client.Sandbox
         {
             try
             {
-                if (!await AmazonS3Util.DoesS3BucketExistAsync(s3Client, bucketName))
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
                 {
                     var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
 

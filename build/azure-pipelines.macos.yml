@@ -3,37 +3,44 @@ trigger:
     include:
       - "*"
   paths:
-    include:
-      - "*"
     exclude:
-      - "**/*.md"
+      - README.md
+      - CONTRIBUTING.md
+      - LICENSE
 pr:
   branches:
     include:
       - "*"
+schedules:
+  - cron: "0 12 * * 0"
+    displayName: Weekly Sunday build
+    branches:
+      include:
+        - master
+    always: true
 pool:
-  name: "Hosted macOS High Sierra"
+  vmImage: macOS-10.14
 steps:
-  - task: UseDotNet@2
-    displayName: "Install .net core 2.1"
-    inputs:
-      packageType: sdk
-      version: "2.1.802"
-      installationPath: $(Agent.ToolsDirectory)/dotnet
+  - bash: "sudo curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+    displayName: "Install Nuget"
+
+  - bash: "alias nuget='mono /usr/local/bin/nuget.exe'"
+    displayName: "Set nuget alias"
+
+  - bash: "mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls"
+    displayName: "Create test runner folder"
 
   - task: UseDotNet@2
-    displayName: "Install .net core 2.2"
+    displayName: ".NET Core 3.1.x"
     inputs:
+      version: "3.1.x"
       packageType: sdk
-      version: "2.2.402"
-      installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - task: UseDotNet@2
-    displayName: "Install .net core 3.0"
+    displayName: ".NET Core 2.1.x"
     inputs:
+      version: "2.1.x"
       packageType: sdk
-      version: "3.0.100"
-      installationPath: $(Agent.ToolsDirectory)/dotnet
 
   - task: Bash@3
     displayName: "Compile & Tests"

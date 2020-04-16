@@ -3,14 +3,21 @@ trigger:
     include:
       - "*"
   paths:
-    include:
-      - "*"
     exclude:
-      - "**/*.md"
+      - README.md
+      - CONTRIBUTING.md
+      - LICENSE
 pr:
   branches:
     include:
       - "*"
+schedules:
+  - cron: "0 12 * * 0"
+    displayName: Weekly Sunday build
+    branches:
+      include:
+        - master
+    always: true
 pool:
   vmImage: windows-2019
 steps:

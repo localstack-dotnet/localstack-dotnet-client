@@ -1,17 +1,17 @@
 using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 var target = Argument("target", "default");
 var configuration = Argument("config", "Release");
 var buildNumber = Argument<int>("buildnumber", 1);
 
 var artifactOutput = "./artifacts";
-var artifactPreOutput = "./artifacts-pre";
 var testResults = "results.trx";
 string projectPath = "./src/LocalStack.Client/LocalStack.Client.csproj";
 
-Task("default")
+
+Task("Default")
     .IsDependentOn("init")
     .IsDependentOn("tests");
 
@@ -30,7 +30,7 @@ Task("init")
             });
 
             StartProcess("mono", new ProcessSettings {
-                Arguments = "--info"
+                Arguments = "--version"
             });
 
             InstallXUnitNugetPackage();
@@ -88,16 +88,28 @@ Task("tests")
 Task("nuget-pack")
     .Does(() =>
     {
-        NugetPack(artifactOutput, false);
-        NugetPack(artifactPreOutput, true);
+        string outputDirectory = MakeAbsolute(Directory(artifactOutput)).FullPath;
+        string projectFullPath = MakeAbsolute(File(projectPath)).FullPath;
+
+        if(!System.IO.Directory.Exists(outputDirectory))
+        {
+            System.IO.Directory.CreateDirectory(outputDirectory);
+        }
+
+        var settings = new DotNetCorePackSettings();
+        settings.Configuration = configuration;
+        settings.OutputDirectory = artifactOutput;
+        settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
+        settings.MSBuildSettings.SetVersion(GetProjectVersion());
+
+        DotNetCorePack(projectFullPath, settings);
     });
 
 Task("get-version")
     .Description("Get version")
     .Does(() =>
     {
-        Warning(GetProjectVersion(true));
-        Warning(GetProjectVersion(false));
+        Warning(GetProjectVersion());
     });
 
 RunTarget(target);
@@ -126,25 +138,6 @@ private void RunXunitUsingMono(string targetFramework, string assemblyPath)
     {
         throw new InvalidOperationException($"Exit code: {exitCode}");
     }
-}
-
-private void NugetPack(string outputPath, bool packBeta)
-{
-    string outputDirectory = MakeAbsolute(Directory(outputPath)).FullPath;
-    string projectFullPath = MakeAbsolute(File(projectPath)).FullPath;
-
-    if(!System.IO.Directory.Exists(outputDirectory))
-    {
-        System.IO.Directory.CreateDirectory(outputDirectory);
-    }
-
-    var settings = new DotNetCorePackSettings();
-    settings.Configuration = configuration;
-    settings.OutputDirectory = outputPath;
-    settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
-    settings.MSBuildSettings.SetVersion(GetProjectVersion(!packBeta));
-
-    DotNetCorePack(projectFullPath, settings);
 }
 
 private IList<TestProjMetadata> GetProjMetadata()
@@ -233,7 +226,7 @@ private void UpdateProjectVersion(string version)
     System.IO.File.WriteAllText(file.FullPath, project, Encoding.UTF8);
 }
 
-private string GetProjectVersion(bool withoutBuildNumber)
+private string GetProjectVersion()
 {
     var file =  MakeAbsolute(File("./src/Directory.Build.props"));
 
@@ -244,7 +237,7 @@ private string GetProjectVersion(bool withoutBuildNumber)
     int endIndex = project.IndexOf("</Version>", startIndex);
 
     string version = project.Substring(startIndex, endIndex - startIndex);
-    version = withoutBuildNumber ? $"{version}" : $"{version}-pre{buildNumber}";
+    version = $"{version}.{buildNumber}";
 
     return version;
 }

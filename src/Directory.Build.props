@@ -3,8 +3,8 @@
     <Authors>LocalStack.NET, Deniz İrgin</Authors>
     <Company>LocalStack.NET</Company>
     <Owners>LocalStack.NET</Owners>
-    <PackageIconUrl>https://raw.githubusercontent.com/localstack-dotnet/localstack-dotnet-client/master/assets/localstack-dotnet-square.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/localstack-dotnet/localstack-dotnet-client</PackageProjectUrl>
+    <PackageIcon>localstack-dotnet-square.png</PackageIcon>
     <Version>1.0.0</Version>
   </PropertyGroup>
 </Project>

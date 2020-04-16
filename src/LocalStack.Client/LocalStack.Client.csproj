@@ -32,7 +32,7 @@
     <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
   </PropertyGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PreBuild" AfterTargets="PreBuildEvent">
     <ItemGroup>
       <LicenseFile Include="../../LICENSE" />
     </ItemGroup>
@@ -43,18 +43,18 @@
     <None Include="LICENSE.txt" Pack="true" PackagePath="">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
   <ItemGroup>
     <!-- When using 'dotnet build' to compile against Mono reference assemblies it seems necessary to add some explicit references to some facade DLLs  -->
     <Reference Include="System.Runtime" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
     <Reference Include="System.IO" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
-    <Reference Include="System.Threading.Tasks" Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND $(TargetFramework.StartsWith('net4'))" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="[3.3.100,3.4.0)" />
+    <PackageReference Include="AWSSDK.Core" Version="[3.3.106,3.4.0)" />
   </ItemGroup>
 
 </Project>

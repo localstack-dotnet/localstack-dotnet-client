@@ -11,7 +11,7 @@ namespace LocalStack.Client.Utils
 {
     public class SessionReflection : ISessionReflection
     {
-        public IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient, new()
+        public IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient
         {
             Type clientType = typeof(TClient);
 
@@ -23,7 +23,7 @@ namespace LocalStack.Client.Utils
             return serviceMetadata;
         }
 
-        public ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient, new()
+        public ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient
         {
             ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(typeof(TClient));
             ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];

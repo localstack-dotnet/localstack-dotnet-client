@@ -1,9 +1,13 @@
 ﻿using Amazon.APIGateway;
+using Amazon.ApiGatewayV2;
 using Amazon.AppSync;
 using Amazon.Athena;
+using Amazon.AutoScaling;
+using Amazon.Batch;
 using Amazon.CloudFormation;
 using Amazon.CloudFront;
 using Amazon.CloudSearch;
+using Amazon.CloudTrail;
 using Amazon.CloudWatch;
 using Amazon.CloudWatchEvents;
 using Amazon.CloudWatchLogs;
@@ -11,6 +15,7 @@ using Amazon.CognitoIdentity;
 using Amazon.CognitoIdentityProvider;
 using Amazon.DynamoDBv2;
 using Amazon.EC2;
+using Amazon.ECR;
 using Amazon.ECS;
 using Amazon.EKS;
 using Amazon.ElastiCache;
@@ -24,10 +29,17 @@ using Amazon.IoT;
 using Amazon.KeyManagementService;
 using Amazon.KinesisFirehose;
 using Amazon.Lambda;
+using Amazon.MediaStore;
+using Amazon.MediaStoreData;
+using Amazon.Organizations;
+using Amazon.QLDB;
 using Amazon.RDS;
+using Amazon.RDSDataService;
 using Amazon.Redshift;
 using Amazon.Route53;
 using Amazon.S3;
+using Amazon.SageMaker;
+using Amazon.SageMakerRuntime;
 using Amazon.SecretsManager;
 using Amazon.SecurityToken;
 using Amazon.SimpleEmail;
@@ -59,6 +71,14 @@ namespace LocalStack.Client.Integration.Tests
             var amazonApiGatewayClient = Session.CreateClient<AmazonAPIGatewayClient>();
 
             Assert.NotNull(amazonApiGatewayClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonApiGatewayV2Client()
+        {
+            var amazonApiGatewayV2Client = Session.CreateClient<AmazonApiGatewayV2Client>();
+
+            Assert.NotNull(amazonApiGatewayV2Client);
         }
 
         [Fact]
@@ -254,6 +274,14 @@ namespace LocalStack.Client.Integration.Tests
         }
 
         [Fact]
+        public void Should_Able_To_Create_AmazonRDSDataServiceClient()
+        {
+            var amazonRdsDataServiceClient = Session.CreateClient<AmazonRDSDataServiceClient>();
+
+            Assert.NotNull(amazonRdsDataServiceClient);
+        }
+
+        [Fact]
         public void Should_Able_To_Create_AmazonCloudSearchClient()
         {
             var amazonCloudSearchClient = Session.CreateClient<AmazonCloudSearchClient>();
@@ -363,6 +391,86 @@ namespace LocalStack.Client.Integration.Tests
             var amazonGlueClient = Session.CreateClient<AmazonGlueClient>();
 
             Assert.NotNull(amazonGlueClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonSageMakerClient()
+        {
+            var amazonSageMakerClient = Session.CreateClient<AmazonSageMakerClient>();
+
+            Assert.NotNull(amazonSageMakerClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonSageMakerRuntimeClient()
+        {
+            var amazonSageMakerRuntimeClient = Session.CreateClient<AmazonSageMakerRuntimeClient>();
+
+            Assert.NotNull(amazonSageMakerRuntimeClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonECRClient()
+        {
+            var amazonEcrClient = Session.CreateClient<AmazonECRClient>();
+
+            Assert.NotNull(amazonEcrClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonQLDBClient()
+        {
+            var amazonQldbClient = Session.CreateClient<AmazonQLDBClient>();
+
+            Assert.NotNull(amazonQldbClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonCloudTrailClient()
+        {
+            var amazonCloudTrailClient = Session.CreateClient<AmazonCloudTrailClient>();
+
+            Assert.NotNull(amazonCloudTrailClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonBatchClientClient()
+        {
+            var amazonBatchClient = Session.CreateClient<AmazonBatchClient>();
+
+            Assert.NotNull(amazonBatchClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonOrganizationsClient()
+        {
+            var amazonOrganizationsClient = Session.CreateClient<AmazonOrganizationsClient>();
+
+            Assert.NotNull(amazonOrganizationsClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonAutoScalingClient()
+        {
+            var amazonAutoScalingClient = Session.CreateClient<AmazonAutoScalingClient>();
+
+            Assert.NotNull(amazonAutoScalingClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonMediaStoreClient()
+        {
+            var amazonMediaStoreClient = Session.CreateClient<AmazonMediaStoreClient>();
+
+            Assert.NotNull(amazonMediaStoreClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonMediaStoreDataClient()
+        {
+            var amazonMediaStoreDataClient = Session.CreateClient<AmazonMediaStoreDataClient>();
+
+            Assert.NotNull(amazonMediaStoreDataClient);
         }
     }
 }

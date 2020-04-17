@@ -32,11 +32,15 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.APIGateway" Version="3.3.103.85" />
+    <PackageReference Include="AWSSDK.ApiGatewayV2" Version="3.3.106.13" />
     <PackageReference Include="AWSSDK.AppSync" Version="3.3.104.31" />
     <PackageReference Include="AWSSDK.Athena" Version="3.3.103.56" />
+    <PackageReference Include="AWSSDK.AutoScaling" Version="3.3.102.27" />
+    <PackageReference Include="AWSSDK.Batch" Version="3.3.104.35" />
     <PackageReference Include="AWSSDK.CloudFormation" Version="3.3.104.29" />
     <PackageReference Include="AWSSDK.CloudFront" Version="3.3.101.127" />
     <PackageReference Include="AWSSDK.CloudSearch" Version="3.3.101.62" />
+    <PackageReference Include="AWSSDK.CloudTrail" Version="3.3.102.59" />
     <PackageReference Include="AWSSDK.CloudWatch" Version="3.3.107.5" />
     <PackageReference Include="AWSSDK.CloudWatchEvents" Version="3.3.102.26" />
     <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.3.101.110" />
@@ -45,6 +49,7 @@
     <PackageReference Include="AWSSDK.Core" Version="3.3.106.5" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.105.27" />
     <PackageReference Include="AWSSDK.EC2" Version="3.3.170" />
+    <PackageReference Include="AWSSDK.ECR" Version="3.3.103.42" />
     <PackageReference Include="AWSSDK.ECS" Version="3.3.116.1" />
     <PackageReference Include="AWSSDK.EKS" Version="3.3.110.12" />
     <PackageReference Include="AWSSDK.ElastiCache" Version="3.3.108.17" />
@@ -59,10 +64,17 @@
     <PackageReference Include="AWSSDK.Kinesis" Version="3.3.100.160" />
     <PackageReference Include="AWSSDK.KinesisFirehose" Version="3.3.103.59" />
     <PackageReference Include="AWSSDK.Lambda" Version="3.3.109.7" />
+    <PackageReference Include="AWSSDK.MediaStore" Version="3.3.103.7" />
+    <PackageReference Include="AWSSDK.MediaStoreData" Version="3.3.101.136" />
+    <PackageReference Include="AWSSDK.Organizations" Version="3.3.105.12" />
+    <PackageReference Include="AWSSDK.QLDB" Version="3.3.100.88" />
     <PackageReference Include="AWSSDK.RDS" Version="3.3.120" />
+    <PackageReference Include="AWSSDK.RDSDataService" Version="3.3.103.55" />
     <PackageReference Include="AWSSDK.Redshift" Version="3.3.107.19" />
     <PackageReference Include="AWSSDK.Route53" Version="3.3.102.107" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.51" />
+    <PackageReference Include="AWSSDK.SageMaker" Version="3.3.113" />
+    <PackageReference Include="AWSSDK.SageMakerRuntime" Version="3.3.101.56" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.102.25" />
     <PackageReference Include="AWSSDK.SecurityToken" Version="3.3.104.59" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.131" />

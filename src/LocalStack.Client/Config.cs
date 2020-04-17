@@ -19,7 +19,7 @@ namespace LocalStack.Client
 
         public Config(string localStackHost = null)
         {
-            localStackHost = localStackHost ?? (EnvLocalStackHost ?? "localhost");
+            localStackHost ??= (EnvLocalStackHost ?? "localhost");
             string protocol = EnvUseSsl != null && (EnvUseSsl == "1" || EnvUseSsl == "true") ? "https" : "http";
 
             _awsServiceEndpoints = ServiceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum, metadata.Port,
@@ -39,6 +39,18 @@ namespace LocalStack.Client
         public AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId)
         {
             return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.ServiceId == serviceId);
+        }
+
+        public IDictionary<AwsServiceEnum, int> GetAwsServicePorts()
+        {
+            return _awsServiceEndpoints.ToDictionary(endpoint => endpoint.AwsServiceEnum, endpoint => endpoint.Port);
+        }
+
+        public int GetAwsServicePorts(AwsServiceEnum awsServiceEnum)
+        {
+            return _awsServiceEndpoints
+                .First(endpoint => endpoint.AwsServiceEnum == awsServiceEnum)
+                .Port;
         }
     }
 }

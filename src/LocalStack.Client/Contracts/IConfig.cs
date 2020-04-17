@@ -13,5 +13,9 @@ namespace LocalStack.Client.Contracts
         AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum);
 
         AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId);
+
+        IDictionary<AwsServiceEnum, int> GetAwsServicePorts();
+
+        int GetAwsServicePorts(AwsServiceEnum awsServiceEnum);
     }
 }

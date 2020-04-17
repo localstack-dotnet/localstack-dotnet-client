@@ -3,6 +3,7 @@
     public enum AwsServiceEnum
     {
         ApiGateway,
+        ApiGatewayV2,
         Kinesis,
         DynamoDb,
         DynamoDbStreams,
@@ -16,8 +17,8 @@
         Es,
         Ses,
         Route53,
-        Cloudformation,
-        Cloudwatch,
+        CloudFormation,
+        CloudWatch,
         Ssm,
         SecretsManager,
         StepFunctions,
@@ -30,7 +31,8 @@
         Sts,
         Iam,
         Rds,
-        Cloudsearch,
+        RdsData,
+        CloudSearch,
         Swf,
         Ec2,
         ElastiCache,
@@ -43,6 +45,17 @@
         AppSync,
         CloudFront,
         Athena,
-        Glue
+        Glue,
+        SageMaker,
+        SageMakerRuntime,
+        Ecr,
+        Qldb,
+        CloudTrail,
+        Glacier,
+        Batch,
+        Organizations,
+        AutoScaling,
+        MediaStore,
+        MediaStoreData
     }
 }

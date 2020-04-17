@@ -21,7 +21,7 @@ namespace LocalStack.Client
             _sessionReflection = sessionReflection;
         }
 
-        public TClient CreateClient<TClient>() where TClient : AmazonServiceClient, new()
+        public TClient CreateClient<TClient>() where TClient : AmazonServiceClient
         {
             IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata<TClient>();
             AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??

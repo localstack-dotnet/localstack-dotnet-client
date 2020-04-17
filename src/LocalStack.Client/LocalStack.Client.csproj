@@ -54,7 +54,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="[3.3.106,3.4.0)" />
+    <PackageReference Include="AWSSDK.Core" Version="[3.3.106.5, 3.4.0)" />
   </ItemGroup>
 
 </Project>

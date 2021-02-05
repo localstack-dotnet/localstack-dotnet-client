@@ -1,43 +1,56 @@
-﻿using LocalStack.Client.Contracts;
+﻿using System;
+
+using LocalStack.Client.Contracts;
 using LocalStack.Client.Models;
+using LocalStack.Client.Options;
 using LocalStack.Client.Utils;
 
 namespace LocalStack.Client
 {
     public class SessionStandalone : ISessionStandalone
     {
-        private string _awsAccessKey;
-        private string _awsAccessKeyId;
-        private string _awsSessionToken;
-        private string _localStackHost;
-        private string _regionName;
+        private ISessionOptions _sessionOptions;
+        private IConfigOptions _configOptions;
 
         private SessionStandalone()
         {
         }
 
+        [Obsolete("This method is obsolete, use WithSessionOptions with ISessionOptions parameter")]
         public ISessionStandalone WithSessionOptions(string awsAccessKeyId = null, string awsAccessKey = null, string awsSessionToken = null, string regionName = null)
         {
-            _awsAccessKeyId = awsAccessKeyId;
-            _awsAccessKey = awsAccessKey;
-            _awsSessionToken = awsSessionToken;
-            _regionName = regionName;
+            _sessionOptions = new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName);
 
             return this;
         }
 
+        [Obsolete("This method is obsolete, use WithConfig")]
         public ISessionStandalone WithConfig(string localStackHost = null)
         {
-            _localStackHost = localStackHost;
+            _configOptions = new ConfigOptions(localStackHost);
+
+            return this;
+        }
+
+        public ISessionStandalone WithSessionOptions(ISessionOptions sessionOptions)
+        {
+            _sessionOptions = sessionOptions;
+
+            return this;
+        }
+
+        public ISessionStandalone WithConfigurationOptions(IConfigOptions configOptions)
+        {
+            _configOptions = configOptions;
 
             return this;
         }
 
         public ISession Create()
         {
-            var sessionOptions = new SessionOptions(_awsAccessKeyId, _awsAccessKey, _awsSessionToken, _regionName);
-            var config = new Config(_localStackHost);
-            var sessionReflection = new SessionReflection();
+            ISessionOptions sessionOptions = _sessionOptions ?? new SessionOptions();
+            IConfig config = new Config(_configOptions ?? new ConfigOptions());
+            ISessionReflection sessionReflection = new SessionReflection();
 
             return new Session(sessionOptions, config, sessionReflection);
         }

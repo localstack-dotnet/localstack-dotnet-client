@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net5.0</TargetFrameworks>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <AssemblyName>LocalStack.Client</AssemblyName>
     <RootNamespace>LocalStack.Client</RootNamespace>
@@ -51,7 +51,7 @@
     <None Include="LICENSE.txt" Pack="true" PackagePath="">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath=""/>
+    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,7 +62,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="[3.3.106.5, 3.4.0)" />
+    <PackageReference Include="AWSSDK.Core" Version="3.5.2.6" />
   </ItemGroup>
 
 </Project>

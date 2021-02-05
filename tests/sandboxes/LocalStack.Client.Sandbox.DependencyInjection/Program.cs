@@ -4,13 +4,14 @@ using Amazon.S3.Transfer;
 using Amazon.S3.Util;
 
 using LocalStack.Client.Contracts;
-using LocalStack.Client.Models;
 using LocalStack.Client.Utils;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
 using System.Threading.Tasks;
+
+using LocalStack.Client.Options;
 
 namespace LocalStack.Client.Sandbox.DependencyInjection
 {
@@ -20,16 +21,31 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
         {
             var collection = new ServiceCollection();
 
-            var awsAccessKeyId = "Key Id";
-            var awsAccessKey = "Secret Key";
-            var awsSessionToken = "Token";
-            var regionName = "us-west-1";
-            var localStackHost = "localhost";
+            collection
+                /*
+                * ==== Default Values ====
+                * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
+                * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
+                * AwsSessionToken: token (It doesn't matter to LocalStack)
+                * RegionName: us-east-1
+                * ==== Custom Values ====
+                * .AddScoped<ISessionOptions, SessionOptions>(provider => new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-"))
+                */
+                .AddScoped<ISessionOptions, SessionOptions>()
 
-            collection.AddScoped<ISessionOptions, SessionOptions>(provider => new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName))
-                      .AddScoped<IConfig, Config>(provider => new Config(localStackHost))
-                      .AddScoped<ISessionReflection, SessionReflection>()
-                      .AddScoped<ISession, Session>();
+                /*
+                 * ==== Default Values ====
+                 * LocalStackHost: localhost
+                 * UseSsl: false
+                 * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.5 or above)
+                 * EdgePort: 4566 (It doesn't matter if use legacy ports)
+                 * ==== Custom Values ====
+                 * .AddScoped<IConfigOptions, ConfigOptions>(provider => new ConfigOptions("mylocalhost", false, false, 4566))
+                 */
+                .AddScoped<IConfigOptions, ConfigOptions>()
+                .AddScoped<IConfig, Config>()
+                .AddScoped<ISessionReflection, SessionReflection>()
+                .AddScoped<ISession, Session>();
 
             ServiceProvider serviceProvider = collection.BuildServiceProvider();
             var session = serviceProvider.GetRequiredService<ISession>();
@@ -49,7 +65,7 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
             {
                 if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
                 {
-                    var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
+                    var putBucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true };
 
                     PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
                 }
@@ -73,9 +89,9 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
 
         private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
         {
-            var request = new GetBucketLocationRequest() {BucketName = bucketName};
+            var request = new GetBucketLocationRequest() { BucketName = bucketName };
             GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
-            string bucketLocation = response.Location.ToString();
+            var bucketLocation = response.Location.ToString();
 
             return bucketLocation;
         }

@@ -14,6 +14,7 @@
         Sns,
         Sqs,
         Redshift,
+        RedshiftData,
         Es,
         Ses,
         Route53,
@@ -56,6 +57,18 @@
         Organizations,
         AutoScaling,
         MediaStore,
-        MediaStoreData
+        MediaStoreData,
+        Transfer,
+        Acm,
+        CodeCommit,
+        KinesisAnalytics,
+        Amplify,
+        ApplicationAutoscaling,
+        Kafka,
+        ApiGatewayManagementApi,
+        TimeStreamQuery,
+        TimeStreamWrite,
+        S3Control,
+        ElbV2
     }
 }

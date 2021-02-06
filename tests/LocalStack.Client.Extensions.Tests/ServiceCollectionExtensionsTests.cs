@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Amazon;
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 
@@ -45,9 +46,7 @@ namespace LocalStack.Client.Extensions.Tests
         public void AddLocalStack_Should_Configure_LocalStackOptions_By_LocalStack_Section()
         {
             var configurationValue = new Dictionary<string, string> {{"LocalStack:UseLocalStack", "true"}};
-            IConfiguration configuration = new ConfigurationBuilder()
-                                           .AddInMemoryCollection(configurationValue)
-                                           .Build();
+            IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLocalStack(configuration);
@@ -87,15 +86,13 @@ namespace LocalStack.Client.Extensions.Tests
 
             var configurationValue = new Dictionary<string, string>
             {
-                {"LocalStack:Session:AwsAccessKeyId", awsAccessKeyId}, 
+                {"LocalStack:Session:AwsAccessKeyId", awsAccessKeyId},
                 {"LocalStack:Session:AwsAccessKey", awsAccessKey},
                 {"LocalStack:Session:AwsSessionToken", awsSessionToken},
                 {"LocalStack:Session:RegionName", regionName}
             };
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                                           .AddInMemoryCollection(configurationValue)
-                                           .Build();
+            IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLocalStack(configuration);
 
@@ -135,15 +132,13 @@ namespace LocalStack.Client.Extensions.Tests
 
             var configurationValue = new Dictionary<string, string>
             {
-                {"LocalStack:Config:LocalStackHost", localStackHost}, 
+                {"LocalStack:Config:LocalStackHost", localStackHost},
                 {"LocalStack:Config:UseSsl", useSsl.ToString()},
                 {"LocalStack:Config:UseLegacyPorts", useLegacyPorts.ToString()},
                 {"LocalStack:Config:EdgePort", edgePort.ToString()}
             };
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                                           .AddInMemoryCollection(configurationValue)
-                                           .Build();
+            IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLocalStack(configuration);
 
@@ -224,9 +219,7 @@ namespace LocalStack.Client.Extensions.Tests
         public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True()
         {
             var configurationValue = new Dictionary<string, string> {{"LocalStack:UseLocalStack", "true"}};
-            IConfiguration configuration = new ConfigurationBuilder()
-                                           .AddInMemoryCollection(configurationValue)
-                                           .Build();
+            IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
             var mockServiceMetadata = new MockServiceMetadata();
             var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
@@ -237,10 +230,9 @@ namespace LocalStack.Client.Extensions.Tests
             mockConfig.Setup(config => config.GetAwsServiceEndpoint(It.Is<string>(s => s == mockServiceMetadata.ServiceId))).Returns(() => mockAwsServiceEndpoint);
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection
-                .AddLocalStack(configuration)
-                .Replace(ServiceDescriptor.Singleton(_ => mockConfigObject))
-                .AddAwsService<IMockAmazonServiceWithServiceMetadata>();
+            serviceCollection.AddLocalStack(configuration)
+                             .Replace(ServiceDescriptor.Singleton(_ => mockConfigObject))
+                             .AddAwsService<IMockAmazonServiceWithServiceMetadata>();
 
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
@@ -254,13 +246,12 @@ namespace LocalStack.Client.Extensions.Tests
             Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
         }
 
-        [Theory,InlineData(false, 1, 0),InlineData(true, 0, 1)]
-        public void GetRequiredService_Should_Use_Suitable_ClientFactory_To_Create_AwsService_By_UseLocalStack_Value(bool useLocalStack, int awsClientFactoryInvolved, int sessionInvolved)
+        [Theory, InlineData(false, 1, 0), InlineData(true, 0, 1)]
+        public void GetRequiredService_Should_Use_Suitable_ClientFactory_To_Create_AwsService_By_UseLocalStack_Value(
+            bool useLocalStack, int awsClientFactoryInvolved, int sessionInvolved)
         {
             var configurationValue = new Dictionary<string, string> {{"LocalStack:UseLocalStack", useLocalStack.ToString()}};
-            IConfiguration configuration = new ConfigurationBuilder()
-                                           .AddInMemoryCollection(configurationValue)
-                                           .Build();
+            IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
             var mockSession = new Mock<ISession>(MockBehavior.Strict);
             var mockClientFactory = new Mock<IAwsClientFactoryWrapper>(MockBehavior.Strict);
@@ -269,24 +260,22 @@ namespace LocalStack.Client.Extensions.Tests
             IAwsClientFactoryWrapper mockAwsClientFactoryWrapper = mockClientFactory.Object;
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection
-                .AddLocalStack(configuration)
-                .Replace(ServiceDescriptor.Singleton(_ => mockSessionObject))
-                .Replace(ServiceDescriptor.Singleton(_ => mockAwsClientFactoryWrapper))
-                .AddAwsService<IMockAmazonService>();
+            serviceCollection.AddLocalStack(configuration)
+                             .Replace(ServiceDescriptor.Singleton(_ => mockSessionObject))
+                             .Replace(ServiceDescriptor.Singleton(_ => mockAwsClientFactoryWrapper))
+                             .AddAwsService<IMockAmazonService>();
 
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-            mockSession.Setup(session => session.CreateClientByInterface<IMockAmazonService>())
-                       .Returns(() => new MockAmazonServiceClient());
-            mockClientFactory.Setup(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()))
-                             .Returns(() => new MockAmazonServiceClient());
+            mockSession.Setup(session => session.CreateClientByInterface<IMockAmazonService>()).Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
+            mockClientFactory.Setup(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>())).Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
 
             var mockAmazonService = provider.GetRequiredService<IMockAmazonService>();
 
             Assert.NotNull(mockAmazonService);
 
-            mockClientFactory.Verify(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()), Times.Exactly(awsClientFactoryInvolved));
+            mockClientFactory.Verify(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()),
+                                     Times.Exactly(awsClientFactoryInvolved));
             mockSession.Verify(session => session.CreateClientByInterface<IMockAmazonService>(), Times.Exactly(sessionInvolved));
         }
     }

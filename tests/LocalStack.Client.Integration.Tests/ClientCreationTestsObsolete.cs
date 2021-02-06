@@ -16,9 +16,7 @@ using Amazon.CloudWatchLogs;
 using Amazon.CognitoIdentity;
 using Amazon.CognitoIdentityProvider;
 using Amazon.DynamoDBv2;
-#if WIN
 using Amazon.EC2;
-#endif
 using Amazon.ECR;
 using Amazon.ECS;
 using Amazon.EKS;
@@ -302,7 +300,6 @@ namespace LocalStack.Client.Integration.Tests
             Assert.NotNull(amazonSimpleWorkflowClient);
         }
 
-#if WIN
         [Fact]
         public void Should_Able_To_Create_AmazonEC2Client()
         {
@@ -310,7 +307,6 @@ namespace LocalStack.Client.Integration.Tests
 
             Assert.NotNull(amazonEc2Client);
         }
-#endif
 
         [Fact]
         public void Should_Able_To_Create_AmazonElastiCacheClient()

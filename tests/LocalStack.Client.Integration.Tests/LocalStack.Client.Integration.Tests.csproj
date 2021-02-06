@@ -6,14 +6,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461'">
-    <DefineConstants>NETFULL</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' "> 
-    <DefineConstants>WIN</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AWSSDK.Amplify" Version="3.5.3.30" />
     <PackageReference Include="AWSSDK.APIGateway" Version="3.5.2.32" />

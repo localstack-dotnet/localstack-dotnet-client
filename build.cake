@@ -5,6 +5,7 @@ using System.Diagnostics;
 var target = Argument("target", "default");
 var configuration = Argument("config", "Release");
 var buildNumber = Argument<int>("buildnumber", 1);
+var skipFunctionalTest = Argument("skipFunctionalTest", "1");
 
 var artifactOutput = "./artifacts";
 var testResults = "results.trx";
@@ -68,6 +69,12 @@ Task("tests")
 
            foreach(string targetFramework in testProj.TargetFrameworks)
            {
+               if(skipFunctionalTest == "1" && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
+               {
+                   Warning("Skipping Functional Tests");
+                   continue;
+               }
+
                 Warning($"Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}");
                 settings.Framework = targetFramework;
 

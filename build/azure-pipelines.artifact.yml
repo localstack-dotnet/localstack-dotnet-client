@@ -20,6 +20,12 @@ steps:
     displayName: "Init Task"
 
   - task: UseDotNet@2
+    displayName: ".NET Core 5.0.x"
+    inputs:
+      version: "5.0.x"
+      packageType: sdk
+
+  - task: UseDotNet@2
     displayName: ".NET Core 3.1.x"
     inputs:
       version: "3.1.x"

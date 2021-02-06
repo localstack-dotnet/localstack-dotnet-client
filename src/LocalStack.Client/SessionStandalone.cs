@@ -1,7 +1,6 @@
 ﻿using System;
 
 using LocalStack.Client.Contracts;
-using LocalStack.Client.Models;
 using LocalStack.Client.Options;
 using LocalStack.Client.Utils;
 

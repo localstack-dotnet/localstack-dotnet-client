@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 
-using Amazon.Runtime;
-
 using LocalStack.Client.Models;
 using LocalStack.Client.Options;
 

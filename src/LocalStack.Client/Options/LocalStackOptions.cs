@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-using LocalStack.Client.Contracts;
+﻿using LocalStack.Client.Contracts;
 
 namespace LocalStack.Client.Options
 {

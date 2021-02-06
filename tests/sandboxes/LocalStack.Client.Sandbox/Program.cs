@@ -8,7 +8,6 @@ using LocalStack.Client.Contracts;
 using System;
 using System.Threading.Tasks;
 
-using LocalStack.Client.Models;
 using LocalStack.Client.Options;
 
 namespace LocalStack.Client.Sandbox

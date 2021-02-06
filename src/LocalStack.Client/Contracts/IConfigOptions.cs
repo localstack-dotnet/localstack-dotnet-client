@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace LocalStack.Client.Contracts
+﻿namespace LocalStack.Client.Contracts
 {
     public interface IConfigOptions
     {

@@ -335,3 +335,5 @@ testrunner
 # Cake
 [Tt]ools/
 .ionide
+
+!tests/sandboxes/LocalStack.Client.Sandbox.WithGenericHost/Properties/launchSettings.json

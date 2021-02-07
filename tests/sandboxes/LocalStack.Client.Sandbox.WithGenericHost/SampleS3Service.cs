@@ -13,7 +13,7 @@ namespace LocalStack.Client.Sandbox.WithGenericHost
 {
     public class SampleS3Service : IHostedService
     {
-        private const string BucketName = "test-bucket-3";
+        private const string BucketName = "localstack-sandbox-with-host";
         private const string FilePath = "SampleData.txt";
         private const string Key = "SampleData.txt";
 
@@ -32,7 +32,7 @@ namespace LocalStack.Client.Sandbox.WithGenericHost
         {
             try
             {
-                var putBucketRequest = new PutBucketRequest {BucketName = BucketName, UseClientRegion = true};
+                var putBucketRequest = new PutBucketRequest {BucketName = BucketName};
                 PutBucketResponse putBucketResponse = await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken);
 
                 _logger.LogInformation("The bucket {0} created", BucketName);

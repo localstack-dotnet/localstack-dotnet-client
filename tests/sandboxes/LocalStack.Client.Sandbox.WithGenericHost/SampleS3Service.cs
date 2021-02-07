@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using Amazon.S3.Util;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -33,35 +32,31 @@ namespace LocalStack.Client.Sandbox.WithGenericHost
         {
             try
             {
-                _logger.LogDebug("Check if {0} bucket exists", BucketName);
-                if (!await AmazonS3Util.DoesS3BucketExistV2Async(_amazonS3, BucketName))
-                {
-                    _logger.LogDebug("Bucket {0} not exits, creating the bucket...", BucketName);
-                    var putBucketRequest = new PutBucketRequest { BucketName = BucketName, UseClientRegion = true };
+                var putBucketRequest = new PutBucketRequest {BucketName = BucketName, UseClientRegion = true};
+                PutBucketResponse putBucketResponse = await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken);
 
-                    PutBucketResponse putBucketResponse = await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken);
-
-                    _logger.LogDebug("The bucket {0} created", BucketName);
-                }
+                _logger.LogInformation("The bucket {0} created", BucketName);
 
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(_amazonS3, BucketName);
-                _logger.LogDebug("The bucket's location: {0}", bucketLocation);
+                _logger.LogInformation("The bucket's location: {0}", bucketLocation);
 
                 var fileTransferUtility = new TransferUtility(_amazonS3);
 
-                _logger.LogDebug("Uploading the file {0}...", FilePath);
+                _logger.LogInformation("Uploading the file {0}...", FilePath);
                 await fileTransferUtility.UploadAsync(FilePath, BucketName, Key, cancellationToken);
-                _logger.LogDebug("The file {0} created", FilePath);
+                _logger.LogInformation("The file {0} created", FilePath);
             }
             catch (AmazonS3Exception e)
             {
                 _logger.LogError(e, "Error encountered on server. Message:'{0}' when writing an object", e.Message);
-                _hostApplicationLifetime.StopApplication();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+            }
+            finally
+            {
                 _hostApplicationLifetime.StopApplication();
             }
         }

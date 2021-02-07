@@ -1,7 +1,6 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using Amazon.S3.Util;
 
 using LocalStack.Client.Contracts;
 
@@ -42,11 +41,14 @@ namespace LocalStack.Client.Sandbox
                                                 .WithSessionOptions(sessionOptions)
                                                 .WithConfigurationOptions(configOptions).Create();
 
-            var amazonS3Client = session.CreateClient<AmazonS3Client>();
+            var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
 
             const string bucketName = "test-bucket-3";
             const string filePath = "SampleData.txt";
             const string key = "SampleData.txt";
+
+            Console.WriteLine("Press any key to start Sandbox application");
+            Console.ReadLine();
 
             await CreateBucketAndUploadFileAsync(amazonS3Client, bucketName, filePath, key);
         }
@@ -55,19 +57,20 @@ namespace LocalStack.Client.Sandbox
         {
             try
             {
-                if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
-                {
-                    var putBucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true };
+                var putBucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true };
+                PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
 
-                    PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
-                }
+                Console.WriteLine("The bucket {0} created", bucketName);
 
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
+                Console.WriteLine("The bucket's location: {0}", bucketLocation);
 
                 var fileTransferUtility = new TransferUtility(s3Client);
 
+                Console.WriteLine("Uploading the file {0}...", path);
                 await fileTransferUtility.UploadAsync(path, bucketName, key);
+                Console.WriteLine("The file {0} created", path);
             }
             catch (AmazonS3Exception e)
             {

@@ -18,10 +18,13 @@ namespace LocalStack.Client.Sandbox.WithGenericHost
     {
         public static async Task Main(string[] args)
         {
+            Console.WriteLine("Press any key to start Sandbox application");
+            Console.ReadLine();
+
             Console.WriteLine(Environment.OSVersion.VersionString);
             Console.WriteLine(GetNetCoreVersion());
 
-            Task runConsoleAsync = new HostBuilder().ConfigureHostConfiguration(configHost => configHost.AddEnvironmentVariables())
+            await new HostBuilder().ConfigureHostConfiguration(configHost => configHost.AddEnvironmentVariables())
                                                     .ConfigureAppConfiguration((hostContext, builder) =>
                                                     {
                                                         builder.SetBasePath(Directory.GetCurrentDirectory());
@@ -40,8 +43,6 @@ namespace LocalStack.Client.Sandbox.WithGenericHost
                                                     .ConfigureLogging((_, configLogging) => { configLogging.AddConsole(); })
                                                     .UseConsoleLifetime()
                                                     .RunConsoleAsync();
-
-            await runConsoleAsync;
         }
 
         private static string GetNetCoreVersion() {

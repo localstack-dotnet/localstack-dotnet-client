@@ -48,7 +48,10 @@ steps:
     env:
       BUILD_ID: $(Version.Revision)
 
-  - bash: chmod +x ./build.sh && sudo ./build.sh --target=nuget-pack --buildnumber=$BUILD_ID
+  - bash: cd src/LocalStack.Client.Extensions/ && dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj && dotnet add package LocalStack.Client
+    displayName: "Remove Project Ref & Add latest pack"
+
+  - bash: chmod +x ./build.sh && sudo ./build.sh --target=nuget-pack-extensions --buildnumber=$BUILD_ID
     displayName: "Nuget Pack"
     env:
       BUILD_ID: $(Version.Revision)

@@ -9,11 +9,11 @@
 
     <Title>LocalStack.NET Client</Title>
     <Description>
-      This is an easy-to-use .NET client for LocalStack. The client library provides a thin wrapper around aws-sdk-net which automatically configures the target endpoints to use LocalStack for your local cloud application development.
+      Extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around AWSSDK.Extensions.NETCore.Setup to use both LocalStack and AWS side-by-side
     </Description>
-    <PackageTags>aws-sdk, localstack, client-library, dotnet;dotnet-core</PackageTags>
+    <PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

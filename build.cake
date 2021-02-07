@@ -8,8 +8,10 @@ var buildNumber = Argument<int>("buildnumber", 1);
 var skipFunctionalTest = Argument("skipFunctionalTest", "1");
 
 var artifactOutput = "./artifacts";
+var artifactExtensionsOutput = "./artifacts-extensions";
 var testResults = "results.trx";
 string projectPath = "./src/LocalStack.Client/LocalStack.Client.csproj";
+string projectPathExtensions = "./src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj";
 
 
 Task("Default")
@@ -108,6 +110,26 @@ Task("nuget-pack")
         settings.OutputDirectory = artifactOutput;
         settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
         settings.MSBuildSettings.SetVersion(GetProjectVersion());
+
+        DotNetCorePack(projectFullPath, settings);
+    });
+
+Task("nuget-pack-extensions")
+    .Does(() =>
+    {
+        string outputDirectory = MakeAbsolute(Directory(artifactExtensionsOutput)).FullPath;
+        string projectFullPath = MakeAbsolute(File(projectPathExtensions)).FullPath;
+
+        if(!System.IO.Directory.Exists(outputDirectory))
+        {
+            System.IO.Directory.CreateDirectory(outputDirectory);
+        }
+
+        var settings = new DotNetCorePackSettings();
+        settings.Configuration = configuration;
+        settings.OutputDirectory = artifactExtensionsOutput;
+        settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
+        settings.MSBuildSettings.SetVersion(GetExtensionProjectVersion());
 
         DotNetCorePack(projectFullPath, settings);
     });
@@ -236,6 +258,22 @@ private void UpdateProjectVersion(string version)
 private string GetProjectVersion()
 {
     var file =  MakeAbsolute(File("./src/Directory.Build.props"));
+
+    Information(file.FullPath);
+
+    var project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
+    int startIndex = project.IndexOf("<Version>") + "<Version>".Length;
+    int endIndex = project.IndexOf("</Version>", startIndex);
+
+    string version = project.Substring(startIndex, endIndex - startIndex);
+    version = $"{version}.{buildNumber}";
+
+    return version;
+}
+
+private string GetExtensionProjectVersion()
+{
+    var file =  MakeAbsolute(File("./src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj"));
 
     Information(file.FullPath);
 

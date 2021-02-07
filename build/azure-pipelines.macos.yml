@@ -58,10 +58,3 @@ steps:
     inputs:
       testResultsFormat: "VSTest"
       testResultsFiles: "**/*.trx"
-      testRunTitle: "LocalStack.Client.Tests"
-
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: "VSTest"
-      testResultsFiles: "**/*.trx"
-      testRunTitle: "LocalStack.Client.Integration.Tests"

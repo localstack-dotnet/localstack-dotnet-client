@@ -88,6 +88,59 @@ namespace LocalStack.Client.Tests.ConfigTests
             Assert.Equal(edgePort, awsServiceEndpoint.Port);
         }
 
+        [Theory,
+         InlineData(true, false, "localhost", 1111, "http://localhost"),
+         InlineData(true, true, "localhost", 1111, "https://localhost"),
+         InlineData(false, false, "localhost", 1111, "http://localhost:1111"),
+         InlineData(false, true, "localhost", 1111, "https://localhost:1111"),
+         InlineData(true, false, "myHost", 2222, "http://myHost"),
+         InlineData(true, true, "myHost2", 3334, "https://myHost2"),
+         InlineData(false, false, "myHost3", 4432, "http://myHost3:4432"),
+         InlineData(false, true, "myHost4", 2124, "https://myHost4:2124")]
+        public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_ServiceUrl_Property_Equals_To_Combination_Of_Host_Protocol_And_Port(bool useLegacyPorts, bool useSsl, string localStackHost, int edgePort, string expectedServiceUrl)
+        {
+            var config = new Config(new ConfigOptions(localStackHost,useLegacyPorts:useLegacyPorts, edgePort:edgePort, useSsl:useSsl));
+            AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGatewayV2);
+
+            if (useLegacyPorts)
+            {
+                expectedServiceUrl = $"{expectedServiceUrl}:{awsServiceEndpoint.Port}";
+            }
+
+            Assert.NotNull(awsServiceEndpoint);
+            Assert.Equal(expectedServiceUrl, awsServiceEndpoint.ServiceUrl);
+
+            awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
+
+            Assert.NotNull(awsServiceEndpoint);
+            Assert.Equal(expectedServiceUrl, awsServiceEndpoint.ServiceUrl);
+        }
+
+        [Theory,
+         InlineData(true, false, "localhost", 1111, "http://localhost"),
+         InlineData(true, true, "localhost", 1111, "https://localhost"),
+         InlineData(false, false, "localhost", 1111, "http://localhost:1111"),
+         InlineData(false, true, "localhost", 1111, "https://localhost:1111"),
+         InlineData(true, false, "myHost", 2222, "http://myHost"),
+         InlineData(true, true, "myHost2", 3334, "https://myHost2"),
+         InlineData(false, false, "myHost3", 4432, "http://myHost3:4432"),
+         InlineData(false, true, "myHost4", 2124, "https://myHost4:2124")]
+        public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_ServiceUrl_Property_Property_Of_Every_Item_Equals_To_Combination_Of_Host_Protocol_And_Port(bool useLegacyPorts, bool useSsl, string localStackHost, int edgePort, string expectedServiceUrl)
+        {
+            var config = new Config(new ConfigOptions(localStackHost,useLegacyPorts:useLegacyPorts, edgePort:edgePort, useSsl:useSsl));
+
+            IList<AwsServiceEndpoint> awsServiceEndpoints = config.GetAwsServiceEndpoints().ToList();
+
+            Assert.NotNull(awsServiceEndpoints);
+            Assert.NotEmpty(awsServiceEndpoints);
+            Assert.All(awsServiceEndpoints, endpoint =>
+            {
+                string serviceUrl = useLegacyPorts ? $"{expectedServiceUrl}:{endpoint.Port}" : expectedServiceUrl;
+
+                Assert.Equal(serviceUrl, endpoint.ServiceUrl);
+            });
+        }
+
         [Fact]
         public void GetAwsServiceEndpoints_Should_Return_List_Of_AwsServiceEndpoint_That_Port_Property_Of_Every_Item_Equals_To_Set_EdgePort_Property_Of_ConfigOptions_If_UseLegacyPorts_Property_Is_False()
         {

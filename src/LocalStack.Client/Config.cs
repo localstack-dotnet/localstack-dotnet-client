@@ -27,7 +27,14 @@ namespace LocalStack.Client
             bool useLegacyPorts = configOptions.UseLegacyPorts;
             int edgePort = configOptions.EdgePort;
 
-            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum, useLegacyPorts ? metadata.Port : edgePort, localStackHost, metadata.ToString(protocol, localStackHost)));
+            int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
+
+            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, 
+                                                                                                      metadata.CliName, 
+                                                                                                      metadata.Enum, 
+                                                                                                      GetServicePort(metadata.Port), 
+                                                                                                      localStackHost, 
+                                                                                                      metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
         }
 
         [Obsolete("This constructor is obsolete, use default or constructor with IConfigOptions parameter")]
@@ -43,8 +50,14 @@ namespace LocalStack.Client
             bool useLegacyPorts = string.IsNullOrEmpty(envUseLegacyPorts) || (envUseLegacyPorts == "1" || envUseLegacyPorts == "true");
             int edgePort = int.TryParse(envEdgePort, out int port) ? port : Constants.EdgePort;
 
-            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum,
-                                                                                                      useLegacyPorts ? metadata.Port : edgePort, localStackHost, metadata.ToString(protocol, localStackHost)));
+            int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
+
+            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, 
+                                                                                                      metadata.CliName, 
+                                                                                                      metadata.Enum,
+                                                                                                      GetServicePort(metadata.Port), 
+                                                                                                      localStackHost, 
+                                                                                                      metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
         }
 
         public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints()

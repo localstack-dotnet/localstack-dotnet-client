@@ -6,7 +6,7 @@
 
         public const bool UseSsl = false;
 
-        public const bool UseLegacyPorts = true;
+        public const bool UseLegacyPorts = false;
 
         public const int EdgePort = 4566;
 

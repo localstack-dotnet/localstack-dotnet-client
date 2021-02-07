@@ -134,11 +134,11 @@ namespace LocalStack.Client.Enums
             return All.SingleOrDefault(service => service.Port == port);
         }
 
-        public string ToString(string proto, string host)
+        public string GetServiceUrl(string proto, string host, int? port = null)
         {
             return proto == null || host == null
                        ? throw new ArgumentNullException(proto == null ? nameof(proto) : nameof(host))
-                       : string.Format(EndPointPattern, proto, host, Port);
+                       : string.Format(EndPointPattern, proto, host, port ?? Port);
         }
 
         public override string ToString()

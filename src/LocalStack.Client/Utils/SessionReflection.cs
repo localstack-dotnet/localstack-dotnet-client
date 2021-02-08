@@ -15,8 +15,13 @@ namespace LocalStack.Client.Utils
         {
             Type clientType = typeof(TClient);
 
+            return ExtractServiceMetadata(clientType);
+        }
+
+        public IServiceMetadata ExtractServiceMetadata(Type clientType)
+        {
             FieldInfo serviceMetadataField = clientType.GetField("serviceMetadata", BindingFlags.Static | BindingFlags.NonPublic) ??
-                                             throw new InvalidOperationException($"Invalid service type {typeof(TClient)}");
+                                             throw new InvalidOperationException($"Invalid service type {clientType}");
 
             var serviceMetadata = (IServiceMetadata) serviceMetadataField.GetValue(null);
 
@@ -25,11 +30,19 @@ namespace LocalStack.Client.Utils
 
         public ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient
         {
-            ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(typeof(TClient));
+            Type clientType = typeof(TClient);
+
+            return CreateClientConfig(clientType);
+        }
+
+        public ClientConfig CreateClientConfig(Type clientType)
+        {
+            ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(clientType);
             ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];
 
             return (ClientConfig) Activator.CreateInstance(clientConfigParam.ParameterType);
         }
+
 
         public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
         {

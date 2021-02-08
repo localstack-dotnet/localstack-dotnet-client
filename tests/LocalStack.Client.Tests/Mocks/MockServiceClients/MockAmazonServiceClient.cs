@@ -3,9 +3,9 @@ using Amazon.Runtime.Internal.Auth;
 
 namespace LocalStack.Client.Tests.Mocks.MockServiceClients
 {
-    public class MockAmazonServiceClient : AmazonServiceClient, IAmazonService
+    public class MockAmazonServiceClient : AmazonServiceClient, IAmazonService, IMockAmazonService
     {
-        public MockAmazonServiceClient() : base(FallbackCredentialsFactory.GetCredentials(), new MockClientConfig())
+        public MockAmazonServiceClient() : base(new MockCredentials(), new MockClientConfig())
         {
         }
 

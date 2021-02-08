@@ -1,4 +1,6 @@
-﻿using Amazon.Runtime;
+﻿using System;
+
+using Amazon.Runtime;
 using Amazon.Runtime.Internal;
 
 namespace LocalStack.Client.Contracts
@@ -7,7 +9,11 @@ namespace LocalStack.Client.Contracts
     {
         IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient;
 
+        IServiceMetadata ExtractServiceMetadata(Type clientType);
+
         ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient;
+
+        ClientConfig CreateClientConfig(Type clientType);
 
         bool SetForcePathStyle(ClientConfig clientConfig, bool value = true);
     }

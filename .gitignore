@@ -52,6 +52,7 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+artifacts-extensions/
 **/Properties/launchSettings.json
 
 # StyleCop
@@ -334,3 +335,5 @@ testrunner
 # Cake
 [Tt]ools/
 .ionide
+
+!tests/sandboxes/LocalStack.Client.Sandbox.WithGenericHost/Properties/launchSettings.json

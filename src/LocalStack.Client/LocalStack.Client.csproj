@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net5.0</TargetFrameworks>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <AssemblyName>LocalStack.Client</AssemblyName>
     <RootNamespace>LocalStack.Client</RootNamespace>
@@ -11,7 +11,7 @@
     <Description>
       This is an easy-to-use .NET client for LocalStack. The client library provides a thin wrapper around aws-sdk-net which automatically configures the target endpoints to use LocalStack for your local cloud application development.
     </Description>
-    <PackageTags>aws-sdk, localstack, client-library, dotnet;dotnet-core</PackageTags>
+    <PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 
     <!-- When compiling .NET SDK 2.0 projects targeting .NET 4.x on Mono using 'dotnet build' you -->
@@ -51,7 +51,7 @@
     <None Include="LICENSE.txt" Pack="true" PackagePath="">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath=""/>
+    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,7 +62,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="AWSSDK.Core" Version="[3.3.106.5, 3.4.0)" />
+    <PackageReference Include="AWSSDK.Core" Version="3.5.2.6" />
   </ItemGroup>
 
 </Project>

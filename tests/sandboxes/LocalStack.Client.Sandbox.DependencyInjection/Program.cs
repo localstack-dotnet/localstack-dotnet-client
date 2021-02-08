@@ -4,13 +4,18 @@ using Amazon.S3.Transfer;
 using Amazon.S3.Util;
 
 using LocalStack.Client.Contracts;
-using LocalStack.Client.Models;
 using LocalStack.Client.Utils;
 
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.IO;
 using System.Threading.Tasks;
+
+using LocalStack.Client.Options;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace LocalStack.Client.Sandbox.DependencyInjection
 {
@@ -19,26 +24,71 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
         private static async Task Main(string[] args)
         {
             var collection = new ServiceCollection();
+            var builder = new ConfigurationBuilder();
 
-            var awsAccessKeyId = "Key Id";
-            var awsAccessKey = "Secret Key";
-            var awsSessionToken = "Token";
-            var regionName = "us-west-1";
-            var localStackHost = "localhost";
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json", true);
+            builder.AddJsonFile("appsettings.Development.json", true);
+            builder.AddEnvironmentVariables();
+            builder.AddCommandLine(args);
 
-            collection.AddScoped<ISessionOptions, SessionOptions>(provider => new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName))
-                      .AddScoped<IConfig, Config>(provider => new Config(localStackHost))
-                      .AddScoped<ISessionReflection, SessionReflection>()
-                      .AddScoped<ISession, Session>();
+            IConfiguration configuration = builder.Build();
+
+            collection.Configure<LocalStackOptions>(options => configuration.GetSection("LocalStack").Bind(options, c => c.BindNonPublicProperties = true));
+            /*
+            * ==== Default Values ====
+            * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
+            * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
+            * AwsSessionToken: token (It doesn't matter to LocalStack)
+            * RegionName: us-east-1
+             */
+            collection.Configure<SessionOptions>(options => configuration.GetSection("LocalStack")
+                                                                         .GetSection(nameof(LocalStackOptions.Session))
+                                                                         .Bind(options, c => c.BindNonPublicProperties = true));
+            /*
+             * ==== Default Values ====
+             * LocalStackHost: localhost
+             * UseSsl: false
+             * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.4 or below)
+             * EdgePort: 4566 (It doesn't matter if use legacy ports)
+             */
+            collection.Configure<ConfigOptions>(options => configuration.GetSection("LocalStack")
+                                                                        .GetSection(nameof(LocalStackOptions.Config))
+                                                                        .Bind(options, c => c.BindNonPublicProperties = true));
+
+
+            collection.AddTransient<IConfig, Config>(provider =>
+                      {
+                          ConfigOptions options = provider.GetRequiredService<IOptions<ConfigOptions>>().Value;
+
+                          return new Config(options);
+                      })
+                      .AddSingleton<ISessionReflection, SessionReflection>()
+                      .AddSingleton<ISession, Session>(provider =>
+                      {
+                          SessionOptions sessionOptions = provider.GetRequiredService<IOptions<SessionOptions>>().Value;
+                          var config = provider.GetRequiredService<IConfig>();
+                          var sessionReflection = provider.GetRequiredService<ISessionReflection>();
+
+                          return new Session(sessionOptions, config, sessionReflection);
+                      })
+                      .AddTransient<IAmazonS3>(provider =>
+                      {
+                          var session = provider.GetRequiredService<ISession>();
+
+                          return (IAmazonS3) session.CreateClientByInterface<IAmazonS3>();
+                      });
 
             ServiceProvider serviceProvider = collection.BuildServiceProvider();
-            var session = serviceProvider.GetRequiredService<ISession>();
 
-            var amazonS3Client = session.CreateClient<AmazonS3Client>();
+            var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
 
             const string bucketName = "test-bucket-3";
             const string filePath = "SampleData.txt";
             const string key = "SampleData.txt";
+
+            Console.WriteLine("Press any key to start Sandbox application");
+            Console.ReadLine();
 
             await CreateBucketAndUploadFileAsync(amazonS3Client, bucketName, filePath, key);
         }
@@ -47,19 +97,20 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
         {
             try
             {
-                if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
-                {
-                    var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
+                var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
+                PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
 
-                    PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
-                }
+                Console.WriteLine("The bucket {0} created", bucketName);
 
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
+                Console.WriteLine("The bucket's location: {0}", bucketLocation);
 
                 var fileTransferUtility = new TransferUtility(s3Client);
 
+                Console.WriteLine("Uploading the file {0}...", path);
                 await fileTransferUtility.UploadAsync(path, bucketName, key);
+                Console.WriteLine("The file {0} created", path);
             }
             catch (AmazonS3Exception e)
             {
@@ -75,7 +126,7 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
         {
             var request = new GetBucketLocationRequest() {BucketName = bucketName};
             GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
-            string bucketLocation = response.Location.ToString();
+            var bucketLocation = response.Location.ToString();
 
             return bucketLocation;
         }

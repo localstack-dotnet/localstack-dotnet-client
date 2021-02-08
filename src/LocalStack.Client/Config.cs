@@ -6,24 +6,58 @@ using System.Collections.Generic;
 using System.Linq;
 
 using LocalStack.Client.Enums;
+using LocalStack.Client.Options;
 
 namespace LocalStack.Client
 {
     public class Config : IConfig
     {
-        private static readonly string EnvLocalStackHost = Environment.GetEnvironmentVariable("LOCALSTACK_HOST");
-        private static readonly string EnvUseSsl = Environment.GetEnvironmentVariable("USE_SSL");
-        private static readonly AwsServiceEndpointMetadata[] ServiceEndpointMetadata = AwsServiceEndpointMetadata.All;
-
+        private readonly AwsServiceEndpointMetadata[] _serviceEndpointMetadata = AwsServiceEndpointMetadata.All;
         private readonly IEnumerable<AwsServiceEndpoint> _awsServiceEndpoints;
 
+        public Config()
+            : this(new ConfigOptions())
+        {
+        }
+
+        public Config(IConfigOptions configOptions)
+        {
+            string localStackHost = configOptions.LocalStackHost;
+            string protocol = configOptions.UseSsl ? "https" : "http";
+            bool useLegacyPorts = configOptions.UseLegacyPorts;
+            int edgePort = configOptions.EdgePort;
+
+            int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
+
+            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, 
+                                                                                                      metadata.CliName, 
+                                                                                                      metadata.Enum, 
+                                                                                                      GetServicePort(metadata.Port), 
+                                                                                                      localStackHost, 
+                                                                                                      metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
+        }
+
+        [Obsolete("This constructor is obsolete, use default or constructor with IConfigOptions parameter")]
         public Config(string localStackHost = null)
         {
-            localStackHost ??= (EnvLocalStackHost ?? "localhost");
-            string protocol = EnvUseSsl != null && (EnvUseSsl == "1" || EnvUseSsl == "true") ? "https" : "http";
+            string envLocalStackHost = Environment.GetEnvironmentVariable("LOCALSTACK_HOST");
+            string envUseSsl = Environment.GetEnvironmentVariable("USE_SSL");
+            string envUseLegacyPorts = Environment.GetEnvironmentVariable("USE_LEGACY_PORTS");
+            string envEdgePort = Environment.GetEnvironmentVariable("EDGE_PORT");
 
-            _awsServiceEndpoints = ServiceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum, metadata.Port,
-                                                                                                     localStackHost, metadata.ToString(protocol, localStackHost)));
+            localStackHost ??= (envLocalStackHost ?? "localhost");
+            string protocol = !string.IsNullOrEmpty(envUseSsl) && (envUseSsl == "1" || envUseSsl == "true") ? "https" : "http";
+            bool useLegacyPorts = string.IsNullOrEmpty(envUseLegacyPorts) || (envUseLegacyPorts == "1" || envUseLegacyPorts == "true");
+            int edgePort = int.TryParse(envEdgePort, out int port) ? port : Constants.EdgePort;
+
+            int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
+
+            _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, 
+                                                                                                      metadata.CliName, 
+                                                                                                      metadata.Enum,
+                                                                                                      GetServicePort(metadata.Port), 
+                                                                                                      localStackHost, 
+                                                                                                      metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
         }
 
         public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints()
@@ -46,7 +80,7 @@ namespace LocalStack.Client
             return _awsServiceEndpoints.ToDictionary(endpoint => endpoint.AwsServiceEnum, endpoint => endpoint.Port);
         }
 
-        public int GetAwsServicePorts(AwsServiceEnum awsServiceEnum)
+        public int GetAwsServicePort(AwsServiceEnum awsServiceEnum)
         {
             return _awsServiceEndpoints
                 .First(endpoint => endpoint.AwsServiceEnum == awsServiceEnum)

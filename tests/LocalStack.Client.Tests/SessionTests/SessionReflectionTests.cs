@@ -1,14 +1,14 @@
-﻿using Amazon.Runtime;
+﻿using System;
+
+using Amazon.Runtime;
 using Amazon.Runtime.Internal;
 
 using LocalStack.Client.Tests.Mocks.MockServiceClients;
 using LocalStack.Client.Utils;
 
-using System;
-
 using Xunit;
 
-namespace LocalStack.Client.Tests
+namespace LocalStack.Client.Tests.SessionTests
 {
     public class SessionReflectionTests
     {
@@ -25,7 +25,7 @@ namespace LocalStack.Client.Tests
         {
             var sessionReflection = new SessionReflection();
 
-            IServiceMetadata serviceMetadata = sessionReflection.ExtractServiceMetadata<MockAmazonServiceClientWithServiceMetadata>();
+            IServiceMetadata serviceMetadata = sessionReflection.ExtractServiceMetadata<MockAmazonServiceWithServiceMetadataClient>();
 
             Assert.NotNull(serviceMetadata);
             Assert.Equal(MockServiceMetadata.MockServiceId, serviceMetadata.ServiceId);

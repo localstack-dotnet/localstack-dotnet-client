@@ -1,32 +1,54 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using Amazon.S3.Util;
 
 using LocalStack.Client.Contracts;
 
 using System;
 using System.Threading.Tasks;
 
+using LocalStack.Client.Options;
+
 namespace LocalStack.Client.Sandbox
 {
-    internal class Program
+    internal static class Program
     {
-        private static async Task Main(string[] args)
+        private static async Task Main()
         {
-            var awsAccessKeyId = "Key Id";
-            var awsAccessKey = "Secret Key";
-            var awsSessionToken = "Token";
-            var regionName = "us-west-1";
-            var localStackHost = "localhost";
+            /*
+             * ==== Default Values ====
+             * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
+             * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
+             * AwsSessionToken: token (It doesn't matter to LocalStack)
+             * RegionName: us-east-1
+             * ==== Custom Values ====
+             * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
+             */
+            var sessionOptions = new SessionOptions();
 
-            ISession session = SessionStandalone.Init().WithSessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName).WithConfig(localStackHost).Create();
+            /*
+             * ==== Default Values ====
+             * LocalStackHost: localhost
+             * UseSsl: false
+             * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.4 or below)
+             * EdgePort: 4566 (It doesn't matter if use legacy ports)
+             * ==== Custom Values ====
+             * var configOptions = new ConfigOptions("mylocalhost", false, false, 4566);
+             */
+            var configOptions = new ConfigOptions();
 
-            var amazonS3Client = session.CreateClient<AmazonS3Client>();
+            ISession session = SessionStandalone.Init()
+                                                .WithSessionOptions(sessionOptions)
+                                                .WithConfigurationOptions(configOptions).Create();
+
+            var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
 
             const string bucketName = "test-bucket-3";
             const string filePath = "SampleData.txt";
             const string key = "SampleData.txt";
+
+            Console.WriteLine("Press any key to start Sandbox application");
+            Console.ReadLine();
 
             await CreateBucketAndUploadFileAsync(amazonS3Client, bucketName, filePath, key);
         }
@@ -35,19 +57,20 @@ namespace LocalStack.Client.Sandbox
         {
             try
             {
-                if (!await AmazonS3Util.DoesS3BucketExistV2Async(s3Client, bucketName))
-                {
-                    var putBucketRequest = new PutBucketRequest {BucketName = bucketName, UseClientRegion = true};
+                var putBucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true };
+                PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
 
-                    PutBucketResponse putBucketResponse = await s3Client.PutBucketAsync(putBucketRequest);
-                }
+                Console.WriteLine("The bucket {0} created", bucketName);
 
                 // Retrieve the bucket location.
                 string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
+                Console.WriteLine("The bucket's location: {0}", bucketLocation);
 
                 var fileTransferUtility = new TransferUtility(s3Client);
 
+                Console.WriteLine("Uploading the file {0}...", path);
                 await fileTransferUtility.UploadAsync(path, bucketName, key);
+                Console.WriteLine("The file {0} created", path);
             }
             catch (AmazonS3Exception e)
             {
@@ -61,9 +84,9 @@ namespace LocalStack.Client.Sandbox
 
         private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
         {
-            var request = new GetBucketLocationRequest() {BucketName = bucketName};
+            var request = new GetBucketLocationRequest() { BucketName = bucketName };
             GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
-            string bucketLocation = response.Location.ToString();
+            var bucketLocation = response.Location.ToString();
 
             return bucketLocation;
         }

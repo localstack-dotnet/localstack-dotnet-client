@@ -21,6 +21,7 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata Sns = new AwsServiceEndpointMetadata("SNS", "sns", CommonEndpointPattern, 4575, AwsServiceEnum.Sns);
         public static readonly AwsServiceEndpointMetadata Sqs = new AwsServiceEndpointMetadata("SQS", "sqs", CommonEndpointPattern, 4576, AwsServiceEnum.Sqs);
         public static readonly AwsServiceEndpointMetadata Redshift = new AwsServiceEndpointMetadata("Redshift", "redshift", CommonEndpointPattern, 4577, AwsServiceEnum.Redshift);
+        public static readonly AwsServiceEndpointMetadata RedshiftData = new AwsServiceEndpointMetadata("Redshift Data", "redshift-data", CommonEndpointPattern, 4577, AwsServiceEnum.RedshiftData);
         public static readonly AwsServiceEndpointMetadata Es = new AwsServiceEndpointMetadata("ES", "es", CommonEndpointPattern, 4578, AwsServiceEnum.Es);
         public static readonly AwsServiceEndpointMetadata Ses = new AwsServiceEndpointMetadata("SES", "ses", CommonEndpointPattern, 4579, AwsServiceEnum.Ses);
         public static readonly AwsServiceEndpointMetadata Route53 = new AwsServiceEndpointMetadata("Route 53", "route53", CommonEndpointPattern, 4580, AwsServiceEnum.Route53);
@@ -64,12 +65,25 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata AutoScaling = new AwsServiceEndpointMetadata("Auto Scaling", "autoscaling", CommonEndpointPattern, 4616, AwsServiceEnum.AutoScaling);
         public static readonly AwsServiceEndpointMetadata MediaStore = new AwsServiceEndpointMetadata("MediaStore", "mediastore", CommonEndpointPattern, 4617, AwsServiceEnum.MediaStore);
         public static readonly AwsServiceEndpointMetadata MediaStoreData = new AwsServiceEndpointMetadata("MediaStore Data", "mediastore-data", CommonEndpointPattern, 4617, AwsServiceEnum.MediaStoreData);
+        public static readonly AwsServiceEndpointMetadata Transfer = new AwsServiceEndpointMetadata("Transfer", "transfer", CommonEndpointPattern, 4618, AwsServiceEnum.Transfer);
+        public static readonly AwsServiceEndpointMetadata Acm = new AwsServiceEndpointMetadata("ACM", "acm", CommonEndpointPattern, 4619, AwsServiceEnum.Acm);
+        public static readonly AwsServiceEndpointMetadata CodeCommit = new AwsServiceEndpointMetadata("CodeCommit", "codecommit", CommonEndpointPattern, 4620, AwsServiceEnum.CodeCommit);
+        public static readonly AwsServiceEndpointMetadata KinesisAnalytics = new AwsServiceEndpointMetadata("Kinesis Analytics", "kinesisanalytics", CommonEndpointPattern, 4621, AwsServiceEnum.KinesisAnalytics);
+        public static readonly AwsServiceEndpointMetadata Amplify = new AwsServiceEndpointMetadata("Amplify", "amplify", CommonEndpointPattern, 4622, AwsServiceEnum.Amplify);
+        public static readonly AwsServiceEndpointMetadata ApplicationAutoscaling = new AwsServiceEndpointMetadata("Application Auto Scaling", "application-autoscaling", CommonEndpointPattern, 4623, AwsServiceEnum.ApplicationAutoscaling);
+        public static readonly AwsServiceEndpointMetadata Kafka = new AwsServiceEndpointMetadata("Kafka", "kafka", CommonEndpointPattern, 4624, AwsServiceEnum.Kafka);
+        public static readonly AwsServiceEndpointMetadata ApiGatewayManagementApi = new AwsServiceEndpointMetadata("ApiGatewayManagementApi", "apigatewaymanagementapi", CommonEndpointPattern, 4625, AwsServiceEnum.ApiGatewayManagementApi);
+        public static readonly AwsServiceEndpointMetadata TimeStreamQuery = new AwsServiceEndpointMetadata("Timestream Query", "timestream-query", CommonEndpointPattern, 4626, AwsServiceEnum.TimeStreamQuery);
+        public static readonly AwsServiceEndpointMetadata TimeStreamWrite = new AwsServiceEndpointMetadata("Timestream Write", "timestream-write", CommonEndpointPattern, 4626, AwsServiceEnum.TimeStreamWrite);
+        public static readonly AwsServiceEndpointMetadata S3Control = new AwsServiceEndpointMetadata("S3 Control", "s3control", CommonEndpointPattern, 4627, AwsServiceEnum.S3Control);
+        public static readonly AwsServiceEndpointMetadata ElbV2 = new AwsServiceEndpointMetadata("Elastic Load Balancing v2", "elbv2", CommonEndpointPattern, 4628, AwsServiceEnum.ElbV2);
 
         public static readonly AwsServiceEndpointMetadata[] All =
         {
-            ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, Es, Ses, Route53, CloudFormation, CloudWatch,
+            ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Route53, CloudFormation, CloudWatch,
             Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, CognitoIdp, CognitoIdentity, Sts, Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs,
-            Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData
+            Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData,
+            Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2
         };
 
         private AwsServiceEndpointMetadata()
@@ -120,11 +134,11 @@ namespace LocalStack.Client.Enums
             return All.SingleOrDefault(service => service.Port == port);
         }
 
-        public string ToString(string proto, string host)
+        public string GetServiceUrl(string proto, string host, int? port = null)
         {
             return proto == null || host == null
                        ? throw new ArgumentNullException(proto == null ? nameof(proto) : nameof(host))
-                       : string.Format(EndPointPattern, proto, host, Port);
+                       : string.Format(EndPointPattern, proto, host, port ?? Port);
         }
 
         public override string ToString()

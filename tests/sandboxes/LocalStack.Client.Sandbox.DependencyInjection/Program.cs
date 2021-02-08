@@ -49,7 +49,7 @@ namespace LocalStack.Client.Sandbox.DependencyInjection
              * ==== Default Values ====
              * LocalStackHost: localhost
              * UseSsl: false
-             * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.5 or above)
+             * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.4 or below)
              * EdgePort: 4566 (It doesn't matter if use legacy ports)
              */
             collection.Configure<ConfigOptions>(options => configuration.GetSection("LocalStack")

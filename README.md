@@ -28,7 +28,10 @@ application development.
     - [Standalone Initialization](#standalone-initialization)
     - [Microsoft.Extensions.DependencyInjection Initialization](#di)
 5. [Developing](#developing)
-6. [License](#license)
+    - [About Sandbox Applications](#about-sandboxes)
+    - [Running Tests](#running-tests)
+6. [Changelog](#changelog)
+7. [License](#license)
 
 ## <a name="supported-platforms"></a> Supported Platforms
 
@@ -368,7 +371,7 @@ Linux
 ./build.sh --target=tests
 ```
 
-## Changelog
+## <a name="changelog"></a> Changelog
 
 ### [v1.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.1.0) 
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.10 have been added.

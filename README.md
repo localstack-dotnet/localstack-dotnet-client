@@ -334,7 +334,7 @@ var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
 
 We welcome feedback, bug reports, and pull requests!
 
-Use these commands to get you started and test your code:
+Use commands below to get you started and test your code:
 
 Windows
 ```
@@ -346,9 +346,44 @@ Linux
 ./build.sh
 ```
 
-<!-- ## Changelog
+### <a name="about-sandboxes"></a> About Sandbox Applications
 
-* v0.8: Add more service endpoint mappings that will be implemented in the near future -->
+In addition to Unit Tests and Functional Test, LocalStack .Net Repository has various sandbox console applications for both testing and example purposes under [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes)
+
+Sandbox applications include various examples of initialization methods of `LocalStack.Client` (see [Usage](#usage) section) and common AWS applications. They provide a convenient and safe environment for those who want to make developments in the library.
+
+To run sandbox applications with LocalStack container, console application called [LocalStack.Container](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes/LocalStack.Container) has been developed. It uses [Dotnet Testcontainer](https://github.com/HofmeisterAn/dotnet-testcontainers) to bootstrap LocalStack. Experiments can be made by running LocalStack.Container application first and then any sandbox application.
+
+### <a name="running-tests"></a> Running Tests
+
+Use commands below to run tests
+
+Windows
+```
+build.ps1 --target=tests
+```
+
+Linux
+```
+./build.sh --target=tests
+```
+
+## Changelog
+
+### [v1.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.1.0) 
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.10 have been added.
+   - Transfer, ACM, CodeCommit, Kinesis Analytics, Amplify, Application Auto Scaling, Kafka, Timestream Query, Timestream Write, Timestream Write, S3 Control, Elastic Load Balancing v2, Redshift Data
+- .NET 5.0 support added.
+- AWSSDK.Core set to 3.5.0 as the minimum version
+
+### [v1.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.0.0) 
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v0.23 have been added.
+   - ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, Api Gateway V2, RdsData, SageMaker, SageMakerRuntime, Ecr, Qldb
+- .netcore2.2 support removed since Microsoft depracated it. .netcore3.1 support added.
+- AWSSDK.Core set to 3.3.106.5 as the minimum version
+
+### [v0.8.0.163](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v0.8.0.163) 
+- First release
 
 ## <a name="license"></a> License
 Licensed under MIT, see [LICENSE](LICENSE) for the full text.

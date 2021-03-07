@@ -14,11 +14,11 @@ namespace LocalStack.Container
             Console.ReadLine();
 
             ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-                                                                                .WithName("LocalStack-0.12.6")
-                                                                                .WithImage("localstack/localstack:0.12.6")
+                                                                                .WithName("LocalStack-0.12.7")
+                                                                                .WithImage("localstack/localstack:0.12.7")
                                                                                 .WithCleanUp(true)
                                                                                 .WithEnvironment("DEFAULT_REGION", "eu-central-1")
-                                                                                .WithEnvironment("SERVICES", "s3,dynamodb,sqs")
+                                                                                .WithEnvironment("SERVICES", "iam,lambda,dynamodb,apigateway,s3,sns,cloudformation,cloudwatch,sts")
                                                                                 .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                                                                 .WithEnvironment("LS_LOG", "info")
                                                                                 .WithPortBinding(4566, 4566);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Amazon;
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
 
@@ -215,8 +214,8 @@ namespace LocalStack.Client.Extensions.Tests
             Assert.IsType<SessionReflection>(sessionReflection);
         }
 
-        [Fact]
-        public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True()
+        [Theory, InlineData(false), InlineData(true)]
+        public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True(bool useAlternateNameAddServiceMethod)
         {
             var configurationValue = new Dictionary<string, string> {{"LocalStack:UseLocalStack", "true"}};
             IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
@@ -229,10 +228,19 @@ namespace LocalStack.Client.Extensions.Tests
 
             mockConfig.Setup(config => config.GetAwsServiceEndpoint(It.Is<string>(s => s == mockServiceMetadata.ServiceId))).Returns(() => mockAwsServiceEndpoint);
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddLocalStack(configuration)
-                             .Replace(ServiceDescriptor.Singleton(_ => mockConfigObject))
-                             .AddAwsService<IMockAmazonServiceWithServiceMetadata>();
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection = serviceCollection
+                                .AddLocalStack(configuration)
+                                .Replace(ServiceDescriptor.Singleton(_ => mockConfigObject));
+
+            if (!useAlternateNameAddServiceMethod)
+            {
+                serviceCollection.AddAwsService<IMockAmazonServiceWithServiceMetadata>();
+            }
+            else
+            {
+                serviceCollection.AddAWSServiceLocalStack<IMockAmazonServiceWithServiceMetadata>();
+            }
 
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
@@ -246,9 +254,13 @@ namespace LocalStack.Client.Extensions.Tests
             Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
         }
 
-        [Theory, InlineData(false, 1, 0), InlineData(true, 0, 1)]
+        [Theory, 
+         InlineData(false, 1, 0, false), 
+         InlineData(true, 0, 1, false), 
+         InlineData(false, 1, 0, true), 
+         InlineData(true, 0, 1, true)]
         public void GetRequiredService_Should_Use_Suitable_ClientFactory_To_Create_AwsService_By_UseLocalStack_Value(
-            bool useLocalStack, int awsClientFactoryInvolved, int sessionInvolved)
+            bool useLocalStack, int awsClientFactoryInvolved, int sessionInvolved, bool useAlternateNameAddServiceMethod)
         {
             var configurationValue = new Dictionary<string, string> {{"LocalStack:UseLocalStack", useLocalStack.ToString()}};
             IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
@@ -259,11 +271,19 @@ namespace LocalStack.Client.Extensions.Tests
             ISession mockSessionObject = mockSession.Object;
             IAwsClientFactoryWrapper mockAwsClientFactoryWrapper = mockClientFactory.Object;
 
-            var serviceCollection = new ServiceCollection();
+            IServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddLocalStack(configuration)
                              .Replace(ServiceDescriptor.Singleton(_ => mockSessionObject))
-                             .Replace(ServiceDescriptor.Singleton(_ => mockAwsClientFactoryWrapper))
-                             .AddAwsService<IMockAmazonService>();
+                             .Replace(ServiceDescriptor.Singleton(_ => mockAwsClientFactoryWrapper));
+
+            if (!useAlternateNameAddServiceMethod)
+            {
+                serviceCollection.AddAwsService<IMockAmazonService>();
+            }
+            else
+            {
+                serviceCollection.AddAWSServiceLocalStack<IMockAmazonService>();
+            }
 
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 

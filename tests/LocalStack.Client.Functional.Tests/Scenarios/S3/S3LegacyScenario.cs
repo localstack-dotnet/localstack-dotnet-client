@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-using LocalStack.Client.Functional.Tests.Fixtures;
+﻿using LocalStack.Client.Functional.Tests.Fixtures;
 
 using Xunit;
 

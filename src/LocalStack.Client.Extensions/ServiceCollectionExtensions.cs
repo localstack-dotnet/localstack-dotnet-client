@@ -81,6 +81,38 @@ namespace LocalStack.Client.Extensions
         }
 
         /// <summary>
+        /// Adds the Amazon service client to the dependency injection framework. The Amazon service client is not
+        /// created until it is requested. If the ServiceLifetime property is set to Singleton, the default, then the same
+        /// instance will be reused for the lifetime of the process and the object should not be disposed.
+        /// </summary>
+        /// <typeparam name="TService">The AWS service interface, like IAmazonS3.</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
+        /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
+        public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+            where TService : IAmazonService
+        {
+            return AddAWSServiceLocalStack<TService>(collection, null, lifetime);
+        }
+
+        /// <summary>
+        /// Adds the Amazon service client to the dependency injection framework. The Amazon service client is not
+        /// created until it is requested. If the ServiceLifetime property is set to Singleton, the default, then the same
+        /// instance will be reused for the lifetime of the process and the object should not be disposed.
+        /// </summary>
+        /// <typeparam name="TService">The AWS service interface, like IAmazonS3.</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="options">The AWS options used to create the service client overriding the default AWS options added using AddDefaultAWSOptions.</param>
+        /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
+        /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
+        public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection, 
+                                                                           AWSOptions options,
+                                                                           ServiceLifetime lifetime = ServiceLifetime.Singleton) where TService : IAmazonService
+        {
+            return AddAwsService<TService>(collection, options, lifetime);
+        }
+
+        /// <summary>
         /// Adds the Amazon service client to the dependency injection framework if the service type hasn't already been registered.
         /// The Amazon service client is not created until it is requested. If the ServiceLifetime property is set to Singleton,
         /// the default, then the same instance will be reused for the lifetime of the process and the object should not be disposed.
@@ -112,6 +144,37 @@ namespace LocalStack.Client.Extensions
             collection.TryAdd(descriptor);
 
             return collection;
+        }
+
+        /// <summary>
+        /// Adds the Amazon service client to the dependency injection framework if the service type hasn't already been registered.
+        /// The Amazon service client is not created until it is requested. If the ServiceLifetime property is set to Singleton,
+        /// the default, then the same instance will be reused for the lifetime of the process and the object should not be disposed.
+        /// </summary>
+        /// <typeparam name="TService">The AWS service interface, like IAmazonS3.</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
+        /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
+        public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+            where TService : IAmazonService
+        {
+            return TryAddAWSServiceLocalStack<TService>(collection, null, lifetime);
+        }
+
+        /// <summary>
+        /// Adds the Amazon service client to the dependency injection framework if the service type hasn't already been registered.
+        /// The Amazon service client is not created until it is requested. If the ServiceLifetime property is set to Singleton,
+        /// the default, then the same instance will be reused for the lifetime of the process and the object should not be disposed.
+        /// </summary>
+        /// <typeparam name="TService">The AWS service interface, like IAmazonS3.</typeparam>
+        /// <param name="collection"></param>
+        /// <param name="options">The AWS options used to create the service client overriding the default AWS options added using AddDefaultAWSOptions.</param>
+        /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
+        /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
+        public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, AWSOptions options,
+                                                                              ServiceLifetime lifetime = ServiceLifetime.Singleton) where TService : IAmazonService
+        {
+            return TryAddAwsService<TService>(collection, options, lifetime);
         }
 
         private static IServiceCollection AddLocalStackServices(this IServiceCollection services)

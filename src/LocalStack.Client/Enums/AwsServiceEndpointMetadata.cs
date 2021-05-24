@@ -34,6 +34,12 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata Events = new AwsServiceEndpointMetadata("CloudWatch Events", "events", CommonEndpointPattern, 4587, AwsServiceEnum.Events);
         public static readonly AwsServiceEndpointMetadata Elb = new AwsServiceEndpointMetadata("Elastic Load Balancing", "elb", CommonEndpointPattern, 4588, AwsServiceEnum.Elb);
         public static readonly AwsServiceEndpointMetadata Iot = new AwsServiceEndpointMetadata("IoT", "iot", CommonEndpointPattern, 4589, AwsServiceEnum.Iot);
+        public static readonly AwsServiceEndpointMetadata IoTAnalytics = new AwsServiceEndpointMetadata("IoTAnalytics", "iotanalytics", CommonEndpointPattern, 4589, AwsServiceEnum.IoTAnalytics);
+        public static readonly AwsServiceEndpointMetadata IoTEvents = new AwsServiceEndpointMetadata("IoT Events", "iotevents", CommonEndpointPattern, 4589, AwsServiceEnum.IoTEvents);
+        public static readonly AwsServiceEndpointMetadata IoTEventsData = new AwsServiceEndpointMetadata("IoT Events Data", "iotevents-data", CommonEndpointPattern, 4589, AwsServiceEnum.IoTEventsData);
+        public static readonly AwsServiceEndpointMetadata IoTWireless = new AwsServiceEndpointMetadata("IoT Wireless", "iotwireless", CommonEndpointPattern, 4589, AwsServiceEnum.IoTWireless);
+        public static readonly AwsServiceEndpointMetadata IoTDataPlane = new AwsServiceEndpointMetadata("IoT Data Plane", "iot-data", CommonEndpointPattern, 4589, AwsServiceEnum.IoTDataPlane);
+        public static readonly AwsServiceEndpointMetadata IoTJobsDataPlane = new AwsServiceEndpointMetadata("IoT Jobs Data Plane", "iot-jobs-data", CommonEndpointPattern, 4589, AwsServiceEnum.IoTJobsDataPlane);
         public static readonly AwsServiceEndpointMetadata CognitoIdp = new AwsServiceEndpointMetadata("Cognito Identity Provider", "cognito-idp", CommonEndpointPattern, 4590, AwsServiceEnum.CognitoIdp);
         public static readonly AwsServiceEndpointMetadata CognitoIdentity = new AwsServiceEndpointMetadata("Cognito Identity", "cognito-identity", CommonEndpointPattern, 4591, AwsServiceEnum.CognitoIdentity);
         public static readonly AwsServiceEndpointMetadata Sts = new AwsServiceEndpointMetadata("STS", "sts", CommonEndpointPattern, 4592, AwsServiceEnum.Sts);
@@ -77,13 +83,26 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata TimeStreamWrite = new AwsServiceEndpointMetadata("Timestream Write", "timestream-write", CommonEndpointPattern, 4626, AwsServiceEnum.TimeStreamWrite);
         public static readonly AwsServiceEndpointMetadata S3Control = new AwsServiceEndpointMetadata("S3 Control", "s3control", CommonEndpointPattern, 4627, AwsServiceEnum.S3Control);
         public static readonly AwsServiceEndpointMetadata ElbV2 = new AwsServiceEndpointMetadata("Elastic Load Balancing v2", "elbv2", CommonEndpointPattern, 4628, AwsServiceEnum.ElbV2);
+        public static readonly AwsServiceEndpointMetadata Support = new AwsServiceEndpointMetadata("Support", "support", CommonEndpointPattern, 4629, AwsServiceEnum.Support);
+        public static readonly AwsServiceEndpointMetadata Neptune = new AwsServiceEndpointMetadata("Neptune", "neptune", CommonEndpointPattern, 4594, AwsServiceEnum.Neptune);
+        public static readonly AwsServiceEndpointMetadata DocDb = new AwsServiceEndpointMetadata("DocDB", "docdb", CommonEndpointPattern, 4594, AwsServiceEnum.DocDb);
+        public static readonly AwsServiceEndpointMetadata ServiceDiscovery = new AwsServiceEndpointMetadata("ServiceDiscovery", "servicediscovery", CommonEndpointPattern, 4630, AwsServiceEnum.ServiceDiscovery);
+        public static readonly AwsServiceEndpointMetadata ServerlessApplicationRepository = new AwsServiceEndpointMetadata("ServerlessApplicationRepository", "serverlessrepo", CommonEndpointPattern, 4631, AwsServiceEnum.ServerlessApplicationRepository);
+        public static readonly AwsServiceEndpointMetadata AppConfig = new AwsServiceEndpointMetadata("AppConfig", "appconfig", CommonEndpointPattern, 4632, AwsServiceEnum.AppConfig);
+        public static readonly AwsServiceEndpointMetadata CostExplorer = new AwsServiceEndpointMetadata("Cost Explorer", "ce", CommonEndpointPattern, 4633, AwsServiceEnum.CostExplorer);
+        public static readonly AwsServiceEndpointMetadata MediaConvert = new AwsServiceEndpointMetadata("MediaConvert", "mediaconvert", CommonEndpointPattern, 4634, AwsServiceEnum.MediaConvert);
+        public static readonly AwsServiceEndpointMetadata ResourceGroupsTaggingApi = new AwsServiceEndpointMetadata("Resource Groups Tagging API", "resourcegroupstaggingapi", CommonEndpointPattern, 4635, AwsServiceEnum.ResourceGroupsTaggingApi);
+        public static readonly AwsServiceEndpointMetadata ResourceGroups = new AwsServiceEndpointMetadata("Resource Groups", "resource-groups", CommonEndpointPattern, 4636, AwsServiceEnum.ResourceGroups);
+
 
         public static readonly AwsServiceEndpointMetadata[] All =
         {
             ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Route53, CloudFormation, CloudWatch,
-            Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, CognitoIdp, CognitoIdentity, Sts, Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs,
-            Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData,
-            Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2
+            Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts, 
+            Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, CloudTrail, 
+            Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
+            TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
+            ResourceGroups
         };
 
         private AwsServiceEndpointMetadata()

@@ -1,6 +1,4 @@
-﻿using System;
-
-using LocalStack.Client.Contracts;
+﻿using LocalStack.Client.Contracts;
 using LocalStack.Client.Options;
 using LocalStack.Client.Utils;
 
@@ -13,22 +11,6 @@ namespace LocalStack.Client
 
         private SessionStandalone()
         {
-        }
-
-        [Obsolete("This method is obsolete, use WithSessionOptions with ISessionOptions parameter")]
-        public ISessionStandalone WithSessionOptions(string awsAccessKeyId = null, string awsAccessKey = null, string awsSessionToken = null, string regionName = null)
-        {
-            _sessionOptions = new SessionOptions(awsAccessKeyId, awsAccessKey, awsSessionToken, regionName);
-
-            return this;
-        }
-
-        [Obsolete("This method is obsolete, use WithConfig")]
-        public ISessionStandalone WithConfig(string localStackHost = null)
-        {
-            _configOptions = new ConfigOptions(localStackHost);
-
-            return this;
         }
 
         public ISessionStandalone WithSessionOptions(ISessionOptions sessionOptions)

@@ -22,12 +22,6 @@ namespace LocalStack.Client
             _sessionReflection = sessionReflection;
         }
 
-        [Obsolete("This method is obsolete, use CreateClientByImplementation")]
-        public TClient CreateClient<TClient>() where TClient : AmazonServiceClient
-        {
-            return CreateClientByImplementation<TClient>();
-        }
-
         public TClient CreateClientByImplementation<TClient>() where TClient : AmazonServiceClient
         {
             Type clientType = typeof(TClient);

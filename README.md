@@ -110,8 +110,11 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-The most important difference is that `AddAwsService` extensions method is used instead of `AddAWSService` used in `AWSSDK.Extensions.NETCore.Setup`. The reason for this will be explained later in this section. 
+The most important difference is that `AddAwsService` extensions method is used instead of `AddAWSService` used in `AWSSDK.Extensions.NETCore.Setup`. The reason for this will be explained later in this section.
+
 In addition, the `AddLocalStack` extension method is also used.
+
+<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
 
 `AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
 
@@ -177,6 +180,7 @@ If the `UseLocalStack` entry is `true`, it uses the [Session](https://github.com
 
 It is named as `AddAwsService` to avoid name conflict with `AddAWSService`.
 
+<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
 
 ### <a name="standalone-initialization"></a> Standalone Initialization
 

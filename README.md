@@ -374,20 +374,29 @@ Linux
 
 ## <a name="changelog"></a> Changelog
 
+### [v1.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.0) 
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.20 have been added.
+   - IoTAnalytics, IoT Events, IoT Events Data, IoT Wireless, IoT Data Plane, IoT Jobs Data Plane, Support, Neptune, DocDB, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, Cost Explorer, MediaConvert, Resource Groups Tagging API, Resource Groups
+- AWSSDK.Core set to 3.7.0 as the minimum version.
+- Obsolete methods removed.
+- New alternate AddAWSServiceLocalStack method added to prevent mix up with AddAWSService.
+- Tested against LocalStack v0.12.10 container.
+
 ### [v1.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.1.0) 
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.10 have been added.
    - Transfer, ACM, CodeCommit, Kinesis Analytics, Amplify, Application Auto Scaling, Kafka, Timestream Query, Timestream Write, Timestream Write, S3 Control, Elastic Load Balancing v2, Redshift Data
 - .NET 5.0 support added.
-- AWSSDK.Core set to 3.5.0 as the minimum version
+- AWSSDK.Core set to 3.5.0 as the minimum version.
+- Tested against LocalStack v0.12.07 container.
 
 ### [v1.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.0.0) 
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v0.23 have been added.
    - ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, Api Gateway V2, RdsData, SageMaker, SageMakerRuntime, Ecr, Qldb
 - .netcore2.2 support removed since Microsoft depracated it. .netcore3.1 support added.
-- AWSSDK.Core set to 3.3.106.5 as the minimum version
+- AWSSDK.Core set to 3.3.106.5 as the minimum version.
 
 ### [v0.8.0.163](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v0.8.0.163) 
-- First release
+- First release.
 
 ## <a name="license"></a> License
 Licensed under MIT, see [LICENSE](LICENSE) for the full text.

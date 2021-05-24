@@ -383,7 +383,7 @@ Linux
    - IoTAnalytics, IoT Events, IoT Events Data, IoT Wireless, IoT Data Plane, IoT Jobs Data Plane, Support, Neptune, DocDB, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, Cost Explorer, MediaConvert, Resource Groups Tagging API, Resource Groups
 - AWSSDK.Core set to 3.7.0 as the minimum version.
 - Obsolete methods removed.
-- New alternate AddAWSServiceLocalStack method added to prevent mix up with AddAWSService.
+- New alternate AddAWSServiceLocalStack method added to prevent mix up with AddAWSService (for LocalStack.Client.Extension v1.1.0).
 - Tested against LocalStack v0.12.10 container.
 
 ### [v1.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.1.0) 

@@ -2,9 +2,11 @@
 using Amazon.APIGateway;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayV2;
+using Amazon.AppConfig;
 using Amazon.AppSync;
 using Amazon.Athena;
 using Amazon.AutoScaling;
+using Amazon.AWSSupport;
 using Amazon.Batch;
 using Amazon.CertificateManager;
 using Amazon.CloudFormation;
@@ -17,6 +19,8 @@ using Amazon.CloudWatchLogs;
 using Amazon.CodeCommit;
 using Amazon.CognitoIdentity;
 using Amazon.CognitoIdentityProvider;
+using Amazon.CostExplorer;
+using Amazon.DocDB;
 using Amazon.DynamoDBv2;
 using Amazon.EC2;
 using Amazon.ECR;
@@ -31,19 +35,29 @@ using Amazon.Elasticsearch;
 using Amazon.Glue;
 using Amazon.IdentityManagement;
 using Amazon.IoT;
+using Amazon.IoTAnalytics;
+using Amazon.IotData;
+using Amazon.IoTEvents;
+using Amazon.IoTEventsData;
+using Amazon.IoTJobsDataPlane;
+using Amazon.IoTWireless;
 using Amazon.Kafka;
 using Amazon.KeyManagementService;
 using Amazon.KinesisAnalytics;
 using Amazon.KinesisFirehose;
 using Amazon.Lambda;
+using Amazon.MediaConvert;
 using Amazon.MediaStore;
 using Amazon.MediaStoreData;
+using Amazon.Neptune;
 using Amazon.Organizations;
 using Amazon.QLDB;
 using Amazon.RDS;
 using Amazon.RDSDataService;
 using Amazon.Redshift;
 using Amazon.RedshiftDataAPIService;
+using Amazon.ResourceGroups;
+using Amazon.ResourceGroupsTaggingAPI;
 using Amazon.Route53;
 using Amazon.S3;
 using Amazon.S3Control;
@@ -51,6 +65,8 @@ using Amazon.SageMaker;
 using Amazon.SageMakerRuntime;
 using Amazon.SecretsManager;
 using Amazon.SecurityToken;
+using Amazon.ServerlessApplicationRepository;
+using Amazon.ServiceDiscovery;
 using Amazon.SimpleEmail;
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleSystemsManagement;
@@ -83,6 +99,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonApiGatewayClient = Session.CreateClientByImplementation<AmazonAPIGatewayClient>();
 
             Assert.NotNull(amazonApiGatewayClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonApiGatewayClient);
         }
 
         [Fact]
@@ -91,6 +108,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonApiGatewayV2Client = Session.CreateClientByImplementation<AmazonApiGatewayV2Client>();
 
             Assert.NotNull(amazonApiGatewayV2Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonApiGatewayV2Client);
         }
 
         [Fact]
@@ -99,6 +117,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonS3Client = Session.CreateClientByImplementation<AmazonS3Client>();
 
             Assert.NotNull(amazonS3Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonS3Client);
         }
 
         [Fact]
@@ -107,6 +126,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonDynamoDbClient = Session.CreateClientByImplementation<AmazonDynamoDBClient>();
 
             Assert.NotNull(amazonDynamoDbClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonDynamoDbClient);
         }
 
         [Fact]
@@ -115,6 +135,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElasticsearchClient = Session.CreateClientByImplementation<AmazonElasticsearchClient>();
 
             Assert.NotNull(amazonElasticsearchClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticsearchClient);
         }
 
         [Fact]
@@ -123,6 +144,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonKinesisFirehoseClient = Session.CreateClientByImplementation<AmazonKinesisFirehoseClient>();
 
             Assert.NotNull(amazonKinesisFirehoseClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonKinesisFirehoseClient);
         }
 
         [Fact]
@@ -131,6 +153,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonLambdaClient = Session.CreateClientByImplementation<AmazonLambdaClient>();
 
             Assert.NotNull(amazonLambdaClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonLambdaClient);
         }
 
         [Fact]
@@ -139,6 +162,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSimpleNotificationServiceClient = Session.CreateClientByImplementation<AmazonSimpleNotificationServiceClient>();
 
             Assert.NotNull(amazonSimpleNotificationServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSimpleNotificationServiceClient);
         }
 
         [Fact]
@@ -147,6 +171,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSqsClient = Session.CreateClientByImplementation<AmazonSQSClient>();
 
             Assert.NotNull(amazonSqsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSqsClient);
         }
 
         [Fact]
@@ -155,6 +180,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonRedshiftClient = Session.CreateClientByImplementation<AmazonRedshiftClient>();
 
             Assert.NotNull(amazonRedshiftClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonRedshiftClient);
         }
 
         [Fact]
@@ -163,6 +189,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSimpleEmailServiceClient = Session.CreateClientByImplementation<AmazonSimpleEmailServiceClient>();
 
             Assert.NotNull(amazonSimpleEmailServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSimpleEmailServiceClient);
         }
 
         [Fact]
@@ -171,6 +198,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonRoute53Client = Session.CreateClientByImplementation<AmazonRoute53Client>();
 
             Assert.NotNull(amazonRoute53Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonRoute53Client);
         }
 
         [Fact]
@@ -179,6 +207,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudFormationClient = Session.CreateClientByImplementation<AmazonCloudFormationClient>();
 
             Assert.NotNull(amazonCloudFormationClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudFormationClient);
         }
 
         [Fact]
@@ -187,6 +216,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudWatchClient = Session.CreateClientByImplementation<AmazonCloudWatchClient>();
 
             Assert.NotNull(amazonCloudWatchClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudWatchClient);
         }
 
         [Fact]
@@ -195,6 +225,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSimpleSystemsManagementClient = Session.CreateClientByImplementation<AmazonSimpleSystemsManagementClient>();
 
             Assert.NotNull(amazonSimpleSystemsManagementClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSimpleSystemsManagementClient);
         }
 
         [Fact]
@@ -203,14 +234,16 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSecretsManagerClient = Session.CreateClientByImplementation<AmazonSecretsManagerClient>();
 
             Assert.NotNull(amazonSecretsManagerClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSecretsManagerClient);
         }
 
         [Fact]
         public void Should_Able_To_Create_AmazonStepFunctionsClient()
         {
-            var amazonSecretsManagerClient = Session.CreateClientByImplementation<AmazonStepFunctionsClient>();
+            var amazonStepFunctionsClient = Session.CreateClientByImplementation<AmazonStepFunctionsClient>();
 
-            Assert.NotNull(amazonSecretsManagerClient);
+            Assert.NotNull(amazonStepFunctionsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonStepFunctionsClient);
         }
 
         [Fact]
@@ -219,6 +252,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudWatchLogsClient = Session.CreateClientByImplementation<AmazonCloudWatchLogsClient>();
 
             Assert.NotNull(amazonCloudWatchLogsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudWatchLogsClient);
         }
 
         [Fact]
@@ -227,6 +261,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudWatchEventsClient = Session.CreateClientByImplementation<AmazonCloudWatchEventsClient>();
 
             Assert.NotNull(amazonCloudWatchEventsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudWatchEventsClient);
         }
 
         [Fact]
@@ -235,6 +270,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElasticLoadBalancingClient = Session.CreateClientByImplementation<AmazonElasticLoadBalancingClient>();
 
             Assert.NotNull(amazonElasticLoadBalancingClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticLoadBalancingClient);
         }
 
         [Fact]
@@ -243,6 +279,61 @@ namespace LocalStack.Client.Integration.Tests
             var amazonIoTClient = Session.CreateClientByImplementation<AmazonIoTClient>();
 
             Assert.NotNull(amazonIoTClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTClient);
+        }
+
+                [Fact]
+        public void Should_Able_To_Create_AmazonIoTAnalyticsClient()
+        {
+            var amazonIoTAnalyticsClient = Session.CreateClientByImplementation<AmazonIoTAnalyticsClient>();
+
+            Assert.NotNull(amazonIoTAnalyticsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTAnalyticsClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonIoTEventsClient()
+        {
+            var amazonIoTEventsClient = Session.CreateClientByImplementation<AmazonIoTEventsClient>();
+
+            Assert.NotNull(amazonIoTEventsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTEventsClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonIoTEventsDataClient()
+        {
+            var amazonIoTEventsDataClient = Session.CreateClientByImplementation<AmazonIoTEventsDataClient>();
+
+            Assert.NotNull(amazonIoTEventsDataClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTEventsDataClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonIoTWirelessClient()
+        {
+            var amazonIoTWirelessClient = Session.CreateClientByImplementation<AmazonIoTWirelessClient>();
+
+            Assert.NotNull(amazonIoTWirelessClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTWirelessClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonIoTDataClient()
+        {
+            var amazonIoTDataClient = Session.CreateClientByImplementation<AmazonIotDataClient>();
+
+            Assert.NotNull(amazonIoTDataClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTDataClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonIoTJobsDataPlaneClient()
+        {
+            var amazonIoTJobsDataPlaneClient = Session.CreateClientByImplementation<AmazonIoTJobsDataPlaneClient>();
+
+            Assert.NotNull(amazonIoTJobsDataPlaneClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIoTJobsDataPlaneClient);
         }
 
         [Fact]
@@ -251,6 +342,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCognitoIdentityProviderClient = Session.CreateClientByImplementation<AmazonCognitoIdentityProviderClient>();
 
             Assert.NotNull(amazonCognitoIdentityProviderClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCognitoIdentityProviderClient);
         }
 
         [Fact]
@@ -259,6 +351,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCognitoIdentityClient = Session.CreateClientByImplementation<AmazonCognitoIdentityClient>();
 
             Assert.NotNull(amazonCognitoIdentityClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCognitoIdentityClient);
         }
 
         [Fact]
@@ -267,6 +360,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSecurityTokenServiceClient = Session.CreateClientByImplementation<AmazonSecurityTokenServiceClient>();
 
             Assert.NotNull(amazonSecurityTokenServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSecurityTokenServiceClient);
         }
 
         [Fact]
@@ -275,6 +369,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonIdentityManagementServiceClient = Session.CreateClientByImplementation<AmazonIdentityManagementServiceClient>();
 
             Assert.NotNull(amazonIdentityManagementServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonIdentityManagementServiceClient);
         }
 
         [Fact]
@@ -283,6 +378,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonRdsClient = Session.CreateClientByImplementation<AmazonRDSClient>();
 
             Assert.NotNull(amazonRdsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonRdsClient);
         }
 
         [Fact]
@@ -291,6 +387,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonRdsDataServiceClient = Session.CreateClientByImplementation<AmazonRDSDataServiceClient>();
 
             Assert.NotNull(amazonRdsDataServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonRdsDataServiceClient);
         }
 
         [Fact]
@@ -299,6 +396,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudSearchClient = Session.CreateClientByImplementation<AmazonCloudSearchClient>();
 
             Assert.NotNull(amazonCloudSearchClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudSearchClient);
         }
 
         [Fact]
@@ -307,6 +405,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSimpleWorkflowClient = Session.CreateClientByImplementation<AmazonSimpleWorkflowClient>();
 
             Assert.NotNull(amazonSimpleWorkflowClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSimpleWorkflowClient);
         }
 
         [Fact]
@@ -315,6 +414,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonEc2Client = Session.CreateClientByImplementation<AmazonEC2Client>();
 
             Assert.NotNull(amazonEc2Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonEc2Client);
         }
 
         [Fact]
@@ -323,6 +423,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElastiCacheClient = Session.CreateClientByImplementation<AmazonElastiCacheClient>();
 
             Assert.NotNull(amazonElastiCacheClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElastiCacheClient);
         }
 
         [Fact]
@@ -331,6 +432,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonKeyManagementServiceClient = Session.CreateClientByImplementation<AmazonKeyManagementServiceClient>();
 
             Assert.NotNull(amazonKeyManagementServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonKeyManagementServiceClient);
         }
 
         [Fact]
@@ -339,6 +441,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElasticMapReduceClient = Session.CreateClientByImplementation<AmazonElasticMapReduceClient>();
 
             Assert.NotNull(amazonElasticMapReduceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticMapReduceClient);
         }
 
         [Fact]
@@ -347,6 +450,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonEcsClient = Session.CreateClientByImplementation<AmazonECSClient>();
 
             Assert.NotNull(amazonEcsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonEcsClient);
         }
 
         [Fact]
@@ -355,6 +459,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonEksClient = Session.CreateClientByImplementation<AmazonEKSClient>();
 
             Assert.NotNull(amazonEksClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonEksClient);
         }
 
         [Fact]
@@ -363,6 +468,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonXRayClient = Session.CreateClientByImplementation<AmazonXRayClient>();
 
             Assert.NotNull(amazonXRayClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonXRayClient);
         }
 
         [Fact]
@@ -371,6 +477,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElasticBeanstalkClient = Session.CreateClientByImplementation<AmazonElasticBeanstalkClient>();
 
             Assert.NotNull(amazonElasticBeanstalkClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticBeanstalkClient);
         }
 
         [Fact]
@@ -379,6 +486,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonAppSyncClient = Session.CreateClientByImplementation<AmazonAppSyncClient>();
 
             Assert.NotNull(amazonAppSyncClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonAppSyncClient);
         }
 
         [Fact]
@@ -387,6 +495,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudFrontClient = Session.CreateClientByImplementation<AmazonCloudFrontClient>();
 
             Assert.NotNull(amazonCloudFrontClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudFrontClient);
         }
 
         [Fact]
@@ -395,6 +504,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonAthenaClient = Session.CreateClientByImplementation<AmazonAthenaClient>();
 
             Assert.NotNull(amazonAthenaClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonAthenaClient);
         }
 
         [Fact]
@@ -403,6 +513,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonGlueClient = Session.CreateClientByImplementation<AmazonGlueClient>();
 
             Assert.NotNull(amazonGlueClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonGlueClient);
         }
 
         [Fact]
@@ -411,6 +522,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSageMakerClient = Session.CreateClientByImplementation<AmazonSageMakerClient>();
 
             Assert.NotNull(amazonSageMakerClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSageMakerClient);
         }
 
         [Fact]
@@ -419,6 +531,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonSageMakerRuntimeClient = Session.CreateClientByImplementation<AmazonSageMakerRuntimeClient>();
 
             Assert.NotNull(amazonSageMakerRuntimeClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSageMakerRuntimeClient);
         }
 
         [Fact]
@@ -427,6 +540,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonEcrClient = Session.CreateClientByImplementation<AmazonECRClient>();
 
             Assert.NotNull(amazonEcrClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonEcrClient);
         }
 
         [Fact]
@@ -435,6 +549,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonQldbClient = Session.CreateClientByImplementation<AmazonQLDBClient>();
 
             Assert.NotNull(amazonQldbClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonQldbClient);
         }
 
         [Fact]
@@ -443,6 +558,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCloudTrailClient = Session.CreateClientByImplementation<AmazonCloudTrailClient>();
 
             Assert.NotNull(amazonCloudTrailClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCloudTrailClient);
         }
 
         [Fact]
@@ -451,6 +567,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonBatchClient = Session.CreateClientByImplementation<AmazonBatchClient>();
 
             Assert.NotNull(amazonBatchClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonBatchClient);
         }
 
         [Fact]
@@ -459,6 +576,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonOrganizationsClient = Session.CreateClientByImplementation<AmazonOrganizationsClient>();
 
             Assert.NotNull(amazonOrganizationsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonOrganizationsClient);
         }
 
         [Fact]
@@ -467,6 +585,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonAutoScalingClient = Session.CreateClientByImplementation<AmazonAutoScalingClient>();
 
             Assert.NotNull(amazonAutoScalingClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonAutoScalingClient);
         }
 
         [Fact]
@@ -475,6 +594,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonMediaStoreClient = Session.CreateClientByImplementation<AmazonMediaStoreClient>();
 
             Assert.NotNull(amazonMediaStoreClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonMediaStoreClient);
         }
 
         [Fact]
@@ -483,6 +603,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonMediaStoreDataClient = Session.CreateClientByImplementation<AmazonMediaStoreDataClient>();
 
             Assert.NotNull(amazonMediaStoreDataClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonMediaStoreDataClient);
         }
 
         [Fact]
@@ -491,6 +612,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonTransferClient = Session.CreateClientByImplementation<AmazonTransferClient>();
 
             Assert.NotNull(amazonTransferClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonTransferClient);
         }
 
         [Fact]
@@ -499,6 +621,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCertificateManagerClient = Session.CreateClientByImplementation<AmazonCertificateManagerClient>();
 
             Assert.NotNull(amazonCertificateManagerClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCertificateManagerClient);
         }
 
         [Fact]
@@ -507,6 +630,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonCodeCommitClient = Session.CreateClientByImplementation<AmazonCodeCommitClient>();
 
             Assert.NotNull(amazonCodeCommitClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCodeCommitClient);
         }
 
         [Fact]
@@ -515,6 +639,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonKinesisAnalyticsClient = Session.CreateClientByImplementation<AmazonKinesisAnalyticsClient>();
 
             Assert.NotNull(amazonKinesisAnalyticsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonKinesisAnalyticsClient);
         }
 
         [Fact]
@@ -523,6 +648,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonAmplifyClient = Session.CreateClientByImplementation<AmazonAmplifyClient>();
 
             Assert.NotNull(amazonAmplifyClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonAmplifyClient);
         }
 
         [Fact]
@@ -531,6 +657,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonKafkaClient = Session.CreateClientByImplementation<AmazonKafkaClient>();
 
             Assert.NotNull(amazonKafkaClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonKafkaClient);
         }
 
         [Fact]
@@ -539,6 +666,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonRedshiftDataApiServiceClient = Session.CreateClientByImplementation<AmazonRedshiftDataAPIServiceClient>();
 
             Assert.NotNull(amazonRedshiftDataApiServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonRedshiftDataApiServiceClient);
         }
 
         [Fact]
@@ -547,6 +675,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonApiGatewayManagementApiClient = Session.CreateClientByImplementation<AmazonApiGatewayManagementApiClient>();
 
             Assert.NotNull(amazonApiGatewayManagementApiClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonApiGatewayManagementApiClient);
         }
 
         [Fact]
@@ -555,6 +684,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonTimestreamQueryClient = Session.CreateClientByImplementation<AmazonTimestreamQueryClient>();
 
             Assert.NotNull(amazonTimestreamQueryClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonTimestreamQueryClient);
         }
 
         [Fact]
@@ -563,6 +693,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonTimestreamWriteClient = Session.CreateClientByImplementation<AmazonTimestreamWriteClient>();
 
             Assert.NotNull(amazonTimestreamWriteClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonTimestreamWriteClient);
         }
 
         [Fact]
@@ -571,6 +702,7 @@ namespace LocalStack.Client.Integration.Tests
             var amazonS3ControlClient = Session.CreateClientByImplementation<AmazonS3ControlClient>();
 
             Assert.NotNull(amazonS3ControlClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonS3ControlClient);
         }
 
         [Fact]
@@ -579,6 +711,97 @@ namespace LocalStack.Client.Integration.Tests
             var amazonElasticLoadBalancingV2Client = Session.CreateClientByImplementation<AmazonElasticLoadBalancingV2Client>();
 
             Assert.NotNull(amazonElasticLoadBalancingV2Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticLoadBalancingV2Client);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonSupportClient()
+        {
+            var amazonSupportClient = Session.CreateClientByImplementation<AmazonAWSSupportClient>();
+
+            Assert.NotNull(amazonSupportClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonSupportClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonNeptuneClient()
+        {
+            var amazonNeptuneClient = Session.CreateClientByImplementation<AmazonNeptuneClient>();
+
+            Assert.NotNull(amazonNeptuneClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonNeptuneClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonDocDBClient()
+        {
+            var amazonDocDbClient = Session.CreateClientByImplementation<AmazonDocDBClient>();
+
+            Assert.NotNull(amazonDocDbClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonDocDbClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonServiceDiscoveryClient()
+        {
+            var amazonServiceDiscoveryClient = Session.CreateClientByImplementation<AmazonServiceDiscoveryClient>();
+
+            Assert.NotNull(amazonServiceDiscoveryClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonServiceDiscoveryClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonServerlessApplicationRepositoryClient()
+        {
+            var amazonServiceServerlessApplicationRepositoryClient = Session.CreateClientByImplementation<AmazonServerlessApplicationRepositoryClient>();
+
+            Assert.NotNull(amazonServiceServerlessApplicationRepositoryClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonServiceServerlessApplicationRepositoryClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonAppConfigClient()
+        {
+            var amazonAppConfigClient = Session.CreateClientByImplementation<AmazonAppConfigClient>();
+
+            Assert.NotNull(amazonAppConfigClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonAppConfigClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonCostExplorerClient()
+        {
+            var amazonCostExplorerClient = Session.CreateClientByImplementation<AmazonCostExplorerClient>();
+
+            Assert.NotNull(amazonCostExplorerClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonCostExplorerClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonMediaConvertClient()
+        {
+            var amazonMediaConvertClient = Session.CreateClientByImplementation<AmazonMediaConvertClient>();
+
+            Assert.NotNull(amazonMediaConvertClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonMediaConvertClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonResourceGroupsTaggingAPIClient()
+        {
+            var amazonResourceGroupsTaggingApiClient = Session.CreateClientByImplementation<AmazonResourceGroupsTaggingAPIClient>();
+
+            Assert.NotNull(amazonResourceGroupsTaggingApiClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonResourceGroupsTaggingApiClient);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonResourceGroupsClient()
+        {
+            var amazonResourceGroupsClient = Session.CreateClientByImplementation<AmazonResourceGroupsClient>();
+
+            Assert.NotNull(amazonResourceGroupsClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonResourceGroupsClient);
         }
     }
 }

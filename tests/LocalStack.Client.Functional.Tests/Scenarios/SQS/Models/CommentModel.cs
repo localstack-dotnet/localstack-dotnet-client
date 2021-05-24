@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.SQS.Models
 {

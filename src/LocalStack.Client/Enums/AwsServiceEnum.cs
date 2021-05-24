@@ -27,6 +27,12 @@
         Events,
         Elb,
         Iot,
+        IoTAnalytics,
+        IoTEvents,
+        IoTEventsData,
+        IoTWireless,
+        IoTDataPlane,
+        IoTJobsDataPlane,
         CognitoIdp,
         CognitoIdentity,
         Sts,
@@ -69,6 +75,16 @@
         TimeStreamQuery,
         TimeStreamWrite,
         S3Control,
-        ElbV2
+        ElbV2,
+        Support,
+        Neptune,
+        DocDb,
+        ServiceDiscovery,
+        ServerlessApplicationRepository,
+        AppConfig,
+        CostExplorer,
+        MediaConvert,
+        ResourceGroupsTaggingApi,
+        ResourceGroups
     }
 }

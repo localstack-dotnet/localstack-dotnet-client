@@ -7,6 +7,7 @@ using Amazon.AppSync;
 using Amazon.Athena;
 using Amazon.AutoScaling;
 using Amazon.AWSSupport;
+using Amazon.Backup;
 using Amazon.Batch;
 using Amazon.CertificateManager;
 using Amazon.CloudFormation;
@@ -28,6 +29,7 @@ using Amazon.ECS;
 using Amazon.EKS;
 using Amazon.ElastiCache;
 using Amazon.ElasticBeanstalk;
+using Amazon.ElasticFileSystem;
 using Amazon.ElasticLoadBalancing;
 using Amazon.ElasticLoadBalancingV2;
 using Amazon.ElasticMapReduce;
@@ -45,6 +47,7 @@ using Amazon.Kafka;
 using Amazon.KeyManagementService;
 using Amazon.KinesisAnalytics;
 using Amazon.KinesisFirehose;
+using Amazon.LakeFormation;
 using Amazon.Lambda;
 using Amazon.MediaConvert;
 using Amazon.MediaStore;
@@ -52,6 +55,7 @@ using Amazon.MediaStoreData;
 using Amazon.Neptune;
 using Amazon.Organizations;
 using Amazon.QLDB;
+using Amazon.QLDBSession;
 using Amazon.RDS;
 using Amazon.RDSDataService;
 using Amazon.Redshift;
@@ -76,6 +80,8 @@ using Amazon.StepFunctions;
 using Amazon.TimestreamQuery;
 using Amazon.TimestreamWrite;
 using Amazon.Transfer;
+using Amazon.WAF;
+using Amazon.WAFV2;
 using Amazon.XRay;
 
 using LocalStack.Client.Contracts;
@@ -551,6 +557,15 @@ namespace LocalStack.Client.Integration.Tests
             Assert.NotNull(amazonQldbClient);
             AssertAmazonClient.AssertClientConfiguration(amazonQldbClient);
         }
+        
+        // [Fact]
+        // public void Should_Able_To_Create_AmazonQLDBSessionClient()
+        // {
+        //     var amazonQldbSessionClient = Session.CreateClientByImplementation<AmazonQLDBSessionClient>();
+        //
+        //     Assert.NotNull(amazonQldbSessionClient);
+        //     AssertAmazonClient.AssertClientConfiguration(amazonQldbSessionClient);
+        // }
 
         [Fact]
         public void Should_Able_To_Create_AmazonCloudTrailClient()
@@ -802,6 +817,51 @@ namespace LocalStack.Client.Integration.Tests
 
             Assert.NotNull(amazonResourceGroupsClient);
             AssertAmazonClient.AssertClientConfiguration(amazonResourceGroupsClient);
+        }
+        
+        [Fact]
+        public void Should_Able_To_Create_AmazonElasticFileSystemClient()
+        {
+            var amazonElasticFileSystemClient = Session.CreateClientByImplementation<AmazonElasticFileSystemClient>();
+
+            Assert.NotNull(amazonElasticFileSystemClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonElasticFileSystemClient);
+        }
+        
+        [Fact]
+        public void Should_Able_To_Create_AmazonBackupClient()
+        {
+            var amazonBackupClient = Session.CreateClientByImplementation<AmazonBackupClient>();
+
+            Assert.NotNull(amazonBackupClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonBackupClient);
+        }
+        
+        [Fact]
+        public void Should_Able_To_Create_AmazonLakeFormationClient()
+        {
+            var amazonLakeFormationClient = Session.CreateClientByImplementation<AmazonLakeFormationClient>();
+
+            Assert.NotNull(amazonLakeFormationClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonLakeFormationClient);
+        }
+        
+        [Fact]
+        public void Should_Able_To_Create_AmazonWAFClient()
+        {
+            var amazonWafClient = Session.CreateClientByImplementation<AmazonWAFClient>();
+
+            Assert.NotNull(amazonWafClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonWafClient);
+        }
+        
+        [Fact]
+        public void Should_Able_To_Create_AmazonWAFV2Client()
+        {
+            var amazonWafV2Client = Session.CreateClientByImplementation<AmazonWAFV2Client>();
+
+            Assert.NotNull(amazonWafV2Client);
+            AssertAmazonClient.AssertClientConfiguration(amazonWafV2Client);
         }
     }
 }

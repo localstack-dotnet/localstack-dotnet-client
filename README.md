@@ -378,6 +378,12 @@ Linux
 
 ## <a name="changelog"></a> Changelog
 
+### [v1.2.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.2) 
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.2.2 have been added.
+   - EFS, Backup, LakeFormation, WAF, WAF V2 and QLDB Session
+- AWSSDK.Core set to 3.7.1 as the minimum version.
+- Tested against LocalStack v0.12.16 container.
+    
 ### [v1.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.0) 
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.20 have been added.
    - IoTAnalytics, IoT Events, IoT Events Data, IoT Wireless, IoT Data Plane, IoT Jobs Data Plane, Support, Neptune, DocDB, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, Cost Explorer, MediaConvert, Resource Groups Tagging API, Resource Groups

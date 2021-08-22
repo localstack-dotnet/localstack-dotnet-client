@@ -57,6 +57,7 @@
         SageMakerRuntime,
         Ecr,
         Qldb,
+        QldbSession,
         CloudTrail,
         Glacier,
         Batch,
@@ -85,6 +86,11 @@
         CostExplorer,
         MediaConvert,
         ResourceGroupsTaggingApi,
-        ResourceGroups
+        ResourceGroups,
+        Efs,
+        Backup,
+        LakeFormation,
+        Waf, 
+        WafV2
     }
 }

@@ -20,6 +20,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		..\build\azure-pipelines.artifact.yml = ..\build\azure-pipelines.artifact.yml
+		..\build\azure-pipelines.extensions.artifact.yml = ..\build\azure-pipelines.extensions.artifact.yml
+		..\build\azure-pipelines.macos.yml = ..\build\azure-pipelines.macos.yml
+		..\build\azure-pipelines.ubuntu.yml = ..\build\azure-pipelines.ubuntu.yml
+		..\build\azure-pipelines.windows.yml = ..\build\azure-pipelines.windows.yml
+		..\build.cake = ..\build.cake
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Extensions", "LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj", "{74035094-A726-44E2-9B88-42D6425D8548}"

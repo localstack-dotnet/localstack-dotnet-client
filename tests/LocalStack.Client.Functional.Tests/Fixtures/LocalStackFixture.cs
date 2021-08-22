@@ -14,8 +14,8 @@ namespace LocalStack.Client.Functional.Tests.Fixtures
         public LocalStackFixture()
         {
             ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-                .WithName("LocalStack-0.12.10")
-                .WithImage("localstack/localstack:0.12.10")
+                .WithName("LocalStack-0.12.16")
+                .WithImage("localstack/localstack:0.12.16")
                 .WithCleanUp(true)
                 .WithEnvironment("DEFAULT_REGION", "eu-central-1")
                 .WithEnvironment("SERVICES", "s3,dynamodb,sqs")

@@ -93,7 +93,7 @@
     <PackageReference Include="AWSSDK.WAF" Version="3.7.0.87" />
     <PackageReference Include="AWSSDK.WAFV2" Version="3.7.6.18" />
     <PackageReference Include="AWSSDK.XRay" Version="3.7.0.87" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />

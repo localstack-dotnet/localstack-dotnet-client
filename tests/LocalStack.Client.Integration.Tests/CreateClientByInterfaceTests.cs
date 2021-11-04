@@ -20,6 +20,7 @@ using Amazon.CloudWatchLogs;
 using Amazon.CodeCommit;
 using Amazon.CognitoIdentity;
 using Amazon.CognitoIdentityProvider;
+using Amazon.ConfigService;
 using Amazon.CostExplorer;
 using Amazon.DocDB;
 using Amazon.DynamoDBv2;
@@ -863,6 +864,15 @@ namespace LocalStack.Client.Integration.Tests
 
             Assert.NotNull(amazonWafV2Client);
             AssertAmazonClient.AssertClientConfiguration(amazonWafV2Client);
+        }
+
+        [Fact]
+        public void Should_Able_To_Create_AmazonConfigServiceClient()
+        {
+            AmazonServiceClient amazonConfigServiceClient = Session.CreateClientByInterface<IAmazonConfigService>();
+
+            Assert.NotNull(amazonConfigServiceClient);
+            AssertAmazonClient.AssertClientConfiguration(amazonConfigServiceClient);
         }
     }
 }

@@ -379,8 +379,16 @@ Linux
 
 ## <a name="changelog"></a> Changelog
 
+### [v1.2.3](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.3) 
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.25 have been added.
+   - Config Service
+- .NET 6.0 support added.
+- AWSSDK.Core set to 3.7.3.15 as the minimum version.
+- AWSSDK.Extensions.NETCore.Setup set to 3.7.1 as the minimum version.
+- Tested against LocalStack v0.12.20 container.
+
 ### [v1.2.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.2) 
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.2.2 have been added.
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.22 have been added.
    - EFS, Backup, LakeFormation, WAF, WAF V2 and QLDB Session
 - AWSSDK.Core set to 3.7.1 as the minimum version.
 - Tested against LocalStack v0.12.16 container.

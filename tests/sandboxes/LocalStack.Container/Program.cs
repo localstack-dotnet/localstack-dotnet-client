@@ -14,8 +14,8 @@ namespace LocalStack.Container
             Console.ReadLine();
 
             ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-                                                                                .WithName("LocalStack-0.12.19")
-                                                                                .WithImage("localstack/localstack:0.12.19")
+                                                                                .WithName("LocalStack-0.12.20")
+                                                                                .WithImage("localstack/localstack:0.12.20")
                                                                                 .WithCleanUp(true)
                                                                                 .WithEnvironment("DEFAULT_REGION", "eu-central-1")
                                                                                 .WithEnvironment("SERVICES", "iam,lambda,dynamodb,apigateway,s3,sns,cloudformation,cloudwatch,sts")

@@ -36,6 +36,7 @@ application development.
 
 ## <a name="supported-platforms"></a> Supported Platforms
 
+* [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 * [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 * [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 * [.NET 4.6.1 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
@@ -77,7 +78,7 @@ This library can be used with any DI library, [AWSSDK.Extensions.NETCore.Setup](
 
 [LocalStack.Client.Extensions](https://www.nuget.org/packages/LocalStack.Client/) is extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) to use both LocalStack and AWS side-by-side.
 
-This approach is recommended since `AWSSDK.Extensions.NETCore.Setup` is very popular and also it is best practice for using [AWSSDK.NET](https://aws.amazon.com/sdk-for-net/) with .NET Core or .NET 5
+This approach is recommended since `AWSSDK.Extensions.NETCore.Setup` is very popular and also it is best practice for using [AWSSDK.NET](https://aws.amazon.com/sdk-for-net/) with .NET Core, .NET 5 or .NET 6
 
 #### <a name="extensions-installation"></a>  Installation
 

@@ -31,6 +31,12 @@ steps:
     displayName: "Create test runner folder"
 
   - task: UseDotNet@2
+    displayName: ".NET Core 6.0.x"
+    inputs:
+      version: "6.0.x"
+      packageType: sdk
+
+  - task: UseDotNet@2
     displayName: ".NET Core 5.0.x"
     inputs:
       version: "5.0.x"
@@ -40,12 +46,6 @@ steps:
     displayName: ".NET Core 3.1.x"
     inputs:
       version: "3.1.x"
-      packageType: sdk
-
-  - task: UseDotNet@2
-    displayName: ".NET Core 2.1.x"
-    inputs:
-      version: "2.1.x"
       packageType: sdk
 
   - task: Bash@3

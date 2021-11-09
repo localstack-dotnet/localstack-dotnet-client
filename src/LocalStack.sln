@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.452
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client", "LocalStack.Client\LocalStack.Client.csproj", "{22C080D7-929C-44F1-909C-831EF9D2810F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandboxes", "Sandboxes", "{962A750E-8FE2-461F-B3FC-2B401309B5FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox", "..\tests\sandboxes\LocalStack.Client.Sandbox\LocalStack.Client.Sandbox.csproj", "{E7E16B66-EE23-4B49-89C5-4FF64F2ED95D}"
 EndProject
@@ -19,13 +22,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.props = Directory.Build.props
 		..\build\azure-pipelines.artifact.yml = ..\build\azure-pipelines.artifact.yml
 		..\build\azure-pipelines.extensions.artifact.yml = ..\build\azure-pipelines.extensions.artifact.yml
 		..\build\azure-pipelines.macos.yml = ..\build\azure-pipelines.macos.yml
 		..\build\azure-pipelines.ubuntu.yml = ..\build\azure-pipelines.ubuntu.yml
 		..\build\azure-pipelines.windows.yml = ..\build\azure-pipelines.windows.yml
 		..\build.cake = ..\build.cake
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Extensions", "LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj", "{74035094-A726-44E2-9B88-42D6425D8548}"
@@ -36,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Extension
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Functional.Tests", "..\tests\LocalStack.Client.Functional.Tests\LocalStack.Client.Functional.Tests.csproj", "{A697D9A2-4DF7-4B4D-A189-EEC7F64B5609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalStack.Container", "..\tests\sandboxes\LocalStack.Container\LocalStack.Container.csproj", "{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Container", "..\tests\sandboxes\LocalStack.Container\LocalStack.Container.csproj", "{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

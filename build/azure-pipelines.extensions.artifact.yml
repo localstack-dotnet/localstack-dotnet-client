@@ -11,7 +11,7 @@ trigger:
       - LICENSE
 pr: none
 pool:
-  vmImage: ubuntu-20.04
+  vmImage: ubuntu-latest
 variables:
   Version.MajorMinor: 1.1
   Version.Revision: $[counter(variables['Version.MajorMinor'], 0)]
@@ -20,9 +20,9 @@ steps:
     displayName: "Init Task"
 
   - task: UseDotNet@2
-    displayName: ".NET 6.0.x"
+    displayName: ".NET Core 3.1.x"
     inputs:
-      version: "6.0.x"
+      version: "3.1.x"
       packageType: sdk
 
   - task: UseDotNet@2
@@ -32,9 +32,9 @@ steps:
       packageType: sdk
 
   - task: UseDotNet@2
-    displayName: ".NET Core 3.1.x"
+    displayName: ".NET 6.0.x"
     inputs:
-      version: "3.1.x"
+      version: "6.0.x"
       packageType: sdk
 
   - task: Bash@3

@@ -42,7 +42,7 @@ steps:
       version: "6.x"
       packageType: sdk
 
-  - script: chmod +x ./build.sh && sudo ./build.sh --skipFunctionalTest="0"
+  - script: dotnet --info && chmod +x ./build.sh && sudo ./build.sh --skipFunctionalTest="0"
     displayName: "Compile & Tests"
 
   - task: PublishTestResults@2

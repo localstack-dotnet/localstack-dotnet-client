@@ -84,7 +84,7 @@ if (!(Test-Path $CAKE_EXE)) {
         Write-Verbose -Message "Creating tools.csproj..."    
         try {        
             New-Item "$TOOLS_DIR/tools.csproj" -ItemType file
-            "<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp3.1</TargetFramework></PropertyGroup></Project>" | Out-File -FilePath "$TOOLS_DIR/tools.csproj" -Append
+            "<Project Sdk=""Microsoft.NET.Sdk""><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net6.0</TargetFramework></PropertyGroup></Project>" | Out-File -FilePath "$TOOLS_DIR/tools.csproj" -Append
         }
         catch {
             Throw "Could not download packages.config."

@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client", "LocalStack.Client\LocalStack.Client.csproj", "{22C080D7-929C-44F1-909C-831EF9D2810F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandboxes", "Sandboxes", "{962A750E-8FE2-461F-B3FC-2B401309B5FD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandboxes", "sandboxes", "{962A750E-8FE2-461F-B3FC-2B401309B5FD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Integrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox.DependencyInjection", "..\tests\sandboxes\LocalStack.Client.Sandbox.DependencyInjection\LocalStack.Client.Sandbox.DependencyInjection.csproj", "{4E90D3D1-D570-4205-9C6E-B917B5508912}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
 	ProjectSection(SolutionItems) = preProject
 		..\build\azure-pipelines.artifact.yml = ..\build\azure-pipelines.artifact.yml
 		..\build\azure-pipelines.extensions.artifact.yml = ..\build\azure-pipelines.extensions.artifact.yml
@@ -40,6 +40,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Functional.Tests", "..\tests\LocalStack.Client.Functional.Tests\LocalStack.Client.Functional.Tests.csproj", "{A697D9A2-4DF7-4B4D-A189-EEC7F64B5609}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Container", "..\tests\sandboxes\LocalStack.Container\LocalStack.Container.csproj", "{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{152F3084-DC30-4A44-AEBC-E4C0EBFA0F4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalStack.Build", "..\build\LocalStack.Build\LocalStack.Build.csproj", "{2CA18A71-CA83-4CC4-A777-AA4F56E4413F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +91,10 @@ Global
 		{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CA18A71-CA83-4CC4-A777-AA4F56E4413F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CA18A71-CA83-4CC4-A777-AA4F56E4413F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CA18A71-CA83-4CC4-A777-AA4F56E4413F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CA18A71-CA83-4CC4-A777-AA4F56E4413F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +109,7 @@ Global
 		{0F24D1F8-DB6B-439E-BD6D-23E8DA88615A} = {3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}
 		{A697D9A2-4DF7-4B4D-A189-EEC7F64B5609} = {3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}
 		{6CCFBCE0-C7C6-42A7-B39F-665B4C15C6FE} = {962A750E-8FE2-461F-B3FC-2B401309B5FD}
+		{2CA18A71-CA83-4CC4-A777-AA4F56E4413F} = {152F3084-DC30-4A44-AEBC-E4C0EBFA0F4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E4925255-67AA-4095-816B-CC10A5490E71}

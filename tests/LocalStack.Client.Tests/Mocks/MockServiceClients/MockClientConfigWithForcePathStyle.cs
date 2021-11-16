@@ -1,7 +1,6 @@
-﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients
+﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
+
+public class MockClientConfigWithForcePathStyle : MockClientConfig
 {
-    public class MockClientConfigWithForcePathStyle : MockClientConfig
-    {
-        public bool ForcePathStyle { get; set; } = false;
-    }
+    public bool ForcePathStyle { get; set; } = false;
 }

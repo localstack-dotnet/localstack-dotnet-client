@@ -1,10 +1,9 @@
-﻿namespace LocalStack.Client.Functional.Tests
-{
-    public static class TestConstants
-    {
-        public const string LegacyLocalStackConfig = "appsettings.LocalStackLegacy.json";
-        public const string LocalStackConfig = "appsettings.LocalStack.json";
+﻿namespace LocalStack.Client.Functional.Tests;
 
-        public const string MoiveTableMovieIdGsi = "MoiveTableMovie-Index";
-    }
+public static class TestConstants
+{
+    public const string LegacyLocalStackConfig = "appsettings.LocalStackLegacy.json";
+    public const string LocalStackConfig = "appsettings.LocalStack.json";
+
+    public const string MoiveTableMovieIdGsi = "MoiveTableMovie-Index";
 }

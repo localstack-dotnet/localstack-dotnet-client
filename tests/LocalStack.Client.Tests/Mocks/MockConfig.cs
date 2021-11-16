@@ -1,13 +1,10 @@
-﻿using LocalStack.Client.Options;
+﻿namespace LocalStack.Client.Tests.Mocks;
 
-namespace LocalStack.Client.Tests.Mocks
+public class MockConfig : Config
 {
-    public class MockConfig : Config
+    private MockConfig()
+        : base(new ConfigOptions())
     {
-        private MockConfig()
-            :base(new ConfigOptions())
-        {
-            
-        }
+
     }
 }

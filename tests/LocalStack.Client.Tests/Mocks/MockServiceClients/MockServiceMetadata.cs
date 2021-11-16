@@ -1,15 +1,10 @@
-﻿using Amazon.Runtime.Internal;
+﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-using System.Collections.Generic;
-
-namespace LocalStack.Client.Tests.Mocks.MockServiceClients
+public class MockServiceMetadata : IServiceMetadata
 {
-    public class MockServiceMetadata : IServiceMetadata
-    {
-        public const string MockServiceId = "Mock Amazon Service";
+    public const string MockServiceId = "Mock Amazon Service";
 
-        public string ServiceId => MockServiceId;
+    public string ServiceId => MockServiceId;
 
-        public IDictionary<string, string> OperationNameMapping { get; }
-    }
+    public IDictionary<string, string> OperationNameMapping { get; }
 }

@@ -1,11 +1,6 @@
-﻿using System;
+﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-using Amazon.Runtime;
-
-namespace LocalStack.Client.Tests.Mocks.MockServiceClients
+public interface IMockAmazonService : IDisposable, IAmazonService
 {
-    public interface IMockAmazonService : IDisposable, IAmazonService
-    {
 
-    }
 }

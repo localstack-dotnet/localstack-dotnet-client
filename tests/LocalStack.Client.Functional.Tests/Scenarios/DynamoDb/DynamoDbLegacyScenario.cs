@@ -1,15 +1,10 @@
-﻿using LocalStack.Client.Functional.Tests.Fixtures;
+﻿namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
-using Xunit;
-
-namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb
+[Collection(nameof(LocalStackLegacyCollection))]
+public class DynamoDbLegacyScenario : DynamoDbScenario
 {
-    [Collection(nameof(LocalStackLegacyCollection))]
-    public class DynamoDbLegacyScenario : DynamoDbScenario
+    public DynamoDbLegacyScenario(TestFixture testFixture)
+        : base(testFixture, TestConstants.LegacyLocalStackConfig)
     {
-        public DynamoDbLegacyScenario(TestFixture testFixture) 
-            : base(testFixture, TestConstants.LegacyLocalStackConfig)
-        {
-        }
     }
 }

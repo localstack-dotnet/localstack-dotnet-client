@@ -19,7 +19,6 @@ global using Cake.Common.Tools.DotNetCore.Test;
 global using Cake.Core;
 global using Cake.Core.IO;
 global using Cake.Frosting;
-global using Cake.Git;
 
 global using LocalStack.Build;
 global using LocalStack.Build.Models;

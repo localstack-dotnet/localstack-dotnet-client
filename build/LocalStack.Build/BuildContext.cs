@@ -1,17 +1,20 @@
-﻿namespace LocalStack.Build;
+﻿using Cake.Common.IO;
+
+namespace LocalStack.Build;
 
 public sealed class BuildContext : FrostingContext
 {
     public BuildContext(ICakeContext context) : base(context)
     {
 #if DEBUG
-        // walk backwards until git directory found -that's root
-        if (!context.GitIsValidRepository(context.Environment.WorkingDirectory))
+        FilePath buildFile = context.Environment.WorkingDirectory.GetFilePath("build.sh");
+        if (!context.FileExists(buildFile))
         {
             var dir = new DirectoryPath(".");
-            while (!context.GitIsValidRepository(dir))
+            while (!context.FileExists(buildFile))
             {
                 dir = new DirectoryPath(Directory.GetParent(dir.FullPath)?.FullName);
+                buildFile = dir.GetFilePath(buildFile);
             }
 
             context.Environment.WorkingDirectory = dir;

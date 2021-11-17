@@ -1,10 +1,16 @@
-﻿name: Build Ubuntu
+﻿name: build-ubuntu
 
 on:
   push:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
     branches:
-      - "*"
+      - "master"
   pull_request:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
     branches:
       - master
 
@@ -45,4 +51,11 @@ jobs:
         run: ./build.sh --target build
 
       - name: Run Tests
-        run: ./build.sh --exclusive --target tests --skipFunctionalTest false --verbosity verbose
+        run: ./build.sh --exclusive --target tests --skipFunctionalTest false
+
+      - name: Upload Test Results
+      - uses: actions/upload-artifact@v2  # upload test results
+        if: success() || failure()        # run this step even if previous step failed
+        with:
+          name: test-results
+          path: "**/*.trx"

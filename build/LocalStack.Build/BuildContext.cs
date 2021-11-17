@@ -6,20 +6,20 @@ public sealed class BuildContext : FrostingContext
 {
     public BuildContext(ICakeContext context) : base(context)
     {
-#if DEBUG
-        FilePath buildFile = context.Environment.WorkingDirectory.GetFilePath("build.sh");
-        if (!context.FileExists(buildFile))
-        {
-            var dir = new DirectoryPath(".");
-            while (!context.FileExists(buildFile))
-            {
-                dir = new DirectoryPath(Directory.GetParent(dir.FullPath)?.FullName);
-                buildFile = dir.GetFilePath(buildFile);
-            }
+//#if DEBUG
+//        FilePath buildFile = context.Environment.WorkingDirectory.GetFilePath("build.sh");
+//        if (!context.FileExists(buildFile))
+//        {
+//            var dir = new DirectoryPath(".");
+//            while (!context.FileExists(buildFile))
+//            {
+//                dir = new DirectoryPath(Directory.GetParent(dir.FullPath)?.FullName);
+//                buildFile = dir.GetFilePath(buildFile);
+//            }
 
-            context.Environment.WorkingDirectory = dir;
-        }
-#endif
+//            context.Environment.WorkingDirectory = dir;
+//        }
+//#endif
 
         BuildConfiguration = context.Argument("config", "Release");
         ForceBuild = context.Argument("force-build", false);

@@ -2,9 +2,7 @@
        .UseContext<BuildContext>()
        .Run(args);
 
-[TaskName("Default"),
- IsDependentOn(typeof(InitTask)),
- IsDependentOn(typeof(TestTask))]
+[TaskName("Default"), IsDependentOn(typeof(TestTask))]
 public class DefaultTask : FrostingTask
 {
 }
@@ -38,7 +36,7 @@ public sealed class InitTask : FrostingTask<BuildContext>
     }
 }
 
-[TaskName("build")]
+[TaskName("build"), IsDependentOn(typeof(InitTask)),]
 public sealed class BuildTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
@@ -51,8 +49,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
     }
 }
 
-[TaskName("test"),
- IsDependentOn(typeof(BuildTask))]
+[TaskName("tests"), IsDependentOn(typeof(BuildTask))]
 public sealed class TestTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
@@ -66,7 +63,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
             Configuration = context.BuildConfiguration
         };
 
-        IList<ProjMetadata> projMetadata = context.GetProjMetadata();
+        IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
 
         foreach (ProjMetadata testProj in projMetadata)
         {
@@ -76,7 +73,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
             foreach (string targetFramework in testProj.TargetFrameworks)
             {
-                if (context.SkipFunctionalTest == "1" && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
+                if (context.SkipFunctionalTest && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {
                     context.Warning("Skipping Functional Tests");
                     continue;
@@ -87,7 +84,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
                 if (context.IsRunningOnUnix() && targetFramework == "net461")
                 {
-                    context.RunXunitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
+                    context.RunXUnitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
                 }
                 else
                 {
@@ -105,9 +102,9 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        if (!System.IO.Directory.Exists(context.ArtifactOutput))
+        if (!Directory.Exists(context.ArtifactOutput))
         {
-            System.IO.Directory.CreateDirectory(context.ArtifactOutput);
+            Directory.CreateDirectory(context.ArtifactOutput);
         }
 
         var settings = new DotNetCorePackSettings
@@ -120,5 +117,37 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
         settings.MSBuildSettings.SetVersion(context.GetProjectVersion());
 
         context.DotNetCorePack(context.LocalStackClientProjFile, settings);
+    }
+}
+
+[TaskName("nuget-pack-extensions")]
+public sealed class NugetPackExtensionTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        if (!Directory.Exists(context.ArtifactExtensionsOutput))
+        {
+            Directory.CreateDirectory(context.ArtifactExtensionsOutput);
+        }
+
+        var settings = new DotNetCorePackSettings
+        {
+            Configuration = context.BuildConfiguration,
+            OutputDirectory = context.ArtifactOutput,
+            MSBuildSettings = new DotNetCoreMSBuildSettings()
+        };
+
+        settings.MSBuildSettings.SetVersion(context.GetExtensionProjectVersion());
+
+        context.DotNetCorePack(context.LocalStackClientExtProjFile, settings);
+    }
+}
+
+[TaskName("get-version")]
+public sealed class GetVersionTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        context.Warning(context.GetProjectVersion());
     }
 }

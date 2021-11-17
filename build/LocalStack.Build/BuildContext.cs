@@ -4,11 +4,25 @@ public sealed class BuildContext : FrostingContext
 {
     public BuildContext(ICakeContext context) : base(context)
     {
+#if DEBUG
+        // walk backwards until git directory found -that's root
+        if (!context.GitIsValidRepository(context.Environment.WorkingDirectory))
+        {
+            var dir = new DirectoryPath(".");
+            while (!context.GitIsValidRepository(dir))
+            {
+                dir = new DirectoryPath(Directory.GetParent(dir.FullPath)?.FullName);
+            }
+
+            context.Environment.WorkingDirectory = dir;
+        }
+#endif
+
         BuildConfiguration = context.Argument("config", "Release");
         ForceBuild = context.Argument("force-build", false);
         ForceRestore = context.Argument("force-restore", false);
-        BuildNumber = context.Argument<int>("buildnumber", 1);
-        SkipFunctionalTest = context.Argument("skipFunctionalTest", "1");
+        BuildNumber = context.Argument<int>("build-number", 1);
+        SkipFunctionalTest = context.Argument("skipFunctionalTest", true);
 
         SolutionRoot = context.Directory("../../");
         SrcPath = SolutionRoot + context.Directory("src");
@@ -32,7 +46,7 @@ public sealed class BuildContext : FrostingContext
 
     public string TestingMode { get; }
 
-    public string SkipFunctionalTest { get; set; }
+    public bool SkipFunctionalTest { get; set; }
 
     public int BuildNumber { get; set; }
 
@@ -60,6 +74,11 @@ public sealed class BuildContext : FrostingContext
 
     public void InstallXUnitNugetPackage()
     {
+        if (!Directory.Exists("testrunner"))
+        {
+            Directory.CreateDirectory("testrunner");
+        }
+
         var nugetInstallSettings = new NuGetInstallSettings
         {
             Version = "2.4.1",
@@ -71,9 +90,9 @@ public sealed class BuildContext : FrostingContext
         this.NuGetInstall("xunit.runner.console", nugetInstallSettings);
     }
 
-    public IList<ProjMetadata> GetProjMetadata()
+    public IEnumerable<ProjMetadata> GetProjMetadata()
     {
-        DirectoryPath testsRoot = this.MakeAbsolute(this.Directory(TestsPath));
+        DirectoryPath testsRoot = this.Directory(TestsPath);
         List<FilePath> csProjFile = this.GetFiles($"{testsRoot}/**/*.csproj").Where(fp => fp.FullPath.EndsWith("Tests.csproj")).ToList();
 
         IList<ProjMetadata> projMetadata = new List<ProjMetadata>();
@@ -82,7 +101,7 @@ public sealed class BuildContext : FrostingContext
         {
             string csProjPath = csProj.FullPath;
 
-            string[] targetFrameworks = this.GetProjectTargetFrameworks(csProjPath);
+            IEnumerable<string> targetFrameworks = GetProjectTargetFrameworks(csProjPath);
             string directoryPath = csProj.GetDirectory().FullPath;
             string assemblyName = GetAssemblyName(csProjPath);
 
@@ -93,10 +112,55 @@ public sealed class BuildContext : FrostingContext
         return projMetadata;
     }
 
-    public string[] GetProjectTargetFrameworks(string csprojPath)
+    public void RunXUnitUsingMono(string targetFramework, string assemblyPath)
     {
-        FilePath file = this.MakeAbsolute(this.File(csprojPath));
-        string project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
+        int exitCode = this.StartProcess("mono", new ProcessSettings
+        {
+            Arguments = $"./testrunner/xunit.runner.console.2.4.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}"
+        });
+
+        if (exitCode != 0)
+        {
+            throw new InvalidOperationException($"Exit code: {exitCode}");
+        }
+    }
+
+    public string GetProjectVersion()
+    {
+        FilePath file = this.File("./src/Directory.Build.props");
+
+        this.Information(file.FullPath);
+
+        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
+        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
+        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
+
+        string version = project.Substring(startIndex, endIndex - startIndex);
+        version = $"{version}.{BuildNumber}";
+
+        return version;
+    }
+
+    public string GetExtensionProjectVersion()
+    {
+        FilePath file = this.File(LocalStackClientExtProjFile);
+
+        this.Information(file.FullPath);
+
+        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
+        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
+        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
+
+        string version = project.Substring(startIndex, endIndex - startIndex);
+        version = $"{version}.{BuildNumber}";
+
+        return version;
+    }
+
+    private IEnumerable<string> GetProjectTargetFrameworks(string csprojPath)
+    {
+        FilePath file = this.File(csprojPath);
+        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
 
         bool multipleFrameworks = project.Contains("<TargetFrameworks>");
         string startElement = multipleFrameworks ? "<TargetFrameworks>" : "<TargetFramework>";
@@ -110,10 +174,10 @@ public sealed class BuildContext : FrostingContext
         return targetFrameworks.Split(';');
     }
 
-    public string GetAssemblyName(string csprojPath)
+    private string GetAssemblyName(string csprojPath)
     {
-        FilePath file = this.MakeAbsolute(this.File(csprojPath));
-        string project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
+        FilePath file = this.File(csprojPath);
+        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
 
         bool assemblyNameElementExists = project.Contains("<AssemblyName>");
 
@@ -135,34 +199,5 @@ public sealed class BuildContext : FrostingContext
         }
 
         return assemblyName;
-    }
-
-    public void RunXunitUsingMono(string targetFramework, string assemblyPath)
-    {
-        int exitCode = this.StartProcess("mono", new ProcessSettings
-        {
-            Arguments = $"./testrunner/xunit.runner.console.2.4.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}"
-        });
-
-        if (exitCode != 0)
-        {
-            throw new InvalidOperationException($"Exit code: {exitCode}");
-        }
-    }
-
-    public string GetProjectVersion()
-    {
-        FilePath file =  this.MakeAbsolute(this.File("./src/Directory.Build.props"));
-
-        this.Information(file.FullPath);
-
-        string project = System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
-        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
-        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
-
-        string version = project.Substring(startIndex, endIndex - startIndex);
-        version = $"{version}.{BuildNumber}";
-
-        return version;
     }
 }

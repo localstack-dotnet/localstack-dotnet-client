@@ -1,4 +1,5 @@
 ﻿global using System;
+global using System.IO;
 global using System.Collections;
 global using System.Collections.Generic;
 global using System.Linq;
@@ -18,6 +19,7 @@ global using Cake.Common.Tools.DotNetCore.Test;
 global using Cake.Core;
 global using Cake.Core.IO;
 global using Cake.Frosting;
+global using Cake.Git;
 
 global using LocalStack.Build;
 global using LocalStack.Build.Models;

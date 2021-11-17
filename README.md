@@ -385,7 +385,7 @@ Linux
 - .NET 6.0 support added.
 - AWSSDK.Core set to 3.7.3.15 as the minimum version.
 - AWSSDK.Extensions.NETCore.Setup set to 3.7.1 as the minimum version.
-- Tested against LocalStack v0.12.20 container.
+- Tested against LocalStack v0.13.0 container.
 
 ### [v1.2.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.2) 
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.22 have been added.

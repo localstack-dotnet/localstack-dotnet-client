@@ -68,8 +68,9 @@ public sealed class TestTask : FrostingTask<BuildContext>
         foreach (ProjMetadata testProj in projMetadata)
         {
             string testProjectPath = testProj.CsProjPath;
+            string targetFrameworks = string.Join(",", testProj.TargetFrameworks);
 
-            context.Warning($"Target Frameworks {string.Join(" ", testProj.TargetFrameworks)}");
+            context.Warning($"Target Frameworks {targetFrameworks}");
 
             foreach (string targetFramework in testProj.TargetFrameworks)
             {

@@ -17,11 +17,11 @@ public class SessionOptions : ISessionOptions
         RegionName = regionName;
     }
 
-    public string AwsAccessKeyId { get; } = Constants.AwsAccessKeyId;
+    public string AwsAccessKeyId { get; private set; } = Constants.AwsAccessKeyId;
 
-    public string AwsAccessKey { get; } = Constants.AwsAccessKey;
+    public string AwsAccessKey { get; private set; } = Constants.AwsAccessKey;
 
-    public string AwsSessionToken { get; } = Constants.AwsSessionToken;
+    public string AwsSessionToken { get; private set; } = Constants.AwsSessionToken;
 
-    public string RegionName { get; } = Constants.RegionName;
+    public string RegionName { get; private set; } = Constants.RegionName;
 }

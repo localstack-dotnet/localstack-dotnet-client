@@ -12,5 +12,5 @@ jobs:
         with:
           artifact: test-results-ubuntu
           name: .NET Tests
-          path: "*.trx"
+          path: "**/*.trx"
           reporter: dotnet-trx

@@ -1,0 +1,13 @@
+﻿name: "publish-nuget"
+on:
+  workflow_dispatch:
+    inputs:
+      package-version:
+        description: "Package Version"
+        required: true
+jobs:
+  printInputs:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: |
+          echo "Package Version: ${{ github.event.inputs.package-version }}"

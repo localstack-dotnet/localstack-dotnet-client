@@ -19,16 +19,10 @@ schedules:
         - master
     always: true
 pool:
-  vmImage: ubuntu-18.04
+  vmImage: ubuntu-latest
 steps:
   - bash: "sudo apt install nuget && mkdir ./testrunner && sudo chmod -R 777 ./testrunner && ls"
     displayName: "Init Task"
-
-  - task: UseDotNet@2
-    displayName: ".NET Core 5.0.x"
-    inputs:
-      version: "5.0.x"
-      packageType: sdk
 
   - task: UseDotNet@2
     displayName: ".NET Core 3.1.x"
@@ -37,12 +31,18 @@ steps:
       packageType: sdk
 
   - task: UseDotNet@2
-    displayName: ".NET Core 2.1.x"
+    displayName: ".NET 5.0.x"
     inputs:
-      version: "2.1.x"
+      version: "5.0.x"
       packageType: sdk
 
-  - bash: chmod +x ./build.sh && sudo ./build.sh --skipFunctionalTest="0"
+  - task: UseDotNet@2
+    displayName: ".NET 6.x"
+    inputs:
+      version: "6.x"
+      packageType: sdk
+
+  - script: dotnet --info && chmod +x ./build.sh && sudo ./build.sh --skipFunctionalTest="0"
     displayName: "Compile & Tests"
 
   - task: PublishTestResults@2

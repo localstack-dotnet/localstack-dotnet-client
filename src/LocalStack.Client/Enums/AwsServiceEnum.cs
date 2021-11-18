@@ -91,6 +91,7 @@
         Backup,
         LakeFormation,
         Waf, 
-        WafV2
+        WafV2,
+        ConfigService
     }
 }

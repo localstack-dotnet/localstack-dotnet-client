@@ -1,0 +1,58 @@
+﻿name: build-ubuntu
+
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - "master"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Init
+        run: chmod +x ./build.sh
+
+      - name: Install NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Install .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "3.1.x"
+
+      - name: Install .NET 5
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Build
+        run: ./build.sh --target build
+
+      - name: Run Tests
+        # run: ./build.sh --target tests --skipFunctionalTest false --exclusive
+        run: ./build.sh --target tests --exclusive
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
+        with:
+          name: test-results-ubuntu
+          path: "**/*.trx"

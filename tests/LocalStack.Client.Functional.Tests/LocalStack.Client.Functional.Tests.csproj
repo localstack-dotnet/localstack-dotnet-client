@@ -1,56 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
+	<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+	<LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="appsettings.LocalStack.json;appsettings.LocalStackLegacy.json;">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>appsettings.json</DependentUpon>
-    </Content>
+	<Content Include="appsettings.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="appsettings.LocalStack.json;appsettings.LocalStackLegacy.json;">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <DependentUpon>appsettings.json</DependentUpon>
+	</Content>
   </ItemGroup>
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.abstractions" Version="2.0.3" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="AutoFixture" Version="4.17.0" />
-    <PackageReference Include="DotNet.Testcontainers" Version="1.4.0" />
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+	<PackageReference Include="Moq" Version="4.16.1" />
+	<PackageReference Include="System.Text.Json" Version="5.0.2" />
+	<PackageReference Include="xunit" Version="2.4.1" />
+	<PackageReference Include="xunit.abstractions" Version="2.0.3" />
+	<PackageReference Include="xunit.runner.console" Version="2.4.1">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="coverlet.collector" Version="3.1.0">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="AutoFixture" Version="4.17.0" />
+	<PackageReference Include="DotNet.Testcontainers" Version="1.4.0" />
 
-    <PackageReference Include="AWSSDK.S3" Version="3.7.1.25" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.54" />
-    <PackageReference Include="AWSSDK.SQS" Version="3.7.0.54" />
+	<PackageReference Include="AWSSDK.S3" Version="3.7.3.20" />
+	<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.88" />
+	<PackageReference Include="AWSSDK.SQS" Version="3.7.1.30" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
-    <ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
-    <ProjectReference Include="..\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
+	<ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
+	<ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
+	<ProjectReference Include="..\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SampleData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+	<None Update="SampleData.txt">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
 
 </Project>

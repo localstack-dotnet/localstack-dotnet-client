@@ -99,6 +99,7 @@ namespace LocalStack.Client.Enums
         public static readonly AwsServiceEndpointMetadata LakeFormation = new("LakeFormation", "lakeformation", CommonEndpointPattern, 4639, AwsServiceEnum.LakeFormation);
         public static readonly AwsServiceEndpointMetadata Waf = new("WAF", "waf", CommonEndpointPattern, 4640, AwsServiceEnum.Waf);
         public static readonly AwsServiceEndpointMetadata WafV2 = new("WAFV2", "wafv2", CommonEndpointPattern, 4640, AwsServiceEnum.WafV2);
+        public static readonly AwsServiceEndpointMetadata ConfigService = new("Config Service", "config", CommonEndpointPattern, 4641, AwsServiceEnum.ConfigService);
         
         
         public static readonly AwsServiceEndpointMetadata[] All =
@@ -108,7 +109,7 @@ namespace LocalStack.Client.Enums
             Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
             CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
             TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-            ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2
+            ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService
         };
 
         private AwsServiceEndpointMetadata()

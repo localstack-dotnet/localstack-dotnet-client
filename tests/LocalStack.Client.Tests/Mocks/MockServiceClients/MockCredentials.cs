@@ -1,12 +1,9 @@
-﻿using Amazon.Runtime;
+﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-namespace LocalStack.Client.Tests.Mocks.MockServiceClients
+internal class MockCredentials : BasicAWSCredentials
 {
-    internal class MockCredentials :BasicAWSCredentials
+    public MockCredentials()
+        : base("testkey", "testsecret")
     {
-        public MockCredentials() 
-            : base("testkey", "testsecret")
-        {
-        }
     }
 }

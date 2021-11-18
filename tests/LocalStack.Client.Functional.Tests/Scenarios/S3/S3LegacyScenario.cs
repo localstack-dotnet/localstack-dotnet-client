@@ -1,15 +1,10 @@
-﻿using LocalStack.Client.Functional.Tests.Fixtures;
+﻿namespace LocalStack.Client.Functional.Tests.Scenarios.S3;
 
-using Xunit;
-
-namespace LocalStack.Client.Functional.Tests.Scenarios.S3
+[Collection(nameof(LocalStackLegacyCollection))]
+public class S3LegacyScenario : S3Scenario
 {
-    [Collection(nameof(LocalStackLegacyCollection))]
-    public class S3LegacyScenario : S3Scenario
+    public S3LegacyScenario(TestFixture testFixture)
+        : base(testFixture, TestConstants.LegacyLocalStackConfig)
     {
-        public S3LegacyScenario(TestFixture testFixture) 
-            : base(testFixture, TestConstants.LegacyLocalStackConfig)
-        {
-        }
     }
 }

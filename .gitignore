@@ -337,3 +337,7 @@ testrunner
 .ionide
 
 !tests/sandboxes/LocalStack.Client.Sandbox.WithGenericHost/Properties/launchSettings.json
+
+
+# Visual Studio Code options directory
+.vscode/

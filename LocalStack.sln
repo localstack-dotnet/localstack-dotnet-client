@@ -22,13 +22,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox.D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{06034ACF-97AD-4266-8E46-42B1804C89B6}"
 	ProjectSection(SolutionItems) = preProject
-		build\azure-pipelines.artifact.yml = build\azure-pipelines.artifact.yml
-		build\azure-pipelines.extensions.artifact.yml = build\azure-pipelines.extensions.artifact.yml
-		build\azure-pipelines.macos.yml = build\azure-pipelines.macos.yml
-		build\azure-pipelines.ubuntu.yml = build\azure-pipelines.ubuntu.yml
-		build\azure-pipelines.windows.yml = build\azure-pipelines.windows.yml
-		build.cake = build.cake
+		.github\workflows\build-macos.yml = .github\workflows\build-macos.yml
+		.github\workflows\build-ubuntu.yml = .github\workflows\build-ubuntu.yml
+		.github\workflows\build-windows.yml = .github\workflows\build-windows.yml
+		build.ps1 = build.ps1
+		build.sh = build.sh
 		src\Directory.Build.props = src\Directory.Build.props
+		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
+		.github\workflows\test-report.yml = .github\workflows\test-report.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Extensions", "src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj", "{74035094-A726-44E2-9B88-42D6425D8548}"

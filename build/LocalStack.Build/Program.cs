@@ -1,6 +1,4 @@
-﻿using Cake.Common.Tools.DotNetCore.NuGet.Push;
-
-return new CakeHost()
+﻿return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 

@@ -12,6 +12,7 @@ global using Cake.Common.IO.Paths;
 global using Cake.Common.Tools.NuGet;
 global using Cake.Common.Tools.NuGet.Install;
 global using Cake.Common.Diagnostics;
+global using Cake.Common.Tools.DotNetCore.NuGet.Push;
 global using Cake.Common.Tools.DotNetCore;
 global using Cake.Common.Tools.DotNetCore.Build;
 global using Cake.Common.Tools.DotNetCore.MSBuild;

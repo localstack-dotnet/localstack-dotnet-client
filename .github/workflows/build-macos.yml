@@ -1,4 +1,4 @@
-﻿name: build-ubuntu
+﻿name: build-macos
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       BUILD_CONFIG: "Release"
       SOLUTION: "MySolution.sln"
 
-    runs-on: ubuntu-20.04
+    runs-on: macos-10.15
 
     steps:
       - name: Checkout
@@ -57,5 +57,5 @@ jobs:
         uses: actions/upload-artifact@v2 # upload test results
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-results-ubuntu
+          name: test-results-macos
           path: "**/*.trx"

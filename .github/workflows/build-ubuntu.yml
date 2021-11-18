@@ -30,8 +30,8 @@ jobs:
 
       - name: Setup Testspace
         uses: testspace-com/setup-testspace@v1
-          with:
-            domain: ${{github.repository_owner}}
+        with:
+          domain: ${{github.repository_owner}}
 
       - name: Install .NET Core 3.1
         uses: actions/setup-dotnet@v1

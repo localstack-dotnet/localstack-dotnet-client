@@ -24,7 +24,7 @@ on:
         - LocalStack.Client.Extensions
 
 jobs:
-  build-and-test:
+  publish-nuget:
     runs-on: ubuntu-20.04
 
     steps:
@@ -58,6 +58,10 @@ jobs:
       - name: "Print Version"
         run: |
           echo "Package Version: ${{ github.event.inputs.package-version }}"
+
+      - name: Remove Project Ref & Add latest pack
+        if: ${{ github.event.inputs.package-id == 'LocalStack.Client.Extensions' }}
+        run: cd src/LocalStack.Client.Extensions/ && dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj && dotnet add package LocalStack.Client
 
       - name: Nuget Pack
         run: ./build.sh --target nuget-pack --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }}

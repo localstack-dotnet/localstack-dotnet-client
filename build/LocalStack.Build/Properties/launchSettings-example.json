@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "LocalStack.Build": {
+      "commandName": "Project",
+      "commandLineArgs": "--target nuget-push --package-version 1.2.3 --package-source myget --package-id LocalStack.Client --package-secret ************************"
+    },
+    "WSL 2": {
+      "commandName": "WSL2",
+      "commandLineArgs": "--target get-version",
+      "distributionName": "Ubuntu-18.04"
+    }
+  }
+}

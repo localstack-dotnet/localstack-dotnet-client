@@ -1,17 +1,12 @@
-﻿using System;
+﻿namespace LocalStack.Client.Contracts;
 
-using Amazon.Runtime;
-
-namespace LocalStack.Client.Contracts
+public interface ISession
 {
-    public interface ISession
-    {
-        TClient CreateClientByImplementation<TClient>() where TClient : AmazonServiceClient;
+    TClient CreateClientByImplementation<TClient>() where TClient : AmazonServiceClient;
 
-        AmazonServiceClient CreateClientByImplementation(Type implType);
+    AmazonServiceClient CreateClientByImplementation(Type implType);
 
-        AmazonServiceClient CreateClientByInterface<TClient>() where TClient: IAmazonService;
+    AmazonServiceClient CreateClientByInterface<TClient>() where TClient: IAmazonService;
 
-        AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType);
-    }
+    AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType);
 }

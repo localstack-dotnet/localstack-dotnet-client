@@ -1,20 +1,14 @@
-﻿using System;
+﻿namespace LocalStack.Client.Contracts;
 
-using Amazon.Runtime;
-using Amazon.Runtime.Internal;
-
-namespace LocalStack.Client.Contracts
+public interface ISessionReflection
 {
-    public interface ISessionReflection
-    {
-        IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient;
+    IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient;
 
-        IServiceMetadata ExtractServiceMetadata(Type clientType);
+    IServiceMetadata ExtractServiceMetadata(Type clientType);
 
-        ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient;
+    ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient;
 
-        ClientConfig CreateClientConfig(Type clientType);
+    ClientConfig CreateClientConfig(Type clientType);
 
-        bool SetForcePathStyle(ClientConfig clientConfig, bool value = true);
-    }
+    bool SetForcePathStyle(ClientConfig clientConfig, bool value = true);
 }

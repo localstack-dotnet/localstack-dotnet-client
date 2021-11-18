@@ -1,11 +1,10 @@
-﻿namespace LocalStack.Client.Contracts
+﻿namespace LocalStack.Client.Contracts;
+
+public interface ISessionStandalone
 {
-    public interface ISessionStandalone
-    {
-        ISessionStandalone WithSessionOptions(ISessionOptions sessionOptions);
+    ISessionStandalone WithSessionOptions(ISessionOptions sessionOptions);
 
-        ISessionStandalone WithConfigurationOptions(IConfigOptions configOptions);
+    ISessionStandalone WithConfigurationOptions(IConfigOptions configOptions);
 
-        ISession Create();
-    }
+    ISession Create();
 }

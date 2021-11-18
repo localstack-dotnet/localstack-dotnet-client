@@ -1,13 +1,12 @@
-﻿namespace LocalStack.Client.Contracts
+﻿namespace LocalStack.Client.Contracts;
+
+public interface IConfigOptions
 {
-    public interface IConfigOptions
-    {
-        string LocalStackHost { get; }
+    string LocalStackHost { get; }
 
-        bool UseSsl { get; }
+    bool UseSsl { get; }
 
-        bool UseLegacyPorts { get; }
+    bool UseLegacyPorts { get; }
 
-        int EdgePort { get; }
-    }
+    int EdgePort { get; }
 }

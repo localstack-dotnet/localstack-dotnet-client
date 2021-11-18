@@ -1,13 +1,12 @@
-﻿namespace LocalStack.Client.Contracts
+﻿namespace LocalStack.Client.Contracts;
+
+public interface ISessionOptions
 {
-    public interface ISessionOptions
-    {
-        string AwsAccessKeyId { get; }
+    string AwsAccessKeyId { get; }
 
-        string AwsAccessKey { get; }
+    string AwsAccessKey { get; }
 
-        string AwsSessionToken { get; }
+    string AwsSessionToken { get; }
 
-        string RegionName { get; }
-    }
+    string RegionName { get; }
 }

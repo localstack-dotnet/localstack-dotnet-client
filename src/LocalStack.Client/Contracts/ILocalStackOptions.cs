@@ -1,13 +1,12 @@
 ﻿using LocalStack.Client.Options;
 
-namespace LocalStack.Client.Contracts
+namespace LocalStack.Client.Contracts;
+
+public interface ILocalStackOptions
 {
-    public interface ILocalStackOptions
-    {
-        bool UseLocalStack { get; }
+    bool UseLocalStack { get; }
 
-        SessionOptions Session { get; }
+    SessionOptions Session { get; }
 
-        ConfigOptions Config { get; }
-    }
+    ConfigOptions Config { get; }
 }

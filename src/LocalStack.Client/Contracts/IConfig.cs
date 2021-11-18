@@ -1,21 +1,14 @@
-﻿using LocalStack.Client.Models;
+﻿namespace LocalStack.Client.Contracts;
 
-using System.Collections.Generic;
-
-using LocalStack.Client.Enums;
-
-namespace LocalStack.Client.Contracts
+public interface IConfig
 {
-    public interface IConfig
-    {
-        IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints();
+    IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints();
 
-        AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum);
+    AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum);
 
-        AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId);
+    AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId);
 
-        IDictionary<AwsServiceEnum, int> GetAwsServicePorts();
+    IDictionary<AwsServiceEnum, int> GetAwsServicePorts();
 
-        int GetAwsServicePort(AwsServiceEnum awsServiceEnum);
-    }
+    int GetAwsServicePort(AwsServiceEnum awsServiceEnum);
 }

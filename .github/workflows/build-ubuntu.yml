@@ -28,7 +28,7 @@ jobs:
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1.0.5
 
-      - name:
+      - name: Setup Testspace
         uses: testspace-com/setup-testspace@v1
           with:
             domain: ${{github.repository_owner}}

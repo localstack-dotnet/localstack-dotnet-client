@@ -28,6 +28,11 @@ jobs:
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1.0.5
 
+      - name:
+        uses: testspace-com/setup-testspace@v1
+          with:
+            domain: ${{github.repository_owner}}
+
       - name: Install .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
@@ -55,3 +60,8 @@ jobs:
         with:
           name: test-results-ubuntu
           path: "**/*.trx"
+
+      - name: Push result to Testspace server
+        run: |
+          testspace **/*.trx
+        if: always()

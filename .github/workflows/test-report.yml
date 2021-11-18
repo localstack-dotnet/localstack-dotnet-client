@@ -2,6 +2,7 @@
 on:
   workflow_run:
     workflows: ["build-ubuntu"]
+    branches: ["*"]
     types:
       - completed
 jobs:

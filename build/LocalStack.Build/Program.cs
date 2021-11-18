@@ -1,4 +1,6 @@
-﻿return new CakeHost()
+﻿using Cake.Common.Tools.DotNetCore.NuGet.Push;
+
+return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 
@@ -103,10 +105,14 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
+        ValidatePackageVersion(context);
+
         if (!Directory.Exists(context.ArtifactOutput))
         {
             Directory.CreateDirectory(context.ArtifactOutput);
         }
+
+        FilePath packageCsProj = context.PackageIdProjMap[context.PackageId];
 
         var settings = new DotNetCorePackSettings
         {
@@ -115,40 +121,67 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
             MSBuildSettings = new DotNetCoreMSBuildSettings()
         };
 
-        settings.MSBuildSettings.SetVersion(context.GetProjectVersion());
+        settings.MSBuildSettings.SetVersion(context.PackageVersion);
 
-        context.DotNetCorePack(context.LocalStackClientProjFile, settings);
+        context.DotNetCorePack(packageCsProj.FullPath, settings);
     }
-}
 
-[TaskName("nuget-pack-extensions")]
-public sealed class NugetPackExtensionTask : FrostingTask<BuildContext>
-{
-    public override void Run(BuildContext context)
+    private static void ValidatePackageVersion(BuildContext context)
     {
-        if (!Directory.Exists(context.ArtifactExtensionsOutput))
+        BuildContext.ValidateArgument("package-id", context.PackageId);
+        BuildContext.ValidateArgument("package-version", context.PackageVersion);
+        BuildContext.ValidateArgument("package-source", context.PackageSource);
+
+        Match match = Regex.Match(context.PackageVersion, @"^(\d+)\.(\d+)\.(\d+)(\.(\d+))*$", RegexOptions.IgnoreCase);
+
+        if (!match.Success)
         {
-            Directory.CreateDirectory(context.ArtifactExtensionsOutput);
+            throw new Exception($"Invalid version: {context.PackageVersion}");
         }
 
-        var settings = new DotNetCorePackSettings
+        string packageSource = context.PackageSourceMap[context.PackageSource];
+
+        var nuGetListSettings = new NuGetListSettings { AllVersions = false, Source = new List<string>() { packageSource } };
+        NuGetListItem nuGetListItem = context.NuGetList(context.PackageId, nuGetListSettings).Single(item => item.Name == context.PackageId);
+        string latestPackVersionStr = nuGetListItem.Version;
+
+        Version packageVersion = Version.Parse(context.PackageVersion);
+        Version latestPackVersion = Version.Parse(latestPackVersionStr);
+
+        if (packageVersion <= latestPackVersion)
         {
-            Configuration = context.BuildConfiguration,
-            OutputDirectory = context.ArtifactOutput,
-            MSBuildSettings = new DotNetCoreMSBuildSettings()
-        };
-
-        settings.MSBuildSettings.SetVersion(context.GetExtensionProjectVersion());
-
-        context.DotNetCorePack(context.LocalStackClientExtProjFile, settings);
+            throw new Exception($"The new package version {context.PackageVersion} should be greater than the latest package version {latestPackVersionStr}");
+        }
     }
 }
 
-[TaskName("get-version")]
-public sealed class GetVersionTask : FrostingTask<BuildContext>
+[TaskName("nuget-push")]
+public sealed class NugetPushTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        context.Warning(context.GetProjectVersion());
+        BuildContext.ValidateArgument("package-id", context.PackageId);
+        BuildContext.ValidateArgument("package-version", context.PackageVersion);
+        BuildContext.ValidateArgument("package-secret", context.PackageSecret);
+        BuildContext.ValidateArgument("package-source", context.PackageSource);
+
+        string packageId = context.PackageId;
+        string packageVersion = context.PackageVersion;
+
+        ConvertableFilePath packageFile = context.ArtifactOutput + context.File($"{packageId}.{packageVersion}.nupkg");
+
+        if (!context.FileExists(packageFile))
+        {
+            throw new Exception($"The specified {packageFile.Path} package file does not exists");
+        }
+
+        string packageSecret = context.PackageSecret;
+        string packageSource = context.PackageSourceMap[context.PackageSource];
+
+        context.DotNetCoreNuGetPush(packageFile.Path.FullPath, new DotNetCoreNuGetPushSettings()
+        {
+            ApiKey = packageSecret,
+            Source = packageSource,
+        });
     }
 }

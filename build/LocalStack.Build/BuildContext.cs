@@ -1,44 +1,44 @@
-﻿using Cake.Common.IO;
-
-namespace LocalStack.Build;
+﻿namespace LocalStack.Build;
 
 public sealed class BuildContext : FrostingContext
 {
     public BuildContext(ICakeContext context) : base(context)
     {
-//#if DEBUG
-//        FilePath buildFile = context.Environment.WorkingDirectory.GetFilePath("build.sh");
-//        if (!context.FileExists(buildFile))
-//        {
-//            var dir = new DirectoryPath(".");
-//            while (!context.FileExists(buildFile))
-//            {
-//                dir = new DirectoryPath(Directory.GetParent(dir.FullPath)?.FullName);
-//                buildFile = dir.GetFilePath(buildFile);
-//            }
-
-//            context.Environment.WorkingDirectory = dir;
-//        }
-//#endif
-
         BuildConfiguration = context.Argument("config", "Release");
         ForceBuild = context.Argument("force-build", false);
         ForceRestore = context.Argument("force-restore", false);
-        BuildNumber = context.Argument<int>("build-number", 1);
+        PackageVersion = context.Argument("package-version", "x.x.x");
+        PackageId = context.Argument("package-id", default(string));
+        PackageSecret = context.Argument("package-secret", default(string));
+        PackageSource = context.Argument("package-source", default(string));
         SkipFunctionalTest = context.Argument("skipFunctionalTest", true);
+
+        var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>();
+        sourceBuilder.AddRange(new[]
+        {
+            new KeyValuePair<string, string>("myget", "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
+            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json")
+        });
+        PackageSourceMap = sourceBuilder.ToImmutable();
 
         SolutionRoot = context.Directory("../../");
         SrcPath = SolutionRoot + context.Directory("src");
         TestsPath = SolutionRoot + context.Directory("tests");
         BuildPath = SolutionRoot + context.Directory("build");
         ArtifactOutput = SolutionRoot + context.Directory("artifacts");
-        ArtifactExtensionsOutput = SolutionRoot + context.Directory("artifacts-extensions");
         LocalStackClientFolder = SrcPath + context.Directory("LocalStack.Client");
         LocalStackClientExtFolder = SrcPath + context.Directory("LocalStack.Client.Extensions");
-
         SlnFilePath = SolutionRoot + context.File("LocalStack.sln");
         LocalStackClientProjFile = LocalStackClientFolder + context.File("LocalStack.Client.csproj");
         LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File("LocalStack.Client.Extensions.csproj");
+
+        var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>();
+        packIdBuilder.AddRange(new[]
+        {
+            new KeyValuePair<string, FilePath>("LocalStack.Client", LocalStackClientProjFile),
+            new KeyValuePair<string, FilePath>("LocalStack.Client.Extensions", LocalStackClientExtProjFile)
+        });
+        PackageIdProjMap = packIdBuilder.ToImmutable();
     }
 
     public string BuildConfiguration { get; }
@@ -47,13 +47,21 @@ public sealed class BuildContext : FrostingContext
 
     public bool ForceRestore { get; }
 
-    public string TestingMode { get; }
+    public bool SkipFunctionalTest { get; }
 
-    public bool SkipFunctionalTest { get; set; }
+    public string PackageVersion { get; }
 
-    public int BuildNumber { get; set; }
+    public string PackageId { get; }
 
-    public ConvertableFilePath SlnFilePath { get; set; }
+    public string PackageSecret { get; }
+
+    public string PackageSource { get; }
+
+    public ImmutableDictionary<string, string> PackageSourceMap { get; }
+
+    public ImmutableDictionary<string, FilePath> PackageIdProjMap { get; }
+
+    public ConvertableFilePath SlnFilePath { get; }
 
     public ConvertableDirectoryPath SolutionRoot { get; }
 
@@ -63,17 +71,25 @@ public sealed class BuildContext : FrostingContext
 
     public ConvertableDirectoryPath BuildPath { get; }
 
-    public ConvertableDirectoryPath ArtifactOutput { get; set; }
+    public ConvertableDirectoryPath ArtifactOutput { get; }
 
-    public ConvertableDirectoryPath ArtifactExtensionsOutput { get; set; }
+    public ConvertableDirectoryPath ArtifactExtensionsOutput { get; }
 
-    public ConvertableDirectoryPath LocalStackClientFolder { get; set; }
+    public ConvertableDirectoryPath LocalStackClientFolder { get; }
 
-    public ConvertableDirectoryPath LocalStackClientExtFolder { get; set; }
+    public ConvertableDirectoryPath LocalStackClientExtFolder { get; }
 
-    public ConvertableFilePath LocalStackClientProjFile { get; set; }
+    public ConvertableFilePath LocalStackClientProjFile { get; }
 
-    public ConvertableFilePath LocalStackClientExtProjFile { get; set; }
+    public ConvertableFilePath LocalStackClientExtProjFile { get; }
+
+    public static void ValidateArgument(string argumentName, string argument)
+    {
+        if (string.IsNullOrWhiteSpace(argument))
+        {
+            throw new Exception($"{argumentName} can not be null or empty");
+        }
+    }
 
     public void InstallXUnitNugetPackage()
     {
@@ -139,7 +155,7 @@ public sealed class BuildContext : FrostingContext
         int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
 
         string version = project.Substring(startIndex, endIndex - startIndex);
-        version = $"{version}.{BuildNumber}";
+        version = $"{version}.{PackageVersion}";
 
         return version;
     }
@@ -155,7 +171,7 @@ public sealed class BuildContext : FrostingContext
         int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
 
         string version = project.Substring(startIndex, endIndex - startIndex);
-        version = $"{version}.{BuildNumber}";
+        version = $"{version}.{PackageVersion}";
 
         return version;
     }

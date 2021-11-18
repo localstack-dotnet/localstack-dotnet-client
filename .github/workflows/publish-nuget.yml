@@ -1,13 +1,71 @@
 ﻿name: "publish-nuget"
+
 on:
   workflow_dispatch:
     inputs:
       package-version:
         description: "Package Version"
         required: true
+      package-source:
+        type: choice
+        description: Package Source
+        required: true
+        default: "myget"
+        options:
+        - myget
+        - nuget
+      package-id:
+        type: choice
+        description: Package Id
+        required: true
+        default: "LocalStack.Client"
+        options:
+        - LocalStack.Client
+        - LocalStack.Client.Extensions
+
 jobs:
-  printInputs:
+  build-and-test:
     runs-on: ubuntu-20.04
+
     steps:
-      - run: |
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Init
+        run: chmod +x ./build.sh
+
+      - name: Install NuGet
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Install .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "3.1.x"
+
+      - name: Install .NET 5
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "5.0.x"
+
+      - name: Install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Build & Test
+        run: ./build.sh
+
+      - name: "Print Version"
+        run: |
           echo "Package Version: ${{ github.event.inputs.package-version }}"
+
+      - name: Nuget Pack
+        run: ./build.sh --target nuget-pack --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }}
+
+      - name: MyGet Push
+        if: ${{ github.event.inputs.package-source == 'myget' }}
+        run: ./build.sh --target nuget-push --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }} --package-secret ${{secrets.MYGET_API_KEY}}
+
+      - name: NuGet Push
+        if: ${{ github.event.inputs.package-source == 'nuget' }}
+        run: ./build.sh --target nuget-push --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }} --package-secret ${{secrets.NUGET_API_KEY}}

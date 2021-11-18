@@ -7,7 +7,7 @@ public class LocalStackLegacyFixture : IAsyncLifetime
     public LocalStackLegacyFixture()
     {
         ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-            .WithName("LocalStackLegacy-0.11.4")
+            .WithName($"LocalStackLegacy-0.11.4-{DateTime.Now.Ticks}")
             .WithImage("localstack/localstack:0.11.4")
             .WithCleanUp(true)
             .WithEnvironment("DEFAULT_REGION", "eu-central-1")

@@ -16,10 +16,6 @@ on:
 
 jobs:
   build-and-test:
-    env:
-      BUILD_CONFIG: "Release"
-      SOLUTION: "MySolution.sln"
-
     runs-on: ubuntu-20.04
 
     steps:
@@ -54,8 +50,8 @@ jobs:
         run: ./build.sh --target tests --skipFunctionalTest false --exclusive
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v2 # upload test results
-        if: success() || failure() # run this step even if previous step failed
+        uses: actions/upload-artifact@v2
+        if: success() || failure()
         with:
           name: test-results-ubuntu
           path: "**/*.trx"

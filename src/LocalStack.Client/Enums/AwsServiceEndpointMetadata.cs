@@ -96,7 +96,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Waf = new("WAF", "waf", CommonEndpointPattern, 4640, AwsServiceEnum.Waf);
     public static readonly AwsServiceEndpointMetadata WafV2 = new("WAFV2", "wafv2", CommonEndpointPattern, 4640, AwsServiceEnum.WafV2);
     public static readonly AwsServiceEndpointMetadata ConfigService = new("Config Service", "config", CommonEndpointPattern, 4641, AwsServiceEnum.ConfigService);
-    public static readonly AwsServiceEndpointMetadata EventBridge = new("EventBridge", "events", CommonEndpointPattern, 4587, AwsServiceEnum.Events);
+    public static readonly AwsServiceEndpointMetadata EventBridge = new("EventBridge", "eventbridge", CommonEndpointPattern, 4587, AwsServiceEnum.EventBridge);
 
 
     public static readonly AwsServiceEndpointMetadata[] All =

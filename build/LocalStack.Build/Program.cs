@@ -60,7 +60,8 @@ public sealed class TestTask : FrostingTask<BuildContext>
         {
             NoRestore = !context.ForceRestore,
             NoBuild = !context.ForceBuild,
-            Configuration = context.BuildConfiguration
+            Configuration = context.BuildConfiguration,
+            Blame = true
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
@@ -80,7 +81,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     continue;
                 }
 
-                context.Warning($"Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}");
+                context.Warning($"=============Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}=============");
                 settings.Framework = targetFramework;
 
                 if (context.IsRunningOnUnix() && targetFramework == "net461")
@@ -93,6 +94,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
                     context.DotNetCoreTest(testProjectPath, settings);
                 }
+                context.Warning("==============================================================");
             }
         }
     }

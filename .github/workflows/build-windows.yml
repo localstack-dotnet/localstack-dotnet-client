@@ -22,6 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Testspace
+        uses: testspace-com/setup-testspace@v1
+        with:
+          domain: ${{github.repository_owner}}
+
       - name: Install .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
@@ -43,9 +48,7 @@ jobs:
       - name: Run Tests
         run: .\build.ps1 --target tests --exclusive
 
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-results-windows
-          path: "**/*.trx"
+      - name: Push result to Testspace server
+        run: |
+          testspace [windows]**/*.trx
+        if: always()

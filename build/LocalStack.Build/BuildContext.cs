@@ -73,8 +73,6 @@ public sealed class BuildContext : FrostingContext
 
     public ConvertableDirectoryPath ArtifactOutput { get; }
 
-    public ConvertableDirectoryPath ArtifactExtensionsOutput { get; }
-
     public ConvertableDirectoryPath LocalStackClientFolder { get; }
 
     public ConvertableDirectoryPath LocalStackClientExtFolder { get; }

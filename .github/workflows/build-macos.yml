@@ -28,6 +28,11 @@ jobs:
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1.0.5
 
+      - name: Setup Testspace
+        uses: testspace-com/setup-testspace@v1
+        with:
+          domain: ${{github.repository_owner}}
+
       - name: Install .NET Core 3.1
         uses: actions/setup-dotnet@v1
         with:
@@ -49,9 +54,7 @@ jobs:
       - name: Run Tests
         run: ./build.sh --target tests --exclusive
 
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        if: success() || failure()
-        with:
-          name: test-results-macos
-          path: "**/*.trx"
+      - name: Push result to Testspace server
+        run: |
+          testspace [macos]**/*.trx
+        if: always()

@@ -1,4 +1,4 @@
-![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)
+![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Testspace tests (compact)](https://img.shields.io/testspace/tests/localstack-dotnet/localstack-dotnet:localstack-dotnet-client/master?compact_message)](https://localstack-dotnet.testspace.com/spaces/155695/result_sets)
 
 # LocalStack .Net Core and .Net Framework Client
 

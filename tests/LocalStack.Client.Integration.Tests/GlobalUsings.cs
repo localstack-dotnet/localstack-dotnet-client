@@ -37,6 +37,7 @@ global using Amazon.ElasticLoadBalancing;
 global using Amazon.ElasticLoadBalancingV2;
 global using Amazon.ElasticMapReduce;
 global using Amazon.Elasticsearch;
+global using Amazon.EventBridge;
 global using Amazon.Glue;
 global using Amazon.IdentityManagement;
 global using Amazon.IoT;

@@ -44,6 +44,7 @@
 		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.3.6" />
 		<PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.7.4.25" />
 		<PackageReference Include="AWSSDK.Elasticsearch" Version="3.7.2.20" />
+    		<PackageReference Include="AWSSDK.EventBridge" Version="3.7.4.24" />
 		<PackageReference Include="AWSSDK.Glue" Version="3.7.9.6" />
 		<PackageReference Include="AWSSDK.IdentityManagement" Version="3.7.2.68" />
 		<PackageReference Include="AWSSDK.IoT" Version="3.7.6.20" />

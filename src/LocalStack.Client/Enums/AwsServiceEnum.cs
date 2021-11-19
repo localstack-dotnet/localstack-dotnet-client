@@ -92,5 +92,6 @@ public enum AwsServiceEnum
     LakeFormation,
     Waf, 
     WafV2,
-    ConfigService
+    ConfigService,
+	EventBridge
 }

@@ -1,5 +1,6 @@
 ﻿global using System.Reflection;
 
+global using Amazon;
 global using Amazon.Amplify;
 global using Amazon.APIGateway;
 global using Amazon.ApiGatewayManagementApi;
@@ -87,7 +88,9 @@ global using Amazon.WAF;
 global using Amazon.WAFV2;
 global using Amazon.XRay;
 
+global using LocalStack.Client.Options;
 global using LocalStack.Client.Contracts;
+global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
 
 global using Xunit;

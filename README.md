@@ -129,7 +129,7 @@ You can configure `LocalStack.Client` by using entries in the `appsettings.json`
         "AwsAccessKeyId": "my-AwsAccessKeyId",
         "AwsAccessKey": "my-AwsAccessKey",
         "AwsSessionToken": "my-AwsSessionToken",
-        "RegionName": "eu-central-1"
+        "RegionName": null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
     },
     "Config": {
         "LocalStackHost": "localhost",
@@ -143,7 +143,11 @@ You can configure `LocalStack.Client` by using entries in the `appsettings.json`
 All the entries above are has shown with default values (except `UseLocalStack`, it's `false` by default).
 So the above entries do not need to be specified.
 
-What is entered for the aws credential values ​​in the `Session` section does not matter for LocalStack. `RegionName` is important since LocalStack creates resources by spesified region.
+What is entered for the aws credential values ​​in the `Session` section does not matter for LocalStack.
+
+`RegionName` is important since LocalStack creates resources by spesified region (LocalStack has full multi-region support after `v0.12.17`). By default `RegionName` is `null`. If no value is entered in the `RegionName` entry, the [AWSSDK.NET](https://aws.amazon.com/sdk-for-net/) will use the `us-east-1` region by default.
+
+<i><b>Internally depends on whether you set `RegionName` or not, the values of [ServiceUrl](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L202) ve [RegionEndpoint](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L144) properties of the [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) will change. [RegionEndpoint](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L144) and [ServiceUrl](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L202) are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. If a value set to `RegionName` entry, the LocalStack.NET AWS will set RegionEndpoint property of the ClientConfig. Because of LocalStack.NET sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.</b></i>
 
 `Config` section contains important entries for local development. Starting with LocalStack releases after `v0.11.5`, all services are now exposed via the edge service (port 4566) only! If you are using a version of LocalStack lower than v0.11.5, you should set `UseLegacyPorts` to `true`. Edge port can be set to any available port ([see LocalStack configuration section](https://github.com/localstack/localstack#configurations)). If you have made such a change in LocalStack's configuration, be sure to set the same port value to `EdgePort` in the `Config` section. For `LocalStackHost` and `UseSsl` entries, ​​corresponding to the [LocalStack configuration](https://github.com/localstack/localstack#configurations) should be used.
 
@@ -196,7 +200,7 @@ If you do not want to use any DI library, you have to instantiate `SessionStanda
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
+* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
 * ==== Custom Values ====
 * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
 */
@@ -244,7 +248,7 @@ var collection = new ServiceCollection();
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
+* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
 * ==== Custom Values ====
 * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
 */
@@ -299,7 +303,7 @@ collection.Configure<LocalStackOptions>(options => configuration.GetSection("Loc
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
+* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
     */
 collection.Configure<SessionOptions>(options => configuration.GetSection("LocalStack")
                                                                 .GetSection(nameof(LocalStackOptions.Session))

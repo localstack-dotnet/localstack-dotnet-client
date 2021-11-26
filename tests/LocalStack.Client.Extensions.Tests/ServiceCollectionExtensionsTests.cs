@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Extensions.Tests;
+﻿using Amazon;
+
+namespace LocalStack.Client.Extensions.Tests;
 
 public class ServiceCollectionExtensionsTests
 {
@@ -192,8 +194,64 @@ public class ServiceCollectionExtensionsTests
         Assert.IsType<SessionReflection>(sessionReflection);
     }
 
-    [Theory, InlineData(false), InlineData(true)]
-    public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True(bool useAlternateNameAddServiceMethod)
+    [Theory,
+     InlineData(true, "eu-central-1"),
+     InlineData(true, "us-west-1"),
+     InlineData(true, "af-south-1"),
+     InlineData(true, "ap-southeast-1"),
+     InlineData(true, "ca-central-1"),
+     InlineData(true, "eu-west-2"),
+     InlineData(true, "sa-east-1"),
+     InlineData(false, "eu-central-1"),
+     InlineData(false, "us-west-1"),
+     InlineData(false, "af-south-1"),
+     InlineData(false, "ap-southeast-1"),
+     InlineData(false, "ca-central-1"),
+     InlineData(false, "eu-west-2"),
+     InlineData(false, "sa-east-1")]
+    public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True(bool useAlternateNameAddServiceMethod, string systemName)
+    {
+        var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", "true" }, {"LocalStack:Session:RegionName", systemName} };
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
+
+        var mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+
+        var mockConfig = new Mock<IConfig>(MockBehavior.Strict);
+        IConfig mockConfigObject = mockConfig.Object;
+
+        mockConfig.Setup(config => config.GetAwsServiceEndpoint(It.Is<string>(s => s == mockServiceMetadata.ServiceId))).Returns(() => mockAwsServiceEndpoint);
+
+        IServiceCollection serviceCollection = new ServiceCollection();
+        serviceCollection = serviceCollection
+                            .AddLocalStack(configuration)
+                            .Replace(ServiceDescriptor.Singleton(_ => mockConfigObject));
+
+        if (!useAlternateNameAddServiceMethod)
+        {
+            serviceCollection.AddAwsService<IMockAmazonServiceWithServiceMetadata>();
+        }
+        else
+        {
+            serviceCollection.AddAWSServiceLocalStack<IMockAmazonServiceWithServiceMetadata>();
+        }
+
+        ServiceProvider provider = serviceCollection.BuildServiceProvider();
+
+        var mockAmazonService = provider.GetRequiredService<IMockAmazonServiceWithServiceMetadata>();
+
+        IClientConfig clientConfig = mockAmazonService.Config;
+
+        Assert.True(clientConfig.UseHttp);
+        Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
+        Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
+        Assert.Equal(RegionEndpoint.GetBySystemName(systemName), clientConfig.RegionEndpoint);
+    }
+
+    [Theory, 
+     InlineData(true), 
+     InlineData(false)]
+    public void GetRequiredService_Should_Return_AmazonService_With_Service_Url_That_Configured_For_LocalStack_If_UseLocalStack_Is_True_And_RegionName_Is_Null(bool useAlternateNameAddServiceMethod)
     {
         var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", "true" } };
         IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
@@ -226,10 +284,12 @@ public class ServiceCollectionExtensionsTests
 
         IClientConfig clientConfig = mockAmazonService.Config;
 
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
         Assert.True(clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
+        Assert.Null(clientConfig.RegionEndpoint);
+        Assert.NotNull(clientConfig.ServiceURL);
+        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
     }
 
     [Theory,

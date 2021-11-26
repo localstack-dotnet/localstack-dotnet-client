@@ -6,7 +6,10 @@ public class CreateClientByImplementationTests
 
     static CreateClientByImplementationTests()
     {
-        Session = SessionStandalone.Init().Create();
+        Session = SessionStandalone.Init()
+
+                                   .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+                                   .Create();
     }
 
     [Fact]

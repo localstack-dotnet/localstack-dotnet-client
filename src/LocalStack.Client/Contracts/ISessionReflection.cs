@@ -11,4 +11,6 @@ public interface ISessionReflection
     ClientConfig CreateClientConfig(Type clientType);
 
     bool SetForcePathStyle(ClientConfig clientConfig, bool value = true);
+
+    void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName);
 }

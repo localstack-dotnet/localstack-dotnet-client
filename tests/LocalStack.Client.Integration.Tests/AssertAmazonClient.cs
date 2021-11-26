@@ -2,11 +2,26 @@
 
 public static class AssertAmazonClient
 {
+    public const string TestAwsRegion = "eu-central-1";
+
     public static void AssertClientConfiguration(AmazonServiceClient amazonServiceClient)
     {
         IClientConfig clientConfig = amazonServiceClient.Config;
 
-        Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}", clientConfig.ServiceURL);
+        if (clientConfig.ServiceURL != null && amazonServiceClient.Config.RegionEndpoint == null)
+        {
+            Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}", clientConfig.ServiceURL);
+        }
+        else if(clientConfig.ServiceURL == null && amazonServiceClient.Config.RegionEndpoint != null)
+        {
+            Assert.Equal(RegionEndpoint.GetBySystemName(TestAwsRegion), amazonServiceClient.Config.RegionEndpoint);
+        }
+        else
+        {
+            throw new MisconfiguredClientException(
+                "Both ServiceURL and RegionEndpoint properties are null. Under normal conditions, one of these two properties must be a set. This means either something has changed in the new version of the Amazon Client library or there is a bug in the LocalStack.NET Client that we could not detect before. Please open an issue on the subject.");
+        }
+
         Assert.True(clientConfig.UseHttp);
 
         PropertyInfo forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);

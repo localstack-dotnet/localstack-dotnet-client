@@ -197,13 +197,11 @@ public static class ServiceCollectionExtensions
             if (localStackOptions.UseLocalStack)
             {
                 var session = provider.GetRequiredService<ISession>();
-
                 serviceInstance = session.CreateClientByInterface<TService>();
             }
             else
             {
                 var clientFactory = provider.GetRequiredService<IAwsClientFactoryWrapper>();
-
                 serviceInstance = clientFactory.CreateServiceClient<TService>(provider, options);
             }
 

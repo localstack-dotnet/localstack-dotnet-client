@@ -10,7 +10,7 @@ public class SessionOptionsTests
         Assert.Equal(Constants.AwsAccessKeyId, sessionOptions.AwsAccessKeyId);
         Assert.Equal(Constants.AwsAccessKey, sessionOptions.AwsAccessKey);
         Assert.Equal(Constants.AwsSessionToken, sessionOptions.AwsSessionToken);
-        Assert.Equal(Constants.RegionName, sessionOptions.RegionName);
+        Assert.Equal(default, sessionOptions.RegionName);
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class SessionOptionsTests
         Assert.Equal(Constants.AwsAccessKeyId, sessionOptions.AwsAccessKeyId);
         Assert.Equal(Constants.AwsAccessKey, sessionOptions.AwsAccessKey);
         Assert.Equal(Constants.AwsSessionToken, sessionOptions.AwsSessionToken);
-        Assert.Equal(Constants.RegionName, sessionOptions.RegionName);
+        Assert.Equal(default, sessionOptions.RegionName);
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class SessionOptionsTests
         Assert.Equal(awsAccessKeyId, sessionOptions.AwsAccessKeyId);
         Assert.Equal(Constants.AwsAccessKey, sessionOptions.AwsAccessKey);
         Assert.Equal(Constants.AwsSessionToken, sessionOptions.AwsSessionToken);
-        Assert.Equal(Constants.RegionName, sessionOptions.RegionName);
+        Assert.Equal(default, sessionOptions.RegionName);
     }
 
     [Fact]
@@ -51,7 +51,7 @@ public class SessionOptionsTests
         Assert.Equal(Constants.AwsAccessKeyId, sessionOptions.AwsAccessKeyId);
         Assert.Equal(awsAccessKey, sessionOptions.AwsAccessKey);
         Assert.Equal(Constants.AwsSessionToken, sessionOptions.AwsSessionToken);
-        Assert.Equal(Constants.RegionName, sessionOptions.RegionName);
+        Assert.Equal(default, sessionOptions.RegionName);
     }
 
     [Fact]
@@ -64,7 +64,7 @@ public class SessionOptionsTests
         Assert.Equal(Constants.AwsAccessKeyId, sessionOptions.AwsAccessKeyId);
         Assert.Equal(Constants.AwsAccessKey, sessionOptions.AwsAccessKey);
         Assert.Equal(awsSessionToken, sessionOptions.AwsSessionToken);
-        Assert.Equal(Constants.RegionName, sessionOptions.RegionName);
+        Assert.Equal(default, sessionOptions.RegionName);
     }
 
     [Fact]

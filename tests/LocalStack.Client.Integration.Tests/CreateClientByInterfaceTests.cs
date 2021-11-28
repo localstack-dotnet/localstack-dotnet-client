@@ -6,7 +6,10 @@ public class CreateClientByInterfaceTests
 
     static CreateClientByInterfaceTests()
     {
-        Session = SessionStandalone.Init().Create();
+        Session = SessionStandalone.Init()
+
+                                   .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+                                   .Create();
     }
 
     [Fact]
@@ -235,21 +238,71 @@ public class CreateClientByInterfaceTests
     }
 
     [Fact]
-    public void Should_Able_To_Create_AmazonIoTDataClient()
+    public void Should_Able_To_Create_AmazonIoTDataClient_With_ServiceUrl()
     {
-        AmazonServiceClient amazonIoTDataClient = Session.CreateClientByInterface<IAmazonIotData>();
+        AmazonServiceClient amazonIoTDataClient = Session.CreateClientByInterface<IAmazonIotData>(useServiceUrl:true);
 
         Assert.NotNull(amazonIoTDataClient);
         AssertAmazonClient.AssertClientConfiguration(amazonIoTDataClient);
     }
 
     [Fact]
-    public void Should_Able_To_Create_AmazonIoTJobsDataPlaneClient()
+    public void Should_Throw_AmazonClientException_When_Creating_AmazonIoTDataClient_If_RegionEndpoint_Used()
     {
-        AmazonServiceClient amazonIoTJobsDataPlaneClient = Session.CreateClientByInterface<IAmazonIoTJobsDataPlane>();
+        try
+        {
+            Session.CreateClientByInterface<IAmazonIotData>();
+        }
+        catch (Exception e)
+        {
+            Exception ex = e;
+
+            while (ex != null)
+            {
+                if (ex is AmazonClientException)
+                {
+                    return;
+                }
+
+                ex = ex.InnerException;
+            }
+
+            throw;
+        }
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonIoTJobsDataPlaneClient_With_ServiceUrl()
+    {
+        AmazonServiceClient amazonIoTJobsDataPlaneClient = Session.CreateClientByInterface<IAmazonIoTJobsDataPlane>(useServiceUrl:true);
 
         Assert.NotNull(amazonIoTJobsDataPlaneClient);
         AssertAmazonClient.AssertClientConfiguration(amazonIoTJobsDataPlaneClient);
+    }
+
+    [Fact]
+    public void Should_Throw_AmazonClientException_When_Creating_AmazonIoTJobsDataPlaneClient_If_RegionEndpoint_Used()
+    {
+        try
+        {
+            Session.CreateClientByInterface<IAmazonIoTJobsDataPlane>();
+        }
+        catch (Exception e)
+        {
+            Exception ex = e;
+
+            while (ex != null)
+            {
+                if (ex is AmazonClientException)
+                {
+                    return;
+                }
+
+                ex = ex.InnerException;
+            }
+
+            throw;
+        }
     }
 
     [Fact]
@@ -523,12 +576,37 @@ public class CreateClientByInterfaceTests
     }
 
     [Fact]
-    public void Should_Able_To_Create_AmazonMediaStoreDataClient()
+    public void Should_Able_To_Create_AmazonMediaStoreDataClient_With_ServiceUrl()
     {
-        AmazonServiceClient amazonMediaStoreDataClient = Session.CreateClientByInterface<IAmazonMediaStoreData>();
+        AmazonServiceClient amazonMediaStoreDataClient = Session.CreateClientByInterface<IAmazonMediaStoreData>(useServiceUrl:true);
 
         Assert.NotNull(amazonMediaStoreDataClient);
         AssertAmazonClient.AssertClientConfiguration(amazonMediaStoreDataClient);
+    }
+
+    [Fact]
+    public void Should_Throw_AmazonClientException_When_Creating_AmazonMediaStoreDataClient_If_RegionEndpoint_Used()
+    {
+        try
+        {
+            Session.CreateClientByInterface<IAmazonMediaStoreData>();
+        }
+        catch (Exception e)
+        {
+            Exception ex = e;
+
+            while (ex != null)
+            {
+                if (ex is AmazonClientException)
+                {
+                    return;
+                }
+
+                ex = ex.InnerException;
+            }
+
+            throw;
+        }
     }
 
     [Fact]

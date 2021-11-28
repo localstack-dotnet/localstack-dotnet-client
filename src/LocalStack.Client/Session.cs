@@ -13,15 +13,20 @@ public class Session : ISession
         _sessionReflection = sessionReflection;
     }
 
-    public TClient CreateClientByImplementation<TClient>() where TClient : AmazonServiceClient
+    public TClient CreateClientByImplementation<TClient>(bool useServiceUrl = false) where TClient : AmazonServiceClient
     {
         Type clientType = typeof(TClient);
 
-        return (TClient)CreateClientByImplementation(clientType);
+        return (TClient)CreateClientByImplementation(clientType, useServiceUrl);
     }
 
-    public AmazonServiceClient CreateClientByImplementation(Type implType)
+    public AmazonServiceClient CreateClientByImplementation(Type implType, bool useServiceUrl = false)
     {
+        if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        {
+            throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
+        }
+
         IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata(implType);
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
                                                 throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
@@ -29,13 +34,16 @@ public class Session : ISession
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
         ClientConfig clientConfig = _sessionReflection.CreateClientConfig(implType);
 
-        clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
         clientConfig.UseHttp = true;
         _sessionReflection.SetForcePathStyle(clientConfig);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
-        if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        if (useServiceUrl)
+        {
+            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
+        }
+        else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
             clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
         }
@@ -45,14 +53,14 @@ public class Session : ISession
         return clientInstance;
     }
 
-    public AmazonServiceClient CreateClientByInterface<TClient>() where TClient : IAmazonService
+    public AmazonServiceClient CreateClientByInterface<TClient>(bool useServiceUrl = false) where TClient : IAmazonService
     {
         Type serviceInterfaceType = typeof(TClient);
 
-        return (AmazonServiceClient)CreateClientByInterface(serviceInterfaceType);
+        return (AmazonServiceClient)CreateClientByInterface(serviceInterfaceType, useServiceUrl);
     }
 
-    public AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType)
+    public AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType, bool useServiceUrl = false)
     {
         var clientTypeName = $"{serviceInterfaceType.Namespace}.{serviceInterfaceType.Name.Substring(1)}Client";
         Type clientType = serviceInterfaceType.GetTypeInfo().Assembly.GetType(clientTypeName);
@@ -62,27 +70,35 @@ public class Session : ISession
             throw new AmazonClientException($"Failed to find service client {clientTypeName} which implements {serviceInterfaceType.FullName}.");
         }
 
+        if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        {
+            throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
+        }
+
         IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata(clientType);
 
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
-                                                throw new InvalidOperationException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
+                                                throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
 
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
 
         ClientConfig clientConfig = _sessionReflection.CreateClientConfig(clientType);
 
-        clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
         clientConfig.UseHttp = true;
         _sessionReflection.SetForcePathStyle(clientConfig);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
-        ConstructorInfo constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
-
-        if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        if (useServiceUrl)
+        {
+            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
+        }
+        else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
             clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
         }
+
+        ConstructorInfo constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
 
         if (constructor == null)
         {

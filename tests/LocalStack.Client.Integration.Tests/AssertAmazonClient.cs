@@ -8,11 +8,11 @@ public static class AssertAmazonClient
     {
         IClientConfig clientConfig = amazonServiceClient.Config;
 
-        if (clientConfig.ServiceURL != null && amazonServiceClient.Config.RegionEndpoint == null)
+        if (clientConfig.ServiceURL != null)
         {
             Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}", clientConfig.ServiceURL);
         }
-        else if(clientConfig.ServiceURL == null && amazonServiceClient.Config.RegionEndpoint != null)
+        else if(clientConfig.ServiceURL == null)
         {
             Assert.Equal(RegionEndpoint.GetBySystemName(TestAwsRegion), amazonServiceClient.Config.RegionEndpoint);
         }

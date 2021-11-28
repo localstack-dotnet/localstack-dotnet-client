@@ -2,11 +2,11 @@
 
 public interface ISession
 {
-    TClient CreateClientByImplementation<TClient>() where TClient : AmazonServiceClient;
+    TClient CreateClientByImplementation<TClient>(bool useServiceUrl = false) where TClient : AmazonServiceClient;
 
-    AmazonServiceClient CreateClientByImplementation(Type implType);
+    AmazonServiceClient CreateClientByImplementation(Type implType, bool useServiceUrl = false);
 
-    AmazonServiceClient CreateClientByInterface<TClient>() where TClient: IAmazonService;
+    AmazonServiceClient CreateClientByInterface<TClient>(bool useServiceUrl = false) where TClient: IAmazonService;
 
-    AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType);
+    AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType, bool useServiceUrl = false);
 }

@@ -1,4 +1,5 @@
-﻿global using System.Reflection;
+﻿global using System;
+global using System.Reflection;
 
 global using Amazon;
 global using Amazon.Amplify;

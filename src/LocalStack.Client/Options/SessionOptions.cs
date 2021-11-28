@@ -9,7 +9,7 @@ public class SessionOptions : ISessionOptions
     public SessionOptions(string awsAccessKeyId = Constants.AwsAccessKeyId,
                           string awsAccessKey = Constants.AwsAccessKey, 
                           string awsSessionToken = Constants.AwsSessionToken,
-                          string regionName = default)
+                          string regionName = Constants.RegionName)
     {
         AwsAccessKeyId = awsAccessKeyId;
         AwsAccessKey = awsAccessKey;
@@ -23,5 +23,5 @@ public class SessionOptions : ISessionOptions
 
     public string AwsSessionToken { get; private set; } = Constants.AwsSessionToken;
 
-    public string RegionName { get; private set; } = default;
+    public string RegionName { get; private set; } = Constants.RegionName;
 }

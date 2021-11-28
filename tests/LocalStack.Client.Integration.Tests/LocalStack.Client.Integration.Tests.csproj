@@ -38,7 +38,7 @@
 		<PackageReference Include="AWSSDK.ECS" Version="3.7.4.10" />
 		<PackageReference Include="AWSSDK.EKS" Version="3.7.11" />
 		<PackageReference Include="AWSSDK.ElastiCache" Version="3.7.4.1" />
-    <PackageReference Include="AWSSDK.EventBridge" Version="3.7.4.48" />
+		<PackageReference Include="AWSSDK.EventBridge" Version="3.7.4.48" />
 		<PackageReference Include="AWSSDK.ElasticBeanstalk" Version="3.7.0.103" />
 		<PackageReference Include="AWSSDK.ElasticFileSystem" Version="3.7.3.29" />
 		<PackageReference Include="AWSSDK.ElasticLoadBalancing" Version="3.7.0.103" />

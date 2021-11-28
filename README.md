@@ -27,6 +27,7 @@ application development.
         - [Installation](#extensions-installation)
         - [Usage](#extensions-usage)
         - [About AddAwsService](#extensions-usage-about-addawsservice)
+        - [useServiceUrl Parameter](#useserviceurl)
     - [Standalone Initialization](#standalone-initialization)
     - [Microsoft.Extensions.DependencyInjection Initialization](#di)
 5. [Developing](#developing)
@@ -129,7 +130,7 @@ You can configure `LocalStack.Client` by using entries in the `appsettings.json`
         "AwsAccessKeyId": "my-AwsAccessKeyId",
         "AwsAccessKey": "my-AwsAccessKey",
         "AwsSessionToken": "my-AwsSessionToken",
-        "RegionName": null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
+        "RegionName": "eu-central-1"
     },
     "Config": {
         "LocalStackHost": "localhost",
@@ -145,9 +146,7 @@ So the above entries do not need to be specified.
 
 What is entered for the aws credential values ​​in the `Session` section does not matter for LocalStack.
 
-`RegionName` is important since LocalStack creates resources by spesified region (LocalStack has full multi-region support after `v0.12.17`). By default `RegionName` is `null`. If no value is entered in the `RegionName` entry, the [AWSSDK.NET](https://aws.amazon.com/sdk-for-net/) will use the `us-east-1` region by default.
-
-<i><b>Internally depends on whether you set `RegionName` or not, the values of [ServiceUrl](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L202) ve [RegionEndpoint](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L144) properties of the [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) will change. [RegionEndpoint](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L144) and [ServiceUrl](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs#L202) are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. If a value set to `RegionName` entry, the LocalStack.NET AWS will set RegionEndpoint property of the ClientConfig. Because of LocalStack.NET sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.</b></i>
+<a name="session-regioname"></a>`RegionName` is important since LocalStack creates resources by spesified region.
 
 `Config` section contains important entries for local development. Starting with LocalStack releases after `v0.11.5`, all services are now exposed via the edge service (port 4566) only! If you are using a version of LocalStack lower than v0.11.5, you should set `UseLegacyPorts` to `true`. Edge port can be set to any available port ([see LocalStack configuration section](https://github.com/localstack/localstack#configurations)). If you have made such a change in LocalStack's configuration, be sure to set the same port value to `EdgePort` in the `Config` section. For `LocalStackHost` and `UseSsl` entries, ​​corresponding to the [LocalStack configuration](https://github.com/localstack/localstack#configurations) should be used.
 
@@ -190,6 +189,28 @@ It is named as `AddAwsService` to avoid name conflict with `AddAWSService`.
 
 <e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
 
+#### <a name="useserviceurl"></a> useServiceUrl Parameter
+
+LocalStack.NET uses [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) to configure AWS clients to connect LocalStack. `ClientConfig` has two properties called `ServiceUrl` and `RegionEndpoint`, these are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. LocalStack.NET has given priority to the RegionEndpoint property and the `us-east-1` region is used as the default value (Different regions can be set by using appsettings.json, see [RegionName](#session-regioname) entry. Because of it sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.
+
+To override this behavior, the `useServiceUrl` optional parameter can be set to `true` as below.
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    // Add framework services.
+    services.AddMvc();
+
+    services.AddLocalStack(Configuration)
+    services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+    services.AddAwsService<IAmazonS3>();
+    services.AddAwsService<IAmazonMediaStoreData>(useServiceUrl: true)
+    services.AddAwsService<IAmazonIoTJobsDataPlane>(useServiceUrl: true)
+}
+```
+
+The `RegionEndpoint` is not applicable for services such as AWS MediaStore, Iot. The optional parameter `useServiceUrl` can be useful for use in such scenarios.
+
 ### <a name="standalone-initialization"></a> Standalone Initialization
 
 If you do not want to use any DI library, you have to instantiate `SessionStandalone` as follows.
@@ -200,7 +221,7 @@ If you do not want to use any DI library, you have to instantiate `SessionStanda
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
+* RegionName: us-east-1
 * ==== Custom Values ====
 * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
 */
@@ -230,6 +251,32 @@ var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
 var amazonS3Client = session.CreateClientByInterface<IAmazonS3>();
 ```
 
+### <a name="standalone-useserviceurl"></a><b>useServiceUrl Parameter</b>
+
+LocalStack.NET uses [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) to configure AWS clients to connect LocalStack. `ClientConfig` has two properties called `ServiceUrl` and `RegionEndpoint`, these are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. LocalStack.NET has given priority to the RegionEndpoint property and the `us-east-1` region is used as the default value (Different regions can be set by using appsettings.json, see [RegionName](#session-regioname) entry. Because of it sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.
+
+To override this behavior, the `useServiceUrl` optional parameter can be set to `true` as below.
+
+```csharp
+var sessionOptions = new SessionOptions();
+var configOptions = new ConfigOptions();
+
+ISession session = SessionStandalone.Init()
+                                .WithSessionOptions(sessionOptions)
+                                .WithConfigurationOptions(configOptions).Create();
+
+var amazonS3Client = session.CreateClientByImplementation<AmazonMediaStoreDataClient>(true);
+var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
+```
+
+The `RegionEndpoint` is not applicable for services such as AWS MediaStore, Iot. The optional parameter `useServiceUrl` can be useful for use in such scenarios.
+
+`CreateClientByInterface<TSerice>` method can also be used to create AWS service, as follows
+
+```csharp
+var amazonS3Client = session.CreateClientByInterface<IAmazonMediaStoreData>(true);
+```
+
 ### <a name="di"></a>  Microsoft.Extensions.DependencyInjection Initialization
 
 First, you need to install `Microsoft.Extensions.DependencyInjection` nuget package as follows
@@ -248,7 +295,7 @@ var collection = new ServiceCollection();
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
+* RegionName: us-east-1
 * ==== Custom Values ====
 * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
 */
@@ -303,7 +350,7 @@ collection.Configure<LocalStackOptions>(options => configuration.GetSection("Loc
 * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
 * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
 * AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: null // can be values like "eu-central-1", "us-east-1", "us-west-1" etc.
+* RegionName: us-east-1
     */
 collection.Configure<SessionOptions>(options => configuration.GetSection("LocalStack")
                                                                 .GetSection(nameof(LocalStackOptions.Session))
@@ -346,6 +393,8 @@ ServiceProvider serviceProvider = collection.BuildServiceProvider();
 
 var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
 ```
+
+See [useServiceUrl] parameter usage (#standalone-useserviceurl)
 
 ## <a name="developing"></a> Developing
 
@@ -390,6 +439,21 @@ Linux
 ```
 
 ## <a name="changelog"></a> Changelog
+
+### [v1.3.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.0)
+
+#### 1. New Features
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.27 have been added.
+  - SESv2
+  - EventBridge ([#14](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/14))
+- Tested against LocalStack v0.13.0 container.
+#### 2. Enhancements
+- `useServiceUrl` parameter added to change client connection behavior. See [useServiceUrl Parameter](#useserviceurl)
+- Readme and SourceLink added to Nuget packages
+#### 3. Bug Fixes
+- Session::RegionName configuration does not honor while creating AWS client ([#15](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/15))
+
+Thanks to [petertownsend](https://github.com/petertownsend) for his contribution
 
 ### [v1.2.3](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.3)
 

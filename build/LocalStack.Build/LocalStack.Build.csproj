@@ -7,6 +7,7 @@
 		<NoWarn>CA1303</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Cake.Docker" Version="1.0.0" />
 		<PackageReference Include="Cake.Frosting" Version="1.3.0" />
 	</ItemGroup>
 </Project>

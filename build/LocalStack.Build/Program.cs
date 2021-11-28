@@ -1,4 +1,6 @@
-﻿return new CakeHost()
+﻿using Cake.Docker;
+
+return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 
@@ -83,6 +85,29 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
                 context.Warning($"=============Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}=============");
                 settings.Framework = targetFramework;
+
+                if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
+                {
+                    context.Warning("Deleting running docker containers");
+
+                    try
+                    {
+                        string psOutput = context.DockerPs(new DockerContainerPsSettings() { All = true, Quiet = true});
+
+                        if (!string.IsNullOrEmpty(psOutput))
+                        {
+                            context.Warning(psOutput);
+
+                            string[] containers = psOutput.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
+                            context.DockerRm(containers);
+                        }
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+
 
                 if (context.IsRunningOnUnix() && targetFramework == "net461")
                 {

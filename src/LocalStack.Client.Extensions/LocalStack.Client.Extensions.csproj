@@ -6,6 +6,7 @@
     <AssemblyName>LocalStack.Client.Extensions</AssemblyName>
     <RootNamespace>LocalStack.Client.Extensions</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <Version>1.1.2</Version>
 
     <Title>LocalStack.NET Client</Title>
     <Description>
@@ -14,7 +15,13 @@
     <PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>1.1.2</Version>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>

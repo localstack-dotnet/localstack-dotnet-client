@@ -14,13 +14,19 @@
 		<PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" Version="3.7.3.15" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 	</ItemGroup>
-
 
 	<Target Name="PreBuild" AfterTargets="PreBuildEvent">
 		<ItemGroup>
@@ -42,7 +48,6 @@
 		</None>
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
 		<DefineConstants>NET461</DefineConstants>

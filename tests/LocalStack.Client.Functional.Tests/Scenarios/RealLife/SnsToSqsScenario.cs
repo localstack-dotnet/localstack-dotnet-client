@@ -1,4 +1,6 @@
-﻿using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
+﻿using System.Threading;
+
+using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 
@@ -63,6 +65,14 @@ public class SnsToSqsScenario : BaseScenario
         ReceiveMessageResponse receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
 
         Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
+
+        if (receiveMessageResponse.Messages.Count == 0)
+        {
+            await Task.Delay(2000);
+            receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
+
+            Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
+        }
 
         Assert.NotNull(receiveMessageResponse.Messages);
         Assert.NotEmpty(receiveMessageResponse.Messages);

@@ -1,6 +1,4 @@
-﻿using Amazon;
-
-namespace LocalStack.Client.Extensions.Tests;
+﻿namespace LocalStack.Client.Extensions.Tests;
 
 public class ServiceCollectionExtensionsTests
 {
@@ -211,7 +209,7 @@ public class ServiceCollectionExtensionsTests
      InlineData(false, "sa-east-1")]
     public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True(bool useAlternateNameAddServiceMethod, string systemName)
     {
-        var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", "true" }, {"LocalStack:Session:RegionName", systemName} };
+        var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", "true" }, { "LocalStack:Session:RegionName", systemName } };
         IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
         var mockServiceMetadata = new MockServiceMetadata();
@@ -248,10 +246,12 @@ public class ServiceCollectionExtensionsTests
         Assert.Equal(RegionEndpoint.GetBySystemName(systemName), clientConfig.RegionEndpoint);
     }
 
-    [Theory, 
-     InlineData(true), 
-     InlineData(false)]
-    public void GetRequiredService_Should_Return_AmazonService_With_Service_Url_That_Configured_For_LocalStack_If_UseLocalStack_Is_True_And_RegionName_Is_Null(bool useAlternateNameAddServiceMethod)
+    [Theory,
+     InlineData(false, false),
+     InlineData(false, true),
+     InlineData(true, true),
+     InlineData(true, false)]
+    public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True_And_Should_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(bool useAlternateNameAddServiceMethod, bool useServiceUrl)
     {
         var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", "true" } };
         IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
@@ -271,11 +271,11 @@ public class ServiceCollectionExtensionsTests
 
         if (!useAlternateNameAddServiceMethod)
         {
-            serviceCollection.AddAwsService<IMockAmazonServiceWithServiceMetadata>();
+            serviceCollection.AddAwsService<IMockAmazonServiceWithServiceMetadata>(useServiceUrl: useServiceUrl);
         }
         else
         {
-            serviceCollection.AddAWSServiceLocalStack<IMockAmazonServiceWithServiceMetadata>();
+            serviceCollection.AddAWSServiceLocalStack<IMockAmazonServiceWithServiceMetadata>(useServiceUrl: useServiceUrl);
         }
 
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
@@ -287,19 +287,35 @@ public class ServiceCollectionExtensionsTests
         Assert.True(clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
-        Assert.Null(clientConfig.RegionEndpoint);
-        Assert.NotNull(clientConfig.ServiceURL);
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
+
+        if (useServiceUrl)
+        {
+            Assert.Null(clientConfig.RegionEndpoint);
+            Assert.NotNull(clientConfig.ServiceURL);
+            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
+        }
+        else
+        {
+            Assert.Null(clientConfig.ServiceURL);
+            Assert.NotNull(clientConfig.RegionEndpoint);
+            Assert.Equal(RegionEndpoint.GetBySystemName(Constants.RegionName), clientConfig.RegionEndpoint);
+        }
     }
 
-    [Theory,
-     InlineData(false, 1, 0, false),
-     InlineData(true, 0, 1, false),
-     InlineData(false, 1, 0, true),
-     InlineData(true, 0, 1, true)]
-    public void GetRequiredService_Should_Use_Suitable_ClientFactory_To_Create_AwsService_By_UseLocalStack_Value(
-        bool useLocalStack, int awsClientFactoryInvolved, int sessionInvolved, bool useAlternateNameAddServiceMethod)
+    [Theory, 
+     InlineData(false, false, false),
+     InlineData(false, false, true), 
+     InlineData(true, false, false),
+     InlineData(true, false, true), 
+     InlineData(false, true, false),
+     InlineData(false, true, true),
+     InlineData(true, true, false),
+     InlineData(true, true,true)]
+    public void GetRequiredService_Should_Use_Suitable_ClientFactory_To_Create_AwsService_By_UseLocalStack_Value(bool useLocalStack, bool useAlternateNameAddServiceMethod, bool useServiceUrl)
     {
+        int sessionInvolved = useLocalStack ? 1 : 0;
+        int awsClientFactoryInvolved = useLocalStack ? 0 : 1;
+
         var configurationValue = new Dictionary<string, string> { { "LocalStack:UseLocalStack", useLocalStack.ToString() } };
         IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
@@ -316,24 +332,23 @@ public class ServiceCollectionExtensionsTests
 
         if (!useAlternateNameAddServiceMethod)
         {
-            serviceCollection.AddAwsService<IMockAmazonService>();
+            serviceCollection.AddAwsService<IMockAmazonService>(useServiceUrl:useServiceUrl);
         }
         else
         {
-            serviceCollection.AddAWSServiceLocalStack<IMockAmazonService>();
+            serviceCollection.AddAWSServiceLocalStack<IMockAmazonService>(useServiceUrl:useServiceUrl);
         }
 
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-        mockSession.Setup(session => session.CreateClientByInterface<IMockAmazonService>()).Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
+        mockSession.Setup(session => session.CreateClientByInterface<IMockAmazonService>(It.IsAny<bool>())).Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
         mockClientFactory.Setup(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>())).Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
 
         var mockAmazonService = provider.GetRequiredService<IMockAmazonService>();
 
         Assert.NotNull(mockAmazonService);
 
-        mockClientFactory.Verify(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()),
-                                 Times.Exactly(awsClientFactoryInvolved));
-        mockSession.Verify(session => session.CreateClientByInterface<IMockAmazonService>(), Times.Exactly(sessionInvolved));
+        mockClientFactory.Verify(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()), Times.Exactly(awsClientFactoryInvolved));
+        mockSession.Verify(session => session.CreateClientByInterface<IMockAmazonService>(It.Is<bool>(b => b == useServiceUrl)), Times.Exactly(sessionInvolved));
     }
 }

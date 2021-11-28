@@ -58,6 +58,15 @@ public class CreateClientByImplementationTests
     }
 
     [Fact]
+    public void Should_Able_To_Create_AmazonEventBridgeClient()
+    {
+    	var amazonEventBridgeClient = Session.CreateClientByImplementation<AmazonEventBridgeClient>();
+
+        Assert.NotNull(amazonEventBridgeClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonEventBridgeClient);
+    }
+
+    [Fact]
     public void Should_Able_To_Create_AmazonKinesisFirehoseClient()
     {
         var amazonKinesisFirehoseClient = Session.CreateClientByImplementation<AmazonKinesisFirehoseClient>();

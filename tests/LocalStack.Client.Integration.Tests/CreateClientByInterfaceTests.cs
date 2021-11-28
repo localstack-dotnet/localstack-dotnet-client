@@ -869,4 +869,13 @@ public class CreateClientByInterfaceTests
         Assert.NotNull(amazonConfigServiceClient);
         AssertAmazonClient.AssertClientConfiguration(amazonConfigServiceClient);
     }
+	
+	[Fact]
+    public void Should_Able_To_Create_AmazonEventBridgeClient()
+    {
+    	AmazonServiceClient amazonEventBridgeClient = Session.CreateClientByInterface<IAmazonEventBridge>();
+
+		Assert.NotNull(amazonEventBridgeClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonEventBridgeClient);
+    }
 }

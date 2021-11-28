@@ -1,11 +1,13 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
+﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
 
 public abstract class BaseSqsScenario : BaseScenario
 {
     protected const string TestDlQueueName = "ArmutLocalStack-Test-DLQ.fifo";
     protected const string TestQueueName = "ArmutLocalStack-Test.fifo";
 
-    protected BaseSqsScenario(TestFixture testFixture, string configFile) : base(testFixture, configFile)
+    protected BaseSqsScenario(TestFixture testFixture, string configFile, bool useServiceUrl = false) : base(testFixture, configFile, useServiceUrl)
     {
         AmazonSqs = ServiceProvider.GetRequiredService<IAmazonSQS>();
     }

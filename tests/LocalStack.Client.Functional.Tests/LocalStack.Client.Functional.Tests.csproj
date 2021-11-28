@@ -1,38 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+	<PropertyGroup>
 	<TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
 	<LangVersion>latest</LangVersion>
-  </PropertyGroup>
+	</PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
 	<Content Include="appsettings.json">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
 	<Content Include="appsettings.LocalStack.json;appsettings.LocalStackLegacy.json;">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  <DependentUpon>appsettings.json</DependentUpon>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<DependentUpon>appsettings.json</DependentUpon>
 	</Content>
-  </ItemGroup>
+	</ItemGroup>
 
 
-  <ItemGroup>
+	<ItemGroup>
 	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 	<PackageReference Include="Moq" Version="4.16.1" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Include="System.Text.Json" Version="5.0.2" />
 	<PackageReference Include="xunit" Version="2.4.1" />
 	<PackageReference Include="xunit.abstractions" Version="2.0.3" />
 	<PackageReference Include="xunit.runner.console" Version="2.4.1">
-	  <PrivateAssets>all</PrivateAssets>
-	  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	</PackageReference>
 	<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-	  <PrivateAssets>all</PrivateAssets>
-	  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	</PackageReference>
 	<PackageReference Include="coverlet.collector" Version="3.1.0">
-	  <PrivateAssets>all</PrivateAssets>
-	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
 	<PackageReference Include="AutoFixture" Version="4.17.0" />
 	<PackageReference Include="DotNet.Testcontainers" Version="1.4.0" />
@@ -40,18 +41,23 @@
 	<PackageReference Include="AWSSDK.S3" Version="3.7.3.20" />
 	<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.0.88" />
 	<PackageReference Include="AWSSDK.SQS" Version="3.7.1.30" />
-  </ItemGroup>
+	<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.3.2" />
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
 	<ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
 	<ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
 	<ProjectReference Include="..\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
-  </ItemGroup>
+	</ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
 	<None Update="SampleData.txt">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
-  </ItemGroup>
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+		<DefineConstants>NETCOREAPP</DefineConstants>
+	</PropertyGroup>
 
 </Project>

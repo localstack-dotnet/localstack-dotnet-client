@@ -17,6 +17,7 @@ public enum AwsServiceEnum
     RedshiftData,
     Es,
     Ses,
+    Sesv2,
     Route53,
     CloudFormation,
     CloudWatch,

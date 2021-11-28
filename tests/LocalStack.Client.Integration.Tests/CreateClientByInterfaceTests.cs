@@ -112,6 +112,15 @@ public class CreateClientByInterfaceTests
     }
 
     [Fact]
+    public void Should_Able_To_Create_AmazonSimpleEmailServiceV2Client()
+    {
+        AmazonServiceClient simpleEmailServiceV2Client = Session.CreateClientByInterface<IAmazonSimpleEmailServiceV2>();
+
+        Assert.NotNull(simpleEmailServiceV2Client);
+        AssertAmazonClient.AssertClientConfiguration(simpleEmailServiceV2Client);
+    }
+
+    [Fact]
     public void Should_Able_To_Create_AmazonRoute53Client()
     {
         AmazonServiceClient amazonRoute53Client = Session.CreateClientByInterface<IAmazonRoute53>();

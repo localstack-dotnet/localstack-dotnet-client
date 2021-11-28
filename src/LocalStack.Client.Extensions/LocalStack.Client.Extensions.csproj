@@ -13,6 +13,7 @@
     </Description>
     <PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Version>1.1.2</Version>
   </PropertyGroup>
 
@@ -31,11 +32,18 @@
     <ItemGroup>
       <LicenseFile Include="../../LICENSE" />
     </ItemGroup>
+    <ItemGroup>
+      <ReadmeFile Include="../../README.md" />
+    </ItemGroup>
     <Copy SourceFiles="@(LicenseFile)" DestinationFiles="@(LicenseFile->'./LICENSE.txt')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(ReadmeFile)" DestinationFiles="@(ReadmeFile->'./README.md')" SkipUnchangedFiles="true" />
   </Target>
 
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="README.md" Pack="true" PackagePath="">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />

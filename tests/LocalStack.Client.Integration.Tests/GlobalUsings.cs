@@ -77,6 +77,7 @@ global using Amazon.SecurityToken;
 global using Amazon.ServerlessApplicationRepository;
 global using Amazon.ServiceDiscovery;
 global using Amazon.SimpleEmail;
+global using Amazon.SimpleEmailV2;
 global using Amazon.SimpleNotificationService;
 global using Amazon.SimpleSystemsManagement;
 global using Amazon.SimpleWorkflow;

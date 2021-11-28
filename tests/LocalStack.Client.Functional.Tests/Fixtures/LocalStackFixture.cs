@@ -10,10 +10,10 @@ public class LocalStackFixture : IAsyncLifetime
             .WithName($"LocalStack-0.13.0-{DateTime.Now.Ticks}")
             .WithImage("localstack/localstack:0.13.0")
             .WithCleanUp(true)
-            .WithEnvironment("DEFAULT_REGION", "eu-central-1")
-            .WithEnvironment("SERVICES", "s3,dynamodb,sqs")
+            .WithEnvironment("SERVICES", "s3,dynamodb,sqs,sns")
             .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
-            .WithEnvironment("LS_LOG", "info")
+            .WithEnvironment("DEBUG", "1")
+            .WithEnvironment("LS_LOG", "trace")
             .WithPortBinding(4566, 4566);
 
         _localStackContainer = localStackBuilder.Build();

@@ -3,17 +3,30 @@
 public class SessionTests
 {
     [Fact]
-    public void CreateClientByImplementation_Should_Throw_InvalidOperationException_If_Given_ServiceId_Is_Not_Supported()
+    public void CreateClientByImplementation_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
 
+        mockSession.SessionOptionsMock.SetupDefault();
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => null);
 
-        Assert.Throws<InvalidOperationException>(() => mockSession.CreateClientByImplementation<MockAmazonServiceClient>());
+        Assert.Throws<NotSupportedClientException>(() => mockSession.CreateClientByImplementation<MockAmazonServiceClient>());
 
         mockSession.ConfigMock.Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId => serviceId == mockServiceMetadata.ServiceId)), Times.Once);
+    }
+
+    [Fact]
+    public void CreateClientByImplementation_Should_Throw_MisconfiguredClientException_If_Given_RegionName_Property_Of_SessionOptions_IsNullOrEmpty_And_Given_UseServiceUrl_Is_False()
+    {
+        var mockSession = MockSession.Create();
+
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(default(string));
+        Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByImplementation<MockAmazonServiceClient>(false));
+
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(string.Empty);
+        Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByImplementation<MockAmazonServiceClient>(false));
     }
 
     [Fact]
@@ -23,16 +36,13 @@ public class SessionTests
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
-        const string awsAccessKeyId = "AwsAccessKeyId";
-        const string awsAccessKey = "AwsAccessKey";
-        const string awsSessionToken = "AwsSessionToken";
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns(awsAccessKeyId);
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns(awsAccessKey);
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns(awsSessionToken);
+        (string awsAccessKeyId, string awsAccessKey, string awsSessionToken, _) = mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>();
@@ -44,35 +54,93 @@ public class SessionTests
 
         var sessionAwsCredentials = (SessionAWSCredentials)awsCredentials;
         ImmutableCredentials immutableCredentials = sessionAwsCredentials.GetCredentials();
+
         Assert.Equal(awsAccessKeyId, immutableCredentials.AccessKey);
         Assert.Equal(awsAccessKey, immutableCredentials.SecretKey);
         Assert.Equal(awsSessionToken, immutableCredentials.Token);
     }
 
     [Fact]
-    public void CreateClientByImplementation_Should_Create_ClientConfig_With_ServiceURL_UseHttp_ProxyHost_ProxyPort()
+    public void CreateClientByImplementation_Should_Create_ClientConfig_With_UseHttp_True_And_ProxyHost_And_ProxyPort_By_ServiceEndpoint_Configuration()
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>();
         Assert.NotNull(mockAmazonServiceClient);
 
         IClientConfig clientConfig = mockAmazonServiceClient.Config;
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
+
         Assert.True(clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
+    }
+
+    [Theory,
+     InlineData("eu-central-1"),
+     InlineData("us-west-1"),
+     InlineData("af-south-1"),
+     InlineData("ap-southeast-1"),
+     InlineData("ca-central-1"),
+     InlineData("eu-west-2"),
+     InlineData("sa-east-1")]
+    public void CreateClientByImplementation_Should_Set_RegionEndpoint_By_RegionName_Property_Of_SessionOptions_And_ServiceUrl_To_Null_If_RegionName_IsNotNull_Or_Empty(string systemName)
+    {
+        var mockSession = MockSession.Create();
+
+        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var mockClientConfig = new MockClientConfig();
+
+        (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+
+        var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>();
+
+        Assert.NotNull(mockAmazonServiceClient);
+        Assert.Null(mockAmazonServiceClient.Config.ServiceURL);
+        Assert.Equal(RegionEndpoint.GetBySystemName(regionName), mockAmazonServiceClient.Config.RegionEndpoint);
+    }
+
+    [Theory,
+     InlineData("sa-east-1"),
+     InlineData(null)]
+    public void CreateClientByImplementation_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string systemName)
+    {
+        var mockSession = MockSession.Create();
+
+        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var mockClientConfig = new MockClientConfig();
+
+        mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+
+        var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>(useServiceUrl: true);
+
+        Assert.NotNull(mockAmazonServiceClient);
+        Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
+        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
     }
 
     [Fact]
@@ -83,12 +151,12 @@ public class SessionTests
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         mockSession.CreateClientByImplementation<MockAmazonServiceClient>();
@@ -96,28 +164,40 @@ public class SessionTests
         mockSession.SessionReflectionMock.Verify(reflection => reflection.SetForcePathStyle(It.Is<ClientConfig>(config => config == mockClientConfig), true), Times.Once);
     }
 
-    [Fact]
-    public void CreateClientByImplementation_Should_Create_AmazonServiceClient_By_Given_Generic_Type()
+    [Theory,
+     InlineData(false),
+     InlineData(true)]
+    public void CreateClientByImplementation_Should_Create_AmazonServiceClient_By_Given_Generic_Type_And_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(bool useServiceUrl)
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
-        var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>();
+        var mockAmazonServiceClient = mockSession.CreateClientByImplementation<MockAmazonServiceClient>(useServiceUrl);
+
         Assert.NotNull(mockAmazonServiceClient);
+
+        if (useServiceUrl)
+        {
+            Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
+            Assert.NotNull(mockAmazonServiceClient.Config.ServiceURL);
+            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+        }
+        else
+        {
+            Assert.Null(mockAmazonServiceClient.Config.ServiceURL);
+            Assert.NotNull(mockAmazonServiceClient.Config.RegionEndpoint);
+            Assert.Equal(RegionEndpoint.GetBySystemName(regionName), mockAmazonServiceClient.Config.RegionEndpoint);
+        }
 
         mockSession.ConfigMock.Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId => serviceId == mockServiceMetadata.ServiceId)), Times.Once);
         mockSession.SessionReflectionMock.Verify(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);
@@ -134,17 +214,30 @@ public class SessionTests
     }
 
     [Fact]
-    public void CreateClientByInterface_Should_Throw_InvalidOperationException_If_Given_ServiceId_Is_Not_Supported()
+    public void CreateClientByInterface_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
 
+        mockSession.SessionOptionsMock.SetupDefault();
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => null);
 
-        Assert.Throws<InvalidOperationException>(() => mockSession.CreateClientByInterface<IMockAmazonService>());
+        Assert.Throws<NotSupportedClientException>(() => mockSession.CreateClientByInterface<IMockAmazonService>());
 
         mockSession.ConfigMock.Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId => serviceId == mockServiceMetadata.ServiceId)), Times.Once);
+    }
+
+    [Fact]
+    public void CreateClientByInterface_Should_Throw_MisconfiguredClientException_If_Given_RegionName_Property_Of_SessionOptions_IsNullOrEmpty_And_Given_UseServiceUrl_Is_False()
+    {
+        var mockSession = MockSession.Create();
+
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(default(string));
+        Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByInterface<IMockAmazonService>(false));
+
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(string.Empty);
+        Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByInterface<IMockAmazonService>(false));
     }
 
     [Fact]
@@ -154,16 +247,13 @@ public class SessionTests
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
-        const string awsAccessKeyId = "AwsAccessKeyId";
-        const string awsAccessKey = "AwsAccessKey";
-        const string awsSessionToken = "AwsSessionToken";
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns(awsAccessKeyId);
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns(awsAccessKey);
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns(awsSessionToken);
+        (string awsAccessKeyId, string awsAccessKey, string awsSessionToken, _) = mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>() as MockAmazonServiceClient;
@@ -175,35 +265,94 @@ public class SessionTests
 
         var sessionAwsCredentials = (SessionAWSCredentials)awsCredentials;
         ImmutableCredentials immutableCredentials = sessionAwsCredentials.GetCredentials();
+
         Assert.Equal(awsAccessKeyId, immutableCredentials.AccessKey);
         Assert.Equal(awsAccessKey, immutableCredentials.SecretKey);
         Assert.Equal(awsSessionToken, immutableCredentials.Token);
     }
 
     [Fact]
-    public void CreateClientByInterface_Should_Create_ClientConfig_With_ServiceURL_UseHttp_ProxyHost_ProxyPort()
+    public void CreateClientByInterface_Should_Create_ClientConfig_With_UseHttp_True_And_ProxyHost_And_ProxyPort_By_ServiceEndpoint_Configuration()
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>() as MockAmazonServiceClient;
         Assert.NotNull(mockAmazonServiceClient);
 
         IClientConfig clientConfig = mockAmazonServiceClient.Config;
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, clientConfig.ServiceURL);
+
         Assert.True(clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
+    }
+
+    [Theory,
+     InlineData("eu-central-1"),
+     InlineData("us-west-1"),
+     InlineData("af-south-1"),
+     InlineData("ap-southeast-1"),
+     InlineData("ca-central-1"),
+     InlineData("eu-west-2"),
+     InlineData("sa-east-1")]
+    public void CreateClientByInterface_Should_Set_RegionEndpoint_By_RegionName_Property_Of_SessionOptions_And_ServiceUrl_To_Null_If_RegionName_IsNotNull_Or_Empty(string systemName)
+    {
+        var mockSession = MockSession.Create();
+
+        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var mockClientConfig = new MockClientConfig();
+
+        (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+
+        var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>() as MockAmazonServiceClient;
+
+        Assert.NotNull(mockAmazonServiceClient);
+        Assert.Null(mockAmazonServiceClient.Config.ServiceURL);
+        Assert.Equal(RegionEndpoint.GetBySystemName(regionName), mockAmazonServiceClient.Config.RegionEndpoint);
+    }
+
+
+    [Theory,
+     InlineData("sa-east-1"),
+     InlineData(null)]
+    public void CreateClientByInterface_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string systemName)
+    {
+        var mockSession = MockSession.Create();
+
+        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var mockClientConfig = new MockClientConfig();
+
+        mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+
+        var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>(useServiceUrl: true) as MockAmazonServiceClient;
+
+        Assert.NotNull(mockAmazonServiceClient);
+        Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
+        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
     }
 
     [Fact]
@@ -214,12 +363,12 @@ public class SessionTests
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        mockSession.SessionOptionsMock.SetupDefault();
+
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
         mockSession.CreateClientByInterface<IMockAmazonService>();
@@ -227,28 +376,40 @@ public class SessionTests
         mockSession.SessionReflectionMock.Verify(reflection => reflection.SetForcePathStyle(It.Is<ClientConfig>(config => config == mockClientConfig), true), Times.Once);
     }
 
-    [Fact]
-    public void CreateClientByInterface_Should_Create_AmazonServiceClient_By_Given_Generic_Type()
+    [Theory,
+     InlineData(false),
+     InlineData(true)]
+    public void CreateClientByInterface_Should_Create_AmazonServiceClient_By_Given_Generic_Type_And_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(bool useServiceUrl)
     {
         var mockSession = MockSession.Create();
         IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
+        (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKeyId).Returns("AwsAccessKeyId");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsAccessKey).Returns("AwsAccessKey");
-        mockSession.SessionOptionsMock.SetupGet(options => options.AwsSessionToken).Returns("AwsSessionToken");
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.SetForcePathStyle(mockClientConfig, true)).Returns(() => true);
+
         mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
 
-        var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>() as MockAmazonServiceClient;
+        var mockAmazonServiceClient = mockSession.CreateClientByInterface<IMockAmazonService>(useServiceUrl) as MockAmazonServiceClient;
+
         Assert.NotNull(mockAmazonServiceClient);
+
+        if (useServiceUrl)
+        {
+            Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
+            Assert.NotNull(mockAmazonServiceClient.Config.ServiceURL);
+            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+        }
+        else
+        {
+            Assert.Null(mockAmazonServiceClient.Config.ServiceURL);
+            Assert.NotNull(mockAmazonServiceClient.Config.RegionEndpoint);
+            Assert.Equal(RegionEndpoint.GetBySystemName(regionName), mockAmazonServiceClient.Config.RegionEndpoint);
+        }
 
         mockSession.ConfigMock.Verify(config => config.GetAwsServiceEndpoint(It.Is<string>(serviceId => serviceId == mockServiceMetadata.ServiceId)), Times.Once);
         mockSession.SessionReflectionMock.Verify(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);

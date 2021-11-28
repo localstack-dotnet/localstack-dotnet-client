@@ -2,18 +2,18 @@
 
 public abstract class BaseScenario
 {
-    protected BaseScenario(TestFixture testFixture, string configFile)
+    protected BaseScenario(TestFixture testFixture, string configFile, bool useServiceUrl = false)
     {
-        TestFixture testFixture1 = testFixture;
-
-        ConfigurationBuilder configurationBuilder = testFixture1.CreateConfigureAppConfiguration(configFile);
+        ConfigurationBuilder configurationBuilder = testFixture.CreateConfigureAppConfiguration(configFile);
         Configuration = configurationBuilder.Build();
 
-        IServiceCollection serviceCollection = testFixture1.CreateServiceCollection(Configuration);
+        IServiceCollection serviceCollection = testFixture.CreateServiceCollection(Configuration);
+
         serviceCollection
-            .AddAwsService<IAmazonS3>()
-            .AddAwsService<IAmazonDynamoDB>()
-            .AddAwsService<IAmazonSQS>();
+            .AddAwsService<IAmazonS3>(useServiceUrl: useServiceUrl)
+            .AddAwsService<IAmazonDynamoDB>(useServiceUrl: useServiceUrl)
+            .AddAwsService<IAmazonSQS>(useServiceUrl: useServiceUrl)
+            .AddAwsService<IAmazonSimpleNotificationService>(useServiceUrl: useServiceUrl);
 
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }

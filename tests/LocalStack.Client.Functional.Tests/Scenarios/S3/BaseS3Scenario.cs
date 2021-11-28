@@ -6,8 +6,8 @@ public abstract class BaseS3Scenario : BaseScenario
     private const string FilePath = "SampleData.txt";
     protected const string Key = "SampleData.txt";
 
-    protected BaseS3Scenario(TestFixture testFixture, string configFile)
-        : base(testFixture, configFile)
+    protected BaseS3Scenario(TestFixture testFixture, string configFile, bool useServiceUrl = false)
+        : base(testFixture, configFile, useServiceUrl)
     {
         AmazonS3 = ServiceProvider.GetRequiredService<IAmazonS3>();
     }

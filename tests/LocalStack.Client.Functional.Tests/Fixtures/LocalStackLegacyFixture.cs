@@ -6,17 +6,23 @@ public class LocalStackLegacyFixture : IAsyncLifetime
 
     public LocalStackLegacyFixture()
     {
+        int dynamoDbPort = AwsServiceEndpointMetadata.DynamoDb.Port;
+        int containerPort = AwsServiceEndpointMetadata.Sqs.Port;
+        int hostPort = AwsServiceEndpointMetadata.S3.Port;
+        int snsPort = AwsServiceEndpointMetadata.Sns.Port;
+
         ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-            .WithName($"LocalStackLegacy-0.11.4-{DateTime.Now.Ticks}")
-            .WithImage("localstack/localstack:0.11.4")
-            .WithCleanUp(true)
-            .WithEnvironment("DEFAULT_REGION", "eu-central-1")
-            .WithEnvironment("SERVICES", "s3,dynamodb,sqs")
-            .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
-            .WithEnvironment("DEBUG", "1")
-            .WithPortBinding(4569, 4569) // dynamo
-            .WithPortBinding(4576, 4576) // sqs
-            .WithPortBinding(4572, 4572); // s3
+                                                                            .WithName($"LocalStackLegacy-0.11.4-{DateTime.Now.Ticks}")
+                                                                            .WithImage("localstack/localstack:0.11.4")
+                                                                            .WithCleanUp(true)
+                                                                            .WithEnvironment("DEFAULT_REGION", "eu-central-1")
+                                                                            .WithEnvironment("SERVICES", "s3,dynamodb,sqs,sns")
+                                                                            .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
+                                                                            .WithEnvironment("DEBUG", "1")
+                                                                            .WithPortBinding(dynamoDbPort, dynamoDbPort)
+                                                                            .WithPortBinding(containerPort, containerPort)
+                                                                            .WithPortBinding(hostPort, hostPort)
+                                                                            .WithPortBinding(snsPort, snsPort);                                                                        
 
         _localStackContainer = localStackBuilder.Build();
     }

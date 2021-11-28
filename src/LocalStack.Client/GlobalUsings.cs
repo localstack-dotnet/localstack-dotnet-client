@@ -4,11 +4,13 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Linq;
 global using System.Reflection;
 
+global using Amazon;
 global using Amazon.Runtime;
 global using Amazon.Runtime.Internal;
 
 global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Enums;
+global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
 global using LocalStack.Client.Utils;

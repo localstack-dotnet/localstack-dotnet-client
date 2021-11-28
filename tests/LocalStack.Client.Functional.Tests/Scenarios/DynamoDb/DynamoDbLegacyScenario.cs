@@ -4,7 +4,7 @@
 public class DynamoDbLegacyScenario : DynamoDbScenario
 {
     public DynamoDbLegacyScenario(TestFixture testFixture)
-        : base(testFixture, TestConstants.LegacyLocalStackConfig)
+        : base(testFixture, TestConstants.LegacyLocalStackConfig, true)
     {
     }
 }

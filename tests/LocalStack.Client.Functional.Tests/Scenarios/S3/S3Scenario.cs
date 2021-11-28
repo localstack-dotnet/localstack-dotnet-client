@@ -3,8 +3,8 @@
 [Collection(nameof(LocalStackCollection))]
 public class S3Scenario : BaseS3Scenario
 {
-    public S3Scenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig)
-        : base(testFixture, configFile)
+    public S3Scenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
+        : base(testFixture, configFile, useServiceUrl)
     {
     }
 

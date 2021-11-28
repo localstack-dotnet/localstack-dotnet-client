@@ -1,5 +1,7 @@
-﻿global using System.Reflection;
+﻿global using System;
+global using System.Reflection;
 
+global using Amazon;
 global using Amazon.Amplify;
 global using Amazon.APIGateway;
 global using Amazon.ApiGatewayManagementApi;
@@ -75,6 +77,7 @@ global using Amazon.SecurityToken;
 global using Amazon.ServerlessApplicationRepository;
 global using Amazon.ServiceDiscovery;
 global using Amazon.SimpleEmail;
+global using Amazon.SimpleEmailV2;
 global using Amazon.SimpleNotificationService;
 global using Amazon.SimpleSystemsManagement;
 global using Amazon.SimpleWorkflow;
@@ -87,7 +90,9 @@ global using Amazon.WAF;
 global using Amazon.WAFV2;
 global using Amazon.XRay;
 
+global using LocalStack.Client.Options;
 global using LocalStack.Client.Contracts;
+global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
 
 global using Xunit;

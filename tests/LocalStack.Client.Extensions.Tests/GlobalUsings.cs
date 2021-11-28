@@ -7,6 +7,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Options;
 
+global using Amazon;
 global using Amazon.Extensions.NETCore.Setup;
 global using Amazon.Runtime;
 
@@ -16,6 +17,7 @@ global using LocalStack.Client.Extensions.Tests.Extensions;
 global using LocalStack.Client.Options;
 global using LocalStack.Client.Tests.Mocks.MockServiceClients;
 global using LocalStack.Client.Utils;
+global using LocalStack.Client.Models;
 
 global using Moq;
 global using Xunit;

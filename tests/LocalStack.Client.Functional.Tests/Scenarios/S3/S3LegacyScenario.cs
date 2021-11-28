@@ -4,7 +4,7 @@
 public class S3LegacyScenario : S3Scenario
 {
     public S3LegacyScenario(TestFixture testFixture)
-        : base(testFixture, TestConstants.LegacyLocalStackConfig)
+        : base(testFixture, TestConstants.LegacyLocalStackConfig, true)
     {
     }
 }

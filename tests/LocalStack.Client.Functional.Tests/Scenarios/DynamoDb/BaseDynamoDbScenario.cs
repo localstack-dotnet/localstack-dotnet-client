@@ -4,8 +4,8 @@ public abstract class BaseDynamoDbScenario : BaseScenario
 {
     protected const string TestTableName = "Movies";
 
-    protected BaseDynamoDbScenario(TestFixture testFixture, string configFile)
-        : base(testFixture, configFile)
+    protected BaseDynamoDbScenario(TestFixture testFixture, string configFile, bool useServiceUrl = false)
+        : base(testFixture, configFile, useServiceUrl)
     {
         DynamoDb = ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
         DynamoDbContext = new DynamoDBContext(DynamoDb);

@@ -34,6 +34,11 @@ public class SessionReflection : ISessionReflection
         return (ClientConfig) Activator.CreateInstance(clientConfigParam.ParameterType);
     }
 
+    public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
+    {
+        PropertyInfo regionEndpointProperty = amazonServiceClient.Config.GetType().GetProperty(nameof(amazonServiceClient.Config.RegionEndpoint), BindingFlags.Public | BindingFlags.Instance);
+        regionEndpointProperty?.SetValue(amazonServiceClient.Config, RegionEndpoint.GetBySystemName(systemName));
+    }
 
     public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
     {

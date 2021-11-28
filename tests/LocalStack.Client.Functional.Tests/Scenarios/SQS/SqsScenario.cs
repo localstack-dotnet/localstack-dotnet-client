@@ -1,10 +1,12 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
+﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
 
 [Collection(nameof(LocalStackCollection))]
 public class SqsScenario : BaseSqsScenario
 {
-    public SqsScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig)
-        : base(testFixture, configFile)
+    public SqsScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
+        : base(testFixture, configFile, useServiceUrl)
     {
     }
 

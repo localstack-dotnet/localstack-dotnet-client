@@ -1,10 +1,12 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
+﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
 [Collection(nameof(LocalStackCollection))]
 public class DynamoDbScenario : BaseDynamoDbScenario
 {
-    public DynamoDbScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig)
-        : base(testFixture, configFile)
+    public DynamoDbScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
+        : base(testFixture, configFile, useServiceUrl)
     {
     }
 

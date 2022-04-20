@@ -11,6 +11,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata DynamoDb = new("DynamoDB", "dynamodb", CommonEndpointPattern, 4569, AwsServiceEnum.DynamoDb);
     public static readonly AwsServiceEndpointMetadata DynamoDbStreams = new("DynamoDB Streams", "dynamodbstreams", CommonEndpointPattern, 4570, AwsServiceEnum.DynamoDbStreams);
     public static readonly AwsServiceEndpointMetadata ElasticSearch = new("Elasticsearch Service", "elasticsearch", CommonEndpointPattern, 4571, AwsServiceEnum.ElasticSearch);
+    public static readonly AwsServiceEndpointMetadata OpenSearch = new("OpenSearch", "opensearch", CommonEndpointPattern, 4571, AwsServiceEnum.OpenSearch);
     public static readonly AwsServiceEndpointMetadata S3 = new("S3", "s3", CommonEndpointPattern, 4572, AwsServiceEnum.S3);
     public static readonly AwsServiceEndpointMetadata Firehose = new("Firehose", "firehose", CommonEndpointPattern, 4573, AwsServiceEnum.Firehose);
     public static readonly AwsServiceEndpointMetadata Lambda = new("Lambda", "lambda", CommonEndpointPattern, 4574, AwsServiceEnum.Lambda);
@@ -22,6 +23,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Ses = new("SES", "ses", CommonEndpointPattern, 4579, AwsServiceEnum.Ses);
     public static readonly AwsServiceEndpointMetadata Sesv2 = new("SESv2", "sesv2", CommonEndpointPattern, 4579, AwsServiceEnum.Sesv2);
     public static readonly AwsServiceEndpointMetadata Route53 = new("Route 53", "route53", CommonEndpointPattern, 4580, AwsServiceEnum.Route53);
+    public static readonly AwsServiceEndpointMetadata Route53Resolver = new("Route53Resolver", "route53resolver", CommonEndpointPattern, 4580, AwsServiceEnum.Route53Resolver);
     public static readonly AwsServiceEndpointMetadata CloudFormation = new("CloudFormation", "cloudformation", CommonEndpointPattern, 4581, AwsServiceEnum.CloudFormation);
     public static readonly AwsServiceEndpointMetadata CloudWatch = new("CloudWatch", "cloudwatch", CommonEndpointPattern, 4582, AwsServiceEnum.CloudWatch);
     public static readonly AwsServiceEndpointMetadata Ssm = new("SSM", "ssm", CommonEndpointPattern, 4583, AwsServiceEnum.Ssm);
@@ -73,6 +75,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Acm = new("ACM", "acm", CommonEndpointPattern, 4619, AwsServiceEnum.Acm);
     public static readonly AwsServiceEndpointMetadata CodeCommit = new("CodeCommit", "codecommit", CommonEndpointPattern, 4620, AwsServiceEnum.CodeCommit);
     public static readonly AwsServiceEndpointMetadata KinesisAnalytics = new("Kinesis Analytics", "kinesisanalytics", CommonEndpointPattern, 4621, AwsServiceEnum.KinesisAnalytics);
+    public static readonly AwsServiceEndpointMetadata KinesisAnalyticsV2 = new("Kinesis Analytics V2", "kinesisanalyticsv2", CommonEndpointPattern, 4621, AwsServiceEnum.KinesisAnalyticsV2);
     public static readonly AwsServiceEndpointMetadata Amplify = new("Amplify", "amplify", CommonEndpointPattern, 4622, AwsServiceEnum.Amplify);
     public static readonly AwsServiceEndpointMetadata ApplicationAutoscaling = new("Application Auto Scaling", "application-autoscaling", CommonEndpointPattern, 4623, AwsServiceEnum.ApplicationAutoscaling);
     public static readonly AwsServiceEndpointMetadata Kafka = new("Kafka", "kafka", CommonEndpointPattern, 4624, AwsServiceEnum.Kafka);
@@ -97,17 +100,18 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Waf = new("WAF", "waf", CommonEndpointPattern, 4640, AwsServiceEnum.Waf);
     public static readonly AwsServiceEndpointMetadata WafV2 = new("WAFV2", "wafv2", CommonEndpointPattern, 4640, AwsServiceEnum.WafV2);
     public static readonly AwsServiceEndpointMetadata ConfigService = new("Config Service", "config", CommonEndpointPattern, 4641, AwsServiceEnum.ConfigService);
+    public static readonly AwsServiceEndpointMetadata Mwaa = new("MWAA", "mwaa", CommonEndpointPattern, 4642, AwsServiceEnum.Mwaa);
     public static readonly AwsServiceEndpointMetadata EventBridge = new("EventBridge", "eventbridge", CommonEndpointPattern, 4587, AwsServiceEnum.EventBridge);
 
 
     public static readonly AwsServiceEndpointMetadata[] All =
     {
-        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, CloudFormation, CloudWatch,
-        Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts, 
+        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, OpenSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, Route53Resolver, CloudFormation, 
+        CloudWatch, Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts, 
         Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
-        CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
+        CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, EventBridge
+        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge
     };
 
     private AwsServiceEndpointMetadata()

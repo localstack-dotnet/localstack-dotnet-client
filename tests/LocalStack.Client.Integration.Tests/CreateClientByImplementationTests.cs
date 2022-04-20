@@ -58,6 +58,15 @@ public class CreateClientByImplementationTests
 	}
 
 	[Fact]
+	public void Should_Able_To_Create_AmazonOpenSearchServiceClient()
+	{
+		var amazonOpenSearchServiceClient = Session.CreateClientByImplementation<AmazonOpenSearchServiceClient>();
+
+		Assert.NotNull(amazonOpenSearchServiceClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonOpenSearchServiceClient);
+	}    
+
+	[Fact]
 	public void Should_Able_To_Create_AmazonEventBridgeClient()
 	{
 		var amazonEventBridgeClient = Session.CreateClientByImplementation<AmazonEventBridgeClient>();
@@ -136,6 +145,15 @@ public class CreateClientByImplementationTests
 
 		Assert.NotNull(amazonRoute53Client);
 		AssertAmazonClient.AssertClientConfiguration(amazonRoute53Client);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonRoute53ResolverClient()
+	{
+		var amazonRoute53ResolverClient = Session.CreateClientByImplementation<AmazonRoute53ResolverClient>();
+
+		Assert.NotNull(amazonRoute53ResolverClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonRoute53ResolverClient);
 	}
 
 	[Fact]
@@ -664,6 +682,15 @@ public class CreateClientByImplementationTests
 	}
 
 	[Fact]
+	public void Should_Able_To_Create_AmazonKinesisAnalyticsV2Client()
+	{
+		var kinesisAnalyticsV2Client = Session.CreateClientByImplementation<AmazonKinesisAnalyticsV2Client>();
+
+		Assert.NotNull(kinesisAnalyticsV2Client);
+		AssertAmazonClient.AssertClientConfiguration(kinesisAnalyticsV2Client);
+	}
+
+	[Fact]
 	public void Should_Able_To_Create_AmazonAmplifyClient()
 	{
 		var amazonAmplifyClient = Session.CreateClientByImplementation<AmazonAmplifyClient>();
@@ -877,5 +904,14 @@ public class CreateClientByImplementationTests
 
 		Assert.NotNull(amazonConfigServiceClient);
 		AssertAmazonClient.AssertClientConfiguration(amazonConfigServiceClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonMWAAClient()
+	{
+		var amazonMwaaClient = Session.CreateClientByImplementation<AmazonMWAAClient>();
+
+		Assert.NotNull(amazonMwaaClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonMwaaClient);
 	}
 }

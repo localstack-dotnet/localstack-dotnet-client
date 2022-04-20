@@ -10,7 +10,7 @@ public static class AssertAmazonClient
 
         if (clientConfig.ServiceURL != null)
         {
-            Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}", clientConfig.ServiceURL);
+            Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}/", clientConfig.ServiceURL);
         }
         else if(clientConfig.ServiceURL == null)
         {

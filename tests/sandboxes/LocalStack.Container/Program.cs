@@ -8,8 +8,8 @@ Console.WriteLine("Press any key to start LocalStack container");
 Console.ReadLine();
 
 ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-                                                                    .WithName("LocalStack-0.13.0")
-                                                                    .WithImage("localstack/localstack:0.13.0")
+                                                                    .WithName("LocalStack-0.14.2")
+                                                                    .WithImage("localstack/localstack:0.14.2")
                                                                     .WithCleanUp(true)
                                                                     .WithEnvironment("DEFAULT_REGION", "eu-central-1")
                                                                     .WithEnvironment("SERVICES", "iam,lambda,dynamodb,apigateway,s3,sns,cloudformation,cloudwatch,sts")

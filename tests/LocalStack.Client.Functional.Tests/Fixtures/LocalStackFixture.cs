@@ -7,8 +7,8 @@ public class LocalStackFixture : IAsyncLifetime
     public LocalStackFixture()
     {
         ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-            .WithName($"LocalStack-0.13.0-{DateTime.Now.Ticks}")
-            .WithImage("localstack/localstack:0.13.0")
+            .WithName($"LocalStack-0.14.2-{DateTime.Now.Ticks}")
+            .WithImage("localstack/localstack:0.14.2")
             .WithCleanUp(true)
             .WithEnvironment("SERVICES", "s3,dynamodb,sqs,sns")
             .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")

@@ -8,6 +8,7 @@ public enum AwsServiceEnum
 	DynamoDb,
 	DynamoDbStreams,
 	ElasticSearch,
+	OpenSearch,
 	S3,
 	Firehose,
 	Lambda,
@@ -19,6 +20,7 @@ public enum AwsServiceEnum
 	Ses,
 	Sesv2,
 	Route53,
+	Route53Resolver,
 	CloudFormation,
 	CloudWatch,
 	Ssm,
@@ -70,6 +72,7 @@ public enum AwsServiceEnum
 	Acm,
 	CodeCommit,
 	KinesisAnalytics,
+	KinesisAnalyticsV2,
 	Amplify,
 	ApplicationAutoscaling,
 	Kafka,
@@ -94,5 +97,6 @@ public enum AwsServiceEnum
 	Waf, 
 	WafV2,
 	ConfigService,
+	Mwaa,
 	EventBridge
 }

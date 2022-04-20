@@ -440,64 +440,7 @@ Linux
 
 ## <a name="changelog"></a> Changelog
 
-### [v1.3.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.0)
-
-#### 1. New Features
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.27 have been added.
-  - SESv2
-  - EventBridge ([#14](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/14))
-- Tested against LocalStack v0.13.0 container.
-#### 2. Enhancements
-- `useServiceUrl` parameter added to change client connection behavior. See [useServiceUrl Parameter](#useserviceurl)
-- Readme and SourceLink added to Nuget packages
-#### 3. Bug Fixes
-- Session::RegionName configuration does not honor while creating AWS client ([#15](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/15))
-
-Thanks to [petertownsend](https://github.com/petertownsend) for his contribution
-
-### [v1.2.3](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.3)
-
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.25 have been added.
-  - Config Service
-- .NET 6.0 support added.
-- AWSSDK.Core set to 3.7.3.15 as the minimum version.
-- AWSSDK.Extensions.NETCore.Setup set to 3.7.1 as the minimum version.
-- Tested against LocalStack v0.13.0 container.
-
-### [v1.2.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.2)
-
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.22 have been added.
-  - EFS, Backup, LakeFormation, WAF, WAF V2 and QLDB Session
-- AWSSDK.Core set to 3.7.1 as the minimum version.
-- Tested against LocalStack v0.12.16 container.
-
-### [v1.2](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.2.0)
-
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.20 have been added.
-  - IoTAnalytics, IoT Events, IoT Events Data, IoT Wireless, IoT Data Plane, IoT Jobs Data Plane, Support, Neptune, DocDB, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, Cost Explorer, MediaConvert, Resource Groups Tagging API, Resource Groups
-- AWSSDK.Core set to 3.7.0 as the minimum version.
-- Obsolete methods removed.
-- New alternate AddAWSServiceLocalStack method added to prevent mix up with AddAWSService (for LocalStack.Client.Extension v1.1.0).
-- Tested against LocalStack v0.12.10 container.
-
-### [v1.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.1.0)
-
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.10 have been added.
-  - Transfer, ACM, CodeCommit, Kinesis Analytics, Amplify, Application Auto Scaling, Kafka, Timestream Query, Timestream Write, Timestream Write, S3 Control, Elastic Load Balancing v2, Redshift Data
-- .NET 5.0 support added.
-- AWSSDK.Core set to 3.5.0 as the minimum version.
-- Tested against LocalStack v0.12.07 container.
-
-### [v1.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.0.0)
-
-- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v0.23 have been added.
-  - ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, Api Gateway V2, RdsData, SageMaker, SageMakerRuntime, Ecr, Qldb
-- .netcore2.2 support removed since Microsoft depracated it. .netcore3.1 support added.
-- AWSSDK.Core set to 3.3.106.5 as the minimum version.
-
-### [v0.8.0.163](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v0.8.0.163)
-
-- First release.
+Please refer to [`CHANGELOG.md`](CHANGELOG.md) to see the complete list of changes for each release.
 
 ## <a name="license"></a> License
 

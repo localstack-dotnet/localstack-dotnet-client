@@ -394,7 +394,7 @@ ServiceProvider serviceProvider = collection.BuildServiceProvider();
 var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
 ```
 
-See [useServiceUrl] parameter usage (#standalone-useserviceurl)
+See [useServiceUrl](#standalone-useserviceurl) parameter usage.
 
 ## <a name="developing"></a> Developing
 

@@ -45,6 +45,7 @@
 		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.3.22" />
 		<PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.7.4.40" />
 		<PackageReference Include="AWSSDK.Elasticsearch" Version="3.7.3" />
+		<PackageReference Include="AWSSDK.OpenSearchService" Version="3.7.4.32" />
 		<PackageReference Include="AWSSDK.Glue" Version="3.7.9.21" />
 		<PackageReference Include="AWSSDK.IdentityManagement" Version="3.7.2.83" />
 		<PackageReference Include="AWSSDK.IoT" Version="3.7.7" />
@@ -58,6 +59,7 @@
 		<PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.2.48" />
 		<PackageReference Include="AWSSDK.Kinesis" Version="3.7.0.103" />
 		<PackageReference Include="AWSSDK.KinesisAnalytics" Version="3.7.0.103" />
+		<PackageReference Include="AWSSDK.KinesisAnalyticsV2" Version="3.7.5.69" />
 		<PackageReference Include="AWSSDK.KinesisFirehose" Version="3.7.2.25" />
 		<PackageReference Include="AWSSDK.LakeFormation" Version="3.7.1.86" />
 		<PackageReference Include="AWSSDK.Lambda" Version="3.7.8" />

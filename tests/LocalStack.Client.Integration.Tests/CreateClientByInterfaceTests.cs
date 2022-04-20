@@ -1,6 +1,4 @@
-﻿using Amazon.Route53Resolver;
-
-namespace LocalStack.Client.Integration.Tests;
+﻿namespace LocalStack.Client.Integration.Tests;
 
 public class CreateClientByInterfaceTests
 {
@@ -57,6 +55,15 @@ public class CreateClientByInterfaceTests
 
 		Assert.NotNull(amazonElasticsearchClient);
 		AssertAmazonClient.AssertClientConfiguration(amazonElasticsearchClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonOpenSearchServiceClient()
+	{
+		AmazonServiceClient amazonOpenSearchServiceClient = Session.CreateClientByInterface<IAmazonOpenSearchService>();
+
+		Assert.NotNull(amazonOpenSearchServiceClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonOpenSearchServiceClient);
 	}
 
 	[Fact]
@@ -672,6 +679,15 @@ public class CreateClientByInterfaceTests
 
 		Assert.NotNull(amazonKinesisAnalyticsClient);
 		AssertAmazonClient.AssertClientConfiguration(amazonKinesisAnalyticsClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonKinesisAnalyticsV2Client()
+	{
+		AmazonServiceClient kinesisAnalyticsV2Client = Session.CreateClientByInterface<IAmazonKinesisAnalyticsV2>();
+
+		Assert.NotNull(kinesisAnalyticsV2Client);
+		AssertAmazonClient.AssertClientConfiguration(kinesisAnalyticsV2Client);
 	}
 
 	[Fact]

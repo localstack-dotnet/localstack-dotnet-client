@@ -1,7 +1,4 @@
-﻿global using System;
-global using System.Reflection;
-
-global using Amazon;
+﻿global using Amazon;
 global using Amazon.Amplify;
 global using Amazon.APIGateway;
 global using Amazon.ApiGatewayManagementApi;
@@ -52,6 +49,7 @@ global using Amazon.IoTWireless;
 global using Amazon.Kafka;
 global using Amazon.KeyManagementService;
 global using Amazon.KinesisAnalytics;
+global using Amazon.KinesisAnalyticsV2;
 global using Amazon.KinesisFirehose;
 global using Amazon.LakeFormation;
 global using Amazon.Lambda;
@@ -59,6 +57,7 @@ global using Amazon.MediaConvert;
 global using Amazon.MediaStore;
 global using Amazon.MediaStoreData;
 global using Amazon.Neptune;
+global using Amazon.OpenSearchService;
 global using Amazon.Organizations;
 global using Amazon.QLDB;
 global using Amazon.RDS;
@@ -68,6 +67,7 @@ global using Amazon.RedshiftDataAPIService;
 global using Amazon.ResourceGroups;
 global using Amazon.ResourceGroupsTaggingAPI;
 global using Amazon.Route53;
+global using Amazon.Route53Resolver;
 global using Amazon.Runtime;
 global using Amazon.S3;
 global using Amazon.S3Control;
@@ -91,9 +91,12 @@ global using Amazon.WAF;
 global using Amazon.WAFV2;
 global using Amazon.XRay;
 
-global using LocalStack.Client.Options;
 global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
+global using LocalStack.Client.Options;
+
+global using System;
+global using System.Reflection;
 
 global using Xunit;

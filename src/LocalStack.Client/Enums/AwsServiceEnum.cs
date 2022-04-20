@@ -19,6 +19,7 @@ public enum AwsServiceEnum
 	Ses,
 	Sesv2,
 	Route53,
+	Route53Resolver,
 	CloudFormation,
 	CloudWatch,
 	Ssm,

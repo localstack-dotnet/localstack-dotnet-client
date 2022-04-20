@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Integration.Tests;
+﻿using Amazon.Route53Resolver;
+
+namespace LocalStack.Client.Integration.Tests;
 
 public class CreateClientByImplementationTests
 {
@@ -136,6 +138,15 @@ public class CreateClientByImplementationTests
 
 		Assert.NotNull(amazonRoute53Client);
 		AssertAmazonClient.AssertClientConfiguration(amazonRoute53Client);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonRoute53ResolverClient()
+	{
+		var amazonRoute53ResolverClient = Session.CreateClientByImplementation<AmazonRoute53ResolverClient>();
+
+		Assert.NotNull(amazonRoute53ResolverClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonRoute53ResolverClient);
 	}
 
 	[Fact]

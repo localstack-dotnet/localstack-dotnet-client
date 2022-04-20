@@ -22,6 +22,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Ses = new("SES", "ses", CommonEndpointPattern, 4579, AwsServiceEnum.Ses);
     public static readonly AwsServiceEndpointMetadata Sesv2 = new("SESv2", "sesv2", CommonEndpointPattern, 4579, AwsServiceEnum.Sesv2);
     public static readonly AwsServiceEndpointMetadata Route53 = new("Route 53", "route53", CommonEndpointPattern, 4580, AwsServiceEnum.Route53);
+    public static readonly AwsServiceEndpointMetadata Route53Resolver = new("Route53Resolver", "route53resolver", CommonEndpointPattern, 4580, AwsServiceEnum.Route53Resolver);
     public static readonly AwsServiceEndpointMetadata CloudFormation = new("CloudFormation", "cloudformation", CommonEndpointPattern, 4581, AwsServiceEnum.CloudFormation);
     public static readonly AwsServiceEndpointMetadata CloudWatch = new("CloudWatch", "cloudwatch", CommonEndpointPattern, 4582, AwsServiceEnum.CloudWatch);
     public static readonly AwsServiceEndpointMetadata Ssm = new("SSM", "ssm", CommonEndpointPattern, 4583, AwsServiceEnum.Ssm);
@@ -102,7 +103,7 @@ public class AwsServiceEndpointMetadata
 
     public static readonly AwsServiceEndpointMetadata[] All =
     {
-        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, CloudFormation, CloudWatch,
+        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, Route53Resolver, CloudFormation, CloudWatch,
         Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts, 
         Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 

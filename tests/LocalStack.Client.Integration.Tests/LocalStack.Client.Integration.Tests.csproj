@@ -75,6 +75,7 @@
 		<PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.0.103" />
 		<PackageReference Include="AWSSDK.ResourceGroupsTaggingAPI" Version="3.7.0.104" />
 		<PackageReference Include="AWSSDK.Route53" Version="3.7.1.60" />
+		<PackageReference Include="AWSSDK.Route53Resolver " Version="3.7.2.65" />
 		<PackageReference Include="AWSSDK.S3" Version="3.7.5" />
 		<PackageReference Include="AWSSDK.S3Control" Version="3.7.4" />
 		<PackageReference Include="AWSSDK.SageMaker" Version=" 3.7.21.10" />

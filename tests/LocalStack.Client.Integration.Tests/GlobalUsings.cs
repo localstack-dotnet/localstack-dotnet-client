@@ -56,6 +56,7 @@ global using Amazon.Lambda;
 global using Amazon.MediaConvert;
 global using Amazon.MediaStore;
 global using Amazon.MediaStoreData;
+global using Amazon.MWAA;
 global using Amazon.Neptune;
 global using Amazon.OpenSearchService;
 global using Amazon.Organizations;

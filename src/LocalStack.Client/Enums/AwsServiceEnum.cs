@@ -97,5 +97,6 @@ public enum AwsServiceEnum
 	Waf, 
 	WafV2,
 	ConfigService,
+	Mwaa,
 	EventBridge
 }

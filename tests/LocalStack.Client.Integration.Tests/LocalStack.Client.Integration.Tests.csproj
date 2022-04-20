@@ -30,6 +30,7 @@
 		<PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.0.103" />
 		<PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.1.75" />
 		<PackageReference Include="AWSSDK.ConfigService" Version="3.7.5.22" />
+		<PackageReference Include="AWSSDK.MWAA" Version="3.7.2.38" />
 		<PackageReference Include="AWSSDK.CostExplorer" Version="3.7.3.51" />
 		<PackageReference Include="AWSSDK.DocDB" Version="3.7.2.75" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.1" />

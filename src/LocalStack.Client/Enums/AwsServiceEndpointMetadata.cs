@@ -100,6 +100,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Waf = new("WAF", "waf", CommonEndpointPattern, 4640, AwsServiceEnum.Waf);
     public static readonly AwsServiceEndpointMetadata WafV2 = new("WAFV2", "wafv2", CommonEndpointPattern, 4640, AwsServiceEnum.WafV2);
     public static readonly AwsServiceEndpointMetadata ConfigService = new("Config Service", "config", CommonEndpointPattern, 4641, AwsServiceEnum.ConfigService);
+    public static readonly AwsServiceEndpointMetadata Mwaa = new("MWAA", "mwaa", CommonEndpointPattern, 4642, AwsServiceEnum.Mwaa);
     public static readonly AwsServiceEndpointMetadata EventBridge = new("EventBridge", "eventbridge", CommonEndpointPattern, 4587, AwsServiceEnum.EventBridge);
 
 
@@ -110,7 +111,7 @@ public class AwsServiceEndpointMetadata
         Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, EventBridge
+        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge
     };
 
     private AwsServiceEndpointMetadata()

@@ -17,12 +17,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.S3" Version="3.7.5" />
-	<PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="5.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-	<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+		<PackageReference Include="AWSSDK.S3" Version="3.7.8.23" />
+	<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

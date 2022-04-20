@@ -1,6 +1,4 @@
-﻿using Cake.Docker;
-
-return new CakeHost()
+﻿return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 

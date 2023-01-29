@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.Development.json" />

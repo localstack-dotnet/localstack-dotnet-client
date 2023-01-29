@@ -4,7 +4,6 @@ global using System.Dynamic;
 global using System.IO;
 global using System.Linq;
 global using System.Net;
-global using System.Text.Json;
 global using System.Threading.Tasks;
 
 global using Microsoft.Extensions.Configuration;
@@ -28,8 +27,8 @@ global using AutoFixture;
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Converters;
 
-global using DotNet.Testcontainers.Containers.Builders;
-global using DotNet.Testcontainers.Containers.Modules;
+global using DotNet.Testcontainers.Builders;
+global using DotNet.Testcontainers.Containers;
 
 global using LocalStack.Client.Extensions;
 global using LocalStack.Client.Enums;

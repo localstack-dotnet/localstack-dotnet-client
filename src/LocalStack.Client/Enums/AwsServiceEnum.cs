@@ -98,5 +98,9 @@ public enum AwsServiceEnum
 	WafV2,
 	ConfigService,
 	Mwaa,
-	EventBridge
+	EventBridge,
+	Fis,
+	MarketplaceMetering,
+	Transcribe,
+	Mq
 }

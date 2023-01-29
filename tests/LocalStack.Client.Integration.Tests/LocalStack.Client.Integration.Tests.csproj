@@ -16,6 +16,7 @@
 		<PackageReference Include="AWSSDK.Athena" Version="3.7.103.22" />
 		<PackageReference Include="AWSSDK.AutoScaling" Version="3.7.102.29" />
 		<PackageReference Include="AWSSDK.AWSSupport" Version="3.7.100.62" />
+		<PackageReference Include="AWSSDK.AWSMarketplaceMetering" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.Backup" Version="3.7.101.39" />
 		<PackageReference Include="AWSSDK.Batch" Version="3.7.102.21" />
 		<PackageReference Include="AWSSDK.CertificateManager" Version="3.7.101.51" />
@@ -46,6 +47,7 @@
 		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.7.101.17" />
 		<PackageReference Include="AWSSDK.Elasticsearch" Version="3.7.101.47" />
+		<PackageReference Include="AWSSDK.FIS" Version="3.7.101" />
 		<PackageReference Include="AWSSDK.OpenSearchService" Version="3.7.102.5" />
 		<PackageReference Include="AWSSDK.Glue" Version="3.7.106.5" />
 		<PackageReference Include="AWSSDK.IdentityManagement" Version="3.7.100.63" />
@@ -67,6 +69,7 @@
 		<PackageReference Include="AWSSDK.MediaConvert" Version="3.7.103.9" />
 		<PackageReference Include="AWSSDK.MediaStore" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.MediaStoreData" Version="3.7.100.62" />
+		<PackageReference Include="AWSSDK.MQ" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.Neptune" Version="3.7.101.59" />
 		<PackageReference Include="AWSSDK.Organizations" Version="3.7.101.39" />
 		<PackageReference Include="AWSSDK.QLDB" Version="3.7.100.62" />
@@ -97,6 +100,7 @@
 		<PackageReference Include="AWSSDK.TimestreamQuery" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.TimestreamWrite" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.Transfer" Version="3.7.104.18" />
+		<PackageReference Include="AWSSDK.TranscribeService" Version="3.7.103.21" />
 		<PackageReference Include="AWSSDK.WAF" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.WAFV2" Version="3.7.101.58" />
 		<PackageReference Include="AWSSDK.XRay" Version="3.7.102.43" />

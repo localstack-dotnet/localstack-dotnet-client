@@ -102,7 +102,10 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata ConfigService = new("Config Service", "config", CommonEndpointPattern, 4641, AwsServiceEnum.ConfigService);
     public static readonly AwsServiceEndpointMetadata Mwaa = new("MWAA", "mwaa", CommonEndpointPattern, 4642, AwsServiceEnum.Mwaa);
     public static readonly AwsServiceEndpointMetadata EventBridge = new("EventBridge", "eventbridge", CommonEndpointPattern, 4587, AwsServiceEnum.EventBridge);
-
+    public static readonly AwsServiceEndpointMetadata Fis = new("fis", "fis", CommonEndpointPattern, 4643, AwsServiceEnum.Fis);
+    public static readonly AwsServiceEndpointMetadata MarketplaceMetering = new("Marketplace Metering", "meteringmarketplace", CommonEndpointPattern, 4644, AwsServiceEnum.MarketplaceMetering);
+    public static readonly AwsServiceEndpointMetadata Transcribe = new("Transcribe", "transcribe", CommonEndpointPattern, 4566, AwsServiceEnum.Transcribe);
+    public static readonly AwsServiceEndpointMetadata Mq = new("mq", "mq", CommonEndpointPattern, 4566, AwsServiceEnum.Mq);
 
     public static readonly AwsServiceEndpointMetadata[] All =
     {
@@ -111,7 +114,7 @@ public class AwsServiceEndpointMetadata
         Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge
+        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq
     };
 
     private AwsServiceEndpointMetadata()

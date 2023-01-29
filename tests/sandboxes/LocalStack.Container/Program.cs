@@ -1,7 +1,7 @@
 ﻿using System;
 
-using DotNet.Testcontainers.Containers.Builders;
-using DotNet.Testcontainers.Containers.Modules;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 
 Console.WriteLine("Press any key to start LocalStack container");

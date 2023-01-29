@@ -1,5 +1,20 @@
 # LocalStack .NET Client Change Log
 
+### [v1.4.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.4.0)
+
+#### 1. New Features
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.39 have been added.
+  - Fault Injection Service (FIS)
+  - Marketplace Metering
+  - Amazon Transcribe
+  - Amazon MQ
+
+#### 2. General
+- Tested against LocalStack v1.3.1 container.
+- AWSSDK.Core set to 3.7.103 as the minimum version.
+  - **Warning** In this version, the ServiceURL property of Amazon.Runtime.ClientConfig adds a trailing `/` to every URL set.
+For example, if `http://localhost:1234` is set as the value, it will become `http://localhost:1234/`
+
 ### [v1.3.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.1)
 
 #### 1. New Features

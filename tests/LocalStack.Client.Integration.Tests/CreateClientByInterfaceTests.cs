@@ -9,8 +9,9 @@ public class CreateClientByInterfaceTests
 		Session = SessionStandalone.Init()
 
 								   .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+								   .WithConfigurationOptions(new ConfigOptions(useSsl: AssertAmazonClient.UseSsl))
 								   .Create();
-	}
+}
 
 	[Fact]
 	public void Should_Able_To_Create_AmazonAPIGatewayClient()

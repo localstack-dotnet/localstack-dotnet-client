@@ -1,4 +1,7 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
+﻿using Amazon.Runtime;
+using System.Net.Http;
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
 public abstract class BaseDynamoDbScenario : BaseScenario
 {
@@ -38,7 +41,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
                     new GlobalSecondaryIndex
                     {
                         Projection = new Projection {ProjectionType = ProjectionType.ALL},
-                        IndexName = TestConstants.MoiveTableMovieIdGsi,
+                        IndexName = TestConstants.MovieTableMovieIdGsi,
                         KeySchema = new List<KeySchemaElement> {new KeySchemaElement {AttributeName = nameof(MovieEntity.MovieId), KeyType = KeyType.HASH}},
                         ProvisionedThroughput = new ProvisionedThroughput {ReadCapacityUnits = 5, WriteCapacityUnits = 5}
                     }

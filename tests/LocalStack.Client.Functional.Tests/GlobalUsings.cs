@@ -38,6 +38,7 @@ global using LocalStack.Client.Functional.Tests.Fixtures;
 global using LocalStack.Client.Functional.Tests.Scenarios.DynamoDb.Entities;
 global using LocalStack.Client.Functional.Tests.Scenarios.SQS.Models;
 global using LocalStack.Client.Functional.Tests.Scenarios.SNS.Models;
+global using LocalStack.Client.Functional.Tests.Scenarios.S3;
 
 global using Xunit;
 

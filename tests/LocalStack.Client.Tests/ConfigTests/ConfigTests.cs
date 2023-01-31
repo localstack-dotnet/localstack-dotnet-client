@@ -224,8 +224,7 @@ public class ConfigTests
     }
 
     [Fact]
-    public void
-        GetAwsServicePorts_Should_Return_AwsServiceEnum_And_Integer_Port_Value_Pair_That_Port_Property_Of_The_Pair_Equals_To_Set_EdgePort_Property_Of_ConfigOptions_If_UseLegacyPorts_Property_Is_False()
+    public void GetAwsServicePorts_Should_Return_AwsServiceEnum_And_Integer_Port_Value_Pair_That_Port_Property_Of_The_Pair_Equals_To_Set_EdgePort_Property_Of_ConfigOptions_If_UseLegacyPorts_Property_Is_False()
     {
         const int edgePort = 1234;
         var config = new Config(new ConfigOptions(useLegacyPorts: false, edgePort: edgePort));
@@ -239,5 +238,23 @@ public class ConfigTests
             Assert.Equal(awsServiceEndpointMetadata.Enum, keyValuePair.Key);
             Assert.Equal(edgePort, keyValuePair.Value);
         }
+    }
+
+    [Fact]
+
+    public void GetConfigOptions_Should_Return_Given_ConfigOptions()
+    {
+        const string localStackHost = Constants.LocalStackHost;
+        const bool useSsl = true;
+        const bool useLegacyPorts = false;
+        const int edgePort = Constants.EdgePort;
+
+        var configOptions = new ConfigOptions(localStackHost, useSsl, useLegacyPorts, edgePort);
+        var config = new Config(configOptions);
+
+        Assert.Equal(configOptions.LocalStackHost, config.GetConfigOptions().LocalStackHost);
+        Assert.Equal(configOptions.UseSsl, config.GetConfigOptions().UseSsl);
+        Assert.Equal(configOptions.UseLegacyPorts, config.GetConfigOptions().UseLegacyPorts);
+        Assert.Equal(configOptions.EdgePort, config.GetConfigOptions().EdgePort);
     }
 }

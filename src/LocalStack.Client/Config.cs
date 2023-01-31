@@ -5,6 +5,8 @@ public class Config : IConfig
     private readonly AwsServiceEndpointMetadata[] _serviceEndpointMetadata = AwsServiceEndpointMetadata.All;
     private readonly IEnumerable<AwsServiceEndpoint> _awsServiceEndpoints;
 
+    private readonly IConfigOptions _configOptions;
+
     public Config()
         : this(new ConfigOptions())
     {
@@ -25,6 +27,8 @@ public class Config : IConfig
                                                                                                   GetServicePort(metadata.Port), 
                                                                                                   localStackHost, 
                                                                                                   metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
+
+        _configOptions = configOptions;
     }
 
     public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints()
@@ -53,4 +57,6 @@ public class Config : IConfig
                .First(endpoint => endpoint.AwsServiceEnum == awsServiceEnum)
                .Port;
     }
+
+    public IConfigOptions GetConfigOptions() => _configOptions;
 }

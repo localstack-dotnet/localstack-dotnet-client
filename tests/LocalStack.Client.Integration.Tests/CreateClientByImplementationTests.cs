@@ -9,6 +9,7 @@ public class CreateClientByImplementationTests
         Session = SessionStandalone.Init()
 
                                    .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+                                   .WithConfigurationOptions(new ConfigOptions(useSsl: AssertAmazonClient.UseSsl))
                                    .Create();
     }
 
@@ -274,7 +275,7 @@ public class CreateClientByImplementationTests
     }
 
     [Fact]
-    public void Should_Able_To_Create_AmazonIoTDataClient_With_ServiceUr()
+    public void Should_Able_To_Create_AmazonIoTDataClient_With_ServiceUrl()
     {
         var amazonIoTDataClient = Session.CreateClientByImplementation<AmazonIotDataClient>(useServiceUrl: true);
 

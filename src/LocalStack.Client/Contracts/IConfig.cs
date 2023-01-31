@@ -11,4 +11,6 @@ public interface IConfig
     IDictionary<AwsServiceEnum, int> GetAwsServicePorts();
 
     int GetAwsServicePort(AwsServiceEnum awsServiceEnum);
+
+    IConfigOptions GetConfigOptions();
 }

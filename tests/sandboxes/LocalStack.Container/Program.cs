@@ -1,15 +1,15 @@
 ﻿using System;
 
-using DotNet.Testcontainers.Containers.Builders;
-using DotNet.Testcontainers.Containers.Modules;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 
 Console.WriteLine("Press any key to start LocalStack container");
 Console.ReadLine();
 
 ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()
-                                                                    .WithName("LocalStack-0.14.2")
-                                                                    .WithImage("localstack/localstack:0.14.2")
+                                                                    .WithName("LocalStack-1.3.1")
+                                                                    .WithImage("localstack/localstack:1.3.1")
                                                                     .WithCleanUp(true)
                                                                     .WithEnvironment("DEFAULT_REGION", "eu-central-1")
                                                                     .WithEnvironment("SERVICES", "iam,lambda,dynamodb,apigateway,s3,sns,cloudformation,cloudwatch,sts")

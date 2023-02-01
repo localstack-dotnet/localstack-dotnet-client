@@ -34,7 +34,7 @@ public class Session : ISession
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
         ClientConfig clientConfig = _sessionReflection.CreateClientConfig(implType);
 
-        clientConfig.UseHttp = true;
+        clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
         _sessionReflection.SetForcePathStyle(clientConfig);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
@@ -84,7 +84,7 @@ public class Session : ISession
 
         ClientConfig clientConfig = _sessionReflection.CreateClientConfig(clientType);
 
-        clientConfig.UseHttp = true;
+        clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
         _sessionReflection.SetForcePathStyle(clientConfig);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;

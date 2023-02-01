@@ -9,8 +9,9 @@ public class CreateClientByInterfaceTests
 		Session = SessionStandalone.Init()
 
 								   .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+								   .WithConfigurationOptions(new ConfigOptions(useSsl: AssertAmazonClient.UseSsl))
 								   .Create();
-	}
+}
 
 	[Fact]
 	public void Should_Able_To_Create_AmazonAPIGatewayClient()
@@ -913,5 +914,41 @@ public class CreateClientByInterfaceTests
 
 		Assert.NotNull(amazonMwaaClient);
 		AssertAmazonClient.AssertClientConfiguration(amazonMwaaClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonFISClient()
+	{
+		AmazonServiceClient amazonFisClient = Session.CreateClientByInterface<IAmazonFIS>();
+
+		Assert.NotNull(amazonFisClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonFisClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonAWSMarketplaceMeteringClient()
+	{
+		AmazonServiceClient awsMarketplaceMeteringClient = Session.CreateClientByInterface<IAmazonAWSMarketplaceMetering>();
+
+		Assert.NotNull(awsMarketplaceMeteringClient);
+		AssertAmazonClient.AssertClientConfiguration(awsMarketplaceMeteringClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonTranscribeServiceClient()
+	{
+		AmazonServiceClient amazonTranscribeServiceClient = Session.CreateClientByInterface<IAmazonTranscribeService>();
+
+		Assert.NotNull(amazonTranscribeServiceClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonTranscribeServiceClient);
+	}
+
+	[Fact]
+	public void Should_Able_To_Create_AmazonMQClient()
+	{
+		AmazonServiceClient amazonMqClient = Session.CreateClientByInterface<IAmazonMQ>();
+
+		Assert.NotNull(amazonMqClient);
+		AssertAmazonClient.AssertClientConfiguration(amazonMqClient);
 	}
 }

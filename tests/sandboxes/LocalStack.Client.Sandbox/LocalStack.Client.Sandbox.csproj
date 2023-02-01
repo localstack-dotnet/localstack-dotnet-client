@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFrameworks>net461;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.8.23" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.S3" Version="3.7.102" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="SampleData.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="SampleData.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

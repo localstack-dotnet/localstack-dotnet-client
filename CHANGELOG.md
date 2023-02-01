@@ -1,5 +1,32 @@
 # LocalStack .NET Client Change Log
 
+### [v1.4.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.4.0)
+
+#### 1. New Features
+- New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.39 have been added.
+  - Fault Injection Service (FIS)
+  - Marketplace Metering
+  - Amazon Transcribe
+  - Amazon MQ
+
+#### 2. General
+- .NET 7 support added
+- .NET 5 ve .NET Core 3.1 runtimes removed from Nuget pack (.netstandard2.0 remains)
+- Tested against LocalStack v1.3.1 container.
+- AWSSDK.Core set to 3.7.103 as the minimum version.
+  - **Warning** In this version, the ServiceURL property of Amazon.Runtime.ClientConfig adds a trailing `/` to every URL set.
+For example, if `http://localhost:1234` is set as the value, it will become `http://localhost:1234/`
+- Following depedencies updated from v3.0.0 to v3.1.32 in LocalStack.Client.Extensions for security reasons
+  - Microsoft.Extensions.Configuration.Abstractions
+  - Microsoft.Extensions.Configuration.Binder
+  - Microsoft.Extensions.DependencyInjection.Abstractions
+  - Microsoft.Extensions.Logging.Abstractions
+  - Microsoft.Extensions.Options.ConfigurationExtensions
+
+#### 3. Bug Fixes
+- Write a timestream record using .Net AWSSDK NuGet packages ([#20](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/20))
+- Session does not honor UseSsl and always sets UseHttp to true ([#16](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/16))
+
 ### [v1.3.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.1)
 
 #### 1. New Features

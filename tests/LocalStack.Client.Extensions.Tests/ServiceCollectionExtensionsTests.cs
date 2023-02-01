@@ -214,11 +214,13 @@ public class ServiceCollectionExtensionsTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var configOptions = new ConfigOptions();
 
         var mockConfig = new Mock<IConfig>(MockBehavior.Strict);
         IConfig mockConfigObject = mockConfig.Object;
 
         mockConfig.Setup(config => config.GetAwsServiceEndpoint(It.Is<string>(s => s == mockServiceMetadata.ServiceId))).Returns(() => mockAwsServiceEndpoint);
+        mockConfig.Setup(config => config.GetConfigOptions()).Returns(() => configOptions);
 
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection = serviceCollection
@@ -240,7 +242,7 @@ public class ServiceCollectionExtensionsTests
 
         IClientConfig clientConfig = mockAmazonService.Config;
 
-        Assert.True(clientConfig.UseHttp);
+        Assert.Equal(configOptions.UseSsl, !clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
         Assert.Equal(RegionEndpoint.GetBySystemName(systemName), clientConfig.RegionEndpoint);
@@ -258,11 +260,13 @@ public class ServiceCollectionExtensionsTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var configOptions = new ConfigOptions();
 
         var mockConfig = new Mock<IConfig>(MockBehavior.Strict);
         IConfig mockConfigObject = mockConfig.Object;
 
         mockConfig.Setup(config => config.GetAwsServiceEndpoint(It.Is<string>(s => s == mockServiceMetadata.ServiceId))).Returns(() => mockAwsServiceEndpoint);
+        mockConfig.Setup(config => config.GetConfigOptions()).Returns(() => configOptions);
 
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection = serviceCollection
@@ -284,7 +288,7 @@ public class ServiceCollectionExtensionsTests
 
         IClientConfig clientConfig = mockAmazonService.Config;
 
-        Assert.True(clientConfig.UseHttp);
+        Assert.Equal(configOptions.UseSsl, !clientConfig.UseHttp);
         Assert.Equal(mockAwsServiceEndpoint.Host, clientConfig.ProxyHost);
         Assert.Equal(mockAwsServiceEndpoint.Port, clientConfig.ProxyPort);
 

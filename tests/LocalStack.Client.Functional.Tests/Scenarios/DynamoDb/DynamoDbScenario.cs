@@ -42,7 +42,7 @@ public class DynamoDbScenario : BaseDynamoDbScenario
         Document item = Document.FromJson(modelJson);
 
         await targetTable.PutItemAsync(item);
-        dynamoDbOperationConfig.IndexName = TestConstants.MoiveTableMovieIdGsi;
+        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
         List<MovieEntity> movieEntities = await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync();
 
         Assert.True(movieEntity.DeepEquals(movieEntities.First()));
@@ -75,7 +75,7 @@ public class DynamoDbScenario : BaseDynamoDbScenario
         }
 
 
-        dynamoDbOperationConfig.IndexName = TestConstants.MoiveTableMovieIdGsi;
+        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
         List<MovieEntity> returnedMovieEntities = await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync();
 
         Assert.NotNull(movieEntities);

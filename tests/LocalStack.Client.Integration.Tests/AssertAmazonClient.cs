@@ -3,6 +3,7 @@
 public static class AssertAmazonClient
 {
     public const string TestAwsRegion = "eu-central-1";
+    public const bool UseSsl = true;
 
     public static void AssertClientConfiguration(AmazonServiceClient amazonServiceClient)
     {
@@ -10,7 +11,8 @@ public static class AssertAmazonClient
 
         if (clientConfig.ServiceURL != null)
         {
-            Assert.Equal($"http://{Constants.LocalStackHost}:{Constants.EdgePort}/", clientConfig.ServiceURL);
+            string protocol = clientConfig.UseHttp ? "http" : "https";
+            Assert.Equal($"{protocol}://{Constants.LocalStackHost}:{Constants.EdgePort}/", clientConfig.ServiceURL);
         }
         else if(clientConfig.ServiceURL == null)
         {
@@ -22,7 +24,8 @@ public static class AssertAmazonClient
                 "Both ServiceURL and RegionEndpoint properties are null. Under normal conditions, one of these two properties must be a set. This means either something has changed in the new version of the Amazon Client library or there is a bug in the LocalStack.NET Client that we could not detect before. Please open an issue on the subject.");
         }
 
-        Assert.True(clientConfig.UseHttp);
+        // if(clientConfig.ServiceURL != null)
+        Assert.Equal(UseSsl, !clientConfig.UseHttp);
 
         PropertyInfo forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);
 

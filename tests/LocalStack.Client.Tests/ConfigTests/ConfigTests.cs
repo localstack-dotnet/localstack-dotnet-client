@@ -146,32 +146,37 @@ public class ConfigTests
         Assert.All(awsServiceEndpoints, endpoint => Assert.Equal(edgePort, endpoint.Port));
     }
 
-    [Fact]
-    public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Port_Property_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
-    {
-        var config = new Config(new ConfigOptions(useLegacyPorts: true));
-        AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
+    /* Localstack python client added new services such as Transcribe and MQ with edge port, so this test is invalid now.
+    * https://github.com/localstack/localstack-python-client/commit/f1e538ad23700e5b1afe98720404f4801475e470#diff-fc6b42b69823c1597145b6ad5c2997975b3ad1f8f837b3141e6008bb08dc0a56R117
+     */
 
-        Assert.NotNull(awsServiceEndpoint);
-        Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
+    //[Fact]
+    //public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Port_Property_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
+    //{
+    //    var config = new Config(new ConfigOptions(useLegacyPorts: true));
+    //    AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
 
-        awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
+    //    Assert.NotNull(awsServiceEndpoint);
+    //    Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
 
-        Assert.NotNull(awsServiceEndpoint);
-        Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
-    }
+    //    awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
 
-    [Fact]
-    public void GetAwsServiceEndpoints_Should_Return_List_Of_AwsServiceEndpoint_That_Port_Property_Of_Every_Item_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
-    {
-        var config = new Config(new ConfigOptions(useLegacyPorts: true));
+    //    Assert.NotNull(awsServiceEndpoint);
+    //    Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
+    //}
 
-        IList<AwsServiceEndpoint> awsServiceEndpoints = config.GetAwsServiceEndpoints().ToList();
 
-        Assert.NotNull(awsServiceEndpoints);
-        Assert.NotEmpty(awsServiceEndpoints);
-        Assert.All(awsServiceEndpoints, endpoint => Assert.NotEqual(Constants.EdgePort, endpoint.Port));
-    }
+    //[Fact]
+    //public void GetAwsServiceEndpoints_Should_Return_List_Of_AwsServiceEndpoint_That_Port_Property_Of_Every_Item_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
+    //{
+    //    var config = new Config(new ConfigOptions(useLegacyPorts: true));
+
+    //    IList<AwsServiceEndpoint> awsServiceEndpoints = config.GetAwsServiceEndpoints().ToList();
+
+    //    Assert.NotNull(awsServiceEndpoints);
+    //    Assert.NotEmpty(awsServiceEndpoints);
+    //    Assert.All(awsServiceEndpoints, endpoint => Assert.NotEqual(Constants.EdgePort, endpoint.Port));
+    //}
 
     [Fact]
     public void GetAwsServicePort_Should_Return_Integer_Port_Value_That_Equals_To_Port_Property_Of_Related_AwsServiceEndpoint_If_UseLegacyPorts_Property_Is_True()
@@ -219,8 +224,7 @@ public class ConfigTests
     }
 
     [Fact]
-    public void
-        GetAwsServicePorts_Should_Return_AwsServiceEnum_And_Integer_Port_Value_Pair_That_Port_Property_Of_The_Pair_Equals_To_Set_EdgePort_Property_Of_ConfigOptions_If_UseLegacyPorts_Property_Is_False()
+    public void GetAwsServicePorts_Should_Return_AwsServiceEnum_And_Integer_Port_Value_Pair_That_Port_Property_Of_The_Pair_Equals_To_Set_EdgePort_Property_Of_ConfigOptions_If_UseLegacyPorts_Property_Is_False()
     {
         const int edgePort = 1234;
         var config = new Config(new ConfigOptions(useLegacyPorts: false, edgePort: edgePort));
@@ -234,5 +238,23 @@ public class ConfigTests
             Assert.Equal(awsServiceEndpointMetadata.Enum, keyValuePair.Key);
             Assert.Equal(edgePort, keyValuePair.Value);
         }
+    }
+
+    [Fact]
+
+    public void GetConfigOptions_Should_Return_Given_ConfigOptions()
+    {
+        const string localStackHost = Constants.LocalStackHost;
+        const bool useSsl = true;
+        const bool useLegacyPorts = false;
+        const int edgePort = Constants.EdgePort;
+
+        var configOptions = new ConfigOptions(localStackHost, useSsl, useLegacyPorts, edgePort);
+        var config = new Config(configOptions);
+
+        Assert.Equal(configOptions.LocalStackHost, config.GetConfigOptions().LocalStackHost);
+        Assert.Equal(configOptions.UseSsl, config.GetConfigOptions().UseSsl);
+        Assert.Equal(configOptions.UseLegacyPorts, config.GetConfigOptions().UseLegacyPorts);
+        Assert.Equal(configOptions.EdgePort, config.GetConfigOptions().EdgePort);
     }
 }

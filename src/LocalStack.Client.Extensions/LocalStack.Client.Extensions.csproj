@@ -1,63 +1,63 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net5.0;net6.0</TargetFrameworks>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <AssemblyName>LocalStack.Client.Extensions</AssemblyName>
-    <RootNamespace>LocalStack.Client.Extensions</RootNamespace>
-    <LangVersion>latest</LangVersion>
-    <Version>1.1.3</Version>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
+		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+		<AssemblyName>LocalStack.Client.Extensions</AssemblyName>
+		<RootNamespace>LocalStack.Client.Extensions</RootNamespace>
+		<LangVersion>latest</LangVersion>
+		<Version>1.1.3</Version>
 
-    <Title>LocalStack.NET Client</Title>
-    <Description>
-      Extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around AWSSDK.Extensions.NETCore.Setup to use both LocalStack and AWS side-by-side
-    </Description>
-    <PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-  </PropertyGroup>
+		<Title>LocalStack.NET Client</Title>
+		<Description>
+			Extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around AWSSDK.Extensions.NETCore.Setup to use both LocalStack and AWS side-by-side
+		</Description>
+		<PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.0.0" />
-  </ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.32" />
+	</ItemGroup>
 
-  <Target Name="PreBuild" AfterTargets="PreBuildEvent">
-    <ItemGroup>
-      <LicenseFile Include="../../LICENSE" />
-    </ItemGroup>
-    <ItemGroup>
-      <ReadmeFile Include="../../README.md" />
-    </ItemGroup>
-    <Copy SourceFiles="@(LicenseFile)" DestinationFiles="@(LicenseFile->'./LICENSE.txt')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(ReadmeFile)" DestinationFiles="@(ReadmeFile->'./README.md')" SkipUnchangedFiles="true" />
-  </Target>
+	<Target Name="PreBuild" AfterTargets="PreBuildEvent">
+		<ItemGroup>
+			<LicenseFile Include="../../LICENSE" />
+		</ItemGroup>
+		<ItemGroup>
+			<ReadmeFile Include="../../README.md" />
+		</ItemGroup>
+		<Copy SourceFiles="@(LicenseFile)" DestinationFiles="@(LicenseFile->'./LICENSE.txt')" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(ReadmeFile)" DestinationFiles="@(ReadmeFile->'./README.md')" SkipUnchangedFiles="true" />
+	</Target>
 
-  <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="README.md" Pack="true" PackagePath="">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="LICENSE.txt" Pack="true" PackagePath="">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="README.md" Pack="true" PackagePath="">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LocalStack.Client\LocalStack.Client.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\LocalStack.Client\LocalStack.Client.csproj" />
+	</ItemGroup>
 
 </Project>

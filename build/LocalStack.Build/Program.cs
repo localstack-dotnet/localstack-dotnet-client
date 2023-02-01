@@ -1,4 +1,10 @@
-﻿return new CakeHost()
+﻿using Cake.Common.Tools.DotNet;
+using Cake.Common.Tools.DotNet.Build;
+using Cake.Common.Tools.DotNet.NuGet.Push;
+using Cake.Common.Tools.DotNet.Pack;
+using Cake.Common.Tools.DotNet.Test;
+
+return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 
@@ -41,11 +47,11 @@ public sealed class BuildTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        context.DotNetCoreBuild(context.SlnFilePath,
-                                new DotNetCoreBuildSettings
-                                {
-                                    Configuration = context.BuildConfiguration
-                                });
+        context.DotNetBuild(context.SlnFilePath,
+                            new DotNetBuildSettings
+                            {
+                                Configuration = context.BuildConfiguration
+                            });
     }
 }
 
@@ -56,7 +62,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
     {
         const string testResults = "results.trx";
 
-        var settings = new DotNetCoreTestSettings
+        var settings = new DotNetTestSettings
         {
             NoRestore = !context.ForceRestore,
             NoBuild = !context.ForceBuild,
@@ -115,7 +121,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 {
                     string testFilePrefix = targetFramework.Replace(".", "-");
                     settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
-                    context.DotNetCoreTest(testProjectPath, settings);
+                    context.DotNetTest(testProjectPath, settings);
                 }
                 context.Warning("==============================================================");
             }
@@ -137,16 +143,16 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 
         FilePath packageCsProj = context.PackageIdProjMap[context.PackageId];
 
-        var settings = new DotNetCorePackSettings
+        var settings = new DotNetPackSettings
         {
             Configuration = context.BuildConfiguration, 
             OutputDirectory = context.ArtifactOutput, 
-            MSBuildSettings = new DotNetCoreMSBuildSettings()
+            MSBuildSettings = new DotNetMSBuildSettings()
         };
 
         settings.MSBuildSettings.SetVersion(context.PackageVersion);
 
-        context.DotNetCorePack(packageCsProj.FullPath, settings);
+        context.DotNetPack(packageCsProj.FullPath, settings);
     }
 
     private static void ValidatePackageVersion(BuildContext context)
@@ -201,7 +207,7 @@ public sealed class NugetPushTask : FrostingTask<BuildContext>
         string packageSecret = context.PackageSecret;
         string packageSource = context.PackageSourceMap[context.PackageSource];
 
-        context.DotNetCoreNuGetPush(packageFile.Path.FullPath, new DotNetCoreNuGetPushSettings()
+        context.DotNetNuGetPush(packageFile.Path.FullPath, new DotNetNuGetPushSettings()
         {
             ApiKey = packageSecret,
             Source = packageSource,

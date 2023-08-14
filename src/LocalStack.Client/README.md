@@ -38,8 +38,8 @@ application development.
 
 ## <a name="supported-platforms"></a> Supported Platforms
 
+- [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0) 
 - [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
-- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 - [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 - [.NET 4.6.1 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 

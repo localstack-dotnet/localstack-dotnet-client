@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime;
-using System.Net.Http;
+﻿using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
@@ -7,8 +6,8 @@ public abstract class BaseDynamoDbScenario : BaseScenario
 {
     protected const string TestTableName = "Movies";
 
-    protected BaseDynamoDbScenario(TestFixture testFixture, string configFile, bool useServiceUrl = false)
-        : base(testFixture, configFile, useServiceUrl)
+    protected BaseDynamoDbScenario(TestFixture testFixture, ILocalStackFixture localStackFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false) : base(
+        testFixture, localStackFixture, configFile, useServiceUrl)
     {
         DynamoDb = ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
         DynamoDbContext = new DynamoDBContext(DynamoDb);
@@ -18,6 +17,84 @@ public abstract class BaseDynamoDbScenario : BaseScenario
 
     protected IDynamoDBContext DynamoDbContext { get; private set; }
 
+    [Fact]
+    public async Task DynamoDbService_Should_Create_A_DynamoDb_Table()
+    {
+        var tableName = Guid.NewGuid().ToString();
+        CreateTableResponse createTableResponse = await CreateTestTable(tableName);
+        Assert.Equal(HttpStatusCode.OK, createTableResponse.HttpStatusCode);
+    }
+
+    [Fact]
+    public async Task DynamoDbService_Should_Delete_A_DynamoDb_Table()
+    {
+        var tableName = Guid.NewGuid().ToString();
+        await CreateTestTable(tableName);
+
+        DeleteTableResponse deleteTableResponse = await DeleteTestTable(tableName);
+        Assert.Equal(HttpStatusCode.OK, deleteTableResponse.HttpStatusCode);
+    }
+
+    [Fact]
+    public async Task DynamoDbService_Should_Add_A_Record_To_A_DynamoDb_Table()
+    {
+        var tableName = Guid.NewGuid().ToString();
+        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
+        await CreateTestTable(tableName);
+
+        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
+
+        var movieEntity = new Fixture().Create<MovieEntity>();
+        string modelJson = JsonSerializer.Serialize(movieEntity);
+        Document item = Document.FromJson(modelJson);
+
+        await targetTable.PutItemAsync(item);
+        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
+        List<MovieEntity> movieEntities = await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync();
+
+        Assert.True(movieEntity.DeepEquals(movieEntities.First()));
+    }
+
+    [Fact]
+    public async Task DynamoDbService_Should_List_Records_In_A_DynamoDb_Table()
+    {
+        var tableName = Guid.NewGuid().ToString();
+        const int recordCount = 5;
+
+        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
+        await CreateTestTable(tableName);
+
+        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
+        IList<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
+        List<Document> documents = movieEntities.Select(entity =>
+                                                {
+                                                    string serialize = JsonSerializer.Serialize(entity);
+                                                    Document item = Document.FromJson(serialize);
+
+                                                    return item;
+                                                })
+                                                .ToList();
+
+        foreach (Document document in documents)
+        {
+            await targetTable.PutItemAsync(document);
+        }
+
+
+        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
+        List<MovieEntity> returnedMovieEntities = await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync();
+
+        Assert.NotNull(movieEntities);
+        Assert.NotEmpty(movieEntities);
+        Assert.Equal(recordCount, movieEntities.Count);
+        Assert.All(returnedMovieEntities, movieEntity =>
+        {
+            MovieEntity entity = movieEntities.First(e => e.MovieId == movieEntity.MovieId);
+
+            Assert.True(movieEntity.DeepEquals(entity));
+        });
+    }
+
     protected Task<CreateTableResponse> CreateTestTable(string tableName = null)
     {
         var postTableCreateRequest = new CreateTableRequest
@@ -25,27 +102,27 @@ public abstract class BaseDynamoDbScenario : BaseScenario
             AttributeDefinitions =
                 new List<AttributeDefinition>
                 {
-                        new AttributeDefinition {AttributeName = nameof(MovieEntity.DirectorId), AttributeType = ScalarAttributeType.S},
-                        new AttributeDefinition {AttributeName = nameof(MovieEntity.CreateDate), AttributeType = ScalarAttributeType.S},
-                        new AttributeDefinition() {AttributeName = nameof(MovieEntity.MovieId), AttributeType = ScalarAttributeType.S}
+                    new AttributeDefinition { AttributeName = nameof(MovieEntity.DirectorId), AttributeType = ScalarAttributeType.S },
+                    new AttributeDefinition { AttributeName = nameof(MovieEntity.CreateDate), AttributeType = ScalarAttributeType.S },
+                    new AttributeDefinition() { AttributeName = nameof(MovieEntity.MovieId), AttributeType = ScalarAttributeType.S }
                 },
             TableName = tableName ?? TestTableName,
             KeySchema =
                 new List<KeySchemaElement>()
                 {
-                        new KeySchemaElement() {AttributeName = nameof(MovieEntity.DirectorId), KeyType = KeyType.HASH},
-                        new KeySchemaElement() {AttributeName = nameof(MovieEntity.CreateDate), KeyType = KeyType.RANGE}
+                    new KeySchemaElement() { AttributeName = nameof(MovieEntity.DirectorId), KeyType = KeyType.HASH },
+                    new KeySchemaElement() { AttributeName = nameof(MovieEntity.CreateDate), KeyType = KeyType.RANGE }
                 },
             GlobalSecondaryIndexes = new List<GlobalSecondaryIndex>
+            {
+                new GlobalSecondaryIndex
                 {
-                    new GlobalSecondaryIndex
-                    {
-                        Projection = new Projection {ProjectionType = ProjectionType.ALL},
-                        IndexName = TestConstants.MovieTableMovieIdGsi,
-                        KeySchema = new List<KeySchemaElement> {new KeySchemaElement {AttributeName = nameof(MovieEntity.MovieId), KeyType = KeyType.HASH}},
-                        ProvisionedThroughput = new ProvisionedThroughput {ReadCapacityUnits = 5, WriteCapacityUnits = 5}
-                    }
-                },
+                    Projection = new Projection { ProjectionType = ProjectionType.ALL },
+                    IndexName = TestConstants.MovieTableMovieIdGsi,
+                    KeySchema = new List<KeySchemaElement> { new KeySchemaElement { AttributeName = nameof(MovieEntity.MovieId), KeyType = KeyType.HASH } },
+                    ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 5 }
+                }
+            },
             ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 6 },
         };
 

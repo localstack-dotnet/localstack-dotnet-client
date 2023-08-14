@@ -41,7 +41,8 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="AutoFixture" Version="4.17.0" />
-		<PackageReference Include="Testcontainers" Version="2.3.0" />
+		<PackageReference Include="Testcontainers" Version="3.3.0" />
+		<PackageReference Include="Testcontainers.LocalStack" Version="3.3.0" />
 
 		<PackageReference Include="AWSSDK.S3" Version="3.7.102" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.33" />

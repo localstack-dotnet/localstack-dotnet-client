@@ -2,11 +2,10 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 
-[Collection(nameof(LocalStackCollection))]
-public class SnsToSqsScenario : BaseScenario
+public abstract class BaseRealLife : BaseScenario
 {
-    public SnsToSqsScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false) 
-        : base(testFixture, configFile, useServiceUrl)
+    protected BaseRealLife(TestFixture testFixture, ILocalStackFixture localStackFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false) : base(
+        testFixture, localStackFixture, configFile, useServiceUrl)
     {
         AmazonSimpleNotificationService = ServiceProvider.GetRequiredService<IAmazonSimpleNotificationService>();
         AmazonSqs = ServiceProvider.GetRequiredService<IAmazonSQS>();
@@ -41,18 +40,12 @@ public class SnsToSqsScenario : BaseScenario
         string serializedObject = JsonConvert.SerializeObject(jobCreatedEvent);
         var messageAttributes = new Dictionary<string, MessageAttributeValue>
         {
-            {
-                nameof(jobCreatedEvent.EventName),
-                new MessageAttributeValue {DataType = "String", StringValue = jobCreatedEvent.EventName}
-            }
+            { nameof(jobCreatedEvent.EventName), new MessageAttributeValue { DataType = "String", StringValue = jobCreatedEvent.EventName } }
         };
 
         var publishRequest = new PublishRequest
         {
-            Message = serializedObject,
-            TopicArn = createTopicResponse.TopicArn,
-            Subject = jobCreatedEvent.EventName,
-            MessageAttributes = messageAttributes
+            Message = serializedObject, TopicArn = createTopicResponse.TopicArn, Subject = jobCreatedEvent.EventName, MessageAttributes = messageAttributes
         };
 
         PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest);

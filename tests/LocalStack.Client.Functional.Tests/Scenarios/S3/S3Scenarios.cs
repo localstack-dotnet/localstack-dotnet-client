@@ -24,11 +24,11 @@ public sealed class S3ScenarioV20 : BaseS3Scenario
 //     }
 // }
 
-[Collection(nameof(LocalStackLegacyCollection))]
-public sealed class S3LegacyScenario : BaseS3Scenario
-{
-    public S3LegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
-    {
-    }
-}
+// [Collection(nameof(LocalStackLegacyCollection))]
+// public sealed class S3LegacyScenario : BaseS3Scenario
+// {
+//     public S3LegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+//     {
+//     }
+// }

@@ -16,19 +16,19 @@ public sealed class DynamoDbScenarioV20 : BaseDynamoDbScenario
     }
 }
 
-// [Collection(nameof(LocalStackCollectionV22))]
-// public sealed class DynamoDbScenarioV22 : BaseDynamoDbScenario
-// {
-//     public DynamoDbScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
-//     {
-//     }
-// }
-
-[Collection(nameof(LocalStackLegacyCollection))]
-public sealed class DynamoDbLegacyScenario : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV22))]
+public sealed class DynamoDbScenarioV22 : BaseDynamoDbScenario
 {
-    public DynamoDbLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    public DynamoDbScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
     {
     }
 }
+
+// [Collection(nameof(LocalStackLegacyCollection))]
+// public sealed class DynamoDbLegacyScenario : BaseDynamoDbScenario
+// {
+//     public DynamoDbLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+//     {
+//     }
+// }

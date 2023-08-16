@@ -16,24 +16,24 @@ public sealed class SnsScenarioV20 : BaseSnsScenario
     }
 }
 
-// [Collection(nameof(LocalStackCollectionV22))]
-// public sealed class SnsScenarioV22 : BaseSnsScenario
-// {
-//     public SnsScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
-//     {
-//     }
-// }
-
-[Collection(nameof(LocalStackLegacyCollection))]
-public sealed class SnsLegacyScenario : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionV22))]
+public sealed class SnsScenarioV22 : BaseSnsScenario
 {
-    public SnsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    public SnsScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
     {
-    }
-
-    public override Task Multi_Region_Tests(string systemName)
-    {
-        return Task.CompletedTask;
     }
 }
+//
+// [Collection(nameof(LocalStackLegacyCollection))]
+// public sealed class SnsLegacyScenario : BaseSnsScenario
+// {
+//     public SnsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+//     {
+//     }
+//
+//     public override Task Multi_Region_Tests(string systemName)
+//     {
+//         return Task.CompletedTask;
+//     }
+// }

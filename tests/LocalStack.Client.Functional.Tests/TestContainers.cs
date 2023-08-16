@@ -20,6 +20,7 @@ internal static class TestContainers
                                       .WithName($"localStack-{version}-{Guid.NewGuid().ToString().ToLower()}")
                                       .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                       .WithEnvironment("DEBUG", "1")
+                                      .WithEnvironment("LS_LOG", "trace-internal")
                                       .WithPortBinding(4566, true)
                                       .WithCleanUp(true);
     }

@@ -46,7 +46,7 @@
 
 		<PackageReference Include="AWSSDK.S3" Version="3.7.102" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.33" />
-		<PackageReference Include="AWSSDK.SQS" Version="3.7.100.62" />
+		<PackageReference Include="AWSSDK.SQS" Version="3.7.200.18" />
 		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.63" />
 	</ItemGroup>
 

@@ -22,7 +22,7 @@ public abstract class BaseSqsScenario : BaseScenario
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateQueue(queueName, dlQueueName);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedrive(queueName, dlQueueName);
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
     }
@@ -34,7 +34,7 @@ public abstract class BaseSqsScenario : BaseScenario
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateQueue(queueName, dlQueueName);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedrive(queueName, dlQueueName);
         DeleteQueueResponse deleteQueueResponse = await DeleteQueue(createQueueResponse.QueueUrl);
 
         Assert.Equal(HttpStatusCode.OK, deleteQueueResponse.HttpStatusCode);
@@ -47,7 +47,7 @@ public abstract class BaseSqsScenario : BaseScenario
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateQueue(queueName, dlQueueName);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedrive(queueName, dlQueueName);
 
         var commentModel = new Fixture().Create<CommentModel>();
         string serializedModel = JsonSerializer.Serialize(commentModel);
@@ -72,7 +72,7 @@ public abstract class BaseSqsScenario : BaseScenario
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateQueue(queueName, dlQueueName);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedrive(queueName, dlQueueName);
 
         var commentModel = new Fixture().Create<CommentModel>();
         string serializedModel = JsonSerializer.Serialize(commentModel);
@@ -99,10 +99,9 @@ public abstract class BaseSqsScenario : BaseScenario
         Assert.True(commentModel.DeepEquals(deserializedComment));
     }
 
-    protected async Task<CreateQueueResponse> CreateQueue(string queueName = null, string dlQueueName = null)
+    protected async Task<CreateQueueResponse> CreateFifoQueueWithRedrive(string queueName = null, string dlQueueName = null)
     {
-        var createDlqRequest =
-            new CreateQueueRequest { QueueName = dlQueueName ?? TestDlQueueName, Attributes = new Dictionary<string, string> { { "FifoQueue", "true" }, } };
+        var createDlqRequest = new CreateQueueRequest { QueueName = dlQueueName ?? TestDlQueueName, Attributes = new Dictionary<string, string> { { "FifoQueue", "true" }, } };
 
         CreateQueueResponse createDlqResult = await AmazonSqs.CreateQueueAsync(createDlqRequest);
 
@@ -122,11 +121,18 @@ public abstract class BaseSqsScenario : BaseScenario
 
         return await AmazonSqs.CreateQueueAsync(createQueueRequest);
     }
+    
+    protected async Task<CreateQueueResponse> CreateQueue(string queueName = null)
+    {
+        var createQueueRequest = new CreateQueueRequest(queueName ?? TestQueueName);
 
-    protected Task<DeleteQueueResponse> DeleteQueue(string queueUrl)
+        return await AmazonSqs.CreateQueueAsync(createQueueRequest);
+    }
+
+    protected async Task<DeleteQueueResponse> DeleteQueue(string queueUrl)
     {
         var deleteQueueRequest = new DeleteQueueRequest(queueUrl);
 
-        return AmazonSqs.DeleteQueueAsync(deleteQueueRequest);
+        return await AmazonSqs.DeleteQueueAsync(deleteQueueRequest);
     }
 }

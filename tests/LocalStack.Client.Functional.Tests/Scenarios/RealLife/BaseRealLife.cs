@@ -31,8 +31,16 @@ public abstract class BaseRealLife : BaseScenario
         CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
+        
+        const string queueArnAttribute = "QueueArn";
+        var getQueueAttributesRequest = new GetQueueAttributesRequest(createQueueResponse.QueueUrl, new List<string> { queueArnAttribute });
+        GetQueueAttributesResponse getQueueAttributesResponse = await AmazonSqs.GetQueueAttributesAsync(getQueueAttributesRequest);
+        
+        Assert.Equal(HttpStatusCode.OK, getQueueAttributesResponse.HttpStatusCode);
+        
+        string queueArn = getQueueAttributesResponse.Attributes[queueArnAttribute];
 
-        var subscribeRequest = new SubscribeRequest(createTopicResponse.TopicArn, "sqs", createQueueResponse.QueueUrl);
+        var subscribeRequest = new SubscribeRequest(createTopicResponse.TopicArn, "sqs", queueArn);
         SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest);
 
         Assert.Equal(HttpStatusCode.OK, subscribeResponse.HttpStatusCode);

@@ -16,19 +16,19 @@ public sealed class SqsScenarioV20 : BaseSqsScenario
     }
 }
 
-// [Collection(nameof(LocalStackCollectionV22))]
-// public sealed class SqsScenarioV22 : BaseSqsScenario
-// {
-//     public SqsScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
-//     {
-//     }
-// }
-
-[Collection(nameof(LocalStackLegacyCollection))]
-public sealed class SqsLegacyScenario : BaseSqsScenario
+[Collection(nameof(LocalStackCollectionV22))]
+public sealed class SqsScenarioV22 : BaseSqsScenario
 {
-    public SqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    public SqsScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
     {
     }
 }
+
+// [Collection(nameof(LocalStackLegacyCollection))]
+// public sealed class SqsLegacyScenario : BaseSqsScenario
+// {
+//     public SqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+//     {
+//     }
+// }

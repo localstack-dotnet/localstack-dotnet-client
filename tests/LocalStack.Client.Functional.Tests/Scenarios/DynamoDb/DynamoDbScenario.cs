@@ -24,11 +24,11 @@ public sealed class DynamoDbScenarioV22 : BaseDynamoDbScenario
     }
 }
 
-// [Collection(nameof(LocalStackLegacyCollection))]
-// public sealed class DynamoDbLegacyScenario : BaseDynamoDbScenario
-// {
-//     public DynamoDbLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
-//     {
-//     }
-// }
+[Collection(nameof(LocalStackLegacyCollection))]
+public sealed class DynamoDbLegacyScenario : BaseDynamoDbScenario
+{
+    public DynamoDbLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    {
+    }
+}

@@ -24,11 +24,11 @@ public sealed class SqsScenarioV22 : BaseSqsScenario
     }
 }
 
-// [Collection(nameof(LocalStackLegacyCollection))]
-// public sealed class SqsLegacyScenario : BaseSqsScenario
-// {
-//     public SqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
-//     {
-//     }
-// }
+[Collection(nameof(LocalStackLegacyCollection))]
+public sealed class SqsLegacyScenario : BaseSqsScenario
+{
+    public SqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    {
+    }
+}

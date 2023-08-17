@@ -23,17 +23,17 @@ public sealed class SnsScenarioV22 : BaseSnsScenario
     {
     }
 }
-//
-// [Collection(nameof(LocalStackLegacyCollection))]
-// public sealed class SnsLegacyScenario : BaseSnsScenario
-// {
-//     public SnsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-//         testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
-//     {
-//     }
-//
-//     public override Task Multi_Region_Tests(string systemName)
-//     {
-//         return Task.CompletedTask;
-//     }
-// }
+
+[Collection(nameof(LocalStackLegacyCollection))]
+public sealed class SnsLegacyScenario : BaseSnsScenario
+{
+    public SnsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    {
+    }
+
+    public override Task Multi_Region_Tests(string systemName)
+    {
+        return Task.CompletedTask;
+    }
+}

@@ -25,7 +25,7 @@ public abstract class BaseS3Scenario : BaseScenario
 
     [Fact]
     public async Task S3Service_Should_Delete_A_Bucket()
-    {
+    { 
         var bucketName = Guid.NewGuid().ToString();
         PutBucketResponse putBucketResponse = await CreateTestBucket(bucketName);
 

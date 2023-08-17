@@ -24,16 +24,16 @@ public sealed class SnsToSqsScenarioV22 : BaseRealLife
     }
 }
 
-// [Collection(nameof(LocalStackLegacyCollection))]
-// public sealed class SnsToSqsLegacyScenario : BaseRealLife
-// {
-//     public SnsToSqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackFixtureV22) : base(
-//         testFixture, localStackFixtureV22, TestConstants.LegacyLocalStackConfig, true)
-//     {
-//     }
-//
-//     public override Task Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue()
-//     {
-//         return Task.CompletedTask;
-//     }
-// }
+[Collection(nameof(LocalStackLegacyCollection))]
+public sealed class SnsToSqsLegacyScenario : BaseRealLife
+{
+    public SnsToSqsLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackFixtureV22) : base(
+        testFixture, localStackFixtureV22, TestConstants.LegacyLocalStackConfig, true)
+    {
+    }
+
+    public override Task Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue()
+    {
+        return Task.CompletedTask;
+    }
+}

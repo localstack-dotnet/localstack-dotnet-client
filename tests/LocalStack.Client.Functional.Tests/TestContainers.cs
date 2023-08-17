@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests;
+﻿using DotNet.Testcontainers.Builders;
+
+namespace LocalStack.Client.Functional.Tests;
 
 internal static class TestContainers
 {
@@ -12,6 +14,7 @@ internal static class TestContainers
                                                                                               .WithPortBinding(AwsServiceEndpointMetadata.Sqs.Port, AwsServiceEndpointMetadata.Sqs.Port)
                                                                                               .WithPortBinding(AwsServiceEndpointMetadata.S3.Port, AwsServiceEndpointMetadata.S3.Port)
                                                                                               .WithPortBinding(AwsServiceEndpointMetadata.Sns.Port, AwsServiceEndpointMetadata.Sns.Port)
+                                                                                              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(AwsServiceEndpointMetadata.DynamoDb.Port))
                                                                                               .WithCleanUp(true);
 
     public static LocalStackBuilder LocalStackBuilder(string version)

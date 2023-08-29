@@ -21,3 +21,9 @@ global using System.IO;
 global using System.Linq;
 global using System.Text;
 global using System.Text.RegularExpressions;
+
+global using Cake.Common.Tools.DotNet;
+global using Cake.Common.Tools.DotNet.Build;
+global using Cake.Common.Tools.DotNet.NuGet.Push;
+global using Cake.Common.Tools.DotNet.Pack;
+global using Cake.Common.Tools.DotNet.Test;

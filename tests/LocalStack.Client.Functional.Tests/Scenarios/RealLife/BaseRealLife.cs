@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
+﻿using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 

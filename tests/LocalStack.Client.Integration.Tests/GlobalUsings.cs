@@ -102,6 +102,7 @@ global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
 
 global using System;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Reflection;
 
 global using Amazon.QLDBSession;

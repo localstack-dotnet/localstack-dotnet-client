@@ -1,15 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.S3.Transfer;
-
-using LocalStack.Client;
-using LocalStack.Client.Contracts;
-using LocalStack.Client.Options;
-
-/*
+﻿/*
  * ==== Default Values ====
  * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
  * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
@@ -18,6 +7,7 @@ using LocalStack.Client.Options;
  * ==== Custom Values ====
  * var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
  */
+
 var sessionOptions = new SessionOptions();
 
 /*
@@ -31,9 +21,7 @@ var sessionOptions = new SessionOptions();
  */
 var configOptions = new ConfigOptions();
 
-ISession session = SessionStandalone.Init()
-                                    .WithSessionOptions(sessionOptions)
-                                    .WithConfigurationOptions(configOptions).Create();
+ISession session = SessionStandalone.Init().WithSessionOptions(sessionOptions).WithConfigurationOptions(configOptions).Create();
 
 var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
 

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-
-namespace LocalStack.Client.Tests.ConfigTests;
+﻿namespace LocalStack.Client.Tests.ConfigTests;
 
 public class ConfigurationTests
 {

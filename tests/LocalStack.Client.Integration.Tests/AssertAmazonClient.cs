@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace LocalStack.Client.Integration.Tests;
+﻿namespace LocalStack.Client.Integration.Tests;
 
 public static class AssertAmazonClient
 {

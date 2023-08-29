@@ -1,10 +1,4 @@
-﻿using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNet.NuGet.Push;
-using Cake.Common.Tools.DotNet.Pack;
-using Cake.Common.Tools.DotNet.Test;
-
-return new CakeHost()
+﻿return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 

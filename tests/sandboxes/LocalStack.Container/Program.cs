@@ -1,10 +1,4 @@
-﻿using System;
-
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
-
-
-Console.WriteLine("Press any key to start LocalStack container");
+﻿Console.WriteLine("Press any key to start LocalStack container");
 Console.ReadLine();
 
 ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new TestcontainersBuilder<TestcontainersContainer>()

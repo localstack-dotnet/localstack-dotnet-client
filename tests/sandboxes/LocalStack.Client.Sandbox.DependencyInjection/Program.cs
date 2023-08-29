@@ -1,21 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-
-using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.S3.Transfer;
-
-using LocalStack.Client;
-using LocalStack.Client.Contracts;
-using LocalStack.Client.Utils;
-using LocalStack.Client.Options;
-
-var collection = new ServiceCollection();
+﻿var collection = new ServiceCollection();
 var builder = new ConfigurationBuilder();
 
 builder.SetBasePath(Directory.GetCurrentDirectory());
@@ -28,11 +11,11 @@ IConfiguration configuration = builder.Build();
 
 collection.Configure<LocalStackOptions>(options => configuration.GetSection("LocalStack").Bind(options, c => c.BindNonPublicProperties = true));
 /*
-* ==== Default Values ====
-* AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
-* AwsAccessKey: secretKey (It doesn't matter to LocalStack)
-* AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
+ * ==== Default Values ====
+ * AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
+ * AwsAccessKey: secretKey (It doesn't matter to LocalStack)
+ * AwsSessionToken: token (It doesn't matter to LocalStack)
+ * RegionName: us-east-1
  */
 collection.Configure<SessionOptions>(options => configuration.GetSection("LocalStack")
                                                              .GetSection(nameof(LocalStackOptions.Session))

@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace LocalStack.Client.Extensions.Tests;
+﻿namespace LocalStack.Client.Extensions.Tests;
 
 public class ServiceCollectionExtensionsTests
 {

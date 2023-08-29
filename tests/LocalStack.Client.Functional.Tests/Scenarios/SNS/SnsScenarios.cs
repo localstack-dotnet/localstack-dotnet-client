@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.SNS;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.SNS;
 
 [Collection(nameof(LocalStackCollectionV131))]
 public sealed class SnsScenarioV131 : BaseSnsScenario
@@ -32,7 +34,7 @@ public sealed class SnsLegacyScenario : BaseSnsScenario
     {
     }
 
-    public override Task Multi_Region_Tests(string systemName)
+    public override Task Multi_Region_Tests_Async(string systemName)
     {
         return Task.CompletedTask;
     }

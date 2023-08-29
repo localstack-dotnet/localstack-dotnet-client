@@ -4,6 +4,9 @@ public abstract class BaseScenario
 {
     protected BaseScenario(TestFixture testFixture, ILocalStackFixture localStackFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
     {
+        ArgumentNullException.ThrowIfNull(testFixture);
+        ArgumentNullException.ThrowIfNull(localStackFixture);
+
         ushort mappedPublicPort = localStackFixture.LocalStackContainer.GetMappedPublicPort(4566);
         ConfigurationBuilder configurationBuilder = testFixture.CreateConfigureAppConfiguration(configFile, mappedPublicPort);
         Configuration = configurationBuilder.Build();

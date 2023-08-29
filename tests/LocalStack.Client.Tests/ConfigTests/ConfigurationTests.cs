@@ -1,6 +1,9 @@
-﻿namespace LocalStack.Client.Tests.ConfigTests;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
-public class ConfigTests
+namespace LocalStack.Client.Tests.ConfigTests;
+
+public class ConfigurationTests
 {
     [Fact]
     public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Host_Property_Equals_Set_LocalStackHost_Property_Of_ConfigOptions()
@@ -8,7 +11,7 @@ public class ConfigTests
         const string localStackHost = "myLocalHost";
 
         var config = new Config(new ConfigOptions(localStackHost));
-        AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
+        AwsServiceEndpoint? awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsService.ApiGateway);
 
         Assert.NotNull(awsServiceEndpoint);
         Assert.Equal(localStackHost, awsServiceEndpoint.Host);
@@ -32,24 +35,25 @@ public class ConfigTests
         Assert.All(awsServiceEndpoints, endpoint => Assert.Equal(localStackHost, endpoint.Host));
     }
 
-    [Theory, InlineData(true, "https:"), InlineData(false, "http:")]
-    public void
-        GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Protocol_Property_Equals_To_Https_Or_Http_If_Set_UseSsl_Property_Of_ConfigOptions_Equals_True_Or_False(
+    [Theory, InlineData(true, "https"), InlineData(false, "http")]
+    public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Protocol_Property_Equals_To_Https_Or_Http_If_Set_UseSsl_Property_Of_ConfigOptions_Equals_True_Or_False(
             bool useSsl, string expectedProtocol)
     {
         var config = new Config(new ConfigOptions(useSsl: useSsl));
-        AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
+        AwsServiceEndpoint? awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsService.ApiGateway);
 
         Assert.NotNull(awsServiceEndpoint);
-        Assert.StartsWith(expectedProtocol, awsServiceEndpoint.ServiceUrl);
+        Assert.NotNull(awsServiceEndpoint.ServiceUrl.Scheme);
+        Assert.Equal(expectedProtocol, awsServiceEndpoint.ServiceUrl.Scheme);
 
         awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
 
         Assert.NotNull(awsServiceEndpoint);
-        Assert.StartsWith(expectedProtocol, awsServiceEndpoint.ServiceUrl);
+        Assert.NotNull(awsServiceEndpoint.ServiceUrl.Scheme);
+        Assert.StartsWith(expectedProtocol, awsServiceEndpoint.ServiceUrl.Scheme, StringComparison.Ordinal);
     }
 
-    [Theory, InlineData(true, "https:"), InlineData(false, "http:")]
+    [Theory, InlineData(true, "https"), InlineData(false, "http")]
     public void
         GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Protocol_Property_Of_Every_Item_Equals_To_Https_Or_Http_If_Set_UseSsl_Property_Of_ConfigOptions_Equals_True_Or_False(
             bool useSsl, string expectedProtocol)
@@ -59,7 +63,7 @@ public class ConfigTests
 
         Assert.NotNull(awsServiceEndpoints);
         Assert.NotEmpty(awsServiceEndpoints);
-        Assert.All(awsServiceEndpoints, endpoint => Assert.StartsWith(expectedProtocol, endpoint.ServiceUrl));
+        Assert.All(awsServiceEndpoints, endpoint => Assert.Equal(expectedProtocol, endpoint.ServiceUrl.Scheme));
     }
 
     [Fact]
@@ -68,7 +72,7 @@ public class ConfigTests
         const int edgePort = 1234;
 
         var config = new Config(new ConfigOptions(useLegacyPorts: false, edgePort: edgePort));
-        AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
+        AwsServiceEndpoint? awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsService.ApiGateway);
 
         Assert.NotNull(awsServiceEndpoint);
         Assert.Equal(edgePort, awsServiceEndpoint.Port);
@@ -87,24 +91,29 @@ public class ConfigTests
      InlineData(true, false, "myHost", 2222, "http://myHost"),
      InlineData(true, true, "myHost2", 3334, "https://myHost2"),
      InlineData(false, false, "myHost3", 4432, "http://myHost3:4432"),
-     InlineData(false, true, "myHost4", 2124, "https://myHost4:2124")]
+     InlineData(false, true, "myHost4", 2124, "https://myHost4:2124"),
+    SuppressMessage("Test", "CA1054: URI parameters should not be strings", Justification = "Test case parameter.")]
     public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_ServiceUrl_Property_Equals_To_Combination_Of_Host_Protocol_And_Port(bool useLegacyPorts, bool useSsl, string localStackHost, int edgePort, string expectedServiceUrl)
     {
         var config = new Config(new ConfigOptions(localStackHost, useLegacyPorts: useLegacyPorts, edgePort: edgePort, useSsl: useSsl));
-        AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGatewayV2);
-
-        if (useLegacyPorts)
-        {
-            expectedServiceUrl = $"{expectedServiceUrl}:{awsServiceEndpoint.Port}";
-        }
+        AwsServiceEndpoint? awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsService.ApiGatewayV2);
 
         Assert.NotNull(awsServiceEndpoint);
-        Assert.Equal(expectedServiceUrl, awsServiceEndpoint.ServiceUrl);
+        
+        if (useLegacyPorts)
+        {
+            expectedServiceUrl = $"{expectedServiceUrl}:{awsServiceEndpoint.Port.ToString(CultureInfo.InvariantCulture)}";
+        }
+
+        Uri serviceUrl = awsServiceEndpoint.ServiceUrl;
+        var expectedUrl = new Uri(expectedServiceUrl);
+
+        Assert.Equal(expectedUrl, serviceUrl);
 
         awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
 
         Assert.NotNull(awsServiceEndpoint);
-        Assert.Equal(expectedServiceUrl, awsServiceEndpoint.ServiceUrl);
+        Assert.Equal(expectedUrl, serviceUrl);
     }
 
     [Theory,
@@ -115,7 +124,8 @@ public class ConfigTests
      InlineData(true, false, "myHost", 2222, "http://myHost"),
      InlineData(true, true, "myHost2", 3334, "https://myHost2"),
      InlineData(false, false, "myHost3", 4432, "http://myHost3:4432"),
-     InlineData(false, true, "myHost4", 2124, "https://myHost4:2124")]
+     InlineData(false, true, "myHost4", 2124, "https://myHost4:2124"),
+    SuppressMessage("Test", "CA1054: URI parameters should not be strings", Justification = "Test case parameter.")]
     public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_ServiceUrl_Property_Property_Of_Every_Item_Equals_To_Combination_Of_Host_Protocol_And_Port(bool useLegacyPorts, bool useSsl, string localStackHost, int edgePort, string expectedServiceUrl)
     {
         var config = new Config(new ConfigOptions(localStackHost, useLegacyPorts: useLegacyPorts, edgePort: edgePort, useSsl: useSsl));
@@ -126,9 +136,10 @@ public class ConfigTests
         Assert.NotEmpty(awsServiceEndpoints);
         Assert.All(awsServiceEndpoints, endpoint =>
         {
-            string serviceUrl = useLegacyPorts ? $"{expectedServiceUrl}:{endpoint.Port}" : expectedServiceUrl;
-
-            Assert.Equal(serviceUrl, endpoint.ServiceUrl);
+            string serviceUrl = useLegacyPorts ? $"{expectedServiceUrl}:{endpoint.Port.ToString(CultureInfo.InvariantCulture)}" : expectedServiceUrl;
+            var expectedUrl = new Uri(serviceUrl);
+            
+            Assert.Equal(expectedUrl, endpoint.ServiceUrl);
         });
     }
 
@@ -145,38 +156,6 @@ public class ConfigTests
         Assert.NotEmpty(awsServiceEndpoints);
         Assert.All(awsServiceEndpoints, endpoint => Assert.Equal(edgePort, endpoint.Port));
     }
-
-    /* Localstack python client added new services such as Transcribe and MQ with edge port, so this test is invalid now.
-    * https://github.com/localstack/localstack-python-client/commit/f1e538ad23700e5b1afe98720404f4801475e470#diff-fc6b42b69823c1597145b6ad5c2997975b3ad1f8f837b3141e6008bb08dc0a56R117
-     */
-
-    //[Fact]
-    //public void GetAwsServiceEndpoint_Should_Return_AwsServiceEndpoint_That_Port_Property_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
-    //{
-    //    var config = new Config(new ConfigOptions(useLegacyPorts: true));
-    //    AwsServiceEndpoint awsServiceEndpoint = config.GetAwsServiceEndpoint(AwsServiceEnum.ApiGateway);
-
-    //    Assert.NotNull(awsServiceEndpoint);
-    //    Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
-
-    //    awsServiceEndpoint = config.GetAwsServiceEndpoint("ApiGatewayV2");
-
-    //    Assert.NotNull(awsServiceEndpoint);
-    //    Assert.NotEqual(Constants.EdgePort, awsServiceEndpoint.Port);
-    //}
-
-
-    //[Fact]
-    //public void GetAwsServiceEndpoints_Should_Return_List_Of_AwsServiceEndpoint_That_Port_Property_Of_Every_Item_Not_Equals_To_Default_Edge_Port_If_UseLegacyPorts_Property_Is_True()
-    //{
-    //    var config = new Config(new ConfigOptions(useLegacyPorts: true));
-
-    //    IList<AwsServiceEndpoint> awsServiceEndpoints = config.GetAwsServiceEndpoints().ToList();
-
-    //    Assert.NotNull(awsServiceEndpoints);
-    //    Assert.NotEmpty(awsServiceEndpoints);
-    //    Assert.All(awsServiceEndpoints, endpoint => Assert.NotEqual(Constants.EdgePort, endpoint.Port));
-    //}
 
     [Fact]
     public void GetAwsServicePort_Should_Return_Integer_Port_Value_That_Equals_To_Port_Property_Of_Related_AwsServiceEndpoint_If_UseLegacyPorts_Property_Is_True()
@@ -212,11 +191,11 @@ public class ConfigTests
     {
         var config = new Config(new ConfigOptions(useLegacyPorts: true));
 
-        IDictionary<AwsServiceEnum, int> awsServicePorts = config.GetAwsServicePorts();
+        IDictionary<AwsService, int> awsServicePorts = config.GetAwsServicePorts();
 
         foreach (AwsServiceEndpointMetadata awsServiceEndpointMetadata in AwsServiceEndpointMetadata.All)
         {
-            KeyValuePair<AwsServiceEnum, int> keyValuePair = awsServicePorts.First(pair => pair.Key == awsServiceEndpointMetadata.Enum);
+            KeyValuePair<AwsService, int> keyValuePair = awsServicePorts.First(pair => pair.Key == awsServiceEndpointMetadata.Enum);
 
             Assert.Equal(awsServiceEndpointMetadata.Enum, keyValuePair.Key);
             Assert.Equal(awsServiceEndpointMetadata.Port, keyValuePair.Value);
@@ -229,11 +208,11 @@ public class ConfigTests
         const int edgePort = 1234;
         var config = new Config(new ConfigOptions(useLegacyPorts: false, edgePort: edgePort));
 
-        IDictionary<AwsServiceEnum, int> awsServicePorts = config.GetAwsServicePorts();
+        IDictionary<AwsService, int> awsServicePorts = config.GetAwsServicePorts();
 
         foreach (AwsServiceEndpointMetadata awsServiceEndpointMetadata in AwsServiceEndpointMetadata.All)
         {
-            KeyValuePair<AwsServiceEnum, int> keyValuePair = awsServicePorts.First(pair => pair.Key == awsServiceEndpointMetadata.Enum);
+            KeyValuePair<AwsService, int> keyValuePair = awsServicePorts.First(pair => pair.Key == awsServiceEndpointMetadata.Enum);
 
             Assert.Equal(awsServiceEndpointMetadata.Enum, keyValuePair.Key);
             Assert.Equal(edgePort, keyValuePair.Value);

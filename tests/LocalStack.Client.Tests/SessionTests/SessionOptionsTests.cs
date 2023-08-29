@@ -16,7 +16,7 @@ public class SessionOptionsTests
     [Fact]
     public void SessionOptions_Should_Created_With_Default_Parameters_If_It_Created_By_Parameterized_Constructor_And_Non_Of_The_Parameters_Has_Set()
     {
-        ConstructorInfo constructor = typeof(SessionOptions).GetConstructor(new[] { typeof(string), typeof(string), typeof(string), typeof(string) });
+        ConstructorInfo? constructor = typeof(SessionOptions).GetConstructor(new[] { typeof(string), typeof(string), typeof(string), typeof(string) });
 
         Assert.NotNull(constructor);
 

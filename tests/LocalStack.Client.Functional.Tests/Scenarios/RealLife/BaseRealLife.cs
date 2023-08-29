@@ -1,11 +1,13 @@
-﻿using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 
 public abstract class BaseRealLife : BaseScenario
 {
-    protected BaseRealLife(TestFixture testFixture, ILocalStackFixture localStackFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false) : base(
-        testFixture, localStackFixture, configFile, useServiceUrl)
+    protected BaseRealLife(TestFixture testFixture, ILocalStackFixture localStackFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
+        : base(testFixture, localStackFixture, configFile, useServiceUrl)
     {
         AmazonSimpleNotificationService = ServiceProvider.GetRequiredService<IAmazonSimpleNotificationService>();
         AmazonSqs = ServiceProvider.GetRequiredService<IAmazonSQS>();
@@ -15,40 +17,41 @@ public abstract class BaseRealLife : BaseScenario
 
     protected IAmazonSQS AmazonSqs { get; set; }
 
-    [Fact]
-    public virtual async Task Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue()
+    [Fact, SuppressMessage("Test", "MA0051:Method is too long", Justification = "Test method")]
+    public virtual async Task
+        Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue_Async()
     {
         var topicName = Guid.NewGuid().ToString();
         var queueName = Guid.NewGuid().ToString();
         var jobCreatedEvent = new JobCreatedEvent(423565221, 191, 125522, "Painting Service");
 
         var createTopicRequest = new CreateTopicRequest(topicName);
-        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest);
+        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
         var createQueueRequest = new CreateQueueRequest(queueName);
-        CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
+        CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
-        
+
         const string queueArnAttribute = "QueueArn";
         var getQueueAttributesRequest = new GetQueueAttributesRequest(createQueueResponse.QueueUrl, new List<string> { queueArnAttribute });
-        GetQueueAttributesResponse getQueueAttributesResponse = await AmazonSqs.GetQueueAttributesAsync(getQueueAttributesRequest);
-        
+        GetQueueAttributesResponse getQueueAttributesResponse = await AmazonSqs.GetQueueAttributesAsync(getQueueAttributesRequest).ConfigureAwait(false);
+
         Assert.Equal(HttpStatusCode.OK, getQueueAttributesResponse.HttpStatusCode);
-        
+
         string queueArn = getQueueAttributesResponse.Attributes[queueArnAttribute];
 
         var subscribeRequest = new SubscribeRequest(createTopicResponse.TopicArn, "sqs", queueArn);
-        SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest);
+        SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, subscribeResponse.HttpStatusCode);
 
         string serializedObject = JsonConvert.SerializeObject(jobCreatedEvent);
-        var messageAttributes = new Dictionary<string, MessageAttributeValue>
+        var messageAttributes = new Dictionary<string, MessageAttributeValue>(StringComparer.Ordinal)
         {
-            { nameof(jobCreatedEvent.EventName), new MessageAttributeValue { DataType = "String", StringValue = jobCreatedEvent.EventName } }
+            { nameof(jobCreatedEvent.EventName), new MessageAttributeValue { DataType = "String", StringValue = jobCreatedEvent.EventName } },
         };
 
         var publishRequest = new PublishRequest
@@ -56,19 +59,19 @@ public abstract class BaseRealLife : BaseScenario
             Message = serializedObject, TopicArn = createTopicResponse.TopicArn, Subject = jobCreatedEvent.EventName, MessageAttributes = messageAttributes
         };
 
-        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest);
+        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, publishResponse.HttpStatusCode);
 
         var receiveMessageRequest = new ReceiveMessageRequest(createQueueResponse.QueueUrl);
-        ReceiveMessageResponse receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
+        ReceiveMessageResponse receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
 
         if (receiveMessageResponse.Messages.Count == 0)
         {
-            await Task.Delay(2000);
-            receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
+            await Task.Delay(2000).ConfigureAwait(false);
+            receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest).ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
         }
@@ -77,9 +80,10 @@ public abstract class BaseRealLife : BaseScenario
         Assert.NotEmpty(receiveMessageResponse.Messages);
         Assert.Single(receiveMessageResponse.Messages);
 
-        dynamic deserializedMessage = JsonConvert.DeserializeObject<ExpandoObject>(receiveMessageResponse.Messages[0].Body, new ExpandoObjectConverter());
+        dynamic? deserializedMessage = JsonConvert.DeserializeObject<ExpandoObject>(receiveMessageResponse.Messages[0].Body, new ExpandoObjectConverter());
 
         Assert.NotNull(deserializedMessage);
+        Assert.NotNull(deserializedMessage!.MessageId);
         Assert.Equal(publishResponse.MessageId, (string)deserializedMessage.MessageId);
 
         JobCreatedEvent sqsJobCreatedEvent = JsonConvert.DeserializeObject<JobCreatedEvent>(deserializedMessage.Message);

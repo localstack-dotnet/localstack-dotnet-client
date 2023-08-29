@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 
 [Collection(nameof(LocalStackCollectionV131))]
 public sealed class SnsToSqsScenarioV131 : BaseRealLife
@@ -32,7 +34,7 @@ public sealed class SnsToSqsLegacyScenario : BaseRealLife
     {
     }
 
-    public override Task Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue()
+    public override Task Should_Create_A_SNS_Topic_And_SQS_Queue_Then_Subscribe_To_The_Topic_Using_SQS_Then_Publish_A_Message_To_Topic_And_Read_It_From_The_Queue_Async()
     {
         return Task.CompletedTask;
     }

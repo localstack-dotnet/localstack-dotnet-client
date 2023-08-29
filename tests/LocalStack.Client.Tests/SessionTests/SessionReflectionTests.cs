@@ -68,7 +68,7 @@ public class SessionReflectionTests
     public void SetClientRegion_Should_Set_RegionEndpoint_Of_The_Given_Client_By_System_Name(string systemName)
     {
         var sessionReflection = new SessionReflection();
-        var mockAmazonServiceClient = new MockAmazonServiceClient();
+        using var mockAmazonServiceClient = new MockAmazonServiceClient();
 
         Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
 

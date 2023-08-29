@@ -4,6 +4,7 @@
 		<TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
 		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<LangVersion>latest</LangVersion>
+		<NoWarn>$(NoWarn);CA1707;MA0006</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>

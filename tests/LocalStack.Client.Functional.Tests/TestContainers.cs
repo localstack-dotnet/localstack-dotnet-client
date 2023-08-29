@@ -1,4 +1,6 @@
-﻿using DotNet.Testcontainers.Builders;
+﻿#pragma warning disable CA1304,CA1311,MA0011
+
+using DotNet.Testcontainers.Builders;
 
 namespace LocalStack.Client.Functional.Tests;
 

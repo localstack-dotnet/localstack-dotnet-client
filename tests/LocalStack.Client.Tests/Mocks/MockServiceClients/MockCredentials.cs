@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-internal class MockCredentials : BasicAWSCredentials
+internal sealed class MockCredentials : BasicAWSCredentials
 {
     public MockCredentials()
         : base("testkey", "testsecret")

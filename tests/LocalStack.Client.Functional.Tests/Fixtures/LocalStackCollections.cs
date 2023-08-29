@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests.Fixtures;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Fixtures;
 
 [CollectionDefinition(nameof(LocalStackCollectionV131))]
 public class LocalStackCollectionV131 : ICollectionFixture<LocalStackFixtureV131>, ICollectionFixture<TestFixture>

@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
 
 [Collection(nameof(LocalStackCollectionV131))]
 public sealed class SqsScenarioV131 : BaseSqsScenario

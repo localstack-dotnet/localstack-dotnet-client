@@ -104,4 +104,6 @@ global using LocalStack.Client.Options;
 global using System;
 global using System.Reflection;
 
+global using Amazon.QLDBSession;
+
 global using Xunit;

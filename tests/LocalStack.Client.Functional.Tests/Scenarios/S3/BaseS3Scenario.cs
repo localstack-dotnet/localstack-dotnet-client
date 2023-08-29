@@ -15,55 +15,55 @@ public abstract class BaseS3Scenario : BaseScenario
     protected IAmazonS3 AmazonS3 { get; private set; }
 
     [Fact]
-    public async Task S3Service_Should_Create_A_Bucket()
+    public async Task S3Service_Should_Create_A_Bucket_Async()
     {
         var bucketName = Guid.NewGuid().ToString();
-        PutBucketResponse putBucketResponse = await CreateTestBucket(bucketName);
+        PutBucketResponse putBucketResponse = await CreateTestBucketAsync(bucketName).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, putBucketResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task S3Service_Should_Delete_A_Bucket()
-    { 
+    public async Task S3Service_Should_Delete_A_Bucket_Async()
+    {
         var bucketName = Guid.NewGuid().ToString();
-        PutBucketResponse putBucketResponse = await CreateTestBucket(bucketName);
+        PutBucketResponse putBucketResponse = await CreateTestBucketAsync(bucketName).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, putBucketResponse.HttpStatusCode);
 
-        DeleteBucketResponse deleteBucketResponse = await DeleteTestBucket(bucketName);
+        DeleteBucketResponse deleteBucketResponse = await DeleteTestBucketAsync(bucketName).ConfigureAwait(false);
         Assert.Equal(HttpStatusCode.NoContent, deleteBucketResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task S3Service_Should_Upload_A_File_To_A_Bucket()
+    public async Task S3Service_Should_Upload_A_File_To_A_Bucket_Async()
     {
         var bucketName = Guid.NewGuid().ToString();
-        await CreateTestBucket(bucketName);
-        await UploadTestFile(bucketName: bucketName, key: Key);
+        await CreateTestBucketAsync(bucketName).ConfigureAwait(false);
+        await UploadTestFileAsync(key: Key, bucketName: bucketName).ConfigureAwait(false);
 
-        GetObjectResponse getObjectResponse = await AmazonS3.GetObjectAsync(bucketName, Key);
+        GetObjectResponse getObjectResponse = await AmazonS3.GetObjectAsync(bucketName, Key).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.OK, getObjectResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task S3Service_Should_Delete_A_File_To_A_Bucket()
+    public async Task S3Service_Should_Delete_A_File_To_A_Bucket_Async()
     {
         var bucketName = Guid.NewGuid().ToString();
-        await CreateTestBucket(bucketName);
-        await UploadTestFile(bucketName: bucketName, key: Key);
+        await CreateTestBucketAsync(bucketName).ConfigureAwait(false);
+        await UploadTestFileAsync(key: Key, bucketName: bucketName).ConfigureAwait(false);
 
-        DeleteObjectResponse deleteObjectResponse = await AmazonS3.DeleteObjectAsync(bucketName, Key);
+        DeleteObjectResponse deleteObjectResponse = await AmazonS3.DeleteObjectAsync(bucketName, Key).ConfigureAwait(false);
 
         Assert.Equal(HttpStatusCode.NoContent, deleteObjectResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task S3Service_Should_List_Files_In_A_Bucket()
+    public async Task S3Service_Should_List_Files_In_A_Bucket_Async()
     {
         var bucketName = Guid.NewGuid().ToString();
-        await CreateTestBucket(bucketName);
+        await CreateTestBucketAsync(bucketName).ConfigureAwait(false);
 
         const int uploadCount = 4;
         var fileNames = new string[uploadCount];
@@ -72,35 +72,35 @@ public abstract class BaseS3Scenario : BaseScenario
         {
             var fileName = $"SampleData{i}.txt";
 
-            await UploadTestFile(fileName, bucketName);
+            await UploadTestFileAsync(fileName, bucketName).ConfigureAwait(false);
             fileNames[i] = fileName;
         }
 
-        ListObjectsResponse listObjectsResponse = await AmazonS3.ListObjectsAsync(bucketName);
+        ListObjectsResponse listObjectsResponse = await AmazonS3.ListObjectsAsync(bucketName).ConfigureAwait(false);
         List<S3Object> s3Objects = listObjectsResponse.S3Objects;
 
         Assert.Equal(uploadCount, s3Objects.Count);
-        Assert.All(fileNames, s => Assert.NotNull(s3Objects.FirstOrDefault(o => o.Key == s)));
+        Assert.All(fileNames, s => Assert.NotNull(s3Objects.Find(o => o.Key == s)));
     }
 
-    protected Task<PutBucketResponse> CreateTestBucket(string bucketName = null)
+    protected Task<PutBucketResponse> CreateTestBucketAsync(string? bucketName = null)
     {
         var putBucketRequest = new PutBucketRequest { BucketName = bucketName ?? BucketName, UseClientRegion = true };
 
         return AmazonS3.PutBucketAsync(putBucketRequest);
     }
 
-    protected Task<DeleteBucketResponse> DeleteTestBucket(string bucketName = null)
+    protected Task<DeleteBucketResponse> DeleteTestBucketAsync(string? bucketName = null)
     {
         var deleteBucketRequest = new DeleteBucketRequest { BucketName = bucketName ?? BucketName, UseClientRegion = true };
 
         return AmazonS3.DeleteBucketAsync(deleteBucketRequest);
     }
 
-    protected Task UploadTestFile(string key = null, string bucketName = null)
+    protected async Task UploadTestFileAsync(string? key = null, string? bucketName = null)
     {
-        var fileTransferUtility = new TransferUtility(AmazonS3);
+        using var fileTransferUtility = new TransferUtility(AmazonS3);
 
-        return fileTransferUtility.UploadAsync(FilePath, bucketName ?? BucketName, key ?? Key);
+        await fileTransferUtility.UploadAsync(FilePath, bucketName ?? BucketName, key ?? Key).ConfigureAwait(false);
     }
 }

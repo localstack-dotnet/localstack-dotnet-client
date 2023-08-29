@@ -1,9 +1,13 @@
-﻿namespace LocalStack.Client.Functional.Tests.Fixtures;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Fixtures;
 
 public abstract class LocalStackFixtureBase : IAsyncLifetime, ILocalStackFixture
 {
-    public LocalStackFixtureBase(LocalStackBuilder localStackBuilder)
+    protected LocalStackFixtureBase(LocalStackBuilder localStackBuilder)
     {
+        ArgumentNullException.ThrowIfNull(localStackBuilder);
+
         LocalStackContainer = localStackBuilder.Build();
     }
 
@@ -11,12 +15,12 @@ public abstract class LocalStackFixtureBase : IAsyncLifetime, ILocalStackFixture
 
     public async Task InitializeAsync()
     {
-        await LocalStackContainer.StartAsync();
+        await LocalStackContainer.StartAsync().ConfigureAwait(false);
     }
 
     public async Task DisposeAsync()
     {
-        await LocalStackContainer.StopAsync();
+        await LocalStackContainer.StopAsync().ConfigureAwait(false);
     }
 }
 

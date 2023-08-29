@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Functional.Tests.Scenarios.S3;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
+
+namespace LocalStack.Client.Functional.Tests.Scenarios.S3;
 
 [Collection(nameof(LocalStackCollectionV131))]
 public sealed class S3ScenarioV131 : BaseS3Scenario

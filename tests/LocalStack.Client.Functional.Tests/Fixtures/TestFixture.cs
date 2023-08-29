@@ -1,4 +1,5 @@
-﻿namespace LocalStack.Client.Functional.Tests.Fixtures;
+﻿#pragma warning disable CA1822 // Mark members as static - disabled because of readability
+namespace LocalStack.Client.Functional.Tests.Fixtures;
 
 public class TestFixture
 {
@@ -9,7 +10,8 @@ public class TestFixture
         builder.SetBasePath(Directory.GetCurrentDirectory());
         builder.AddJsonFile("appsettings.json", optional: true);
         builder.AddJsonFile(configFile, optional: true);
-        builder.AddInMemoryCollection(new Dictionary<string, string> { { "LocalStack:Config:EdgePort", hostPort.ToString() }, });
+        var keyValuePairs = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:Config:EdgePort", hostPort.ToString(CultureInfo.InvariantCulture) }, };
+        builder.AddInMemoryCollection(keyValuePairs!);
         builder.AddEnvironmentVariables();
 
         return builder;

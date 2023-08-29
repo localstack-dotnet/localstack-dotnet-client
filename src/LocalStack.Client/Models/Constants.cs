@@ -2,7 +2,7 @@
 
 public static class Constants
 {
-    public const string LocalStackHost = "localhost";
+    public const string LocalStackHost = "localhost.localstack.cloud";
 
     public const bool UseSsl = false;
 

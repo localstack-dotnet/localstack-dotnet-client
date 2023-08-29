@@ -8,9 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandboxes", "sandboxes", "{962A750E-8FE2-461F-B3FC-2B401309B5FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3F0F4BAA-02EF-4008-9CF8-E73AA92D4664}"
-	ProjectSection(SolutionItems) = preProject
-		src\Directory.Build.props = src\Directory.Build.props
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalStack.Client.Sandbox", "tests\sandboxes\LocalStack.Client.Sandbox\LocalStack.Client.Sandbox.csproj", "{E7E16B66-EE23-4B49-89C5-4FF64F2ED95D}"
 EndProject
@@ -27,7 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		.github\workflows\build-windows.yml = .github\workflows\build-windows.yml
 		build.ps1 = build.ps1
 		build.sh = build.sh
-		src\Directory.Build.props = src\Directory.Build.props
 		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
 	EndProjectSection
 EndProject

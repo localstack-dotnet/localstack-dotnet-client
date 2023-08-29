@@ -6,10 +6,10 @@ public class SessionOptions : ISessionOptions
     {
     }
 
-    public SessionOptions(string awsAccessKeyId = Constants.AwsAccessKeyId,
-                          string awsAccessKey = Constants.AwsAccessKey, 
-                          string awsSessionToken = Constants.AwsSessionToken,
-                          string regionName = Constants.RegionName)
+    [SuppressMessage("Usage", "S3427: Method overloads with default parameter values should not overlap",
+                     Justification = "The default constructor need for ConfigureOptions")]
+    public SessionOptions(string awsAccessKeyId = Constants.AwsAccessKeyId, string awsAccessKey = Constants.AwsAccessKey,
+                          string awsSessionToken = Constants.AwsSessionToken, string regionName = Constants.RegionName)
     {
         AwsAccessKeyId = awsAccessKeyId;
         AwsAccessKey = awsAccessKey;

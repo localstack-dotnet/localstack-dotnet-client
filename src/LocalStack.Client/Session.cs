@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client;
+﻿#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type. - disabled because of it's not possible for this case
+#pragma warning disable CS8603 // Possible null reference return. - disabled because of it's not possible for this case
+namespace LocalStack.Client;
 
 public class Session : ISession
 {
@@ -41,7 +43,7 @@ public class Session : ISession
 
         if (useServiceUrl)
         {
-            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
+            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl.AbsoluteUri;
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
@@ -57,11 +59,16 @@ public class Session : ISession
     {
         Type serviceInterfaceType = typeof(TClient);
 
-        return (AmazonServiceClient)CreateClientByInterface(serviceInterfaceType, useServiceUrl);
+        return CreateClientByInterface(serviceInterfaceType, useServiceUrl);
     }
 
     public AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType, bool useServiceUrl = false)
     {
+        if (serviceInterfaceType == null)
+        {
+            throw new ArgumentNullException(nameof(serviceInterfaceType));
+        }
+
         var clientTypeName = $"{serviceInterfaceType.Namespace}.{serviceInterfaceType.Name.Substring(1)}Client";
         Type clientType = serviceInterfaceType.GetTypeInfo().Assembly.GetType(clientTypeName);
 
@@ -91,18 +98,20 @@ public class Session : ISession
 
         if (useServiceUrl)
         {
-            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl;
+            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl.AbsoluteUri;
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
             clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
         }
 
-        ConstructorInfo constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
+        ConstructorInfo? constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
 
         if (constructor == null)
         {
-            throw new AmazonClientException($"Service client {clientTypeName} missing a constructor with parameters AWSCredentials and {clientConfig.GetType().FullName}.");
+            var message = $"Service client {clientTypeName} missing a constructor with parameters AWSCredentials and {clientConfig.GetType().FullName}.";
+
+            throw new AmazonClientException(message);
         }
 
         var client = (AmazonServiceClient)constructor.Invoke(new object[] { awsCredentials, clientConfig });

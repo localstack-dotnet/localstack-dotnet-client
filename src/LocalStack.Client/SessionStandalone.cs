@@ -2,8 +2,8 @@
 
 public class SessionStandalone : ISessionStandalone
 {
-    private ISessionOptions _sessionOptions;
-    private IConfigOptions _configOptions;
+    private ISessionOptions? _sessionOptions;
+    private IConfigOptions? _configOptions;
 
     private SessionStandalone()
     {

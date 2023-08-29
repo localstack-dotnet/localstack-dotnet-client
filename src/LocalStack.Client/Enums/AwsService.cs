@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Enums;
 
-public enum AwsServiceEnum
+public enum AwsService
 {
 	ApiGateway,
 	ApiGatewayV2,

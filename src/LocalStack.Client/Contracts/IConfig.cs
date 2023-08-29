@@ -4,13 +4,13 @@ public interface IConfig
 {
     IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints();
 
-    AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum);
+    AwsServiceEndpoint? GetAwsServiceEndpoint(AwsService awsService);
 
-    AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId);
+    AwsServiceEndpoint? GetAwsServiceEndpoint(string serviceId);
 
-    IDictionary<AwsServiceEnum, int> GetAwsServicePorts();
+    IDictionary<AwsService, int> GetAwsServicePorts();
 
-    int GetAwsServicePort(AwsServiceEnum awsServiceEnum);
+    int GetAwsServicePort(AwsService awsService);
 
     IConfigOptions GetConfigOptions();
 }

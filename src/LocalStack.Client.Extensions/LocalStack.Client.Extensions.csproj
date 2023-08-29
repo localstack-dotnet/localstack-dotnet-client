@@ -12,6 +12,7 @@
 		<Description>
 			Extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around AWSSDK.Extensions.NETCore.Setup to use both LocalStack and AWS side-by-side
 		</Description>
+		<Version>$(PackageExtensionVersion)</Version>
 		<PackageTags>aws-sdk, localstack, client-library, dotnet, dotnet-core</PackageTags>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>

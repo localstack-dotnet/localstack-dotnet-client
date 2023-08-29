@@ -1,0 +1,15 @@
+
+<Project>
+    <ItemGroup>
+      <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4" />
+      <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.6.40" />
+      <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" />
+      <PackageVersion Include="Roslynator.Analyzers" Version="4.3.0" />
+      <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="4.3.0" />
+      <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.3.0" />
+      <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.2.0.71021" />
+      <PackageVersion Include="Meziantou.Analyzer" Version="2.0.56" />
+      <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
+      <PackageVersion Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0" />
+    </ItemGroup>
+  </Project>

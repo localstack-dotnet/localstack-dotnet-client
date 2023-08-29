@@ -955,4 +955,49 @@ public class CreateClientByInterfaceTests
         Assert.NotNull(amazonMqClient);
         AssertAmazonClient.AssertClientConfiguration(amazonMqClient);
     }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonEMRServerlessClient()
+    {
+        AmazonServiceClient amazonEmrServerlessClient = Session.CreateClientByInterface<IAmazonEMRServerless>();
+
+        Assert.NotNull(amazonEmrServerlessClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonEmrServerlessClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonAppflowClient()
+    {
+        AmazonServiceClient amazonAppflowClient = Session.CreateClientByInterface<IAmazonAppflow>();
+
+        Assert.NotNull(amazonAppflowClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonAppflowClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonRoute53DomainsClient()
+    {
+        AmazonServiceClient amazonRoute53DomainsClient = Session.CreateClientByInterface<IAmazonRoute53Domains>();
+
+        Assert.NotNull(amazonRoute53DomainsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonRoute53DomainsClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonKeyspacesClient()
+    {
+        AmazonServiceClient amazonKeyspacesClient = Session.CreateClientByInterface<IAmazonKeyspaces>();
+
+        Assert.NotNull(amazonKeyspacesClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonKeyspacesClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonSchedulerClient()
+    {
+        AmazonServiceClient amazonSchedulerClient = Session.CreateClientByInterface<IAmazonScheduler>();
+
+        Assert.NotNull(amazonSchedulerClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonSchedulerClient);
+    }
 }

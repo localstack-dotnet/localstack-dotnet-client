@@ -18,6 +18,7 @@
 		<PackageReference Include="AWSSDK.AutoScaling" Version="3.7.102.29" />
 		<PackageReference Include="AWSSDK.AWSSupport" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.AWSMarketplaceMetering" Version="3.7.100.62" />
+		<PackageReference Include="AWSSDK.Appflow" Version="3.7.200.27" />
 		<PackageReference Include="AWSSDK.Backup" Version="3.7.101.39" />
 		<PackageReference Include="AWSSDK.Batch" Version="3.7.102.21" />
 		<PackageReference Include="AWSSDK.CertificateManager" Version="3.7.101.51" />
@@ -32,6 +33,7 @@
 		<PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.101.62" />
 		<PackageReference Include="AWSSDK.ConfigService" Version="3.7.101.38" />
+		<PackageReference Include="AWSSDK.Keyspaces" Version="3.7.200.27" />
 		<PackageReference Include="AWSSDK.MWAA" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.CostExplorer" Version="3.7.103.26" />
 		<PackageReference Include="AWSSDK.DocDB" Version="3.7.100.62" />
@@ -48,6 +50,7 @@
 		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.7.101.17" />
 		<PackageReference Include="AWSSDK.Elasticsearch" Version="3.7.101.47" />
+		<PackageReference Include="AWSSDK.EMRServerless" Version="3.7.201.23" />
 		<PackageReference Include="AWSSDK.FIS" Version="3.7.101" />
 		<PackageReference Include="AWSSDK.OpenSearchService" Version="3.7.102.5" />
 		<PackageReference Include="AWSSDK.Glue" Version="3.7.106.5" />
@@ -83,10 +86,12 @@
 		<PackageReference Include="AWSSDK.ResourceGroupsTaggingAPI" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.Route53" Version="3.7.104.2" />
 		<PackageReference Include="AWSSDK.Route53Resolver " Version="3.7.100.62" />
+		<PackageReference Include="AWSSDK.Route53Domains" Version="3.7.201.9" />
 		<PackageReference Include="AWSSDK.S3" Version="3.7.102" />
 		<PackageReference Include="AWSSDK.S3Control" Version="3.7.105.1" />
 		<PackageReference Include="AWSSDK.SageMaker" Version="3.7.117" />
 		<PackageReference Include="AWSSDK.SageMakerRuntime" Version="3.7.101" />
+		<PackageReference Include="AWSSDK.Scheduler" Version="3.7.201.20" />
 		<PackageReference Include="AWSSDK.SecretsManager" Version="3.7.101.17" />
 		<PackageReference Include="AWSSDK.SecurityToken" Version="3.7.100.62" />
 		<PackageReference Include="AWSSDK.ServerlessApplicationRepository" Version="3.7.101" />

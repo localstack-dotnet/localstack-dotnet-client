@@ -24,6 +24,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Sesv2 = new("SESv2", "sesv2", CommonEndpointPattern, 4579, AwsService.Sesv2);
     public static readonly AwsServiceEndpointMetadata Route53 = new("Route 53", "route53", CommonEndpointPattern, 4580, AwsService.Route53);
     public static readonly AwsServiceEndpointMetadata Route53Resolver = new("Route53Resolver", "route53resolver", CommonEndpointPattern, 4580, AwsService.Route53Resolver);
+    public static readonly AwsServiceEndpointMetadata Route53Domains  = new("Route 53 Domains", "route53domains", CommonEndpointPattern, 4566, AwsService.Route53Domains);
     public static readonly AwsServiceEndpointMetadata CloudFormation = new("CloudFormation", "cloudformation", CommonEndpointPattern, 4581, AwsService.CloudFormation);
     public static readonly AwsServiceEndpointMetadata CloudWatch = new("CloudWatch", "cloudwatch", CommonEndpointPattern, 4582, AwsService.CloudWatch);
     public static readonly AwsServiceEndpointMetadata Ssm = new("SSM", "ssm", CommonEndpointPattern, 4583, AwsService.Ssm);
@@ -106,15 +107,19 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata MarketplaceMetering = new("Marketplace Metering", "meteringmarketplace", CommonEndpointPattern, 4644, AwsService.MarketplaceMetering);
     public static readonly AwsServiceEndpointMetadata Transcribe = new("Transcribe", "transcribe", CommonEndpointPattern, 4566, AwsService.Transcribe);
     public static readonly AwsServiceEndpointMetadata Mq = new("mq", "mq", CommonEndpointPattern, 4566, AwsService.Mq);
+    public static readonly AwsServiceEndpointMetadata EmrServerless = new("EMR Serverless", "emr-serverless", CommonEndpointPattern, 4566, AwsService.EmrServerless);
+    public static readonly AwsServiceEndpointMetadata Appflow = new("Appflow", "appflow", CommonEndpointPattern, 4566, AwsService.Appflow);
+    public static readonly AwsServiceEndpointMetadata Keyspaces = new("Keyspaces", "keyspaces", CommonEndpointPattern, 4566, AwsService.Keyspaces);
+    public static readonly AwsServiceEndpointMetadata Scheduler = new("Scheduler", "scheduler", CommonEndpointPattern, 4566, AwsService.Scheduler);
 
     public static readonly AwsServiceEndpointMetadata[] All =
     {
-        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, OpenSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, Route53Resolver, CloudFormation, 
-        CloudWatch, Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts, 
-        Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession, 
+        ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, OpenSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, Route53Resolver, CloudFormation,
+        CloudWatch, Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts,
+        Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession,
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq
+        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler
     };
 
     private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsService @enum)
@@ -167,7 +172,7 @@ public class AwsServiceEndpointMetadata
         {
             throw new ArgumentNullException(nameof(proto));
         }
-        
+
         if (string.IsNullOrWhiteSpace(host))
         {
             throw new ArgumentNullException(nameof(host));

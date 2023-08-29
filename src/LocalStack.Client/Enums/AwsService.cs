@@ -21,6 +21,7 @@ public enum AwsService
 	Sesv2,
 	Route53,
 	Route53Resolver,
+	Route53Domains,
 	CloudFormation,
 	CloudWatch,
 	Ssm,
@@ -102,5 +103,9 @@ public enum AwsService
 	Fis,
 	MarketplaceMetering,
 	Transcribe,
-	Mq
+	Mq,
+	EmrServerless,
+	Appflow,
+	Keyspaces,
+	Scheduler,
 }

@@ -98,10 +98,7 @@ public sealed class BuildContext : FrostingContext
 
         var nugetInstallSettings = new NuGetInstallSettings
         {
-            Version = "2.4.1",
-            Verbosity = NuGetVerbosity.Normal,
-            OutputDirectory = "testrunner",
-            WorkingDirectory = "."
+            Version = "2.4.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = "."
         };
 
         this.NuGetInstall("xunit.runner.console", nugetInstallSettings);
@@ -110,7 +107,9 @@ public sealed class BuildContext : FrostingContext
     public IEnumerable<ProjMetadata> GetProjMetadata()
     {
         DirectoryPath testsRoot = this.Directory(TestsPath);
-        List<FilePath> csProjFile = this.GetFiles($"{testsRoot}/**/*.csproj").Where(fp => fp.FullPath.EndsWith("Tests.csproj")).ToList();
+        List<FilePath> csProjFile = this.GetFiles($"{testsRoot}/**/*.csproj")
+                                        .Where(fp => fp.FullPath.EndsWith("Tests.csproj", StringComparison.InvariantCulture))
+                                        .ToList();
 
         IList<ProjMetadata> projMetadata = new List<ProjMetadata>();
 
@@ -131,10 +130,8 @@ public sealed class BuildContext : FrostingContext
 
     public void RunXUnitUsingMono(string targetFramework, string assemblyPath)
     {
-        int exitCode = this.StartProcess("mono", new ProcessSettings
-        {
-            Arguments = $"./testrunner/xunit.runner.console.2.4.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}"
-        });
+        int exitCode = this.StartProcess(
+            "mono", new ProcessSettings { Arguments = $"./testrunner/xunit.runner.console.2.4.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}" });
 
         if (exitCode != 0)
         {

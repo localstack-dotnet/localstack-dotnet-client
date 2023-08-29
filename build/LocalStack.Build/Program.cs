@@ -87,7 +87,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     continue;
                 }
 
-                context.Warning($"=============Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}=============");
+                context.Warning($"=============Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}=============");
                 settings.Framework = targetFramework;
 
                 if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")

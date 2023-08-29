@@ -20,12 +20,12 @@ ITestcontainersBuilder<TestcontainersContainer> localStackBuilder = new Testcont
 TestcontainersContainer container = localStackBuilder.Build();
 
 Console.WriteLine("Starting LocalStack Container");
-await container.StartAsync();
+await container.StartAsync().ConfigureAwait(false);
 Console.WriteLine("LocalStack Container started");
 
 Console.WriteLine("Press any key to stop LocalStack container");
 Console.ReadLine();
 
 Console.WriteLine("Stopping LocalStack Container");
-await container.StopAsync();
+await container.StopAsync().ConfigureAwait(false);
 Console.WriteLine("LocalStack Container stopped");

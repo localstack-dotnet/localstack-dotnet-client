@@ -22,27 +22,27 @@ public class SampleS3Service : IHostedService
         try
         {
             var putBucketRequest = new PutBucketRequest { BucketName = BucketName };
-            PutBucketResponse putBucketResponse = await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken);
+            await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken).ConfigureAwait(false);
 
-            _logger.LogInformation("The bucket {0} created", BucketName);
+            _logger.LogInformation("The bucket {BucketName} created", BucketName);
 
             // Retrieve the bucket location.
-            string bucketLocation = await FindBucketLocationAsync(_amazonS3, BucketName);
-            _logger.LogInformation("The bucket's location: {0}", bucketLocation);
+            string bucketLocation = await FindBucketLocationAsync(_amazonS3, BucketName).ConfigureAwait(false);
+            _logger.LogInformation("The bucket's location: {BucketLocation}", bucketLocation);
 
-            var fileTransferUtility = new TransferUtility(_amazonS3);
+            using var fileTransferUtility = new TransferUtility(_amazonS3);
 
-            _logger.LogInformation("Uploading the file {0}...", FilePath);
-            await fileTransferUtility.UploadAsync(FilePath, BucketName, Key, cancellationToken);
-            _logger.LogInformation("The file {0} created", FilePath);
+            _logger.LogInformation("Uploading the file {FilePath}...", FilePath);
+            await fileTransferUtility.UploadAsync(FilePath, BucketName, Key, cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation("The file {FilePath} created", FilePath);
         }
         catch (AmazonS3Exception e)
         {
-            _logger.LogError(e, "Error encountered on server. Message:'{0}' when writing an object", e.Message);
+            _logger.LogError(e, "Error encountered on server. Message:'{EMessage}' when writing an object", e.Message);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+            _logger.LogError(e, "Unknown encountered on server. Message:'{EMessage}' when writing an object", e.Message);
         }
         finally
         {
@@ -59,7 +59,7 @@ public class SampleS3Service : IHostedService
     private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
     {
         var request = new GetBucketLocationRequest() { BucketName = bucketName };
-        GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
+        GetBucketLocationResponse response = await client.GetBucketLocationAsync(request).ConfigureAwait(false);
         var bucketLocation = response.Location.ToString();
 
         return bucketLocation;

@@ -22,9 +22,10 @@ await new HostBuilder().ConfigureHostConfiguration(configHost => configHost.AddE
                                         })
                                         .ConfigureLogging((_, configLogging) => { configLogging.AddConsole(); })
                                         .UseConsoleLifetime()
-                                        .RunConsoleAsync();
+                                        .RunConsoleAsync()
+                                        .ConfigureAwait(false);
 
-static string GetNetCoreVersion()
+static string? GetNetCoreVersion()
 {
     Assembly assembly = typeof(System.Runtime.GCSettings).GetTypeInfo().Assembly;
     string[] assemblyPath = assembly.Location.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);

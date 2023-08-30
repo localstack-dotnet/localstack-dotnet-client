@@ -8,7 +8,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Testcontainers" Version="2.3.0" />
+		<PackageReference Include="Testcontainers" />
+		<PackageReference Include="Testcontainers.LocalStack" />
 	</ItemGroup>
 
 </Project>

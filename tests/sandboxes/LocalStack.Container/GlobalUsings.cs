@@ -2,5 +2,4 @@
 
 global using System;
 
-global using DotNet.Testcontainers.Builders;
-global using DotNet.Testcontainers.Containers;
+global using Testcontainers.LocalStack;

@@ -26,6 +26,9 @@
         <Features>strict</Features>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
 
+        <!-- Enable central package management -->
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
     </PropertyGroup>
 
     <!-- third-party analyzers -->
@@ -44,7 +47,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        
+
         <PackageReference Include="Roslynator.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -16,26 +16,6 @@ public sealed class DynamoDbScenarioV20 : BaseDynamoDbScenario
     public DynamoDbScenarioV20(TestFixture testFixture, LocalStackFixtureV20 localStackFixtureV20) : base(testFixture, localStackFixtureV20)
     {
     }
-
-    public override Task DynamoDbService_Should_Add_A_Record_To_A_DynamoDb_Table_Async()
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task DynamoDbService_Should_Create_A_DynamoDb_Table_Async()
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task DynamoDbService_Should_Delete_A_DynamoDb_Table_Async()
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task DynamoDbService_Should_List_Records_In_A_DynamoDb_Table_Async()
-    {
-        return Task.CompletedTask;
-    }
 }
 
 [Collection(nameof(LocalStackCollectionV22))]

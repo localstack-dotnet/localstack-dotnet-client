@@ -19,24 +19,26 @@ application development.
 
 ## Table of Contents
 
-1. [Supported Platforms](#supported-platforms)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Usage](#usage)
-   - [LocalStack.Client.Extensions (Recommended)](#localstack-client-extensions)
-     - [Installation](#extensions-installation)
-     - [Usage](#extensions-usage)
-     - [About AddAwsService](#extensions-usage-about-addawsservice)
-     - [useServiceUrl Parameter](#useserviceurl)
-   - [Standalone Initialization](#standalone-initialization)
-   - [Microsoft.Extensions.DependencyInjection Initialization](#di)
-5. [Developing](#developing)
-   - [About Sandbox Applications](#about-sandboxes)
+1. [LocalStack .Net Core and .Net Framework Client](#localstack-net-core-and-net-framework-client)
+2. [Continuous Integration](#continuous-integration)
+3. [Supported Platforms](#supported-platforms)
+4. [Why LocalStack.NET Client?](#why-localstacknet-client)
+5. [Prerequisites](#prerequisites)
+6. [Installation](#installation)
+   - [Recommended: LocalStack.Client.Extensions](#recommended-localstackclientextensions)
+   - [Base Library: LocalStack.Client](#base-library-localstackclient)
+7. [Packages Overview](#packages-overview)
+8. [Usage](#usage)
+   - [Configuration](#configuration)
+   - [Integrating with Dependency Injection](#integrating-with-dependency-injection)
+9. [Developing](#developing)
+   - [Building the Project](#building-the-project)
+   - [Sandbox Applications](#sandbox-applications)
    - [Running Tests](#running-tests)
-6. [Changelog](#changelog)
-7. [License](#license)
+10. [Changelog](#changelog)
+11. [License](#license)
 
-## <a name="supported-platforms"></a> Supported Platforms
+## Supported Platforms
 
 - [.NET 7](https://dotnet.microsoft.com/download/dotnet/7.0)
 - [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
@@ -55,13 +57,13 @@ application development.
 
 - **Enhanced Development Speed:** LocalStack.NET reduces boilerplate and manual configurations, speeding up the development process.
 
-## <a name="prerequisites"></a> Prerequisites
+## Prerequisites
 
 To utilize this library, you need to have LocalStack running. While LocalStack can be installed directly on your machine and accessed via the `localstack` cli, the recommended approach is to run LocalStack using Docker or `docker-compose`.
 
 For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/getting-started/installation/).
 
-## <a name="installation"></a> Installation
+## Installation
 
 ### Recommended: LocalStack.Client.Extensions
 
@@ -99,14 +101,14 @@ Or use `dotnet cli`
 dotnet add package LocalStack.Client
 ```
 
-## <a name="packages-overview"></a> Packages Overview
+## Packages Overview
 
 | Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
 | LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
 
-## <a name="usage"></a> Usage
+## Usage
 
 `LocalStack.NET` is a library that provides a wrapper around the [aws-sdk-net](https://github.com/aws/aws-sdk-net). This means you can use it in a similar way to the `AWS SDK for .NET` and to [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) with a few differences. For more on how to use the AWS SDK for .NET, see [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-setup.html).
 
@@ -174,7 +176,7 @@ services.AddAwsService<IAmazonIoTJobsDataPlane>(useServiceUrl: true);
 
 ```
 
-## <a name="developing"></a> Developing
+## Developing
 
 We appreciate contributions in the form of feedback, bug reports, and pull requests.
 
@@ -194,7 +196,7 @@ Linux
 ./build.sh
 ```
 
-### <a name="about-sandboxes"></a> Sandbox Applications
+### Sandbox Applications
 
 The LocalStack .NET repository includes several sandbox console applications located in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes)
 . These applications serve both as testing tools and as examples.
@@ -203,7 +205,7 @@ These sandbox applications showcase various initialization methods for `LocalSta
 
 To interact with a LocalStack container, use the [LocalStack.Container](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes/LocalStack.Container) console application. This application leverages [testcontainers-dotnet](https://github.com/testcontainers/testcontainers-dotnets) to initialize LocalStack. Start the LocalStack.Container application first, then run any of the sandbox applications to experiment.
 
-### <a name="running-tests"></a> Running Tests
+### Running Tests
 
 To execute the tests, use the commands below:
 
@@ -219,10 +221,10 @@ Linux
 ./build.sh --target=tests
 ```
 
-## <a name="changelog"></a> Changelog
+## Changelog
 
 Please refer to [`CHANGELOG.md`](CHANGELOG.md) to see the complete list of changes for each release.
 
-## <a name="license"></a> License
+## License
 
 Licensed under MIT, see [LICENSE](LICENSE) for the full text.

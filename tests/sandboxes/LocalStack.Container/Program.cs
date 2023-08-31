@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-Console.WriteLine("Press any key to start LocalStack container");
+﻿Console.WriteLine("Press any key to start LocalStack container");
 Console.ReadLine();
 
 string containerId = Guid.NewGuid().ToString().ToUpperInvariant();

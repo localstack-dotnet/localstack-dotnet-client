@@ -1,8 +1,51 @@
 # LocalStack .NET Client Change Log
 
+### [v1.4.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.4.1)
+
+#### 1. New Features
+
+- **Update Packages and Multi LocalStack Support:**
+- New endpoints added from the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v2.3:
+  - EMRServerless
+  - Appflow
+  - Keyspaces
+  - Scheduler
+
+#### 2. Bug Fixes and Investigations
+
+- **Investigation and Fixes:**
+  - Started investigating issues #23 and #24.
+    - Bugs have been fixed with [this PR](https://github.com/localstack/localstack/pull/8962) by LocalStack.
+  - Fixed legacy LocalStack container wait strategy for functional tests.
+
+#### 3. General
+
+- **New Solution Standards:**
+  - Introduced new solution-wide coding standards with various analyzers.
+- **Code Refactoring According to New Standards:**
+  - Libraries, sandbox projects, build projects, and test projects have been refactored to adhere to the new coding standards.
+  - Moved remaining using directives to GlobalUsings.cs files.
+- **Centralized Package Management:**
+  - Managed package versions centrally to resolve issue #28.
+- **Package Updates:**
+  - Updated analyzer packages.
+  - Updated test packages.
+  - AWSSDK.Core set to 3.7.201 as the minimum version.
+- Tested against LocalStack v1.3.1, v2.0, and the latest containers.
+
+#### 4. Warnings
+
+- **Legacy LocalStack Versions:**
+  - This version will be the last to support Legacy LocalStack versions.
+- **.NET 4.6.1 Support:**
+  - .NET 4.6.1 support will be removed in the next release and replaced with .NET 4.6.2.
+- **Breaking Changes Ahead:**
+  - Users should anticipate some breaking changes in the next release due to the removal of Legacy support and changes in configuration.
+
 ### [v1.4.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.4.0)
 
 #### 1. New Features
+
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.39 have been added.
   - Fault Injection Service (FIS)
   - Marketplace Metering
@@ -10,12 +53,13 @@
   - Amazon MQ
 
 #### 2. General
+
 - .NET 7 support added
 - .NET 5 ve .NET Core 3.1 runtimes removed from Nuget pack (.netstandard2.0 remains)
 - Tested against LocalStack v1.3.1 container.
 - AWSSDK.Core set to 3.7.103 as the minimum version.
   - **Warning** In this version, the ServiceURL property of Amazon.Runtime.ClientConfig adds a trailing `/` to every URL set.
-For example, if `http://localhost:1234` is set as the value, it will become `http://localhost:1234/`
+    For example, if `http://localhost:1234` is set as the value, it will become `http://localhost:1234/`
 - Following depedencies updated from v3.0.0 to v3.1.32 in LocalStack.Client.Extensions for security reasons
   - Microsoft.Extensions.Configuration.Abstractions
   - Microsoft.Extensions.Configuration.Binder
@@ -24,12 +68,14 @@ For example, if `http://localhost:1234` is set as the value, it will become `htt
   - Microsoft.Extensions.Options.ConfigurationExtensions
 
 #### 3. Bug Fixes
+
 - Write a timestream record using .Net AWSSDK NuGet packages ([#20](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/20))
 - Session does not honor UseSsl and always sets UseHttp to true ([#16](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/16))
 
 ### [v1.3.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.1)
 
 #### 1. New Features
+
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.35 have been added.
   - Route53Resolver
   - KinesisAnalyticsV2
@@ -37,22 +83,27 @@ For example, if `http://localhost:1234` is set as the value, it will become `htt
   - Amazon Managed Workflows for Apache Airflow (MWAA)
 
 #### 2. General
+
 - Tested against LocalStack v0.14.2 container.
 - AWSSDK.Core set to 3.7.9 as the minimum version.
 - AWSSDK.Extensions.NETCore.Setup set to 3.7.2 as the minimum version.
 
-
 ### [v1.3.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.3.0)
 
 #### 1. New Features
+
 - New endpoints in the official [Localstack Python Client](https://github.com/localstack/localstack-python-client) v1.27 have been added.
   - SESv2
   - EventBridge ([#14](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/14))
 - Tested against LocalStack v0.13.0 container.
+
 #### 2. Enhancements
+
 - `useServiceUrl` parameter added to change client connection behavior. See [useServiceUrl Parameter](#useserviceurl)
 - Readme and SourceLink added to Nuget packages
+
 #### 3. Bug Fixes
+
 - Session::RegionName configuration does not honor while creating AWS client ([#15](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/15))
 
 Thanks to [petertownsend](https://github.com/petertownsend) for his contribution

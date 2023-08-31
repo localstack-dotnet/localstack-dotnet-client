@@ -6,5 +6,5 @@ public class MockServiceMetadata : IServiceMetadata
 
     public string ServiceId => MockServiceId;
 
-    public IDictionary<string, string> OperationNameMapping { get; }
+    public IDictionary<string, string> OperationNameMapping { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
 }

@@ -7,28 +7,32 @@ public class Config : IConfig
 
     private readonly IConfigOptions _configOptions;
 
-    public Config()
-        : this(new ConfigOptions())
+    public Config() : this(new ConfigOptions())
     {
     }
 
     public Config(IConfigOptions configOptions)
     {
+        if (configOptions == null)
+        {
+            throw new ArgumentNullException(nameof(configOptions));
+        }
+
         string localStackHost = configOptions.LocalStackHost;
         string protocol = configOptions.UseSsl ? "https" : "http";
         bool useLegacyPorts = configOptions.UseLegacyPorts;
         int edgePort = configOptions.EdgePort;
 
-        int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
+        _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata =>
+        {
+            Uri serviceUrl = metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port));
 
-        _awsServiceEndpoints = _serviceEndpointMetadata.Select(metadata => new AwsServiceEndpoint(metadata.ServiceId, 
-                                                                                                  metadata.CliName, 
-                                                                                                  metadata.Enum, 
-                                                                                                  GetServicePort(metadata.Port), 
-                                                                                                  localStackHost, 
-                                                                                                  metadata.GetServiceUrl(protocol, localStackHost, GetServicePort(metadata.Port))));
+            return new AwsServiceEndpoint(metadata.ServiceId, metadata.CliName, metadata.Enum, GetServicePort(metadata.Port), localStackHost, serviceUrl);
+        });
 
         _configOptions = configOptions;
+
+        int GetServicePort(int metadataPort) => useLegacyPorts ? metadataPort : edgePort;
     }
 
     public IEnumerable<AwsServiceEndpoint> GetAwsServiceEndpoints()
@@ -36,26 +40,24 @@ public class Config : IConfig
         return _awsServiceEndpoints;
     }
 
-    public AwsServiceEndpoint GetAwsServiceEndpoint(AwsServiceEnum awsServiceEnum)
+    public AwsServiceEndpoint? GetAwsServiceEndpoint(AwsService awsService)
     {
-        return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.AwsServiceEnum == awsServiceEnum);
+        return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.AwsService == awsService);
     }
 
-    public AwsServiceEndpoint GetAwsServiceEndpoint(string serviceId)
+    public AwsServiceEndpoint? GetAwsServiceEndpoint(string serviceId)
     {
         return _awsServiceEndpoints.SingleOrDefault(endpoint => endpoint.ServiceId == serviceId);
     }
 
-    public IDictionary<AwsServiceEnum, int> GetAwsServicePorts()
+    public IDictionary<AwsService, int> GetAwsServicePorts()
     {
-        return _awsServiceEndpoints.ToDictionary(endpoint => endpoint.AwsServiceEnum, endpoint => endpoint.Port);
+        return _awsServiceEndpoints.ToDictionary(endpoint => endpoint.AwsService, endpoint => endpoint.Port);
     }
 
-    public int GetAwsServicePort(AwsServiceEnum awsServiceEnum)
+    public int GetAwsServicePort(AwsService awsService)
     {
-        return _awsServiceEndpoints
-               .First(endpoint => endpoint.AwsServiceEnum == awsServiceEnum)
-               .Port;
+        return _awsServiceEndpoints.First(endpoint => endpoint.AwsService == awsService).Port;
     }
 
     public IConfigOptions GetConfigOptions() => _configOptions;

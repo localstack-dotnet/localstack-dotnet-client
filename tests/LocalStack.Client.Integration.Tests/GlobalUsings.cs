@@ -102,6 +102,14 @@ global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
 
 global using System;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Reflection;
+
+global using Amazon.Appflow;
+global using Amazon.EMRServerless;
+global using Amazon.Keyspaces;
+global using Amazon.QLDBSession;
+global using Amazon.Route53Domains;
+global using Amazon.Scheduler;
 
 global using Xunit;

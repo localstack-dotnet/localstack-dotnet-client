@@ -1,6 +1,8 @@
 ﻿global using System;
 global using System.Collections.Generic;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Dynamic;
+global using System.Globalization;
 global using System.IO;
 global using System.Linq;
 global using System.Net;
@@ -24,11 +26,10 @@ global using Amazon.SimpleNotificationService.Model;
 
 global using AutoFixture;
 
+global using DotNet.Testcontainers.Builders;
+
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Converters;
-
-global using DotNet.Testcontainers.Builders;
-global using DotNet.Testcontainers.Containers;
 
 global using LocalStack.Client.Extensions;
 global using LocalStack.Client.Enums;
@@ -38,11 +39,12 @@ global using LocalStack.Client.Functional.Tests.Fixtures;
 global using LocalStack.Client.Functional.Tests.Scenarios.DynamoDb.Entities;
 global using LocalStack.Client.Functional.Tests.Scenarios.SQS.Models;
 global using LocalStack.Client.Functional.Tests.Scenarios.SNS.Models;
-global using LocalStack.Client.Functional.Tests.Scenarios.S3;
+
+global using Testcontainers.LocalStack;
 
 global using Xunit;
 
-
+#pragma warning disable MA0048 // File name must match type name
 #if NETCOREAPP
 namespace System.Runtime.CompilerServices
 {

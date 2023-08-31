@@ -1,8 +1,10 @@
 ﻿global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Globalization;
 global using System.Linq;
 global using System.Reflection;
+global using System.Runtime.Serialization;
 
 global using Amazon;
 global using Amazon.Runtime;
@@ -15,7 +17,7 @@ global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
 global using LocalStack.Client.Utils;
 
-
+#pragma warning disable MA0048 // File name must match type name
 #if NETSTANDARD || NET461
 namespace System.Runtime.CompilerServices
 {

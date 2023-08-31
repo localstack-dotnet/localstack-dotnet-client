@@ -1,6 +1,4 @@
-﻿using LocalStack.Client.Options;
-
-namespace LocalStack.Client.Contracts;
+﻿namespace LocalStack.Client.Contracts;
 
 public interface ILocalStackOptions
 {

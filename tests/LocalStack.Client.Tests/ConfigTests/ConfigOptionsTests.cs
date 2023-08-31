@@ -16,7 +16,7 @@ public class ConfigOptionsTests
     [Fact]
     public void ConfigOptions_Should_Created_With_Default_Parameters_If_It_Created_By_Parameterized_Constructor_And_Non_Of_The_Parameters_Has_Set()
     {
-        ConstructorInfo constructor = typeof(ConfigOptions).GetConstructor(new[] { typeof(string), typeof(bool), typeof(bool), typeof(int) });
+        ConstructorInfo? constructor = typeof(ConfigOptions).GetConstructor(new[] { typeof(string), typeof(bool), typeof(bool), typeof(int) });
 
         Assert.NotNull(constructor);
 

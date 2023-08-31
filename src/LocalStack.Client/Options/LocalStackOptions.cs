@@ -4,6 +4,9 @@ public class LocalStackOptions : ILocalStackOptions
 {
     public LocalStackOptions()
     {
+        UseLocalStack = false;
+        Session = new SessionOptions();
+        Config = new ConfigOptions();
     }
 
     public LocalStackOptions(bool useLocalStack, SessionOptions sessionOptions, ConfigOptions configOptions)
@@ -13,9 +16,9 @@ public class LocalStackOptions : ILocalStackOptions
         Config = configOptions;
     }
 
-    public bool UseLocalStack { get; private set; } = false;
+    public bool UseLocalStack { get; private set; }
 
-    public SessionOptions Session { get; private set; } = new SessionOptions();
+    public SessionOptions Session { get; private set; }
 
-    public ConfigOptions Config { get; private set; } = new ConfigOptions();
+    public ConfigOptions Config { get; private set; }
 }

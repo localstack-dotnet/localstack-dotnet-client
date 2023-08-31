@@ -43,8 +43,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection AddAwsService<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton, bool useServiceUrl = false)
-        where TService : IAmazonService
+    public static IServiceCollection AddAwsService<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton,
+                                                             bool useServiceUrl = false) where TService : IAmazonService
     {
         return AddAwsService<TService>(collection, null, lifetime, useServiceUrl);
     }
@@ -60,13 +60,16 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection AddAwsService<TService>(this IServiceCollection collection,
-                                                             AWSOptions options,
-                                                             ServiceLifetime lifetime = ServiceLifetime.Singleton,
-                                                             bool useServiceUrl = false)
+    public static IServiceCollection AddAwsService<TService>(this IServiceCollection collection, AWSOptions? options,
+                                                             ServiceLifetime lifetime = ServiceLifetime.Singleton, bool useServiceUrl = false)
         where TService : IAmazonService
     {
         ServiceDescriptor descriptor = GetServiceFactoryDescriptor<TService>(options, lifetime, useServiceUrl);
+
+        if (collection == null)
+        {
+            throw new ArgumentNullException(nameof(collection));
+        }
 
         collection.Add(descriptor);
 
@@ -83,10 +86,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection,
-                                                                       ServiceLifetime lifetime = ServiceLifetime.Singleton,
-                                                                       bool useServiceUrl = false)
-        where TService : IAmazonService
+    public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton,
+                                                                       bool useServiceUrl = false) where TService : IAmazonService
     {
         return AddAWSServiceLocalStack<TService>(collection, null, lifetime, useServiceUrl);
     }
@@ -102,10 +103,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection,
-                                                                       AWSOptions options,
-                                                                       ServiceLifetime lifetime = ServiceLifetime.Singleton,
-                                                                       bool useServiceUrl = false) 
+    public static IServiceCollection AddAWSServiceLocalStack<TService>(this IServiceCollection collection, AWSOptions? options,
+                                                                       ServiceLifetime lifetime = ServiceLifetime.Singleton, bool useServiceUrl = false)
         where TService : IAmazonService
     {
         return AddAwsService<TService>(collection, options, lifetime, useServiceUrl);
@@ -121,10 +120,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection TryAddAwsService<TService>(this IServiceCollection collection, 
-                                                                ServiceLifetime lifetime = ServiceLifetime.Singleton, 
-                                                                bool useServiceUrl = false)
-        where TService : IAmazonService
+    public static IServiceCollection TryAddAwsService<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton,
+                                                                bool useServiceUrl = false) where TService : IAmazonService
     {
         return TryAddAwsService<TService>(collection, null, lifetime);
     }
@@ -140,10 +137,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection TryAddAwsService<TService>(this IServiceCollection collection, 
-                                                                AWSOptions options,
-                                                                ServiceLifetime lifetime = ServiceLifetime.Singleton, 
-                                                                bool useServiceUrl = false) 
+    public static IServiceCollection TryAddAwsService<TService>(this IServiceCollection collection, AWSOptions? options,
+                                                                ServiceLifetime lifetime = ServiceLifetime.Singleton, bool useServiceUrl = false)
         where TService : IAmazonService
     {
         ServiceDescriptor descriptor = GetServiceFactoryDescriptor<TService>(options, lifetime, useServiceUrl);
@@ -162,10 +157,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, 
-                                                                          ServiceLifetime lifetime = ServiceLifetime.Singleton,
-                                                                          bool useServiceUrl = false)
-        where TService : IAmazonService
+    public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton,
+                                                                          bool useServiceUrl = false) where TService : IAmazonService
     {
         return TryAddAWSServiceLocalStack<TService>(collection, null, lifetime, useServiceUrl);
     }
@@ -181,10 +174,8 @@ public static class ServiceCollectionExtensions
     /// <param name="lifetime">The lifetime of the service client created. The default is Singleton.</param>
     /// <param name="useServiceUrl">(LocalStack) Determines whether the service client will use RegionEndpoint or ServiceUrl. The default is false.</param>
     /// <returns>Returns back the IServiceCollection to continue the fluent system of IServiceCollection.</returns>
-    public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, 
-                                                                          AWSOptions options,
-                                                                          ServiceLifetime lifetime = ServiceLifetime.Singleton,
-                                                                          bool useServiceUrl = false) 
+    public static IServiceCollection TryAddAWSServiceLocalStack<TService>(this IServiceCollection collection, AWSOptions? options,
+                                                                          ServiceLifetime lifetime = ServiceLifetime.Singleton, bool useServiceUrl = false)
         where TService : IAmazonService
     {
         return TryAddAwsService<TService>(collection, options, lifetime, useServiceUrl);
@@ -212,7 +203,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    private static ServiceDescriptor GetServiceFactoryDescriptor<TService>(AWSOptions options, ServiceLifetime lifetime, bool useServiceUrl = false)
+    private static ServiceDescriptor GetServiceFactoryDescriptor<TService>(AWSOptions? options, ServiceLifetime lifetime, bool useServiceUrl = false)
         where TService : IAmazonService
     {
         var descriptor = new ServiceDescriptor(typeof(TService), provider =>
@@ -229,11 +220,10 @@ public static class ServiceCollectionExtensions
             else
             {
                 var clientFactory = provider.GetRequiredService<IAwsClientFactoryWrapper>();
-                serviceInstance = clientFactory.CreateServiceClient<TService>(provider, options);
+                serviceInstance = clientFactory.CreateServiceClient<TService>(provider, options!);
             }
 
             return serviceInstance;
-
         }, lifetime);
 
         return descriptor;

@@ -1,91 +1,36 @@
-﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+﻿#pragma warning disable MA0048 // File name must match type name - disabled because of readability
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
-[Collection(nameof(LocalStackCollection))]
-public class DynamoDbScenario : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV131))]
+public class DynamoDbScenarioV131 : BaseDynamoDbScenario
 {
-    public DynamoDbScenario(TestFixture testFixture, string configFile = TestConstants.LocalStackConfig, bool useServiceUrl = false)
-        : base(testFixture, configFile, useServiceUrl)
+    public DynamoDbScenarioV131(TestFixture testFixture, LocalStackFixtureV131 localStackFixtureV131) : base(testFixture, localStackFixtureV131)
     {
     }
+}
 
-    [Fact]
-    public async Task DynamoDbService_Should_Create_A_DynamoDb_Table()
+[Collection(nameof(LocalStackCollectionV20))]
+public sealed class DynamoDbScenarioV20 : BaseDynamoDbScenario
+{
+    public DynamoDbScenarioV20(TestFixture testFixture, LocalStackFixtureV20 localStackFixtureV20) : base(testFixture, localStackFixtureV20)
     {
-        var tableName = Guid.NewGuid().ToString();
-        CreateTableResponse createTableResponse = await CreateTestTable(tableName);
-        Assert.Equal(HttpStatusCode.OK, createTableResponse.HttpStatusCode);
     }
+}
 
-    [Fact]
-    public async Task DynamoDbService_Should_Delete_A_DynamoDb_Table()
+[Collection(nameof(LocalStackCollectionV22))]
+public sealed class DynamoDbScenarioV22 : BaseDynamoDbScenario
+{
+    public DynamoDbScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
     {
-        var tableName = Guid.NewGuid().ToString();
-        await CreateTestTable(tableName);
-
-        DeleteTableResponse deleteTableResponse = await DeleteTestTable(tableName);
-        Assert.Equal(HttpStatusCode.OK, deleteTableResponse.HttpStatusCode);
     }
+}
 
-    [Fact]
-    public async Task DynamoDbService_Should_Add_A_Record_To_A_DynamoDb_Table()
+[Collection(nameof(LocalStackLegacyCollection))]
+public sealed class DynamoDbLegacyScenario : BaseDynamoDbScenario
+{
+    public DynamoDbLegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
+        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
     {
-        var tableName = Guid.NewGuid().ToString();
-        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
-        await CreateTestTable(tableName);
-
-        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
-
-        var movieEntity = new Fixture().Create<MovieEntity>();
-        string modelJson = JsonSerializer.Serialize(movieEntity);
-        Document item = Document.FromJson(modelJson);
-
-        await targetTable.PutItemAsync(item);
-        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
-        List<MovieEntity> movieEntities = await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync();
-
-        Assert.True(movieEntity.DeepEquals(movieEntities.First()));
-    }
-
-    [Fact]
-    public async Task DynamoDbService_Should_List_Records_In_A_DynamoDb_Table()
-    {
-        var tableName = Guid.NewGuid().ToString();
-        const int recordCount = 5;
-
-        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
-        await CreateTestTable(tableName);
-
-        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
-        IList<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
-        List<Document> documents = movieEntities
-                              .Select(entity =>
-                              {
-                                  string serialize = JsonSerializer.Serialize(entity);
-                                  Document item = Document.FromJson(serialize);
-
-                                  return item;
-                              })
-                              .ToList();
-
-        foreach (Document document in documents)
-        {
-            await targetTable.PutItemAsync(document);
-        }
-
-
-        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
-        List<MovieEntity> returnedMovieEntities = await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync();
-
-        Assert.NotNull(movieEntities);
-        Assert.NotEmpty(movieEntities);
-        Assert.Equal(recordCount, movieEntities.Count);
-        Assert.All(returnedMovieEntities, movieEntity =>
-        {
-            MovieEntity entity = movieEntities.First(e => e.MovieId == movieEntity.MovieId);
-
-            Assert.True(movieEntity.DeepEquals(entity));
-        });
     }
 }

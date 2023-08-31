@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Enums;
 
-public enum AwsServiceEnum
+public enum AwsService
 {
 	ApiGateway,
 	ApiGatewayV2,
@@ -21,6 +21,7 @@ public enum AwsServiceEnum
 	Sesv2,
 	Route53,
 	Route53Resolver,
+	Route53Domains,
 	CloudFormation,
 	CloudWatch,
 	Ssm,
@@ -102,5 +103,9 @@ public enum AwsServiceEnum
 	Fis,
 	MarketplaceMetering,
 	Transcribe,
-	Mq
+	Mq,
+	EmrServerless,
+	Appflow,
+	Keyspaces,
+	Scheduler,
 }

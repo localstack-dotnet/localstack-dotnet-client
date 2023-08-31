@@ -4,122 +4,130 @@
 		<TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
 		<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
 		<LangVersion>latest</LangVersion>
+		<NoWarn>$(NoWarn);CA1707;MA0006</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.Amplify" Version="3.7.101.42" />
-		<PackageReference Include="AWSSDK.APIGateway" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ApiGatewayV2" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.AppConfig" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.AppSync" Version="3.7.102.34" />
-		<PackageReference Include="AWSSDK.Athena" Version="3.7.103.22" />
-		<PackageReference Include="AWSSDK.AutoScaling" Version="3.7.102.29" />
-		<PackageReference Include="AWSSDK.AWSSupport" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.AWSMarketplaceMetering" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.Backup" Version="3.7.101.39" />
-		<PackageReference Include="AWSSDK.Batch" Version="3.7.102.21" />
-		<PackageReference Include="AWSSDK.CertificateManager" Version="3.7.101.51" />
-		<PackageReference Include="AWSSDK.CloudFormation" Version="3.7.103.1" />
-		<PackageReference Include="AWSSDK.CloudFront" Version="3.7.103.16" />
-		<PackageReference Include="AWSSDK.CloudSearch" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.CloudTrail" Version="3.7.102.27" />
-		<PackageReference Include="AWSSDK.CloudWatch" Version="3.7.103.6" />
-		<PackageReference Include="AWSSDK.CloudWatchEvents" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.7.104.5" />
-		<PackageReference Include="AWSSDK.CodeCommit" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.CognitoIdentity" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.7.101.62" />
-		<PackageReference Include="AWSSDK.ConfigService" Version="3.7.101.38" />
-		<PackageReference Include="AWSSDK.MWAA" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.CostExplorer" Version="3.7.103.26" />
-		<PackageReference Include="AWSSDK.DocDB" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.33" />
-		<PackageReference Include="AWSSDK.EC2" Version="3.7.118.1" />
-		<PackageReference Include="AWSSDK.ECR" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ECS" Version="3.7.104.22" />
-		<PackageReference Include="AWSSDK.EKS" Version="3.7.104.25" />
-		<PackageReference Include="AWSSDK.ElastiCache" Version="3.7.103.18" />
-		<PackageReference Include="AWSSDK.EventBridge" Version="3.7.101" />
-		<PackageReference Include="AWSSDK.ElasticBeanstalk" Version="3.7.101" />
-		<PackageReference Include="AWSSDK.ElasticFileSystem" Version="3.7.101.39" />
-		<PackageReference Include="AWSSDK.ElasticLoadBalancing" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ElasticMapReduce" Version="3.7.101.17" />
-		<PackageReference Include="AWSSDK.Elasticsearch" Version="3.7.101.47" />
-		<PackageReference Include="AWSSDK.FIS" Version="3.7.101" />
-		<PackageReference Include="AWSSDK.OpenSearchService" Version="3.7.102.5" />
-		<PackageReference Include="AWSSDK.Glue" Version="3.7.106.5" />
-		<PackageReference Include="AWSSDK.IdentityManagement" Version="3.7.100.63" />
-		<PackageReference Include="AWSSDK.IoT" Version="3.7.103.39" />
-		<PackageReference Include="AWSSDK.IoTAnalytics" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.IotData" Version="3.7.101.39" />
-		<PackageReference Include="AWSSDK.IoTEvents" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.IoTEventsData" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.IoTJobsDataPlane" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.IoTWireless" Version="3.7.101.39" />
-		<PackageReference Include="AWSSDK.Kafka" Version="3.7.101.59" />
-		<PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.101.37" />
-		<PackageReference Include="AWSSDK.Kinesis" Version="3.7.101.25" />
-		<PackageReference Include="AWSSDK.KinesisAnalytics" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.KinesisAnalyticsV2" Version="3.7.101.40" />
-		<PackageReference Include="AWSSDK.KinesisFirehose" Version="3.7.101.37" />
-		<PackageReference Include="AWSSDK.LakeFormation" Version="3.7.101.46" />
-		<PackageReference Include="AWSSDK.Lambda" Version="3.7.104.3" />
-		<PackageReference Include="AWSSDK.MediaConvert" Version="3.7.103.9" />
-		<PackageReference Include="AWSSDK.MediaStore" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.MediaStoreData" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.MQ" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.Neptune" Version="3.7.101.59" />
-		<PackageReference Include="AWSSDK.Organizations" Version="3.7.101.39" />
-		<PackageReference Include="AWSSDK.QLDB" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.QLDBSession" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.RDS" Version="3.7.114.10" />
-		<PackageReference Include="AWSSDK.RDSDataService" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.Redshift" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.RedshiftDataAPIService" Version="3.7.101.26" />
-		<PackageReference Include="AWSSDK.ResourceGroups" Version="3.7.101.8" />
-		<PackageReference Include="AWSSDK.ResourceGroupsTaggingAPI" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.Route53" Version="3.7.104.2" />
-		<PackageReference Include="AWSSDK.Route53Resolver " Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.S3" Version="3.7.102" />
-		<PackageReference Include="AWSSDK.S3Control" Version="3.7.105.1" />
-		<PackageReference Include="AWSSDK.SageMaker" Version="3.7.117" />
-		<PackageReference Include="AWSSDK.SageMakerRuntime" Version="3.7.101" />
-		<PackageReference Include="AWSSDK.SecretsManager" Version="3.7.101.17" />
-		<PackageReference Include="AWSSDK.SecurityToken" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.ServerlessApplicationRepository" Version="3.7.101" />
-		<PackageReference Include="AWSSDK.ServiceDiscovery" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.SimpleEmailV2" Version="3.7.101.55" />
-		<PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.100.63" />
-		<PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="3.7.103.14" />
-		<PackageReference Include="AWSSDK.SimpleWorkflow" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.SQS" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.StepFunctions" Version="3.7.102.35" />
-		<PackageReference Include="AWSSDK.TimestreamQuery" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.TimestreamWrite" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.Transfer" Version="3.7.104.18" />
-		<PackageReference Include="AWSSDK.TranscribeService" Version="3.7.103.21" />
-		<PackageReference Include="AWSSDK.WAF" Version="3.7.100.62" />
-		<PackageReference Include="AWSSDK.WAFV2" Version="3.7.101.58" />
-		<PackageReference Include="AWSSDK.XRay" Version="3.7.102.43" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-		<PackageReference Include="Moq" Version="4.18.4" />
-		<PackageReference Include="xunit" Version="2.4.2" />
-		<PackageReference Include="xunit.abstractions" Version="2.0.3" />
-		<PackageReference Include="xunit.runner.console" Version="2.4.2">
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />
+		<PackageReference Include="AWSSDK.Amplify" />
+		<PackageReference Include="AWSSDK.APIGateway" />
+		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" />
+		<PackageReference Include="AWSSDK.ApiGatewayV2" />
+		<PackageReference Include="AWSSDK.AppConfig" />
+		<PackageReference Include="AWSSDK.Appflow" />
+		<PackageReference Include="AWSSDK.AppSync" />
+		<PackageReference Include="AWSSDK.Athena" />
+		<PackageReference Include="AWSSDK.AutoScaling" />
+		<PackageReference Include="AWSSDK.AWSSupport" />
+		<PackageReference Include="AWSSDK.AWSMarketplaceMetering" />
+		<PackageReference Include="AWSSDK.Backup" />
+		<PackageReference Include="AWSSDK.Batch" />
+		<PackageReference Include="AWSSDK.CertificateManager" />
+		<PackageReference Include="AWSSDK.CloudFormation" />
+		<PackageReference Include="AWSSDK.CloudFront" />
+		<PackageReference Include="AWSSDK.CloudSearch" />
+		<PackageReference Include="AWSSDK.CloudTrail" />
+		<PackageReference Include="AWSSDK.CloudWatch" />
+		<PackageReference Include="AWSSDK.CloudWatchEvents" />
+		<PackageReference Include="AWSSDK.CloudWatchLogs" />
+		<PackageReference Include="AWSSDK.CodeCommit" />
+		<PackageReference Include="AWSSDK.CognitoIdentity" />
+		<PackageReference Include="AWSSDK.CognitoIdentityProvider" />
+		<PackageReference Include="AWSSDK.ConfigService" />
+		<PackageReference Include="AWSSDK.Keyspaces" />
+		<PackageReference Include="AWSSDK.MWAA" />
+		<PackageReference Include="AWSSDK.CostExplorer" />
+		<PackageReference Include="AWSSDK.DocDB" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" />
+		<PackageReference Include="AWSSDK.EC2" />
+		<PackageReference Include="AWSSDK.ECR" />
+		<PackageReference Include="AWSSDK.ECS" />
+		<PackageReference Include="AWSSDK.EKS" />
+		<PackageReference Include="AWSSDK.ElastiCache" />
+		<PackageReference Include="AWSSDK.EventBridge" />
+		<PackageReference Include="AWSSDK.ElasticBeanstalk" />
+		<PackageReference Include="AWSSDK.ElasticFileSystem" />
+		<PackageReference Include="AWSSDK.ElasticLoadBalancing" />
+		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" />
+		<PackageReference Include="AWSSDK.ElasticMapReduce" />
+		<PackageReference Include="AWSSDK.Elasticsearch" />
+		<PackageReference Include="AWSSDK.EMRServerless" />
+		<PackageReference Include="AWSSDK.FIS" />
+		<PackageReference Include="AWSSDK.OpenSearchService" />
+		<PackageReference Include="AWSSDK.Glue" />
+		<PackageReference Include="AWSSDK.IdentityManagement" />
+		<PackageReference Include="AWSSDK.IoT" />
+		<PackageReference Include="AWSSDK.IoTAnalytics" />
+		<PackageReference Include="AWSSDK.IotData" />
+		<PackageReference Include="AWSSDK.IoTEvents" />
+		<PackageReference Include="AWSSDK.IoTEventsData" />
+		<PackageReference Include="AWSSDK.IoTJobsDataPlane" />
+		<PackageReference Include="AWSSDK.IoTWireless" />
+		<PackageReference Include="AWSSDK.Kafka" />
+		<PackageReference Include="AWSSDK.KeyManagementService" />
+		<PackageReference Include="AWSSDK.Kinesis" />
+		<PackageReference Include="AWSSDK.KinesisAnalytics" />
+		<PackageReference Include="AWSSDK.KinesisAnalyticsV2" />
+		<PackageReference Include="AWSSDK.KinesisFirehose" />
+		<PackageReference Include="AWSSDK.LakeFormation" />
+		<PackageReference Include="AWSSDK.Lambda" />
+		<PackageReference Include="AWSSDK.MediaConvert" />
+		<PackageReference Include="AWSSDK.MediaStore" />
+		<PackageReference Include="AWSSDK.MediaStoreData" />
+		<PackageReference Include="AWSSDK.MQ" />
+		<PackageReference Include="AWSSDK.Neptune" />
+		<PackageReference Include="AWSSDK.Organizations" />
+		<PackageReference Include="AWSSDK.QLDB" />
+		<PackageReference Include="AWSSDK.QLDBSession" />
+		<PackageReference Include="AWSSDK.RDS" />
+		<PackageReference Include="AWSSDK.RDSDataService" />
+		<PackageReference Include="AWSSDK.Redshift" />
+		<PackageReference Include="AWSSDK.RedshiftDataAPIService" />
+		<PackageReference Include="AWSSDK.ResourceGroups" />
+		<PackageReference Include="AWSSDK.ResourceGroupsTaggingAPI" />
+		<PackageReference Include="AWSSDK.Route53" />
+		<PackageReference Include="AWSSDK.Route53Resolver " />
+		<PackageReference Include="AWSSDK.Route53Domains" />
+		<PackageReference Include="AWSSDK.S3" />
+		<PackageReference Include="AWSSDK.S3Control" />
+		<PackageReference Include="AWSSDK.SageMaker" />
+		<PackageReference Include="AWSSDK.SageMakerRuntime" />
+		<PackageReference Include="AWSSDK.Scheduler" />
+		<PackageReference Include="AWSSDK.SecretsManager" />
+		<PackageReference Include="AWSSDK.SecurityToken" />
+		<PackageReference Include="AWSSDK.ServerlessApplicationRepository" />
+		<PackageReference Include="AWSSDK.ServiceDiscovery" />
+		<PackageReference Include="AWSSDK.SimpleEmail" />
+		<PackageReference Include="AWSSDK.SimpleEmailV2" />
+		<PackageReference Include="AWSSDK.SimpleNotificationService" />
+		<PackageReference Include="AWSSDK.SimpleSystemsManagement" />
+		<PackageReference Include="AWSSDK.SimpleWorkflow" />
+		<PackageReference Include="AWSSDK.SQS" />
+		<PackageReference Include="AWSSDK.StepFunctions" />
+		<PackageReference Include="AWSSDK.TimestreamQuery" />
+		<PackageReference Include="AWSSDK.TimestreamWrite" />
+		<PackageReference Include="AWSSDK.Transfer" />
+		<PackageReference Include="AWSSDK.TranscribeService" />
+		<PackageReference Include="AWSSDK.WAF" />
+		<PackageReference Include="AWSSDK.WAFV2" />
+		<PackageReference Include="AWSSDK.XRay" />
+
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.abstractions" />
+		<PackageReference Include="xunit.runner.console">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+		<PackageReference Include="xunit.runner.visualstudio">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-		<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
+		<PackageReference Include="Microsoft.TestPlatform.ObjectModel" />
 	</ItemGroup>
 
 	<ItemGroup>

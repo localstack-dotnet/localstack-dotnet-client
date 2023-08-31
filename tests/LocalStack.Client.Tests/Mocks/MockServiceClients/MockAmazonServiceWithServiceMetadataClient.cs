@@ -1,6 +1,7 @@
-﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
+﻿#pragma warning disable S1144, CA1823
+namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-public class MockAmazonServiceWithServiceMetadataClient : AmazonServiceClient, IAmazonService, IMockAmazonServiceWithServiceMetadata
+public class MockAmazonServiceWithServiceMetadataClient : AmazonServiceClient, IMockAmazonServiceWithServiceMetadata
 {
     private static IServiceMetadata serviceMetadata = new MockServiceMetadata();
 

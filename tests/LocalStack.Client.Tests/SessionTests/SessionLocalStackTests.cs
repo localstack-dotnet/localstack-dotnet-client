@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Tests.SessionTests;
 
-public class SessionTests
+public class SessionLocalStackTests
 {
     [Fact]
     public void CreateClientByImplementation_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()
@@ -22,7 +22,7 @@ public class SessionTests
     {
         var mockSession = MockSession.Create();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(default(string));
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns((string)null!);
         Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByImplementation<MockAmazonServiceClient>(false));
 
         mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(string.Empty);
@@ -174,7 +174,7 @@ public class SessionTests
 
         Assert.NotNull(mockAmazonServiceClient);
         Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl.AbsoluteUri, mockAmazonServiceClient.Config.ServiceURL);
     }
 
     [Fact]
@@ -226,7 +226,7 @@ public class SessionTests
         {
             Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
             Assert.NotNull(mockAmazonServiceClient.Config.ServiceURL);
-            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl.AbsoluteUri, mockAmazonServiceClient.Config.ServiceURL);
         }
         else
         {
@@ -269,7 +269,7 @@ public class SessionTests
     {
         var mockSession = MockSession.Create();
 
-        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(default(string));
+        mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(default(string)!);
         Assert.Throws<MisconfiguredClientException>(() => mockSession.CreateClientByInterface<IMockAmazonService>(false));
 
         mockSession.SessionOptionsMock.SetupGet(options => options.RegionName).Returns(string.Empty);
@@ -424,7 +424,7 @@ public class SessionTests
 
         Assert.NotNull(mockAmazonServiceClient);
         Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
-        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+        Assert.Equal(mockAwsServiceEndpoint.ServiceUrl.AbsoluteUri, mockAmazonServiceClient.Config.ServiceURL);
     }
 
     [Fact]
@@ -478,7 +478,7 @@ public class SessionTests
         {
             Assert.Null(mockAmazonServiceClient.Config.RegionEndpoint);
             Assert.NotNull(mockAmazonServiceClient.Config.ServiceURL);
-            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl, mockAmazonServiceClient.Config.ServiceURL);
+            Assert.Equal(mockAwsServiceEndpoint.ServiceUrl.AbsoluteUri, mockAmazonServiceClient.Config.ServiceURL);
         }
         else
         {

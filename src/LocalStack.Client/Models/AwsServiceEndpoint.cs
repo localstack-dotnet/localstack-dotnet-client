@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Models;
 
-public record AwsServiceEndpoint(string ServiceId, string CliName, AwsServiceEnum AwsServiceEnum, int Port, string Host, string ServiceUrl)
+public record AwsServiceEndpoint(string ServiceId, string CliName, AwsService AwsService, int Port, string Host, Uri ServiceUrl)
 {
     public override string ToString()
     {

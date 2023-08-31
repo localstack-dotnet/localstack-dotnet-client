@@ -4,10 +4,12 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
+		<NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Testcontainers" Version="2.3.0" />
+		<PackageReference Include="Testcontainers" />
+		<PackageReference Include="Testcontainers.LocalStack" />
 	</ItemGroup>
 
 </Project>

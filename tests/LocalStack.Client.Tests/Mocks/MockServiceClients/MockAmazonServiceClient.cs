@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
 
-public class MockAmazonServiceClient : AmazonServiceClient, IAmazonService, IMockAmazonService
+public class MockAmazonServiceClient : AmazonServiceClient, IMockAmazonService
 {
     public MockAmazonServiceClient() : base(new MockCredentials(), new MockClientConfig())
     {

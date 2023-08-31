@@ -1,4 +1,5 @@
-﻿namespace LocalStack.Client.Utils;
+﻿#pragma warning disable S3011 // We need to use reflection to access private fields for service metadata
+namespace LocalStack.Client.Utils;
 
 public class SessionReflection : ISessionReflection
 {
@@ -11,10 +12,16 @@ public class SessionReflection : ISessionReflection
 
     public IServiceMetadata ExtractServiceMetadata(Type clientType)
     {
+        if (clientType == null)
+        {
+            throw new ArgumentNullException(nameof(clientType));
+        }
+
         FieldInfo serviceMetadataField = clientType.GetField("serviceMetadata", BindingFlags.Static | BindingFlags.NonPublic) ??
                                          throw new InvalidOperationException($"Invalid service type {clientType}");
 
-        var serviceMetadata = (IServiceMetadata) serviceMetadataField.GetValue(null);
+        #pragma warning disable CS8600,CS8603 // Not possible to get null value from this private field
+        var serviceMetadata = (IServiceMetadata)serviceMetadataField.GetValue(null);
 
         return serviceMetadata;
     }
@@ -28,21 +35,38 @@ public class SessionReflection : ISessionReflection
 
     public ClientConfig CreateClientConfig(Type clientType)
     {
+        if (clientType == null)
+        {
+            throw new ArgumentNullException(nameof(clientType));
+        }
+
         ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(clientType);
         ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];
 
-        return (ClientConfig) Activator.CreateInstance(clientConfigParam.ParameterType);
+        return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType);
     }
 
     public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
     {
-        PropertyInfo regionEndpointProperty = amazonServiceClient.Config.GetType().GetProperty(nameof(amazonServiceClient.Config.RegionEndpoint), BindingFlags.Public | BindingFlags.Instance);
+        if (amazonServiceClient == null)
+        {
+            throw new ArgumentNullException(nameof(amazonServiceClient));
+        }
+
+        PropertyInfo? regionEndpointProperty = amazonServiceClient.Config.GetType()
+                                                                  .GetProperty(nameof(amazonServiceClient.Config.RegionEndpoint),
+                                                                               BindingFlags.Public | BindingFlags.Instance);
         regionEndpointProperty?.SetValue(amazonServiceClient.Config, RegionEndpoint.GetBySystemName(systemName));
     }
 
     public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
     {
-        PropertyInfo forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);
+        if (clientConfig == null)
+        {
+            throw new ArgumentNullException(nameof(clientConfig));
+        }
+
+        PropertyInfo? forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);
 
         if (forcePathStyleProperty == null)
         {
@@ -57,7 +81,7 @@ public class SessionReflection : ISessionReflection
     private static ConstructorInfo FindConstructorWithCredentialsAndClientConfig(Type clientType)
     {
         return clientType.GetConstructors(BindingFlags.Instance | BindingFlags.Public)
-                         .Where(info =>
+                         .Single(info =>
                          {
                              ParameterInfo[] parameterInfos = info.GetParameters();
 
@@ -73,7 +97,6 @@ public class SessionReflection : ISessionReflection
                                     credentialsParameter.ParameterType == typeof(AWSCredentials) &&
                                     clientConfigParameter.Name == "clientConfig" &&
                                     clientConfigParameter.ParameterType.IsSubclassOf(typeof(ClientConfig));
-                         })
-                         .Single();
+                         });
     }
 }

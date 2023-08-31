@@ -2,15 +2,13 @@
 
 public class CreateClientByImplementationTests
 {
-    private static readonly ISession Session;
+    private static readonly ISession Session = SessionStandalone.Init()
+                                                                .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
+                                                                .WithConfigurationOptions(new ConfigOptions(useSsl: AssertAmazonClient.UseSsl))
+                                                                .Create();
 
     static CreateClientByImplementationTests()
     {
-        Session = SessionStandalone.Init()
-
-                                   .WithSessionOptions(new SessionOptions(regionName: AssertAmazonClient.TestAwsRegion))
-                                   .WithConfigurationOptions(new ConfigOptions(useSsl: AssertAmazonClient.UseSsl))
-                                   .Create();
     }
 
     [Fact]
@@ -292,7 +290,7 @@ public class CreateClientByImplementationTests
         }
         catch (Exception e)
         {
-            Exception ex = e;
+            Exception? ex = e;
 
             while (ex != null)
             {
@@ -306,6 +304,8 @@ public class CreateClientByImplementationTests
 
             throw;
         }
+
+        Assert.Fail("Exception has not thrown");
     }
 
     [Fact]
@@ -326,7 +326,7 @@ public class CreateClientByImplementationTests
         }
         catch (Exception e)
         {
-            Exception ex = e;
+            Exception? ex = e;
 
             while (ex != null)
             {
@@ -340,6 +340,8 @@ public class CreateClientByImplementationTests
 
             throw;
         }
+
+        Assert.Fail("Exception has not thrown");
     }
 
     [Fact]
@@ -558,14 +560,14 @@ public class CreateClientByImplementationTests
         AssertAmazonClient.AssertClientConfiguration(amazonQldbClient);
     }
 
-    // [Fact]
-    // public void Should_Able_To_Create_AmazonQLDBSessionClient()
-    // {
-    //     var amazonQldbSessionClient = Session.CreateClientByImplementation<AmazonQLDBSessionClient>();
-    //
-    //     Assert.NotNull(amazonQldbSessionClient);
-    //     AssertAmazonClient.AssertClientConfiguration(amazonQldbSessionClient);
-    // }
+    [Fact]
+    public void Should_Able_To_Create_AmazonQLDBSessionClient()
+    {
+        var amazonQldbSessionClient = Session.CreateClientByImplementation<AmazonQLDBSessionClient>();
+
+        Assert.NotNull(amazonQldbSessionClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonQldbSessionClient);
+    }
 
     [Fact]
     public void Should_Able_To_Create_AmazonCloudTrailClient()
@@ -630,7 +632,7 @@ public class CreateClientByImplementationTests
         }
         catch (Exception e)
         {
-            Exception ex = e;
+            Exception? ex = e;
 
             while (ex != null)
             {
@@ -644,6 +646,8 @@ public class CreateClientByImplementationTests
 
             throw;
         }
+
+        Assert.Fail("Exception has not thrown");
     }
 
     [Fact]
@@ -950,5 +954,50 @@ public class CreateClientByImplementationTests
 
         Assert.NotNull(amazonMqClient);
         AssertAmazonClient.AssertClientConfiguration(amazonMqClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonEMRServerlessClient()
+    {
+        var amazonEmrServerlessClient = Session.CreateClientByImplementation<AmazonEMRServerlessClient>();
+
+        Assert.NotNull(amazonEmrServerlessClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonEmrServerlessClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonAppflowClient()
+    {
+        var amazonAppflowClient = Session.CreateClientByImplementation<AmazonAppflowClient>();
+
+        Assert.NotNull(amazonAppflowClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonAppflowClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonRoute53DomainsClient()
+    {
+        var amazonRoute53DomainsClient = Session.CreateClientByImplementation<AmazonRoute53DomainsClient>();
+
+        Assert.NotNull(amazonRoute53DomainsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonRoute53DomainsClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonKeyspacesClient()
+    {
+        var amazonKeyspacesClient = Session.CreateClientByImplementation<AmazonKeyspacesClient>();
+
+        Assert.NotNull(amazonKeyspacesClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonKeyspacesClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonSchedulerClient()
+    {
+        var amazonSchedulerClient = Session.CreateClientByImplementation<AmazonSchedulerClient>();
+
+        Assert.NotNull(amazonSchedulerClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonSchedulerClient);
     }
 }

@@ -5,7 +5,7 @@ public class ConstantsTests
     [Fact]
     public void All_Constants_Should_Be_Equal_Appropriate_Defaults()
     {
-        Assert.Equal("localhost", Constants.LocalStackHost);
+        Assert.Equal("localhost.localstack.cloud", Constants.LocalStackHost);
         Assert.False(Constants.UseSsl);
         Assert.False(Constants.UseLegacyPorts);
         Assert.Equal(4566, Constants.EdgePort);

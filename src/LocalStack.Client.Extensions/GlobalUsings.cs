@@ -1,5 +1,6 @@
 ﻿global using System;
 global using System.Reflection;
+global using System.Runtime.Serialization;
 
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

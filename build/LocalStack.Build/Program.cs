@@ -1,10 +1,4 @@
-﻿using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNet.Build;
-using Cake.Common.Tools.DotNet.NuGet.Push;
-using Cake.Common.Tools.DotNet.Pack;
-using Cake.Common.Tools.DotNet.Test;
-
-return new CakeHost()
+﻿return new CakeHost()
        .UseContext<BuildContext>()
        .Run(args);
 
@@ -87,7 +81,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     continue;
                 }
 
-                context.Warning($"=============Running {targetFramework.ToUpper()} tests for {testProj.AssemblyName}=============");
+                context.Warning($"=============Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}=============");
                 settings.Framework = targetFramework;
 
                 if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")

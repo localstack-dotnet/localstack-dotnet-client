@@ -17,26 +17,30 @@ application development.
 | Github Actions | Windows  | [![build-windows](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml) |
 | Github Actions | macOS    | [![build-macos](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml)       |
 
+## Packages
+
+| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
+| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
+
 ## Table of Contents
 
-1. [LocalStack .Net Core and .Net Framework Client](#localstack-net-core-and-net-framework-client)
-2. [Continuous Integration](#continuous-integration)
-3. [Supported Platforms](#supported-platforms)
-4. [Why LocalStack.NET Client?](#why-localstacknet-client)
-5. [Prerequisites](#prerequisites)
-6. [Installation](#installation)
+1. [Supported Platforms](#supported-platforms)
+2. [Why LocalStack.NET Client?](#why-localstacknet-client)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
    - [Recommended: LocalStack.Client.Extensions](#recommended-localstackclientextensions)
    - [Base Library: LocalStack.Client](#base-library-localstackclient)
-7. [Packages Overview](#packages-overview)
-8. [Usage](#usage)
+5. [Usage](#usage)
    - [Configuration](#configuration)
    - [Integrating with Dependency Injection](#integrating-with-dependency-injection)
-9. [Developing](#developing)
+6. [Developing](#developing)
    - [Building the Project](#building-the-project)
    - [Sandbox Applications](#sandbox-applications)
    - [Running Tests](#running-tests)
-10. [Changelog](#changelog)
-11. [License](#license)
+7. [Changelog](#changelog)
+8. [License](#license)
 
 ## Supported Platforms
 
@@ -100,13 +104,6 @@ Or use `dotnet cli`
 ```
 dotnet add package LocalStack.Client
 ```
-
-## Packages Overview
-
-| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
-| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
 
 ## Usage
 

@@ -7,7 +7,10 @@
         <PackageIcon>localstack-dotnet-square.png</PackageIcon>
         <PackageMainVersion>1.4.1</PackageMainVersion>
         <PackageExtensionVersion>1.2.1</PackageExtensionVersion>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <LangVersion>11.0</LangVersion>
+        <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
         <AnalysisLevel>latest</AnalysisLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>

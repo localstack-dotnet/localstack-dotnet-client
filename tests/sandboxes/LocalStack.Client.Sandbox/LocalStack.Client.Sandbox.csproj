@@ -3,8 +3,6 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
-        <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-        <LangVersion>latest</LangVersion>
         <NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848</NoWarn>
     </PropertyGroup>
 

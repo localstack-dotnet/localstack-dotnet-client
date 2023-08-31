@@ -4,6 +4,7 @@
     <PackageVersion Include="Meziantou.Analyzer" Version="2.0.82" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.5.0" />
     <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="4.5.0" />
@@ -116,8 +117,8 @@
     <PackageVersion Include="AWSSDK.WAF" Version="3.7.200.27" />
     <PackageVersion Include="AWSSDK.WAFV2" Version="3.7.201.26" />
     <PackageVersion Include="AWSSDK.XRay" Version="3.7.200.27" />
-    <PackageVersion Include="Cake.Docker" Version="1.2.0" />
-    <PackageVersion Include="Cake.Frosting" Version="3.0.0" />
+    <PackageVersion Include="Cake.Docker" Version="1.2.2" />
+    <PackageVersion Include="Cake.Frosting" Version="3.1.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.32" />
@@ -129,8 +130,8 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageVersion Include="System.Text.Json" Version="7.0.1" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="System.Text.Json" Version="7.0.3" />
     <!-- test packages -->
     <PackageVersion Include="AutoFixture" Version="4.18.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />

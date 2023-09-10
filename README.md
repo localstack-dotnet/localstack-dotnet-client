@@ -26,8 +26,8 @@ application development.
 2. [Why LocalStack.NET Client?](#why-localstacknet-client)
 3. [Prerequisites](#prerequisites)
 4. [Getting Started](#getting-started)
+   - [Setup](#setup)
    - [Configuration](#configuration)
-   - [Integrating with Dependency Injection](#integrating-with-dependency-injection)
 5. [Known Issues](#known-issues)
 6. [Developing](#developing)
    - [Building the Project](#building-the-project)
@@ -74,6 +74,29 @@ Refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-
 
 `LocalStack.NET` is a library that provides a wrapper around the [aws-sdk-net](https://github.com/aws/aws-sdk-net). This means you can use it in a similar way to the `AWS SDK for .NET` and to [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) with a few differences. For more on how to use the AWS SDK for .NET, see [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-setup.html).
 
+### Setup
+
+Here's a basic example of how to setup `LocalStack.NET`:
+
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    // Add framework services.
+    services.AddMvc();
+
+    services.AddLocalStack(Configuration)
+    services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+    services.AddAwsService<IAmazonS3>();
+    services.AddAwsService<IAmazonDynamoDB>();
+}
+```
+
+The `AddLocalStack` method integrates LocalStack.NET into your application, and the `AddAwsService` method allows you to specify which AWS services you want to use with LocalStack.
+
+<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
+
+`AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
+
 ### Configuration
 
 To configure LocalStack.NET, you can use entries in the appsettings.json files. Here's a basic example for different environments:
@@ -105,30 +128,7 @@ To configure LocalStack.NET, you can use entries in the appsettings.json files. 
 }
 ```
 
-The `RegionName` is important as LocalStack creates resources based on the specified region. For more advanced configurations and understanding how LocalStack.NET operates with LocalStack, refer to documentation.
-
-### Integrating with Dependency Injection
-
-Here's a basic example of how to integrate `LocalStack.NET` with the .NET dependency injection:
-
-```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    // Add framework services.
-    services.AddMvc();
-
-    services.AddLocalStack(Configuration)
-    services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
-    services.AddAwsService<IAmazonS3>();
-    services.AddAwsService<IAmazonDynamoDB>();
-}
-```
-
-The `AddLocalStack` method integrates LocalStack.NET into your application, and the `AddAwsService` method allows you to specify which AWS services you want to use with LocalStack.
-
-<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
-
-`AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
+The `RegionName` is important as LocalStack creates resources based on the specified region. For more advanced configurations and understanding how LocalStack.NET operates with LocalStack, refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Setup#configuration).
 
 ## Known Issues
 

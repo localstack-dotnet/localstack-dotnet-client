@@ -1,6 +1,4 @@
-![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
-
-# LocalStack .Net Core and .Net Framework Client
+# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
@@ -9,7 +7,12 @@ The client library provides a thin wrapper around [aws-sdk-net](https://github.c
 automatically configures the target endpoints to use LocalStack for your local cloud
 application development.
 
-## Continuous integration
+| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
+| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
+
+## Continuous Integration
 
 | Build server   | Platform | Build status                                                                                                                                                                                                                       |
 | -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -17,24 +20,15 @@ application development.
 | Github Actions | Windows  | [![build-windows](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml) |
 | Github Actions | macOS    | [![build-macos](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml)       |
 
-## Packages
-
-| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
-| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
-
 ## Table of Contents
 
 1. [Supported Platforms](#supported-platforms)
 2. [Why LocalStack.NET Client?](#why-localstacknet-client)
 3. [Prerequisites](#prerequisites)
-4. [Installation](#installation)
-   - [Recommended: LocalStack.Client.Extensions](#recommended-localstackclientextensions)
-   - [Base Library: LocalStack.Client](#base-library-localstackclient)
-5. [Usage](#usage)
+4. [Getting Started](#getting-started)
    - [Configuration](#configuration)
    - [Integrating with Dependency Injection](#integrating-with-dependency-injection)
+5. [Known Issues](#known-issues)
 6. [Developing](#developing)
    - [Building the Project](#building-the-project)
    - [Sandbox Applications](#sandbox-applications)
@@ -67,45 +61,16 @@ To utilize this library, you need to have LocalStack running. While LocalStack c
 
 For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/getting-started/installation/).
 
-## Installation
+## Getting Started
 
-### Recommended: LocalStack.Client.Extensions
+LocalStack.NET is installed from NuGet. To work with LocalStack in your .NET applications, you'll need the main library and its extensions. Here's how you can install them:
 
-[`LocalStack.Client.Extensions`](https://www.nuget.org/packages/LocalStack.Client.Extensions) is the recommended package for most modern .NET environments. It integrates with .NET [configuration](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration) and [dependency injection](https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection) frameworks and provides a wrapper around [`AWSSDK.Extensions.NETCore.Setup`](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-netcore.html). This allows you to use both LocalStack and AWS side-by-side seamlessly.
-
-This approach is especially recommended for projects using .NET Core, .NET 6, or .NET 7 etc., given the popularity and best practices associated with `AWSSDK.Extensions.NETCore.Setup`.
-
-To install, use `nuget`:
-
-```
-Install-Package LocalStack.Client.Extensions
-```
-
-Or use `dotnet cli`
-
-```
+```bash
+dotnet add package LocalStack.Client
 dotnet add package LocalStack.Client.Extensions
 ```
 
-**Note**: Installing `LocalStack.Client.Extensions` will also install the base `LocalStack.Client` library.
-
-### Base Library: LocalStack.Client
-
-For specific scenarios, such as using the legacy .NET Framework, or employing a different DI framework like Autofac, or using the library standalone without DI, you might opt for the base [`LocalStack.Client`](https://www.nuget.org/packages/LocalStack.Client) library.
-
-To install, use `nuget`:
-
-```
-Install-Package LocalStack.Client
-```
-
-Or use `dotnet cli`
-
-```
-dotnet add package LocalStack.Client
-```
-
-## Usage
+Refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Getting-Started#installation) for more information on how to install LocalStack.NET.
 
 `LocalStack.NET` is a library that provides a wrapper around the [aws-sdk-net](https://github.com/aws/aws-sdk-net). This means you can use it in a similar way to the `AWS SDK for .NET` and to [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) with a few differences. For more on how to use the AWS SDK for .NET, see [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-setup.html).
 
@@ -140,7 +105,7 @@ To configure LocalStack.NET, you can use entries in the appsettings.json files. 
 }
 ```
 
-The `RegionName` is important as LocalStack creates resources based on the specified region. For more advanced configurations and understanding how LocalStack.NET operates with LocalStack, refer to the upcoming detailed documentation.
+The `RegionName` is important as LocalStack creates resources based on the specified region. For more advanced configurations and understanding how LocalStack.NET operates with LocalStack, refer to documentation.
 
 ### Integrating with Dependency Injection
 
@@ -165,13 +130,17 @@ The `AddLocalStack` method integrates LocalStack.NET into your application, and 
 
 `AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
 
-For services where the `RegionEndpoint` is not applicable, such as AWS MediaStore or IoT, you can use the `useServiceUrl` parameter:
+## Known Issues
+
+- **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest container from Docker Hub.
+
+- **AWS_SERVICE_URL Environment Variable:** Unexpected behaviors might occur in LocalStack.NET when the `AWS_SERVICE_URL` environment variable is set. This environment variable is typically set by LocalStack in the container when using AWS Lambda, and AWS also uses this environment variable in the live environment. Soon, just like in LocalStack's official Python library, this environment variable will be prioritized by LocalStack.NET when configuring the LocalStack host, and there will be a general simplification in the configuration. You can follow this in the issues [issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27) and [issue #32](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/32). You set the `AWS_SERVICE_URL` to empty string until this issue is resolved.
 
 ```csharp
-services.AddAwsService<IAmazonMediaStoreData>(useServiceUrl: true);
-services.AddAwsService<IAmazonIoTJobsDataPlane>(useServiceUrl: true);
-
+Environment.SetEnvironmentVariable("AWS_SERVICE_URL", string.Empty);
 ```
+
+- **IAmazonLambda Operations:** There's a general issue with `IAmazonLambda` operations. This matter is currently under investigation.
 
 ## Developing
 
@@ -195,12 +164,7 @@ Linux
 
 ### Sandbox Applications
 
-The LocalStack .NET repository includes several sandbox console applications located in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes)
-. These applications serve both as testing tools and as examples.
-
-These sandbox applications showcase various initialization methods for `LocalStack.Client` and `LocalStack.Client.Extensions` (refer to the [Usage](#usage)) and demonstrate common AWS applications. If you're looking to contribute or experiment with the library, these sandbox applications provide a safe environment to do so.
-
-To interact with a LocalStack container, use the [LocalStack.Container](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes/LocalStack.Container) console application. This application leverages [testcontainers-dotnet](https://github.com/testcontainers/testcontainers-dotnets) to initialize LocalStack. Start the LocalStack.Container application first, then run any of the sandbox applications to experiment.
+The LocalStack .NET repository includes several sandbox console applications located in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes). These applications serve both as testing tools and as examples.
 
 ### Running Tests
 

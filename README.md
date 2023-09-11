@@ -2,10 +2,7 @@
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
-This is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack).
-The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which
-automatically configures the target endpoints to use LocalStack for your local cloud
-application development.
+Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
 
 | Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -45,19 +42,19 @@ application development.
 
 ## Why LocalStack.NET Client?
 
-- **Consistent Client Configuration:** LocalStack.NET eliminates the need for manual endpoint configuration, providing a standardized and familiar approach to initialize clients.
+- **Consistent Client Configuration:** LocalStack.NET eliminates the need for manual endpoint configuration, providing a standardized and familiar approach to initializing clients.
 
-- **Adaptable Environment Transition:** LocalStack.NET makes it easy to switch between LocalStack and actual AWS services with minimal configuration changes.
+- **Adaptable Environment Transition:** Easily switch between LocalStack and actual AWS services with minimal configuration changes.
 
-- **Versatile .NET Compatibility:** LocalStack.NET supports a broad spectrum of .NET versions, from .NET 7.0 and .NET Standard 2.0, to .NET Framework 4.6.1 and above.
+- **Versatile .NET Compatibility:** Supports a broad spectrum of .NET versions, from .NET 7.0 and .NET Standard 2.0 to .NET Framework 4.6.1 and above.
 
-- **Reduced Learning Curve:** LocalStack.NET offers a familiar interface tailored for LocalStack, making it easier for developers already acquainted with the AWS SDK for .NET.
+- **Reduced Learning Curve:** Offers a familiar interface tailored for LocalStack, ideal for developers acquainted with the AWS SDK for .NET.
 
-- **Enhanced Development Speed:** LocalStack.NET reduces boilerplate and manual configurations, speeding up the development process.
+- **Enhanced Development Speed:**  Reduces boilerplate and manual configurations, speeding up the development process.
 
 ## Prerequisites
 
-To utilize this library, you need to have LocalStack running. While LocalStack can be installed directly on your machine and accessed via the `localstack` cli, the recommended approach is to run LocalStack using Docker or `docker-compose`.
+To utilize this library, you need to have LocalStack running. While LocalStack can be installed directly on your machine and accessed via the localstack cli, the recommended approach is to run LocalStack using [Docker](https://docs.docker.com/get-docker/) or [docker-compose](https://docs.docker.com/compose/install/).
 
 For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/getting-started/installation/).
 
@@ -93,7 +90,7 @@ public void ConfigureServices(IServiceCollection services)
 
 The `AddLocalStack` method integrates LocalStack.NET into your application, and the `AddAwsService` method allows you to specify which AWS services you want to use with LocalStack.
 
-<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
+<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b></e>
 
 `AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
 

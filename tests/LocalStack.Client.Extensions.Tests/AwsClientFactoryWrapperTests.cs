@@ -39,6 +39,10 @@ public class AwsClientFactoryWrapperTests
         configurationBuilder.AddInMemoryCollection(new KeyValuePair<string, string?>[] { new("LocalStack:UseLocalStack", "false") });
         IConfigurationRoot configurationRoot = configurationBuilder.Build();
 
+        Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "AKIAIOSFODNN7EXAMPLE");
+        Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        Environment.SetEnvironmentVariable("AWS_DEFAULT_REGION", "us-west-2");
+
         ServiceCollection serviceCollection = new();
         serviceCollection.AddLocalStack(configurationRoot);
         serviceCollection.AddAWSServiceLocalStack<IAmazonS3>();

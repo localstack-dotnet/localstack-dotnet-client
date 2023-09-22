@@ -39,12 +39,15 @@ public class AwsClientFactoryWrapperTests
         configurationBuilder.AddInMemoryCollection(new KeyValuePair<string, string?>[] { new("LocalStack:UseLocalStack", "false") });
         IConfigurationRoot configurationRoot = configurationBuilder.Build();
 
-        Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", "AKIAIOSFODNN7EXAMPLE");
-        Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
-        Environment.SetEnvironmentVariable("AWS_DEFAULT_REGION", "us-west-2");
+        // Explicit AWS SDK configuration
+        var awsOptions = new AWSOptions
+        {
+            Credentials = new BasicAWSCredentials("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"), Region = RegionEndpoint.USWest2
+        };
 
         ServiceCollection serviceCollection = new();
         serviceCollection.AddLocalStack(configurationRoot);
+        serviceCollection.AddDefaultAWSOptions(awsOptions);
         serviceCollection.AddAWSServiceLocalStack<IAmazonS3>();
         ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 

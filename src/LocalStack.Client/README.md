@@ -1,104 +1,79 @@
-![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Testspace tests (compact)](https://img.shields.io/testspace/tests/localstack-dotnet/localstack-dotnet:localstack-dotnet-client/master?compact_message)](https://localstack-dotnet.testspace.com/spaces/155695/result_sets)
-
-# LocalStack .Net Core and .Net Framework Client
+# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
-This is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack).
-The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which
-automatically configures the target endpoints to use LocalStack for your local cloud
-application development.
+Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
 
-## Continuous integration
+| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
+| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
 
-| Build server     | Platform  | Build status                                                                                                                                                                                                                                                                          |
-|----------------- |---------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Github Actions  | Ubuntu    | [![build-ubuntu](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml)  |
-| Github Actions   | Windows    | [![build-windows](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml)  |
-| Github Actions   | macOS    | [![build-macos](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml) |
+## Continuous Integration
+
+| Build server   | Platform | Build status                                                                                                                                                                                                                       |
+| -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Github Actions | Ubuntu   | [![build-ubuntu](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml)    |
+| Github Actions | Windows  | [![build-windows](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml) |
+| Github Actions | macOS    | [![build-macos](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml)       |
 
 ## Table of Contents
 
 1. [Supported Platforms](#supported-platforms)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Usage](#usage)
-    - [LocalStack.Client.Extensions (Recommended)](#localstack-client-extensions)
-        - [Installation](#extensions-installation)
-        - [Usage](#extensions-usage)
-        - [About AddAwsService](#extensions-usage-about-addawsservice)
-        - [useServiceUrl Parameter](#useserviceurl)
-    - [Standalone Initialization](#standalone-initialization)
-    - [Microsoft.Extensions.DependencyInjection Initialization](#di)
-5. [Developing](#developing)
-    - [About Sandbox Applications](#about-sandboxes)
-    - [Running Tests](#running-tests)
-6. [Changelog](#changelog)
-7. [License](#license)
+2. [Why LocalStack.NET Client?](#why-localstacknet-client)
+3. [Prerequisites](#prerequisites)
+4. [Getting Started](#getting-started)
+   - [Setup](#setup)
+   - [Configuration](#configuration)
+5. [Known Issues](#known-issues)
+6. [Developing](#developing)
+   - [Building the Project](#building-the-project)
+   - [Sandbox Applications](#sandbox-applications)
+   - [Running Tests](#running-tests)
+7. [Changelog](#changelog)
+8. [License](#license)
 
-## <a name="supported-platforms"></a> Supported Platforms
+## Supported Platforms
 
-- [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0) 
-- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 7](https://dotnet.microsoft.com/download/dotnet/7.0)
+- [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 - [.NET 4.6.1 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 
-## <a name="prerequisites"></a> Prerequisites
+## Why LocalStack.NET Client?
 
-To make use of this library, you need to have [LocalStack](https://github.com/localstack/localstack)
-installed on your local machine. In particular, the `localstack` command needs to be available.
+- **Consistent Client Configuration:** LocalStack.NET eliminates the need for manual endpoint configuration, providing a standardized and familiar approach to initializing clients.
 
-## <a name="installation"></a>  Installation
+- **Adaptable Environment Transition:** Easily switch between LocalStack and actual AWS services with minimal configuration changes.
 
-The easiest way to install *LocalStack .NET Client* is via `nuget`:
+- **Versatile .NET Compatibility:** Supports a broad spectrum of .NET versions, from .NET 7.0 and .NET Standard 2.0 to .NET Framework 4.6.1 and above.
 
-```
-Install-Package LocalStack.Client
-```
+- **Reduced Learning Curve:** Offers a familiar interface tailored for LocalStack, ideal for developers acquainted with the AWS SDK for .NET.
 
-Or use `dotnet cli`
+- **Enhanced Development Speed:**  Reduces boilerplate and manual configurations, speeding up the development process.
 
-```
+## Prerequisites
+
+To utilize this library, you need to have LocalStack running. While LocalStack can be installed directly on your machine and accessed via the localstack cli, the recommended approach is to run LocalStack using [Docker](https://docs.docker.com/get-docker/) or [docker-compose](https://docs.docker.com/compose/install/).
+
+For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/getting-started/installation/).
+
+## Getting Started
+
+LocalStack.NET is installed from NuGet. To work with LocalStack in your .NET applications, you'll need the main library and its extensions. Here's how you can install them:
+
+```bash
 dotnet add package LocalStack.Client
+dotnet add package LocalStack.Client.Extensions
 ```
 
-| Package                      | Stable | Nightly |
-|------------------------------|--------|---------|
-| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)        |
-| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/)       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions)        |
+Refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Getting-Started#installation) for more information on how to install LocalStack.NET.
 
-## <a name="usage"></a> Usage
+`LocalStack.NET` is a library that provides a wrapper around the [aws-sdk-net](https://github.com/aws/aws-sdk-net). This means you can use it in a similar way to the `AWS SDK for .NET` and to [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) with a few differences. For more on how to use the AWS SDK for .NET, see [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-setup.html).
 
-This library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net).
-Therefore the usage of this library is same as using `AWS SDK for .NET`.
+### Setup
 
-See [Getting Started with the AWS SDK for .NET](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-setup.html)
-
-This library can be used with any DI library, [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) or it can be used as standalone.
-
-### <a name="localstack-client-extensions"></a>  LocalStack.Client.Extensions (Recommended)
-
-[LocalStack.Client.Extensions](https://www.nuget.org/packages/LocalStack.Client/) is extensions for the LocalStack.NET Client to integrate with .NET Core configuration and dependency injection frameworks. The extensions also provides wrapper around [AWSSDK.Extensions.NETCore.Setup](https://docs.aws.amazon.com/sdk-for-net/latest/developer-guide/net-dg-config-netcore.html) to use both LocalStack and AWS side-by-side.
-
-This approach is recommended since `AWSSDK.Extensions.NETCore.Setup` is very popular and also it is best practice for using [AWSSDK.NET](https://aws.amazon.com/sdk-for-net/) with .NET Core, .NET 5 or .NET 6
-
-#### <a name="extensions-installation"></a>  Installation
-
-The easiest way to install *LocalStack .NET Client Extensions* is via `nuget`:
-
-```
-Install-Package LocalStack.Client.Extensions
-```
-
-Or use `dotnet cli`
-
-```
-dotnet add package LocalStack.Client.Extensions  
-```
-
-#### <a name="extensions-usage"></a> Usage
-
-The usage is very similar to `AWSSDK.Extensions.NETCore.Setup` with some differences.
+Here's a basic example of how to setup `LocalStack.NET`:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -113,44 +88,15 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-The most important difference is that `AddAwsService` extensions method is used instead of `AddAWSService` used in `AWSSDK.Extensions.NETCore.Setup`. The reason for this will be explained later in this section.
+The `AddLocalStack` method integrates LocalStack.NET into your application, and the `AddAwsService` method allows you to specify which AWS services you want to use with LocalStack.
 
-In addition, the `AddLocalStack` extension method is also used.
-
-<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
+<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b></e>
 
 `AddLocalStack` extension method is responsible for both configurations and adding of `LocalStack.Client` dependencies to service collection.
 
-You can configure `LocalStack.Client` by using entries in the `appsettings.json` files, as shown in the following example.
+### Configuration
 
-```json
-"LocalStack": {
-    "UseLocalStack": true,
-    "Session": {
-        "AwsAccessKeyId": "my-AwsAccessKeyId",
-        "AwsAccessKey": "my-AwsAccessKey",
-        "AwsSessionToken": "my-AwsSessionToken",
-        "RegionName": "eu-central-1"
-    },
-    "Config": {
-        "LocalStackHost": "localhost",
-        "UseSsl": false,
-        "UseLegacyPorts": false,
-        "EdgePort": 4566
-    }
-}
-```
-
-All the entries above are has shown with default values (except `UseLocalStack`, it's `false` by default).
-So the above entries do not need to be specified.
-
-What is entered for the aws credential values ​​in the `Session` section does not matter for LocalStack.
-
-<a name="session-regioname"></a>`RegionName` is important since LocalStack creates resources by spesified region.
-
-`Config` section contains important entries for local development. Starting with LocalStack releases after `v0.11.5`, all services are now exposed via the edge service (port 4566) only! If you are using a version of LocalStack lower than v0.11.5, you should set `UseLegacyPorts` to `true`. Edge port can be set to any available port ([see LocalStack configuration section](https://github.com/localstack/localstack#configurations)). If you have made such a change in LocalStack's configuration, be sure to set the same port value to `EdgePort` in the `Config` section. For `LocalStackHost` and `UseSsl` entries, ​​corresponding to the [LocalStack configuration](https://github.com/localstack/localstack#configurations) should be used.
-
-The following sample setting files can be used to use both `LocalStack.Client` and`AWSSDK.Extensions.NETCore.Setup` in different environments.
+To configure LocalStack.NET, you can use entries in the appsettings.json files. Here's a basic example for different environments:
 
 `appsettings.Development.json`
 
@@ -158,10 +104,11 @@ The following sample setting files can be used to use both `LocalStack.Client` a
 "LocalStack": {
     "UseLocalStack": true,
     "Session": {
-        ...
+        "RegionName": "eu-central-1"
     },
     "Config": {
-        ...
+        "LocalStackHost": "localhost.localstack.cloud", // or "localhost",
+        "EdgePort": 4566
     }
 }
 ```
@@ -178,229 +125,27 @@ The following sample setting files can be used to use both `LocalStack.Client` a
 }
 ```
 
-See project [LocalStack.Client.Sandbox.WithGenericHost](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes/LocalStack.Client.Sandbox.WithGenericHost) for a use case.
+The `RegionName` is important as LocalStack creates resources based on the specified region. For more advanced configurations and understanding how LocalStack.NET operates with LocalStack, refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Setup#configuration).
 
-#### <a name="extensions-usage-about-addawsservice"></a> About AddAwsService
+## Known Issues
 
-`AddAwsService` is equivalent of `AddAWSService` used in `AWSSDK.Extensions.NETCore.Setup`. It decides which factory to use when resolving any AWS Service. To decide this, it checks the `UseLocalStack` entry.
-If the `UseLocalStack` entry is `true`, it uses the [Session](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/src/LocalStack.Client/Session.cs) class of `LocalStack.Client` to create AWS Service. If the `UseLocalStack` entry is `false`, it uses the [ClientFactory](https://github.com/aws/aws-sdk-net/blob/master/extensions/src/AWSSDK.Extensions.NETCore.Setup/ClientFactory.cs) class of `AWSSDK.Extensions.NETCore.Setup` which is also used by original `AddAWSService`.
+- **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest container from Docker Hub.
 
-It is named as `AddAwsService` to avoid name conflict with `AddAWSService`.
-
-<e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b><e>
-
-#### <a name="useserviceurl"></a> useServiceUrl Parameter
-
-LocalStack.NET uses [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) to configure AWS clients to connect LocalStack. `ClientConfig` has two properties called `ServiceUrl` and `RegionEndpoint`, these are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. LocalStack.NET has given priority to the RegionEndpoint property and the `us-east-1` region is used as the default value (Different regions can be set by using appsettings.json, see [RegionName](#session-regioname) entry. Because of it sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.
-
-To override this behavior, the `useServiceUrl` optional parameter can be set to `true` as below.
+- **AWS_SERVICE_URL Environment Variable:** Unexpected behaviors might occur in LocalStack.NET when the `AWS_SERVICE_URL` environment variable is set. This environment variable is typically set by LocalStack in the container when using AWS Lambda, and AWS also uses this environment variable in the live environment. Soon, just like in LocalStack's official Python library, this environment variable will be prioritized by LocalStack.NET when configuring the LocalStack host, and there will be a general simplification in the configuration. You can follow this in the issues [issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27) and [issue #32](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/32). You set the `AWS_SERVICE_URL` to empty string until this issue is resolved.
 
 ```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    // Add framework services.
-    services.AddMvc();
-
-    services.AddLocalStack(Configuration)
-    services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
-    services.AddAwsService<IAmazonS3>();
-    services.AddAwsService<IAmazonMediaStoreData>(useServiceUrl: true)
-    services.AddAwsService<IAmazonIoTJobsDataPlane>(useServiceUrl: true)
-}
+Environment.SetEnvironmentVariable("AWS_SERVICE_URL", string.Empty);
 ```
 
-The `RegionEndpoint` is not applicable for services such as AWS MediaStore, Iot. The optional parameter `useServiceUrl` can be useful for use in such scenarios.
+- **IAmazonLambda Operations:** There's a general issue with `IAmazonLambda` operations. This matter is currently under investigation.
 
-### <a name="standalone-initialization"></a> Standalone Initialization
+## Developing
 
-If you do not want to use any DI library, you have to instantiate `SessionStandalone` as follows.
+We appreciate contributions in the form of feedback, bug reports, and pull requests.
 
-```csharp
-/*
-* ==== Default Values ====
-* AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
-* AwsAccessKey: secretKey (It doesn't matter to LocalStack)
-* AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
-* ==== Custom Values ====
-* var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
-*/
-var sessionOptions = new SessionOptions();
+### Building the Project
 
-/*
-* ==== Default Values ====
-* LocalStackHost: localhost
-* UseSsl: false
-* UseLegacyPorts: false (Set true if your LocalStack version is 0.11.5 or above)
-* EdgePort: 4566 (It doesn't matter if use legacy ports)
-* ==== Custom Values ====
-* var configOptions = new ConfigOptions("mylocalhost", false, false, 4566);
-*/
-var configOptions = new ConfigOptions();
-
-ISession session = SessionStandalone.Init()
-                                .WithSessionOptions(sessionOptions)
-                                .WithConfigurationOptions(configOptions).Create();
-
-var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
-```
-
-`CreateClientByInterface<TSerice>` method can also be used to create AWS service, as follows
-
-```csharp
-var amazonS3Client = session.CreateClientByInterface<IAmazonS3>();
-```
-
-### <a name="standalone-useserviceurl"></a><b>useServiceUrl Parameter</b>
-
-LocalStack.NET uses [ClientConfig](https://github.com/aws/aws-sdk-net/blob/master/sdk/src/Core/Amazon.Runtime/ClientConfig.cs) to configure AWS clients to connect LocalStack. `ClientConfig` has two properties called `ServiceUrl` and `RegionEndpoint`, these are mutually exclusive properties. Whichever property is set last will cause the other to automatically be reset to null. LocalStack.NET has given priority to the RegionEndpoint property and the `us-east-1` region is used as the default value (Different regions can be set by using appsettings.json, see [RegionName](#session-regioname) entry. Because of it sets the RegionEndpoint property after the ServiceUrl property, ServiceUrl will be set to null.
-
-To override this behavior, the `useServiceUrl` optional parameter can be set to `true` as below.
-
-```csharp
-var sessionOptions = new SessionOptions();
-var configOptions = new ConfigOptions();
-
-ISession session = SessionStandalone.Init()
-                                .WithSessionOptions(sessionOptions)
-                                .WithConfigurationOptions(configOptions).Create();
-
-var amazonS3Client = session.CreateClientByImplementation<AmazonMediaStoreDataClient>(true);
-var amazonS3Client = session.CreateClientByImplementation<AmazonS3Client>();
-```
-
-The `RegionEndpoint` is not applicable for services such as AWS MediaStore, Iot. The optional parameter `useServiceUrl` can be useful for use in such scenarios.
-
-`CreateClientByInterface<TSerice>` method can also be used to create AWS service, as follows
-
-```csharp
-var amazonS3Client = session.CreateClientByInterface<IAmazonMediaStoreData>(true);
-```
-
-### <a name="di"></a>  Microsoft.Extensions.DependencyInjection Initialization
-
-First, you need to install `Microsoft.Extensions.DependencyInjection` nuget package as follows
-
-```
-dotnet add package Microsoft.Extensions.DependencyInjection
-```
-
-Register necessary dependencies to `ServiceCollection` as follows
-
-```csharp
-var collection = new ServiceCollection();
-
-/*
-* ==== Default Values ====
-* AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
-* AwsAccessKey: secretKey (It doesn't matter to LocalStack)
-* AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
-* ==== Custom Values ====
-* var sessionOptions = new SessionOptions("someAwsAccessKeyId", "someAwsAccessKey", "someAwsSessionToken", "eu-central-");
-*/
-var sessionOptions = new SessionOptions();
-
-/*
-* ==== Default Values ====
-* LocalStackHost: localhost
-* UseSsl: false
-* UseLegacyPorts: false (Set true if your LocalStack version is 0.11.4 or below)
-* EdgePort: 4566 (It doesn't matter if use legacy ports)
-* ==== Custom Values ====
-* var configOptions = new ConfigOptions("mylocalhost", false, false, 4566);
-*/
-var configOptions = new ConfigOptions();
-
-collection
-    .AddScoped<ISessionOptions, SessionOptions>(provider => sessionOptions)
-    .AddScoped<IConfigOptions, ConfigOptions>(provider => configOptions))
-    .AddScoped<IConfig, Config>()
-    .AddSingleton<ISessionReflection, SessionReflection>()
-    .AddSingleton<ISession, Session>()
-    .AddTransient<IAmazonS3>(provider =>
-    {
-        var session = provider.GetRequiredService<ISession>();
-
-        return (IAmazonS3) session.CreateClientByInterface<IAmazonS3>();
-    });
-
-ServiceProvider serviceProvider = collection.BuildServiceProvider();
-
-var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
-```
-
-If you want to use it with `ConfigurationBuilder`, you can also choose a usage as below.
-
-```csharp
-var collection = new ServiceCollection();
-var builder = new ConfigurationBuilder();
-
-builder.SetBasePath(Directory.GetCurrentDirectory());
-builder.AddJsonFile("appsettings.json", true);
-builder.AddJsonFile("appsettings.Development.json", true);
-builder.AddEnvironmentVariables();
-builder.AddCommandLine(args);
-
-IConfiguration configuration = builder.Build();
-
-collection.Configure<LocalStackOptions>(options => configuration.GetSection("LocalStack").Bind(options, c => c.BindNonPublicProperties = true));
-/*
-* ==== Default Values ====
-* AwsAccessKeyId: accessKey (It doesn't matter to LocalStack)
-* AwsAccessKey: secretKey (It doesn't matter to LocalStack)
-* AwsSessionToken: token (It doesn't matter to LocalStack)
-* RegionName: us-east-1
-    */
-collection.Configure<SessionOptions>(options => configuration.GetSection("LocalStack")
-                                                                .GetSection(nameof(LocalStackOptions.Session))
-                                                                .Bind(options, c => c.BindNonPublicProperties = true));
-/*
-    * ==== Default Values ====
-    * LocalStackHost: localhost
-    * UseSsl: false
-    * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.5 or above)
-    * EdgePort: 4566 (It doesn't matter if use legacy ports)
-    */
-collection.Configure<ConfigOptions>(options => configuration.GetSection("LocalStack")
-                                                            .GetSection(nameof(LocalStackOptions.Config))
-                                                            .Bind(options, c => c.BindNonPublicProperties = true));
-
-
-collection.AddTransient<IConfig, Config>(provider =>
-{
-    ConfigOptions options = provider.GetRequiredService<IOptions<ConfigOptions>>().Value;
-
-    return new Config(options);
-})
-.AddSingleton<ISessionReflection, SessionReflection>()
-.AddSingleton<ISession, Session>(provider =>
-{
-    SessionOptions sessionOptions = provider.GetRequiredService<IOptions<SessionOptions>>().Value;
-    var config = provider.GetRequiredService<IConfig>();
-    var sessionReflection = provider.GetRequiredService<ISessionReflection>();
-
-    return new Session(sessionOptions, config, sessionReflection);
-})
-.AddTransient<IAmazonS3>(provider =>
-{
-    var session = provider.GetRequiredService<ISession>();
-
-    return (IAmazonS3) session.CreateClientByInterface<IAmazonS3>();
-});
-
-ServiceProvider serviceProvider = collection.BuildServiceProvider();
-
-var amazonS3Client = serviceProvider.GetRequiredService<IAmazonS3>();
-```
-
-See [useServiceUrl](#standalone-useserviceurl) parameter usage.
-
-## <a name="developing"></a> Developing
-
-We welcome feedback, bug reports, and pull requests!
-
-Use commands below to get you started and test your code:
+To build the project, use the following commands based on your operating system:
 
 Windows
 
@@ -414,17 +159,13 @@ Linux
 ./build.sh
 ```
 
-### <a name="about-sandboxes"></a> About Sandbox Applications
+### Sandbox Applications
 
-In addition to Unit Tests and Functional Test, LocalStack .Net Repository has various sandbox console applications for both testing and example purposes under [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes)
+The LocalStack .NET repository includes several sandbox console applications located in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes). These applications serve both as testing tools and as examples. Refer to [the documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Developing#sandbox-applications) for more information
 
-Sandbox applications include various examples of initialization methods of `LocalStack.Client` (see [Usage](#usage) section) and common AWS applications. They provide a convenient and safe environment for those who want to make developments in the library.
+### Running Tests
 
-To run sandbox applications with LocalStack container, console application called [LocalStack.Container](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes/LocalStack.Container) has been developed. It uses [Dotnet Testcontainer](https://github.com/HofmeisterAn/dotnet-testcontainers) to bootstrap LocalStack. Experiments can be made by running LocalStack.Container application first and then any sandbox application.
-
-### <a name="running-tests"></a> Running Tests
-
-Use commands below to run tests
+To execute the tests, use the commands below:
 
 Windows
 
@@ -438,10 +179,10 @@ Linux
 ./build.sh --target=tests
 ```
 
-## <a name="changelog"></a> Changelog
+## Changelog
 
 Please refer to [`CHANGELOG.md`](CHANGELOG.md) to see the complete list of changes for each release.
 
-## <a name="license"></a> License
+## License
 
 Licensed under MIT, see [LICENSE](LICENSE) for the full text.

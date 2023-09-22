@@ -27,5 +27,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
+		<ProjectReference Include="..\common\LocalStack.Tests.Common\LocalStack.Tests.Common.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace LocalStack.Client.Tests.Mocks;
+﻿namespace LocalStack.Tests.Common.Mocks;
 
 public class MockSession : Session
 {
@@ -18,8 +18,6 @@ public class MockSession : Session
 
     public static MockSession Create()
     {
-        return new MockSession(new Mock<ISessionOptions>(MockBehavior.Strict), 
-                               new Mock<IConfig>(MockBehavior.Strict),
-                               new Mock<ISessionReflection>(MockBehavior.Strict));
+        return new MockSession(new Mock<ISessionOptions>(MockBehavior.Strict), new Mock<IConfig>(MockBehavior.Strict), new Mock<ISessionReflection>(MockBehavior.Strict));
     }
 }

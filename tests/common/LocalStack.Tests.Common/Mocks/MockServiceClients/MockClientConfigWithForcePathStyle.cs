@@ -1,4 +1,4 @@
-﻿namespace LocalStack.Client.Tests.Mocks.MockServiceClients;
+﻿namespace LocalStack.Tests.Common.Mocks.MockServiceClients;
 
 public class MockClientConfigWithForcePathStyle : MockClientConfig
 {

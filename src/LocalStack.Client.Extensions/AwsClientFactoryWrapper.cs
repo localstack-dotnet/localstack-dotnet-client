@@ -1,19 +1,15 @@
 ﻿#pragma warning disable S3011 // We need to use reflection to access private fields for service metadata
 #pragma warning disable CS8600,CS8603 // Not possible to get null value from this private field
+#pragma warning disable CA1802 // We need to use reflection to access private fields for service metadata
 namespace LocalStack.Client.Extensions;
 
 public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
 {
-    private const string ClientFactoryFullName = "Amazon.Extensions.NETCore.Setup.ClientFactory";
-    private const string CreateServiceClientMethodName = "CreateServiceClient";
+    private static readonly string ClientFactoryFullName = "Amazon.Extensions.NETCore.Setup.ClientFactory";
+    private static readonly string CreateServiceClientMethodName = "CreateServiceClient";
 
-    public AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions awsOptions) where TClient : IAmazonService
+    public AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions? awsOptions) where TClient : IAmazonService
     {
-        if (awsOptions == null)
-        {
-            throw new ArgumentNullException(nameof(awsOptions));
-        }
-
         Type? clientFactoryType = typeof(ConfigurationException).Assembly.GetType(ClientFactoryFullName);
 
         if (clientFactoryType == null)
@@ -31,7 +27,7 @@ public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
 
         Type clientType = typeof(TClient);
 
-        object clientFactory = constructorInfo.Invoke(new object[] { clientType, awsOptions });
+        object clientFactory = constructorInfo.Invoke(new object[] { clientType, awsOptions! });
 
         MethodInfo? methodInfo = clientFactory.GetType().GetMethod(CreateServiceClientMethodName, BindingFlags.NonPublic | BindingFlags.Instance);
 

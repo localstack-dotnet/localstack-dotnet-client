@@ -2,5 +2,5 @@
 
 public interface IAwsClientFactoryWrapper
 {
-    AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions awsOptions) where TClient : IAmazonService;
+    AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions? awsOptions) where TClient : IAmazonService;
 }

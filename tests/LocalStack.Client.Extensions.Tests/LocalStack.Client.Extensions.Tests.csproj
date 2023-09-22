@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AWSSDK.Core" />
+		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 		
@@ -29,5 +29,7 @@
 		<ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
 		<ProjectReference Include="..\LocalStack.Client.Tests\LocalStack.Client.Tests.csproj" />
 	</ItemGroup>
+
+
 
 </Project>

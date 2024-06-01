@@ -107,7 +107,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 }
 
 
-                if (context.IsRunningOnUnix() && targetFramework == "net461")
+                if (context.IsRunningOnUnix() && targetFramework == "net462")
                 {
                     context.RunXUnitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
                 }

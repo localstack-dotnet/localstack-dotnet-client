@@ -18,7 +18,7 @@ global using LocalStack.Client.Options;
 global using LocalStack.Client.Utils;
 
 #pragma warning disable MA0048 // File name must match type name
-#if NETSTANDARD || NET461
+#if NETSTANDARD || NET462
 namespace System.Runtime.CompilerServices
 {
     using System.ComponentModel;

@@ -2,7 +2,7 @@
 
 public class AwsClientFactoryWrapperTests
 {
-    private readonly IAwsClientFactoryWrapper _awsClientFactoryWrapper;
+    private readonly AwsClientFactoryWrapper _awsClientFactoryWrapper;
     private readonly Mock<IServiceProvider> _mockServiceProvider;
     private readonly AWSOptions _awsOptions;
 

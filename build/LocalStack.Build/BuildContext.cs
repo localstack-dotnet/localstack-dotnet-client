@@ -111,7 +111,7 @@ public sealed class BuildContext : FrostingContext
                                         .Where(fp => fp.FullPath.EndsWith("Tests.csproj", StringComparison.InvariantCulture))
                                         .ToList();
 
-        IList<ProjMetadata> projMetadata = new List<ProjMetadata>();
+        var projMetadata = new List<ProjMetadata>();
 
         foreach (FilePath csProj in csProjFile)
         {
@@ -171,7 +171,7 @@ public sealed class BuildContext : FrostingContext
         return version;
     }
 
-    private IEnumerable<string> GetProjectTargetFrameworks(string csprojPath)
+    private string[] GetProjectTargetFrameworks(string csprojPath)
     {
         FilePath file = this.File(csprojPath);
         string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
@@ -206,7 +206,7 @@ public sealed class BuildContext : FrostingContext
         }
         else
         {
-            int startIndex = csprojPath.LastIndexOf("/", StringComparison.Ordinal) + 1;
+            int startIndex = csprojPath.LastIndexOf('/') + 1;
             int endIndex = csprojPath.IndexOf(".csproj", startIndex, StringComparison.Ordinal);
 
             assemblyName = csprojPath.Substring(startIndex, endIndex - startIndex);

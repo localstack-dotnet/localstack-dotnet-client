@@ -127,6 +127,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.32" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
@@ -137,12 +138,12 @@
     <PackageVersion Include="AutoFixture" Version="4.18.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="Moq" Version="4.18.4" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageVersion Include="Testcontainers" Version="3.4.0" />
-    <PackageVersion Include="Testcontainers.LocalStack" Version="3.4.0" />
-    <PackageVersion Include="xunit" Version="2.5.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="Testcontainers" Version="3.8.0" />
+    <PackageVersion Include="Testcontainers.LocalStack" Version="3.8.0" />
+    <PackageVersion Include="xunit" Version="2.8.1" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
-    <PackageVersion Include="xunit.runner.console" Version="2.5.0" />
+    <PackageVersion Include="xunit.runner.console" Version="2.8.1"/>
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">

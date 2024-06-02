@@ -22,18 +22,18 @@ public class SampleS3Service : IHostedService
         try
         {
             var putBucketRequest = new PutBucketRequest { BucketName = BucketName };
-            await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken).ConfigureAwait(false);
+            await _amazonS3.PutBucketAsync(putBucketRequest, cancellationToken);
 
             _logger.LogInformation("The bucket {BucketName} created", BucketName);
 
             // Retrieve the bucket location.
-            string bucketLocation = await FindBucketLocationAsync(_amazonS3, BucketName).ConfigureAwait(false);
+            string bucketLocation = await FindBucketLocationAsync(_amazonS3, BucketName);
             _logger.LogInformation("The bucket's location: {BucketLocation}", bucketLocation);
 
             using var fileTransferUtility = new TransferUtility(_amazonS3);
 
             _logger.LogInformation("Uploading the file {FilePath}...", FilePath);
-            await fileTransferUtility.UploadAsync(FilePath, BucketName, Key, cancellationToken).ConfigureAwait(false);
+            await fileTransferUtility.UploadAsync(FilePath, BucketName, Key, cancellationToken);
             _logger.LogInformation("The file {FilePath} created", FilePath);
         }
         catch (AmazonS3Exception e)
@@ -59,7 +59,7 @@ public class SampleS3Service : IHostedService
     private static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
     {
         var request = new GetBucketLocationRequest() { BucketName = bucketName };
-        GetBucketLocationResponse response = await client.GetBucketLocationAsync(request).ConfigureAwait(false);
+        GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
         var bucketLocation = response.Location.ToString();
 
         return bucketLocation;

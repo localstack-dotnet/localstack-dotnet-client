@@ -21,7 +21,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
     public virtual async Task DynamoDbService_Should_Create_A_DynamoDb_Table_Async()
     {
         var tableName = Guid.NewGuid().ToString();
-        CreateTableResponse createTableResponse = await CreateTestTableAsync(tableName).ConfigureAwait(false);
+        CreateTableResponse createTableResponse = await CreateTestTableAsync(tableName);
         Assert.Equal(HttpStatusCode.OK, createTableResponse.HttpStatusCode);
     }
 
@@ -29,9 +29,9 @@ public abstract class BaseDynamoDbScenario : BaseScenario
     public virtual async Task DynamoDbService_Should_Delete_A_DynamoDb_Table_Async()
     {
         var tableName = Guid.NewGuid().ToString();
-        await CreateTestTableAsync(tableName).ConfigureAwait(false);
+        await CreateTestTableAsync(tableName);
 
-        DeleteTableResponse deleteTableResponse = await DeleteTestTableAsync(tableName).ConfigureAwait(false);
+        DeleteTableResponse deleteTableResponse = await DeleteTestTableAsync(tableName);
         Assert.Equal(HttpStatusCode.OK, deleteTableResponse.HttpStatusCode);
     }
 
@@ -40,7 +40,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
     {
         var tableName = Guid.NewGuid().ToString();
         var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
-        await CreateTestTableAsync(tableName).ConfigureAwait(false);
+        await CreateTestTableAsync(tableName);
 
         Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
 
@@ -48,10 +48,10 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         string modelJson = JsonSerializer.Serialize(movieEntity);
         Document item = Document.FromJson(modelJson);
 
-        await targetTable.PutItemAsync(item).ConfigureAwait(false);
+        await targetTable.PutItemAsync(item);
         dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
         List<MovieEntity> movieEntities =
-            await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync().ConfigureAwait(false);
+            await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync();
 
         Assert.True(movieEntity.DeepEquals(movieEntities[0]));
     }
@@ -63,7 +63,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         const int recordCount = 5;
 
         var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
-        await CreateTestTableAsync(tableName).ConfigureAwait(false);
+        await CreateTestTableAsync(tableName);
 
         Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
         IList<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
@@ -78,12 +78,12 @@ public abstract class BaseDynamoDbScenario : BaseScenario
 
         foreach (Document document in documents)
         {
-            await targetTable.PutItemAsync(document).ConfigureAwait(false);
+            await targetTable.PutItemAsync(document);
         }
 
         dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
         List<MovieEntity> returnedMovieEntities =
-            await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync().ConfigureAwait(false);
+            await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync();
 
         Assert.NotNull(movieEntities);
         Assert.NotEmpty(movieEntities);

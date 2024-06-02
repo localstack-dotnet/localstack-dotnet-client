@@ -16,38 +16,38 @@ public abstract class BaseSqsScenario : BaseScenario
     protected IAmazonSQS AmazonSqs { get; set; }
 
     [Fact]
-    public async Task AmazonSqsService_Should_Create_A_Queue_Async()
+    public virtual async Task AmazonSqsService_Should_Create_A_Queue_Async()
     {
         var guid = Guid.NewGuid();
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName).ConfigureAwait(false);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName);
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task AmazonSqsService_Should_Delete_A_Queue_Async()
+    public virtual async Task AmazonSqsService_Should_Delete_A_Queue_Async()
     {
         var guid = Guid.NewGuid();
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName).ConfigureAwait(false);
-        DeleteQueueResponse deleteQueueResponse = await DeleteQueueAsync(createQueueResponse.QueueUrl).ConfigureAwait(false);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName);
+        DeleteQueueResponse deleteQueueResponse = await DeleteQueueAsync(createQueueResponse.QueueUrl);
 
         Assert.Equal(HttpStatusCode.OK, deleteQueueResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task AmazonSqsService_Should_Send_A_Message_To_A_Queue_Async()
+    public virtual async Task AmazonSqsService_Should_Send_A_Message_To_A_Queue_Async()
     {
         var guid = Guid.NewGuid();
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName).ConfigureAwait(false);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName);
 
         var commentModel = new Fixture().Create<CommentModel>();
         string serializedModel = JsonSerializer.Serialize(commentModel);
@@ -60,19 +60,19 @@ public abstract class BaseSqsScenario : BaseScenario
             MessageBody = serializedModel,
         };
 
-        SendMessageResponse messageResponse = await AmazonSqs.SendMessageAsync(sendMessageRequest).ConfigureAwait(false);
+        SendMessageResponse messageResponse = await AmazonSqs.SendMessageAsync(sendMessageRequest);
 
         Assert.Equal(HttpStatusCode.OK, messageResponse.HttpStatusCode);
     }
 
     [Fact]
-    public async Task AmazonSqsService_Should_Receive_Messages_From_A_Queue_Async()
+    public virtual async Task AmazonSqsService_Should_Receive_Messages_From_A_Queue_Async()
     {
         var guid = Guid.NewGuid();
         var queueName = $"{guid}.fifo";
         var dlQueueName = $"{guid}-DLQ.fifo";
 
-        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName).ConfigureAwait(false);
+        CreateQueueResponse createQueueResponse = await CreateFifoQueueWithRedriveAsync(queueName, dlQueueName);
 
         var commentModel = new Fixture().Create<CommentModel>();
         string serializedModel = JsonSerializer.Serialize(commentModel);
@@ -85,11 +85,11 @@ public abstract class BaseSqsScenario : BaseScenario
             MessageBody = serializedModel
         };
 
-        await AmazonSqs.SendMessageAsync(sendMessageRequest).ConfigureAwait(false);
+        await AmazonSqs.SendMessageAsync(sendMessageRequest);
 
         var req = new ReceiveMessageRequest { MaxNumberOfMessages = 1, QueueUrl = createQueueResponse.QueueUrl };
 
-        ReceiveMessageResponse receiveMessages = await AmazonSqs.ReceiveMessageAsync(req).ConfigureAwait(false);
+        ReceiveMessageResponse receiveMessages = await AmazonSqs.ReceiveMessageAsync(req);
         Assert.Equal(HttpStatusCode.OK, receiveMessages.HttpStatusCode);
 
         Message? currentMessage = receiveMessages.Messages.FirstOrDefault();
@@ -107,14 +107,14 @@ public abstract class BaseSqsScenario : BaseScenario
             QueueName = dlQueueName ?? TestDlQueueName, Attributes = new Dictionary<string, string>(StringComparer.Ordinal) { { "FifoQueue", "true" }, },
         };
 
-        CreateQueueResponse createDlqResult = await AmazonSqs.CreateQueueAsync(createDlqRequest).ConfigureAwait(false);
+        CreateQueueResponse createDlqResult = await AmazonSqs.CreateQueueAsync(createDlqRequest);
 
         GetQueueAttributesResponse attributes = await AmazonSqs.GetQueueAttributesAsync(new GetQueueAttributesRequest
                                                                {
                                                                    QueueUrl = createDlqResult.QueueUrl,
                                                                    AttributeNames = new List<string> { "QueueArn" },
                                                                })
-                                                               .ConfigureAwait(false);
+                                                               ;
 
         var redrivePolicy = new { maxReceiveCount = "1", deadLetterTargetArn = attributes.Attributes["QueueArn"] };
 
@@ -127,14 +127,14 @@ public abstract class BaseSqsScenario : BaseScenario
             },
         };
 
-        return await AmazonSqs.CreateQueueAsync(createQueueRequest).ConfigureAwait(false);
+        return await AmazonSqs.CreateQueueAsync(createQueueRequest);
     }
 
     protected async Task<CreateQueueResponse> CreateQueueAsync(string? queueName = null)
     {
         var createQueueRequest = new CreateQueueRequest(queueName ?? TestQueueName);
 
-        return await AmazonSqs.CreateQueueAsync(createQueueRequest).ConfigureAwait(false);
+        return await AmazonSqs.CreateQueueAsync(createQueueRequest);
     }
 
     [SuppressMessage("Design", "CA1054:URI-like parameters should not be strings")]
@@ -142,6 +142,6 @@ public abstract class BaseSqsScenario : BaseScenario
     {
         var deleteQueueRequest = new DeleteQueueRequest(queueUrl);
 
-        return await AmazonSqs.DeleteQueueAsync(deleteQueueRequest).ConfigureAwait(false);
+        return await AmazonSqs.DeleteQueueAsync(deleteQueueRequest);
     }
 }

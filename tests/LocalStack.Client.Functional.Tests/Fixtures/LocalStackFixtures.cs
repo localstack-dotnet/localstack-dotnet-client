@@ -15,12 +15,12 @@ public abstract class LocalStackFixtureBase : IAsyncLifetime, ILocalStackFixture
 
     public async Task InitializeAsync()
     {
-        await LocalStackContainer.StartAsync().ConfigureAwait(false);
+        await LocalStackContainer.StartAsync();
     }
 
     public async Task DisposeAsync()
     {
-        await LocalStackContainer.StopAsync().ConfigureAwait(false);
+        await LocalStackContainer.StopAsync();
     }
 }
 
@@ -31,23 +31,16 @@ public sealed class LocalStackFixtureV131 : LocalStackFixtureBase
     }
 }
 
-public sealed class LocalStackFixtureV20 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV23 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV20() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV20))
+    public LocalStackFixtureV23() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV23))
     {
     }
 }
 
-public sealed class LocalStackFixtureV22 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV34 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV22() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV22))
-    {
-    }
-}
-
-public class LocalStackLegacyFixture : LocalStackFixtureBase
-{
-    public LocalStackLegacyFixture() : base(TestContainers.LocalStackLegacyBuilder)
+    public LocalStackFixtureV34() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV34))
     {
     }
 }

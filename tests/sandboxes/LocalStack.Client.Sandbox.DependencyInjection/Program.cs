@@ -65,25 +65,25 @@ const string key = "SampleData.txt";
 Console.WriteLine("Press any key to start Sandbox application");
 Console.ReadLine();
 
-await CreateBucketAndUploadFileAsync(amazonS3Client, bucketName, filePath, key).ConfigureAwait(false);
+await CreateBucketAndUploadFileAsync(amazonS3Client, bucketName, filePath, key);
 
 static async Task CreateBucketAndUploadFileAsync(IAmazonS3 s3Client, string bucketName, string path, string key)
 {
     try
     {
         var putBucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true };
-        await s3Client.PutBucketAsync(putBucketRequest).ConfigureAwait(false);
+        await s3Client.PutBucketAsync(putBucketRequest);
 
         Console.WriteLine("The bucket {0} created", bucketName);
 
         // Retrieve the bucket location.
-        string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName).ConfigureAwait(false);
+        string bucketLocation = await FindBucketLocationAsync(s3Client, bucketName);
         Console.WriteLine("The bucket's location: {0}", bucketLocation);
 
         using var fileTransferUtility = new TransferUtility(s3Client);
 
         Console.WriteLine("Uploading the file {0}...", path);
-        await fileTransferUtility.UploadAsync(path, bucketName, key).ConfigureAwait(false);
+        await fileTransferUtility.UploadAsync(path, bucketName, key);
         Console.WriteLine("The file {0} created", path);
     }
     catch (AmazonS3Exception e)
@@ -99,7 +99,7 @@ static async Task CreateBucketAndUploadFileAsync(IAmazonS3 s3Client, string buck
 static async Task<string> FindBucketLocationAsync(IAmazonS3 client, string bucketName)
 {
     var request = new GetBucketLocationRequest() { BucketName = bucketName };
-    GetBucketLocationResponse response = await client.GetBucketLocationAsync(request).ConfigureAwait(false);
+    GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
     var bucketLocation = response.Location.ToString();
 
     return bucketLocation;

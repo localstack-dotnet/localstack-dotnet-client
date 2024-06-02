@@ -2,7 +2,7 @@
 Console.ReadLine();
 
 string containerId = Guid.NewGuid().ToString().ToUpperInvariant();
-LocalStackBuilder localStackBuilder = new LocalStackBuilder().WithImage($"localstack/localstack:latest")
+LocalStackBuilder localStackBuilder = new LocalStackBuilder().WithImage($"localstack/localstack:3.4.0")
                                                              .WithName($"localStack-latest-{containerId}")
                                                              .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                                              .WithEnvironment("DEBUG", "1")
@@ -12,14 +12,13 @@ LocalStackBuilder localStackBuilder = new LocalStackBuilder().WithImage($"locals
 
 LocalStackContainer container = localStackBuilder.Build();
 
-
 Console.WriteLine("Starting LocalStack Container");
-await container.StartAsync().ConfigureAwait(false);
+await container.StartAsync();
 Console.WriteLine("LocalStack Container started");
 
 Console.WriteLine("Press any key to stop LocalStack container");
 Console.ReadLine();
 
 Console.WriteLine("Stopping LocalStack Container");
-await container.DisposeAsync().ConfigureAwait(false);
+await container.DisposeAsync();
 Console.WriteLine("LocalStack Container stopped");

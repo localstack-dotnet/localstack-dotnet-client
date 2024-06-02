@@ -24,25 +24,25 @@ public abstract class BaseRealLife : BaseScenario
         var jobCreatedEvent = new JobCreatedEvent(423565221, 191, 125522, "Painting Service");
 
         var createTopicRequest = new CreateTopicRequest(topicName);
-        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest);
 
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
         var createQueueRequest = new CreateQueueRequest(queueName);
-        CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest).ConfigureAwait(false);
+        CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
 
         const string queueArnAttribute = "QueueArn";
         var getQueueAttributesRequest = new GetQueueAttributesRequest(createQueueResponse.QueueUrl, new List<string> { queueArnAttribute });
-        GetQueueAttributesResponse getQueueAttributesResponse = await AmazonSqs.GetQueueAttributesAsync(getQueueAttributesRequest).ConfigureAwait(false);
+        GetQueueAttributesResponse getQueueAttributesResponse = await AmazonSqs.GetQueueAttributesAsync(getQueueAttributesRequest);
 
         Assert.Equal(HttpStatusCode.OK, getQueueAttributesResponse.HttpStatusCode);
 
         string queueArn = getQueueAttributesResponse.Attributes[queueArnAttribute];
 
         var subscribeRequest = new SubscribeRequest(createTopicResponse.TopicArn, "sqs", queueArn);
-        SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest).ConfigureAwait(false);
+        SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest);
 
         Assert.Equal(HttpStatusCode.OK, subscribeResponse.HttpStatusCode);
 
@@ -57,19 +57,19 @@ public abstract class BaseRealLife : BaseScenario
             Message = serializedObject, TopicArn = createTopicResponse.TopicArn, Subject = jobCreatedEvent.EventName, MessageAttributes = messageAttributes
         };
 
-        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest).ConfigureAwait(false);
+        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest);
 
         Assert.Equal(HttpStatusCode.OK, publishResponse.HttpStatusCode);
 
         var receiveMessageRequest = new ReceiveMessageRequest(createQueueResponse.QueueUrl);
-        ReceiveMessageResponse receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest).ConfigureAwait(false);
+        ReceiveMessageResponse receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
 
         Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
 
         if (receiveMessageResponse.Messages.Count == 0)
         {
-            await Task.Delay(2000).ConfigureAwait(false);
-            receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest).ConfigureAwait(false);
+            await Task.Delay(2000);
+            receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
 
             Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
         }

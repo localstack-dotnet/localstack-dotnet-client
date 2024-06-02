@@ -22,8 +22,7 @@ await new HostBuilder().ConfigureHostConfiguration(configHost => configHost.AddE
                                         })
                                         .ConfigureLogging((_, configLogging) => { configLogging.AddConsole(); })
                                         .UseConsoleLifetime()
-                                        .RunConsoleAsync()
-                                        .ConfigureAwait(false);
+                                        .RunConsoleAsync();
 
 static string? GetNetCoreVersion()
 {

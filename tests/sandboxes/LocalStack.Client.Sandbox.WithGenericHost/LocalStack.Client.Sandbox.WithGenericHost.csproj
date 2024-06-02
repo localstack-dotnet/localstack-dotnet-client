@@ -1,40 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
-		<NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848</NoWarn>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <LangVersion>latest</LangVersion>
+        <NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848;MA0004;CA2007</NoWarn>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<Content Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="appsettings.Development.json;appsettings.Production.json;">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<DependentUpon>appsettings.json</DependentUpon>
-		</Content>
-	</ItemGroup>
+    <ItemGroup>
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="appsettings.Development.json;appsettings.Production.json;">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="AWSSDK.S3" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="7.0.0"/>
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.S3"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="7.0.0"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
-		<ProjectReference Include="..\..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj"/>
+        <ProjectReference Include="..\..\..\src\LocalStack.Client\LocalStack.Client.csproj"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<None Update="SampleData.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+    <ItemGroup>
+        <None Update="SampleData.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
 </Project>

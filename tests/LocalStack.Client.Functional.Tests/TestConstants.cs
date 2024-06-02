@@ -7,8 +7,8 @@ public static class TestConstants
     public const string LocalStackHttpsConfig = "appsettings.LocalStack.Https.json";
 
     public const string LocalStackV13 = "1.3.1";
-    public const string LocalStackV20 = "2.0";
-    public const string LocalStackV22 = "latest";
-    
+    public const string LocalStackV23 = "2.3.2";
+    public const string LocalStackV34 = "3.4.0";
+
     public const string MovieTableMovieIdGsi = "MoiveTableMovie-Index";
 }

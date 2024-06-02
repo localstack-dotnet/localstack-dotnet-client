@@ -1,6 +1,4 @@
-﻿return new CakeHost()
-       .UseContext<BuildContext>()
-       .Run(args);
+﻿return new CakeHost().UseContext<BuildContext>().Run(args);
 
 [TaskName("Default"), IsDependentOn(typeof(TestTask))]
 public class DefaultTask : FrostingTask
@@ -12,25 +10,16 @@ public sealed class InitTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        context.StartProcess("dotnet", new ProcessSettings
-        {
-            Arguments = "--info"
-        });
+        context.StartProcess("dotnet", new ProcessSettings { Arguments = "--info" });
 
         if (!context.IsRunningOnUnix())
         {
             return;
         }
 
-        context.StartProcess("git", new ProcessSettings
-        {
-            Arguments = "config --global core.autocrlf true"
-        });
+        context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
 
-        context.StartProcess("mono", new ProcessSettings
-        {
-            Arguments = "--version"
-        });
+        context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
 
         context.InstallXUnitNugetPackage();
     }
@@ -41,11 +30,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
-        context.DotNetBuild(context.SlnFilePath,
-                            new DotNetBuildSettings
-                            {
-                                Configuration = context.BuildConfiguration
-                            });
+        context.DotNetBuild(context.SlnFilePath, new DotNetBuildSettings { Configuration = context.BuildConfiguration });
     }
 }
 
@@ -58,10 +43,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
         var settings = new DotNetTestSettings
         {
-            NoRestore = !context.ForceRestore,
-            NoBuild = !context.ForceBuild,
-            Configuration = context.BuildConfiguration,
-            Blame = true
+            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
@@ -78,10 +60,12 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 if (context.SkipFunctionalTest && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {
                     context.Warning("Skipping Functional Tests");
+
                     continue;
                 }
 
-                context.Warning($"=============Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}=============");
+                context.Warning(
+                    $"=============Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}=============");
                 settings.Framework = targetFramework;
 
                 if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
@@ -90,13 +74,13 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
                     try
                     {
-                        string psOutput = context.DockerPs(new DockerContainerPsSettings() { All = true, Quiet = true});
+                        string psOutput = context.DockerPs(new DockerContainerPsSettings() { All = true, Quiet = true });
 
                         if (!string.IsNullOrEmpty(psOutput))
                         {
                             context.Warning(psOutput);
 
-                            string[] containers = psOutput.Split(new[]{ Environment.NewLine }, StringSplitOptions.None);
+                            string[] containers = psOutput.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
                             context.DockerRm(containers);
                         }
                     }
@@ -105,7 +89,6 @@ public sealed class TestTask : FrostingTask<BuildContext>
                         // ignored
                     }
                 }
-
 
                 if (context.IsRunningOnUnix() && targetFramework == "net462")
                 {
@@ -117,6 +100,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
                     context.DotNetTest(testProjectPath, settings);
                 }
+
                 context.Warning("==============================================================");
             }
         }
@@ -139,9 +123,7 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 
         var settings = new DotNetPackSettings
         {
-            Configuration = context.BuildConfiguration, 
-            OutputDirectory = context.ArtifactOutput, 
-            MSBuildSettings = new DotNetMSBuildSettings()
+            Configuration = context.BuildConfiguration, OutputDirectory = context.ArtifactOutput, MSBuildSettings = new DotNetMSBuildSettings()
         };
 
         settings.MSBuildSettings.SetVersion(context.PackageVersion);
@@ -201,10 +183,6 @@ public sealed class NugetPushTask : FrostingTask<BuildContext>
         string packageSecret = context.PackageSecret;
         string packageSource = context.PackageSourceMap[context.PackageSource];
 
-        context.DotNetNuGetPush(packageFile.Path.FullPath, new DotNetNuGetPushSettings()
-        {
-            ApiKey = packageSecret,
-            Source = packageSource,
-        });
+        context.DotNetNuGetPush(packageFile.Path.FullPath, new DotNetNuGetPushSettings() { ApiKey = packageSecret, Source = packageSource, });
     }
 }

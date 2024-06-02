@@ -98,7 +98,7 @@ public sealed class BuildContext : FrostingContext
 
         var nugetInstallSettings = new NuGetInstallSettings
         {
-            Version = "2.4.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = "."
+            Version = "2.8.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = "."
         };
 
         this.NuGetInstall("xunit.runner.console", nugetInstallSettings);
@@ -131,7 +131,7 @@ public sealed class BuildContext : FrostingContext
     public void RunXUnitUsingMono(string targetFramework, string assemblyPath)
     {
         int exitCode = this.StartProcess(
-            "mono", new ProcessSettings { Arguments = $"./testrunner/xunit.runner.console.2.4.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}" });
+            "mono", new ProcessSettings { Arguments = $"./testrunner/xunit.runner.console.2.8.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}" });
 
         if (exitCode != 0)
         {

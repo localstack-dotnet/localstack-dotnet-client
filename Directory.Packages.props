@@ -19,6 +19,7 @@
     <PackageVersion Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.300.98" />
     <PackageVersion Include="AWSSDK.ApiGatewayV2" Version="3.7.300.98" />
     <PackageVersion Include="AWSSDK.AppConfig" Version="3.7.301.44" />
+    <PackageVersion Include="AWSSDK.AppConfigData" Version="3.7.301.59" />
     <PackageVersion Include="AWSSDK.Appflow" Version="3.7.300.98" />
     <PackageVersion Include="AWSSDK.AppSync" Version="3.7.305.16" />
     <PackageVersion Include="AWSSDK.Athena" Version="3.7.304.1" />
@@ -84,6 +85,7 @@
     <PackageVersion Include="AWSSDK.Organizations" Version="3.7.302.44" />
     <PackageVersion Include="AWSSDK.QLDB" Version="3.7.300.99" />
     <PackageVersion Include="AWSSDK.QLDBSession" Version="3.7.300.98" />
+    <PackageVersion Include="AWSSDK.RAM" Version="3.7.300.98" />
     <PackageVersion Include="AWSSDK.RDS" Version="3.7.313.6" />
     <PackageVersion Include="AWSSDK.RDSDataService" Version="3.7.301.74" />
     <PackageVersion Include="AWSSDK.Redshift" Version="3.7.305.24" />

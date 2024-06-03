@@ -12,6 +12,7 @@
 		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" />
 		<PackageReference Include="AWSSDK.ApiGatewayV2" />
 		<PackageReference Include="AWSSDK.AppConfig" />
+		<PackageReference Include="AWSSDK.AppConfigData" />
 		<PackageReference Include="AWSSDK.Appflow" />
 		<PackageReference Include="AWSSDK.AppSync" />
 		<PackageReference Include="AWSSDK.Athena" />
@@ -77,6 +78,7 @@
 		<PackageReference Include="AWSSDK.Organizations" />
 		<PackageReference Include="AWSSDK.QLDB" />
 		<PackageReference Include="AWSSDK.QLDBSession" />
+		<PackageReference Include="AWSSDK.RAM" />
 		<PackageReference Include="AWSSDK.RDS" />
 		<PackageReference Include="AWSSDK.RDSDataService" />
 		<PackageReference Include="AWSSDK.Redshift" />

@@ -1,4 +1,7 @@
-﻿namespace LocalStack.Client.Integration.Tests;
+﻿using Amazon.AppConfigData;
+using Amazon.RAM;
+
+namespace LocalStack.Client.Integration.Tests;
 
 public class CreateClientByInterfaceTests
 {
@@ -999,5 +1002,23 @@ public class CreateClientByInterfaceTests
 
         Assert.NotNull(amazonSchedulerClient);
         AssertAmazonClient.AssertClientConfiguration(amazonSchedulerClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonRAM()
+    {
+        AmazonServiceClient amazonRamClient = Session.CreateClientByInterface<IAmazonRAM>();
+
+        Assert.NotNull(amazonRamClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonRamClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonAppConfigData()
+    {
+        AmazonServiceClient amazonAppConfigData = Session.CreateClientByInterface<IAmazonAppConfigData>();
+
+        Assert.NotNull(amazonAppConfigData);
+        AssertAmazonClient.AssertClientConfiguration(amazonAppConfigData);
     }
 }

@@ -95,7 +95,7 @@ public enum AwsService
     Efs,
     Backup,
     LakeFormation,
-    Waf, 
+    Waf,
     WafV2,
     ConfigService,
     Mwaa,
@@ -110,4 +110,5 @@ public enum AwsService
     Scheduler,
     Ram,
     AppConfigData,
+    Pinpoint,
 }

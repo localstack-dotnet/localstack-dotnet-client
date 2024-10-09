@@ -1,124 +1,125 @@
 <Project>
   <ItemGroup>
     <!-- third-party analyzers -->
-    <PackageVersion Include="Meziantou.Analyzer" Version="2.0.154" />
+    <PackageVersion Include="Meziantou.Analyzer" Version="2.0.169" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" />
     <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.10.48" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.3" />
-    <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.3" />
-    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.12.3" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.11.20" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.7" />
+    <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.7" />
+    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.12.7" />
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.26.0.92422" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="9.32.0.97167" />
     <PackageVersion Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0" />
     <!-- packages -->
-    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
-    <PackageVersion Include="AWSSDK.Core" Version="3.7.303.14" />
-    <PackageVersion Include="AWSSDK.Amplify" Version="3.7.302.14" />
-    <PackageVersion Include="AWSSDK.APIGateway" Version="3.7.300.100" />
-    <PackageVersion Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.ApiGatewayV2" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.AppConfig" Version="3.7.301.44" />
-    <PackageVersion Include="AWSSDK.AppConfigData" Version="3.7.301.59" />
-    <PackageVersion Include="AWSSDK.Appflow" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.AppSync" Version="3.7.305.16" />
-    <PackageVersion Include="AWSSDK.Athena" Version="3.7.304.1" />
-    <PackageVersion Include="AWSSDK.AutoScaling" Version="3.7.302.57" />
-    <PackageVersion Include="AWSSDK.AWSSupport" Version="3.7.301.15" />
-    <PackageVersion Include="AWSSDK.AWSMarketplaceMetering" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.Backup" Version="3.7.304.40" />
-    <PackageVersion Include="AWSSDK.Batch" Version="3.7.305.24" />
-    <PackageVersion Include="AWSSDK.CertificateManager" Version="3.7.301" />
-    <PackageVersion Include="AWSSDK.CloudFormation" Version="3.7.308.4" />
-    <PackageVersion Include="AWSSDK.CloudFront" Version="3.7.303.5" />
-    <PackageVersion Include="AWSSDK.CloudSearch" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.CloudTrail" Version="3.7.305" />
-    <PackageVersion Include="AWSSDK.CloudWatch" Version="3.7.304.24" />
-    <PackageVersion Include="AWSSDK.CloudWatchEvents" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.305.39" />
-    <PackageVersion Include="AWSSDK.CodeCommit" Version="3.7.301.74" />
-    <PackageVersion Include="AWSSDK.CognitoIdentity" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.CognitoIdentityProvider" Version="3.7.305.11" />
-    <PackageVersion Include="AWSSDK.ConfigService" Version="3.7.302.70" />
-    <PackageVersion Include="AWSSDK.Keyspaces" Version="3.7.301.62" />
-    <PackageVersion Include="AWSSDK.MWAA" Version="3.7.304.6" />
-    <PackageVersion Include="AWSSDK.CostExplorer" Version="3.7.303.18" />
-    <PackageVersion Include="AWSSDK.DocDB" Version="3.7.303.30" />
-    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.303.15" />
-    <PackageVersion Include="AWSSDK.EC2" Version="3.7.328.2" />
-    <PackageVersion Include="AWSSDK.ECR" Version="3.7.302.11" />
-    <PackageVersion Include="AWSSDK.ECS" Version="3.7.305.60" />
-    <PackageVersion Include="AWSSDK.EKS" Version="3.7.305.34" />
-    <PackageVersion Include="AWSSDK.ElastiCache" Version="3.7.302.36" />
-    <PackageVersion Include="AWSSDK.EventBridge" Version="3.7.303.8" />
-    <PackageVersion Include="AWSSDK.ElasticBeanstalk" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.ElasticFileSystem" Version="3.7.302.89" />
-    <PackageVersion Include="AWSSDK.ElasticLoadBalancing" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.303.5" />
-    <PackageVersion Include="AWSSDK.ElasticMapReduce" Version="3.7.304.46" />
-    <PackageVersion Include="AWSSDK.Elasticsearch" Version="3.7.302.52" />
-    <PackageVersion Include="AWSSDK.EMRServerless" Version="3.7.304" />
-    <PackageVersion Include="AWSSDK.FIS" Version="3.7.302.41" />
-    <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.307.4" />
-    <PackageVersion Include="AWSSDK.Glue" Version="3.7.312.1" />
-    <PackageVersion Include="AWSSDK.IdentityManagement" Version="3.7.301.24" />
-    <PackageVersion Include="AWSSDK.IoT" Version="3.7.307.45" />
-    <PackageVersion Include="AWSSDK.IoTAnalytics" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.IotData" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.IoTEvents" Version="3.7.301.46" />
-    <PackageVersion Include="AWSSDK.IoTEventsData" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.IoTJobsDataPlane" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.IoTWireless" Version="3.7.302.23" />
-    <PackageVersion Include="AWSSDK.Kafka" Version="3.7.304.2" />
-    <PackageVersion Include="AWSSDK.KeyManagementService" Version="3.7.303.4" />
-    <PackageVersion Include="AWSSDK.Kinesis" Version="3.7.301.91" />
-    <PackageVersion Include="AWSSDK.KinesisAnalytics" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.KinesisAnalyticsV2" Version="3.7.302.40" />
-    <PackageVersion Include="AWSSDK.KinesisFirehose" Version="3.7.304.46" />
-    <PackageVersion Include="AWSSDK.LakeFormation" Version="3.7.304.5" />
-    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.305.30" />
-    <PackageVersion Include="AWSSDK.MediaConvert" Version="3.7.304.26" />
-    <PackageVersion Include="AWSSDK.MediaStore" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.MediaStoreData" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.MQ" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.Neptune" Version="3.7.301.82" />
-    <PackageVersion Include="AWSSDK.Organizations" Version="3.7.302.44" />
-    <PackageVersion Include="AWSSDK.QLDB" Version="3.7.300.99" />
-    <PackageVersion Include="AWSSDK.QLDBSession" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.RAM" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.RDS" Version="3.7.313.6" />
-    <PackageVersion Include="AWSSDK.RDSDataService" Version="3.7.301.74" />
-    <PackageVersion Include="AWSSDK.Redshift" Version="3.7.305.24" />
-    <PackageVersion Include="AWSSDK.RedshiftDataAPIService" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.ResourceGroups" Version="3.7.301.28" />
-    <PackageVersion Include="AWSSDK.ResourceGroupsTaggingAPI" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.Route53" Version="3.7.302.65" />
-    <PackageVersion Include="AWSSDK.Route53Resolver" Version="3.7.303.14" />
-    <PackageVersion Include="AWSSDK.Route53Domains" Version="3.7.301.50" />
-    <PackageVersion Include="AWSSDK.S3" Version="3.7.308.7" />
-    <PackageVersion Include="AWSSDK.S3Control" Version="3.7.305.63" />
-    <PackageVersion Include="AWSSDK.SageMaker" Version="3.7.324" />
-    <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.301.87" />
-    <PackageVersion Include="AWSSDK.Scheduler" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.SecretsManager" Version="3.7.303.5" />
-    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.300.99" />
-    <PackageVersion Include="AWSSDK.ServerlessApplicationRepository" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.ServiceDiscovery" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.SimpleEmail" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="3.7.303.12" />
-    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.301.46" />
-    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="3.7.304.17" />
-    <PackageVersion Include="AWSSDK.SimpleWorkflow" Version="3.7.301.2" />
-    <PackageVersion Include="AWSSDK.SQS" Version="3.7.301.11" />
-    <PackageVersion Include="AWSSDK.StepFunctions" Version="3.7.303.16" />
-    <PackageVersion Include="AWSSDK.TimestreamQuery" Version="3.7.301.14" />
-    <PackageVersion Include="AWSSDK.TimestreamWrite" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.Transfer" Version="3.7.307.5" />
-    <PackageVersion Include="AWSSDK.TranscribeService" Version="3.7.303.14" />
-    <PackageVersion Include="AWSSDK.WAF" Version="3.7.300.98" />
-    <PackageVersion Include="AWSSDK.WAFV2" Version="3.7.305.4" />
-    <PackageVersion Include="AWSSDK.XRay" Version="3.7.300.98" />
-    <PackageVersion Include="Cake.Docker" Version="1.2.2" />
+    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
+    <PackageVersion Include="AWSSDK.Core" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Amplify" Version="3.7.401.25" />
+    <PackageVersion Include="AWSSDK.APIGateway" Version="3.7.400.31" />
+    <PackageVersion Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.ApiGatewayV2" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.AppConfig" Version="3.7.401.18" />
+    <PackageVersion Include="AWSSDK.AppConfigData" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Appflow" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.AppSync" Version="3.7.401.16" />
+    <PackageVersion Include="AWSSDK.Athena" Version="3.7.401.8" />
+    <PackageVersion Include="AWSSDK.AutoScaling" Version="3.7.401.28" />
+    <PackageVersion Include="AWSSDK.AWSSupport" Version="3.7.400.31" />
+    <PackageVersion Include="AWSSDK.AWSMarketplaceMetering" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Backup" Version="3.7.401.17" />
+    <PackageVersion Include="AWSSDK.Batch" Version="3.7.401.23" />
+    <PackageVersion Include="AWSSDK.CertificateManager" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CloudFormation" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CloudFront" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CloudSearch" Version="3.7.400.31" />
+    <PackageVersion Include="AWSSDK.CloudTrail" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CloudWatch" Version="3.7.401.28" />
+    <PackageVersion Include="AWSSDK.CloudWatchEvents" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="3.7.403.16" />
+    <PackageVersion Include="AWSSDK.CodeCommit" Version="3.7.401.30" />
+    <PackageVersion Include="AWSSDK.CognitoIdentity" Version="3.7.401.12" />
+    <PackageVersion Include="AWSSDK.CognitoIdentityProvider" Version="3.7.403.11" />
+    <PackageVersion Include="AWSSDK.ConfigService" Version="3.7.401.26" />
+    <PackageVersion Include="AWSSDK.Keyspaces" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.MWAA" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.CostExplorer" Version="3.7.401.9" />
+    <PackageVersion Include="AWSSDK.DocDB" Version="3.7.401.24" />
+    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="3.7.401.8" />
+    <PackageVersion Include="AWSSDK.EC2" Version="3.7.408" />
+    <PackageVersion Include="AWSSDK.ECR" Version="3.7.404.9" />
+    <PackageVersion Include="AWSSDK.ECS" Version="3.7.402.25" />
+    <PackageVersion Include="AWSSDK.EKS" Version="3.7.402.26" />
+    <PackageVersion Include="AWSSDK.ElastiCache" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.EventBridge" Version="3.7.401.28" />
+    <PackageVersion Include="AWSSDK.ElasticBeanstalk" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.ElasticFileSystem" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.ElasticLoadBalancing" Version="3.7.401.28" />
+    <PackageVersion Include="AWSSDK.ElasticLoadBalancingV2" Version="3.7.404.11" />
+    <PackageVersion Include="AWSSDK.ElasticMapReduce" Version="3.7.401.11" />
+    <PackageVersion Include="AWSSDK.Elasticsearch" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.EMRServerless" Version="3.7.401.8" />
+    <PackageVersion Include="AWSSDK.FIS" Version="3.7.402.16" />
+    <PackageVersion Include="AWSSDK.OpenSearchService" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Glue" Version="3.7.408.8" />
+    <PackageVersion Include="AWSSDK.IdentityManagement" Version="3.7.402.24" />
+    <PackageVersion Include="AWSSDK.IoT" Version="3.7.402.1" />
+    <PackageVersion Include="AWSSDK.IoTAnalytics" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.IotData" Version="3.7.401" />
+    <PackageVersion Include="AWSSDK.IoTEvents" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.IoTEventsData" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.IoTJobsDataPlane" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.IoTWireless" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Kafka" Version="3.7.401.13" />
+    <PackageVersion Include="AWSSDK.KeyManagementService" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Kinesis" Version="3.7.402.7" />
+    <PackageVersion Include="AWSSDK.KinesisAnalytics" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.KinesisAnalyticsV2" Version="3.7.401.15" />
+    <PackageVersion Include="AWSSDK.KinesisFirehose" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.LakeFormation" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Lambda" Version="3.7.405.5" />
+    <PackageVersion Include="AWSSDK.MediaConvert" Version="3.7.402.9" />
+    <PackageVersion Include="AWSSDK.MediaStore" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.MediaStoreData" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.MQ" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Neptune" Version="3.7.401.8" />
+    <PackageVersion Include="AWSSDK.Organizations" Version="3.7.402.5" />
+    <PackageVersion Include="AWSSDK.Pinpoint" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.QLDB" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.QLDBSession" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.RAM" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.RDS" Version="3.7.404.3" />
+    <PackageVersion Include="AWSSDK.RDSDataService" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Redshift" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.RedshiftDataAPIService" Version="3.7.401.17" />
+    <PackageVersion Include="AWSSDK.ResourceGroups" Version="3.7.401.4" />
+    <PackageVersion Include="AWSSDK.ResourceGroupsTaggingAPI" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Route53" Version="3.7.402.19" />
+    <PackageVersion Include="AWSSDK.Route53Resolver" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Route53Domains" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.S3" Version="3.7.404.2" />
+    <PackageVersion Include="AWSSDK.S3Control" Version="3.7.401.16" />
+    <PackageVersion Include="AWSSDK.SageMaker" Version="3.7.411.2" />
+    <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="3.7.401.13" />
+    <PackageVersion Include="AWSSDK.Scheduler" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SecretsManager" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SecurityToken" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.ServerlessApplicationRepository" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.ServiceDiscovery" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SimpleEmail" Version="3.7.401.20" />
+    <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="3.7.402.4" />
+    <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="3.7.402.9" />
+    <PackageVersion Include="AWSSDK.SimpleWorkflow" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.SQS" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.StepFunctions" Version="3.7.402.18" />
+    <PackageVersion Include="AWSSDK.TimestreamQuery" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.TimestreamWrite" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Transfer" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.TranscribeService" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.WAF" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.WAFV2" Version="3.7.401.18" />
+    <PackageVersion Include="AWSSDK.XRay" Version="3.7.400.30" />
+    <PackageVersion Include="Cake.Docker" Version="1.3.0" />
     <PackageVersion Include="Cake.Frosting" Version="3.1.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
@@ -132,23 +133,32 @@
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.32" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="3.1.32" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageVersion Include="System.Text.Json" Version="7.0.3" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
     <PackageVersion Include="System.ValueTuple" Version="4.5.0" />
     <!-- test packages -->
-    <PackageVersion Include="AutoFixture" Version="4.18.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
-    <PackageVersion Include="Moq" Version="4.18.4" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-    <PackageVersion Include="Testcontainers" Version="3.8.0" />
-    <PackageVersion Include="Testcontainers.LocalStack" Version="3.8.0" />
-    <PackageVersion Include="xunit" Version="2.8.1" />
+    <PackageVersion Include="AutoFixture" Version="4.18.1" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageVersion Include="Testcontainers" Version="3.10.0" />
+    <PackageVersion Include="Testcontainers.LocalStack" Version="3.10.0" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
-    <PackageVersion Include="xunit.runner.console" Version="2.8.1"/>
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageVersion Include="xunit.runner.console" Version="2.9.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageVersion>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.3" />
+    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="17.11.1" />
   </ItemGroup>
 </Project>

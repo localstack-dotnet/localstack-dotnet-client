@@ -19,11 +19,11 @@
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="8.0.0"/>
     </ItemGroup>
 
     <ItemGroup>

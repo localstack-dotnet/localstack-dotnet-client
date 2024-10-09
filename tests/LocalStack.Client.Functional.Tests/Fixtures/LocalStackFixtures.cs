@@ -45,6 +45,13 @@ public sealed class LocalStackFixtureV34 : LocalStackFixtureBase
     }
 }
 
+public sealed class LocalStackFixtureV38 : LocalStackFixtureBase
+{
+    public LocalStackFixtureV38() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV38))
+    {
+    }
+}
+
 public interface ILocalStackFixture
 {
     LocalStackContainer LocalStackContainer { get; }

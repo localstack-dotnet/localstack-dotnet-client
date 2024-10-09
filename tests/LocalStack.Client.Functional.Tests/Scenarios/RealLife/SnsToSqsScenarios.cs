@@ -15,7 +15,6 @@ public sealed class SnsToSqsScenarioV131 : BaseRealLife
         Assert.True(true);
 
         return Task.CompletedTask;
-    
     }
 }
 
@@ -32,7 +31,6 @@ public sealed class SnsToSqsScenarioV23 : BaseRealLife
         Assert.True(true);
 
         return Task.CompletedTask;
-    
     }
 }
 
@@ -40,6 +38,14 @@ public sealed class SnsToSqsScenarioV23 : BaseRealLife
 public sealed class SnsToSqsScenarioV34 : BaseRealLife
 {
     public SnsToSqsScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
+    {
+    }
+}
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class SnsToSqsScenarioV38 : BaseRealLife
+{
+    public SnsToSqsScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
     {
     }
 }

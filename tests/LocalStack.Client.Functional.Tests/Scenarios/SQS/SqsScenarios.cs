@@ -89,3 +89,11 @@ public sealed class SqsScenarioV34 : BaseSqsScenario
     {
     }
 }
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class SqsScenarioV38 : BaseSqsScenario
+{
+    public SqsScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    {
+    }
+}

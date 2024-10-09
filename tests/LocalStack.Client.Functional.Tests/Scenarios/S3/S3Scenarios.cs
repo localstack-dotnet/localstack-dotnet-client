@@ -25,3 +25,11 @@ public sealed class S3ScenarioV34 : BaseS3Scenario
     {
     }
 }
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class S3ScenarioV38 : BaseS3Scenario
+{
+    public S3ScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    {
+    }
+}

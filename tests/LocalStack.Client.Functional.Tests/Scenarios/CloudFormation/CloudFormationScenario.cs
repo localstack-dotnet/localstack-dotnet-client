@@ -26,3 +26,11 @@ public sealed class CloudFormationScenarioV34 : BaseCloudFormationScenario
     {
     }
 }
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class CloudFormationScenarioV38 : BaseCloudFormationScenario
+{
+    public CloudFormationScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    {
+    }
+}

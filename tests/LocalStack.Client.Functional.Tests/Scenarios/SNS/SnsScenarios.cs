@@ -25,3 +25,11 @@ public sealed class SnsScenarioV34 : BaseSnsScenario
     {
     }
 }
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class SnsScenarioV38 : BaseSnsScenario
+{
+    public SnsScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    {
+    }
+}

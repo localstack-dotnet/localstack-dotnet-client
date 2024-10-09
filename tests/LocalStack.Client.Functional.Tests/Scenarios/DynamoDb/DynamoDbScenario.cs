@@ -25,3 +25,11 @@ public sealed class DynamoDbScenarioV34 : BaseDynamoDbScenario
     {
     }
 }
+
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class DynamoDbScenarioV38 : BaseDynamoDbScenario
+{
+    public DynamoDbScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    {
+    }
+}

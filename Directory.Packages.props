@@ -120,7 +120,7 @@
     <PackageVersion Include="AWSSDK.WAFV2" Version="3.7.401.18" />
     <PackageVersion Include="AWSSDK.XRay" Version="3.7.400.30" />
     <PackageVersion Include="Cake.Docker" Version="1.3.0" />
-    <PackageVersion Include="Cake.Frosting" Version="3.1.0" />
+    <PackageVersion Include="Cake.Frosting" Version="4.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.32" />

@@ -1,69 +1,78 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-		<LangVersion>latest</LangVersion>
-		<NoWarn>$(NoWarn);CA1707;MA0006;CA1711</NoWarn>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);CA1707;MA0006;MA0004;CA1711;CA2007;MA0132;CA1848;CA2254;S4144</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Scenarios\CloudFormation\app-resources.template" />
+  </ItemGroup>
 
 
-	<ItemGroup>
-		<Content Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="appsettings.LocalStack.json;appsettings.LocalStackLegacy.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<DependentUpon>appsettings.json</DependentUpon>
-		</Content>
-	</ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.LocalStack.json;appsettings.LocalStackLegacy.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </Content>
+    <Content Include="Scenarios\CloudFormation\app-resources.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 
-	<ItemGroup>
-		<PackageReference Include="AWSSDK.DynamoDBv2" />
-		<PackageReference Include="AWSSDK.S3" />
-		<PackageReference Include="AWSSDK.SimpleNotificationService" />
-		<PackageReference Include="AWSSDK.SQS" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudFormation" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" />
+    <PackageReference Include="AWSSDK.S3" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" />
+    <PackageReference Include="AWSSDK.SQS" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
 
-		<PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="System.Text.Json" />
-		
-		<PackageReference Include="AutoFixture" />
-		<PackageReference Include="coverlet.collector"/>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-		<PackageReference Include="Moq" />
-		<PackageReference Include="Testcontainers" />
-		<PackageReference Include="Testcontainers.LocalStack" />
-		<PackageReference Include="xunit" />
-		<PackageReference Include="xunit.abstractions" />
-		<PackageReference Include="xunit.runner.console">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.visualstudio">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		
-	</ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="System.Text.Json" />
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
-		<ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
-		<ProjectReference Include="..\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
-	</ItemGroup>
+    <PackageReference Include="AutoFixture" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Testcontainers" />
+    <PackageReference Include="Testcontainers.LocalStack" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.abstractions" />
+    <PackageReference Include="xunit.runner.console">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
 
-	<ItemGroup>
-		<None Update="SampleData.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+  </ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-		<DefineConstants>NETCOREAPP</DefineConstants>
-	</PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\LocalStack.Client\LocalStack.Client.csproj" />
+    <ProjectReference Include="..\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SampleData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <DefineConstants>NETCOREAPP</DefineConstants>
+  </PropertyGroup>
 
 </Project>

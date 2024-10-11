@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
-		<NoWarn>$(NoWarn);CA1707;MA0006</NoWarn>
+		<TargetFrameworks>net462;net6.0;net8.0</TargetFrameworks>
+		<NoWarn>$(NoWarn);CA1707;MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -12,6 +12,7 @@
 		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" />
 		<PackageReference Include="AWSSDK.ApiGatewayV2" />
 		<PackageReference Include="AWSSDK.AppConfig" />
+		<PackageReference Include="AWSSDK.AppConfigData" />
 		<PackageReference Include="AWSSDK.Appflow" />
 		<PackageReference Include="AWSSDK.AppSync" />
 		<PackageReference Include="AWSSDK.Athena" />
@@ -75,8 +76,11 @@
 		<PackageReference Include="AWSSDK.MQ" />
 		<PackageReference Include="AWSSDK.Neptune" />
 		<PackageReference Include="AWSSDK.Organizations" />
+		<PackageReference Include="AWSSDK.Pinpoint"/>
+		<PackageReference Include="AWSSDK.Pipes" />
 		<PackageReference Include="AWSSDK.QLDB" />
 		<PackageReference Include="AWSSDK.QLDBSession" />
+		<PackageReference Include="AWSSDK.RAM" />
 		<PackageReference Include="AWSSDK.RDS" />
 		<PackageReference Include="AWSSDK.RDSDataService" />
 		<PackageReference Include="AWSSDK.Redshift" />
@@ -124,7 +128,7 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
 		<PackageReference Include="Microsoft.TestPlatform.ObjectModel" />
 	</ItemGroup>
 

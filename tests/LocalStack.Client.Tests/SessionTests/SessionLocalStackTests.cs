@@ -153,7 +153,7 @@ public class SessionLocalStackTests
     [Theory,
      InlineData("sa-east-1"),
      InlineData(null)]
-    public void CreateClientByImplementation_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string systemName)
+    public void CreateClientByImplementation_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string? systemName)
     {
         var mockSession = MockSession.Create();
 
@@ -161,7 +161,9 @@ public class SessionLocalStackTests
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
+#pragma warning disable CS8604 // Possible null reference argument.
         mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+#pragma warning restore CS8604 // Possible null reference argument.
 
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
@@ -301,7 +303,7 @@ public class SessionLocalStackTests
         IClientConfig clientConfig = mockAmazonServiceClient.Config;
 
         Assert.Equal(useSsl, !clientConfig.UseHttp);
-        
+
         mockSession.ConfigMock.Verify(config => config.GetConfigOptions(), Times.Once);
     }
 
@@ -403,7 +405,7 @@ public class SessionLocalStackTests
     [Theory,
      InlineData("sa-east-1"),
      InlineData(null)]
-    public void CreateClientByInterface_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string systemName)
+    public void CreateClientByInterface_Should_Set_ServiceUrl_By_ServiceEndpoint_Configuration_And_RegionEndpoint_To_Null_If_Given_UseServiceUrl_Parameter_Is_True_Regardless_Of_Use_RegionName_Property_Of_SessionOptions_Has_Value_Or_Not(string? systemName)
     {
         var mockSession = MockSession.Create();
 
@@ -411,7 +413,9 @@ public class SessionLocalStackTests
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
+#pragma warning disable CS8604 // Possible null reference argument.
         mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
+#pragma warning restore CS8604 // Possible null reference argument.
 
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
         mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);

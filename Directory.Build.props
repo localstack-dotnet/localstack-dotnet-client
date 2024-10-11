@@ -5,11 +5,11 @@
         <Owners>LocalStack.NET</Owners>
         <PackageProjectUrl>https://github.com/localstack-dotnet/localstack-dotnet-client</PackageProjectUrl>
         <PackageIcon>localstack-dotnet-square.png</PackageIcon>
-        <PackageMainVersion>1.4.1</PackageMainVersion>
-        <PackageExtensionVersion>1.2.1</PackageExtensionVersion>
+        <PackageMainVersion>1.5.0</PackageMainVersion>
+        <PackageExtensionVersion>1.3.0</PackageExtensionVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <LangVersion>11.0</LangVersion>
+        <LangVersion>12.0</LangVersion>
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
         <AnalysisLevel>latest</AnalysisLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

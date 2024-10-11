@@ -129,7 +129,9 @@ The `RegionName` is important as LocalStack creates resources based on the speci
 
 ## Known Issues
 
-- **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest container from Docker Hub.
+- **SNS with LocalStack v3.7.2 and v3.8.0:** During development on the new version, it was discovered that SNS functional tests are not working in LocalStack versions v3.7.2 and v3.8.0. This issue was reported in LocalStack [issue #11652](https://github.com/localstack/localstack/issues/11652). The LocalStack team identified a bug related to handling SNS URIs and resolved it in [PR #11653](https://github.com/localstack/localstack/pull/11653). The fix will be included in an upcoming release of LocalStack. In the meantime, if you're using SNS, it is recommended to stick to version v3.7.1 of LocalStack until the fix is available.
+
+- **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest v3 series container from Docker Hub.
 
 - **AWS_SERVICE_URL Environment Variable:** Unexpected behaviors might occur in LocalStack.NET when the `AWS_SERVICE_URL` environment variable is set. This environment variable is typically set by LocalStack in the container when using AWS Lambda, and AWS also uses this environment variable in the live environment. Soon, just like in LocalStack's official Python library, this environment variable will be prioritized by LocalStack.NET when configuring the LocalStack host, and there will be a general simplification in the configuration. You can follow this in the issues [issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27) and [issue #32](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/32). You set the `AWS_SERVICE_URL` to empty string until this issue is resolved.
 
@@ -138,6 +140,8 @@ Environment.SetEnvironmentVariable("AWS_SERVICE_URL", string.Empty);
 ```
 
 - **IAmazonLambda Operations:** There's a general issue with `IAmazonLambda` operations. This matter is currently under investigation.
+
+- **AWSSDK.SQS Compatibility:** Starting from version `3.7.300.*` of `AWSSDK.SQS`, there are compatibility issues with LocalStack v1 and v2 series versions. The [v3](https://hub.docker.com/r/localstack/localstack/tags?page=&page_size=&ordering=&name=3.4) series of LocalStack does not have these issues. Therefore, it is recommended to either update your LocalStack container to the v3 series or downgrade your `AWSSDK.SQS` to version `3.7.200.*` if you are using LocalStack v1 or v2 series containers. It is important to note that this is not a problem related to LocalStack.NET, but rather an issue with the LocalStack container and the AWS SDK for .NET.
 
 ## Developing
 

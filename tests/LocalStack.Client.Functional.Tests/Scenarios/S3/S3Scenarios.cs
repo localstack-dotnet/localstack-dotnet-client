@@ -10,27 +10,26 @@ public sealed class S3ScenarioV131 : BaseS3Scenario
     }
 }
 
-[Collection(nameof(LocalStackCollectionV20))]
-public sealed class S3ScenarioV20 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV23))]
+public sealed class S3ScenarioV23 : BaseS3Scenario
 {
-    public S3ScenarioV20(TestFixture testFixture, LocalStackFixtureV20 localStackFixtureV20) : base(testFixture, localStackFixtureV20)
+    public S3ScenarioV23(TestFixture testFixture, LocalStackFixtureV23 localStackFixtureV23) : base(testFixture, localStackFixtureV23)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV22))]
-public sealed class S3ScenarioV22 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV34))]
+public sealed class S3ScenarioV34 : BaseS3Scenario
 {
-    public S3ScenarioV22(TestFixture testFixture, LocalStackFixtureV22 localStackFixtureV22) : base(testFixture, localStackFixtureV22)
+    public S3ScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
     {
     }
 }
 
-[Collection(nameof(LocalStackLegacyCollection))]
-public sealed class S3LegacyScenario : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV38))]
+public sealed class S3ScenarioV38 : BaseS3Scenario
 {
-    public S3LegacyScenario(TestFixture testFixture, LocalStackLegacyFixture localStackLegacyFixture) : base(
-        testFixture, localStackLegacyFixture, TestConstants.LegacyLocalStackConfig, true)
+    public S3ScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
     {
     }
 }

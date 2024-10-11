@@ -1,5 +1,50 @@
 # LocalStack .NET Client Change Log
 
+### [v1.5.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.5.0)
+
+#### 1. New Features
+
+- **Added Endpoints from [Localstack Python Client](https://github.com/localstack/localstack-python-client) v2.7:**
+  - **RAM**
+  - **AppConfigData**
+  - **Pinpoint**
+  - **EventBridge Pipes**
+
+#### 2. General
+
+- **Framework Support Updates:**
+  - **.NET 8** support added.
+  - **Deprecated** support for **.NET 7** and **.NET 4.6.1**.
+  - Continued support for **.NET Standard 2.0** to maintain compatibility with older .NET versions.
+  - **Upcoming Changes:**
+    - In the next release, **.NET 6** support will be removed as it reaches end-of-life in November 2024.
+
+- **Functional Tests Enhancements:**
+  - **Removed** tests for legacy LocalStack versions and versions **v2.0** and **v2.2**.
+    - **Note:** LocalStack.NET no longer guarantees compatibility with these versions.
+  - **Added** functional test support for LocalStack versions:
+    - **v2.3**
+    - **v3.4**
+    - **v3.7.1**
+  - **New Tests:**
+    - Introduced new tests for **CloudFormation**.
+
+- **Package Updates:**
+  - **AWSSDK.Core** minimum version set to **3.7.400.30**.
+
+- **Testing Compatibility:**
+  - Successfully tested against LocalStack versions:
+    - **v1.3.1**
+    - **v2.3**
+    - **v3.4**
+    - **v3.7.1**
+
+#### 3. Warnings
+
+- **Breaking Changes Postponed:**
+  - The planned breaking changes have been postponed to the next release.
+  - **Important:** Users should anticipate some breaking changes in the next release due to the removal of legacy support and configuration updates.
+
 ### [v1.4.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.4.1)
 
 #### 1. New Features

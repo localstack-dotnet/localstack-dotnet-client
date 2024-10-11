@@ -30,8 +30,12 @@ public abstract class LocalStackClientException : Exception
     /// </summary>
     /// <param name="serializationInfo">The information to use when serializing the exception.</param>
     /// <param name="streamingContext">The context for the serialization.</param>
-    protected LocalStackClientException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        : base(serializationInfo, streamingContext)
+#if NET8_0_OR_GREATER
+#pragma warning disable S1133, MA0070, CA1041
+    [Obsolete(DiagnosticId = "SYSLIB0051")] // add this attribute to the serialization ctor
+#pragma warning restore MA0070, S1133, CA1041
+#endif
+    protected LocalStackClientException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext)
     {
     }
 }

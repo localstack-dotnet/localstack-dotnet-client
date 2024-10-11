@@ -16,10 +16,16 @@ public abstract class BaseScenario
         serviceCollection.AddAwsService<IAmazonS3>(useServiceUrl: useServiceUrl)
                          .AddAwsService<IAmazonDynamoDB>(useServiceUrl: useServiceUrl)
                          .AddAwsService<IAmazonSQS>(useServiceUrl: useServiceUrl)
-                         .AddAwsService<IAmazonSimpleNotificationService>(useServiceUrl: useServiceUrl);
+                         .AddAwsService<IAmazonSimpleNotificationService>(useServiceUrl: useServiceUrl)
+                         .AddAwsService<IAmazonCloudFormation>(useServiceUrl: useServiceUrl);
+
+        serviceCollection.AddLogging();
 
         ServiceProvider = serviceCollection.BuildServiceProvider();
+        LocalStackFixture = localStackFixture;
     }
+
+    protected ILocalStackFixture LocalStackFixture { get; set; }
 
     protected IConfiguration Configuration { get; set; }
 

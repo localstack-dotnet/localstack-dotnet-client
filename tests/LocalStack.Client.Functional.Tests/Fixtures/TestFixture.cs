@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CA1822 // Mark members as static - disabled because of readability
+#pragma warning disable S2325 // Methods and properties that don't access instance data should be static - disabled because of readability
 namespace LocalStack.Client.Functional.Tests.Fixtures;
 
 public class TestFixture

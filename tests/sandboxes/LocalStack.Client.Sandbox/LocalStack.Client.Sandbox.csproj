@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net461;net6.0;net7.0</TargetFrameworks>
-        <NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848</NoWarn>
+        <TargetFrameworks>net462;net6.0;net8.0</TargetFrameworks>
+        <NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848;MA0004;CA2007</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

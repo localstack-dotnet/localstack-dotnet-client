@@ -17,17 +17,17 @@ public abstract class BaseSnsScenario : BaseScenario
     public async Task SnsService_Should_Create_A_Sns_Topic_Async()
     {
         var topicName = Guid.NewGuid().ToString();
-        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName);
 
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
-        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync().ConfigureAwait(false);
+        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
         Topic? snsTopic = listTopicsResponse.Topics.SingleOrDefault(topic => topic.TopicArn == createTopicResponse.TopicArn);
 
         Assert.NotNull(snsTopic);
         Assert.EndsWith(topicName, snsTopic.TopicArn, StringComparison.Ordinal);
 
-        await DeleteSnsTopicAsync(createTopicResponse.TopicArn).ConfigureAwait(false); //Cleanup
+        await DeleteSnsTopicAsync(createTopicResponse.TopicArn); //Cleanup
     }
 
     [Fact]
@@ -35,12 +35,12 @@ public abstract class BaseSnsScenario : BaseScenario
     {
         var topicName = Guid.NewGuid().ToString();
 
-        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName).ConfigureAwait(false);
-        DeleteTopicResponse deleteTopicResponse = await DeleteSnsTopicAsync(createTopicResponse.TopicArn).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName);
+        DeleteTopicResponse deleteTopicResponse = await DeleteSnsTopicAsync(createTopicResponse.TopicArn);
 
         Assert.Equal(HttpStatusCode.OK, deleteTopicResponse.HttpStatusCode);
 
-        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync().ConfigureAwait(false);
+        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
         bool hasAny = listTopicsResponse.Topics.Exists(topic => topic.TopicArn == createTopicResponse.TopicArn);
 
         Assert.False(hasAny);
@@ -50,7 +50,7 @@ public abstract class BaseSnsScenario : BaseScenario
     public async Task SnsService_Should_Send_Publish_A_Message_Async()
     {
         var topicName = Guid.NewGuid().ToString();
-        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName);
 
         var jobCreatedEvent = new JobCreatedEvent(423565221, 191, 125522, "Painting Service");
         string serializedObject = JsonSerializer.Serialize(jobCreatedEvent);
@@ -65,11 +65,11 @@ public abstract class BaseSnsScenario : BaseScenario
             Message = serializedObject, TopicArn = createTopicResponse.TopicArn, Subject = jobCreatedEvent.EventName, MessageAttributes = messageAttributes
         };
 
-        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest).ConfigureAwait(false);
+        PublishResponse publishResponse = await AmazonSimpleNotificationService.PublishAsync(publishRequest);
 
         Assert.Equal(HttpStatusCode.OK, publishResponse.HttpStatusCode);
 
-        await DeleteSnsTopicAsync(createTopicResponse.TopicArn).ConfigureAwait(false); //Cleanup
+        await DeleteSnsTopicAsync(createTopicResponse.TopicArn); //Cleanup
     }
 
     [Theory, InlineData("eu-central-1"), InlineData("us-west-1"), InlineData("af-south-1"), InlineData("ap-southeast-1"), InlineData("ca-central-1"),
@@ -84,26 +84,26 @@ public abstract class BaseSnsScenario : BaseScenario
         Assert.Equal(RegionEndpoint.GetBySystemName(systemName), amazonSimpleNotificationService.Config.RegionEndpoint);
 
         var topicName = Guid.NewGuid().ToString();
-        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await CreateSnsTopicAsync(topicName);
 
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
         var topicArn = $"arn:aws:sns:{systemName}:000000000000:{topicName}";
 
-        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync().ConfigureAwait(false);
+        ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
         Topic? snsTopic = listTopicsResponse.Topics.SingleOrDefault(topic => topic.TopicArn == topicArn);
 
         Assert.NotNull(snsTopic);
         Assert.Single(listTopicsResponse.Topics);
 
-        await DeleteSnsTopicAsync(topicArn).ConfigureAwait(false); //Cleanup
+        await DeleteSnsTopicAsync(topicArn); //Cleanup
     }
 
     protected async Task<CreateTopicResponse> CreateSnsTopicAsync(string topic)
     {
         var createTopicRequest = new CreateTopicRequest(topic);
 
-        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest).ConfigureAwait(false);
+        CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest);
 
         return createTopicResponse;
     }
@@ -112,7 +112,7 @@ public abstract class BaseSnsScenario : BaseScenario
     {
         var deleteTopicRequest = new DeleteTopicRequest(topic);
 
-        DeleteTopicResponse deleteTopicResponse = await AmazonSimpleNotificationService.DeleteTopicAsync(deleteTopicRequest).ConfigureAwait(false);
+        DeleteTopicResponse deleteTopicResponse = await AmazonSimpleNotificationService.DeleteTopicAsync(deleteTopicRequest);
 
         return deleteTopicResponse;
     }

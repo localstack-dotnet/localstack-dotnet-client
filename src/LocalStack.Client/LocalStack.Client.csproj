@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net461;net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net462;net6.0;net8.0</TargetFrameworks>
 		<AssemblyName>LocalStack.Client</AssemblyName>
 		<RootNamespace>LocalStack.Client</RootNamespace>
 
@@ -14,10 +14,10 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<EnablePackageValidation>true</EnablePackageValidation>
-<!--		<PackageValidationBaselineVersion>1.4.0</PackageValidationBaselineVersion>-->
+		<PackageValidationBaselineVersion>1.4.1</PackageValidationBaselineVersion>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<NoWarn>$(NoWarn);MA0006</NoWarn>
+		<NoWarn>$(NoWarn);MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -50,8 +50,8 @@
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-		<DefineConstants>NET461</DefineConstants>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
+		<DefineConstants>NET462</DefineConstants>
 	</PropertyGroup>
 
 </Project>

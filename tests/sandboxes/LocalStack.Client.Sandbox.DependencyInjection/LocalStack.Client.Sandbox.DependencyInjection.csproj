@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-		<NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848</NoWarn>
+		<TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+		<NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848;MA0004;CA2007</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,12 +23,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.S3"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" VersionOverride="7.0.0"/>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="7.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" VersionOverride="8.0.0"/>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="8.0.0"/>
 	</ItemGroup>
 
 	<ItemGroup>

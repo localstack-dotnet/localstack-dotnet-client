@@ -111,16 +111,21 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Appflow = new("Appflow", "appflow", CommonEndpointPattern, 4566, AwsService.Appflow);
     public static readonly AwsServiceEndpointMetadata Keyspaces = new("Keyspaces", "keyspaces", CommonEndpointPattern, 4566, AwsService.Keyspaces);
     public static readonly AwsServiceEndpointMetadata Scheduler = new("Scheduler", "scheduler", CommonEndpointPattern, 4566, AwsService.Scheduler);
+    public static readonly AwsServiceEndpointMetadata Ram = new("RAM", "ram", CommonEndpointPattern, 4566, AwsService.Ram);
+    public static readonly AwsServiceEndpointMetadata AppConfigData = new("AppConfigData", "appconfigdata", CommonEndpointPattern, 4632, AwsService.AppConfigData);
+    public static readonly AwsServiceEndpointMetadata Pinpoint = new("Pinpoint", "pinpoint", CommonEndpointPattern, 4566, AwsService.Pinpoint);
+    public static readonly AwsServiceEndpointMetadata Pipes = new("Pipes", "pipes", CommonEndpointPattern, 4566, AwsService.Pipes);
 
     public static readonly AwsServiceEndpointMetadata[] All =
-    {
+    [
         ApiGateway, ApiGatewayV2, Kinesis, DynamoDb, DynamoDbStreams, ElasticSearch, OpenSearch, S3, Firehose, Lambda, Sns, Sqs, Redshift, RedshiftData, Es, Ses, Sesv2, Route53, Route53Resolver, CloudFormation,
         CloudWatch, Ssm, SecretsManager, StepFunctions, Logs, Events, Elb, Iot, IoTAnalytics, IoTEvents, IoTEventsData, IoTWireless, IoTDataPlane, IoTJobsDataPlane, CognitoIdp, CognitoIdentity, Sts,
         Iam, Rds, RdsData, CloudSearch, Swf, Ec2, ElastiCache, Kms, Emr, Ecs, Eks, XRay, ElasticBeanstalk, AppSync, CloudFront, Athena, Glue, SageMaker, SageMakerRuntime, Ecr, Qldb, QldbSession,
-        CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi, 
+        CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi,
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
-        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler
-    };
+        ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler, Ram, AppConfigData,
+        Pinpoint, Pipes,
+    ];
 
     private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsService @enum)
     {

@@ -1,7 +1,11 @@
 ﻿namespace LocalStack.Client.Exceptions;
 
 [Serializable]
-public abstract class LocalStackClientException : Exception
+#if NETFRAMEWORK
+public class LocalStackClientException : Exception, System.Runtime.InteropServices._Exception
+#else
+public class LocalStackClientException : Exception
+#endif
 {
     /// <summary>
     /// Construct instance of ConfigurationException

@@ -13,7 +13,7 @@
 #### 2. General
 
 - **Framework Support Updates:**
-  - **.NET 8** support added.
+  - **.NET 8** and **.NET 4.6.2** support added.
   - **Deprecated** support for **.NET 7** and **.NET 4.6.1**.
   - Continued support for **.NET Standard 2.0** to maintain compatibility with older .NET versions.
   - **Upcoming Changes:**

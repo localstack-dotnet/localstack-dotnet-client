@@ -77,6 +77,7 @@
 		<PackageReference Include="AWSSDK.Neptune" />
 		<PackageReference Include="AWSSDK.Organizations" />
 		<PackageReference Include="AWSSDK.Pinpoint"/>
+		<PackageReference Include="AWSSDK.Pipes" />
 		<PackageReference Include="AWSSDK.QLDB" />
 		<PackageReference Include="AWSSDK.QLDBSession" />
 		<PackageReference Include="AWSSDK.RAM" />

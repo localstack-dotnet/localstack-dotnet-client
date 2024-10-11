@@ -84,6 +84,7 @@
     <PackageVersion Include="AWSSDK.Neptune" Version="3.7.401.8" />
     <PackageVersion Include="AWSSDK.Organizations" Version="3.7.402.5" />
     <PackageVersion Include="AWSSDK.Pinpoint" Version="3.7.400.30" />
+    <PackageVersion Include="AWSSDK.Pipes" Version="3.7.401.15" />
     <PackageVersion Include="AWSSDK.QLDB" Version="3.7.400.30" />
     <PackageVersion Include="AWSSDK.QLDBSession" Version="3.7.400.30" />
     <PackageVersion Include="AWSSDK.RAM" Version="3.7.400.30" />

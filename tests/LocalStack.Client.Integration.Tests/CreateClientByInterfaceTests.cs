@@ -1,5 +1,6 @@
 ﻿using Amazon.AppConfigData;
 using Amazon.Pinpoint;
+using Amazon.Pipes;
 using Amazon.RAM;
 
 namespace LocalStack.Client.Integration.Tests;
@@ -1030,5 +1031,14 @@ public class CreateClientByInterfaceTests
 
         Assert.NotNull(amazonPinpoint);
         AssertAmazonClient.AssertClientConfiguration(amazonPinpoint);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonPipes()
+    {
+        AmazonServiceClient amazonPipes = Session.CreateClientByInterface<IAmazonPipes>();
+
+        Assert.NotNull(amazonPipes);
+        AssertAmazonClient.AssertClientConfiguration(amazonPipes);
     }
 }

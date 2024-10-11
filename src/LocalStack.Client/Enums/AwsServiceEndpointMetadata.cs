@@ -114,6 +114,7 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata Ram = new("RAM", "ram", CommonEndpointPattern, 4566, AwsService.Ram);
     public static readonly AwsServiceEndpointMetadata AppConfigData = new("AppConfigData", "appconfigdata", CommonEndpointPattern, 4632, AwsService.AppConfigData);
     public static readonly AwsServiceEndpointMetadata Pinpoint = new("Pinpoint", "pinpoint", CommonEndpointPattern, 4566, AwsService.Pinpoint);
+    public static readonly AwsServiceEndpointMetadata Pipes = new("Pipes", "pipes", CommonEndpointPattern, 4566, AwsService.Pipes);
 
     public static readonly AwsServiceEndpointMetadata[] All =
     [
@@ -123,7 +124,7 @@ public class AwsServiceEndpointMetadata
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi,
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
         ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler, Ram, AppConfigData,
-        Pinpoint,
+        Pinpoint, Pipes,
     ];
 
     private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsService @enum)

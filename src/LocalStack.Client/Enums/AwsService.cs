@@ -111,4 +111,5 @@ public enum AwsService
     Ram,
     AppConfigData,
     Pinpoint,
+    Pipes,
 }

@@ -1,0 +1,30 @@
+﻿<Solution>
+  <Folder Name="/build/">
+    <Project Path="build\LocalStack.Build\LocalStack.Build.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="tests\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
+    <Project Path="tests\LocalStack.Client.Functional.Tests\LocalStack.Client.Functional.Tests.csproj" />
+    <Project Path="tests\LocalStack.Client.Integration.Tests\LocalStack.Client.Integration.Tests.csproj" />
+    <Project Path="tests\LocalStack.Client.Tests\LocalStack.Client.Tests.csproj" />
+  </Folder>
+  <Folder Name="/test/common/">
+    <Project Path="tests\common\LocalStack.Tests.Common\LocalStack.Tests.Common.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/test/sandboxes/">
+    <Project Path="tests\sandboxes\LocalStack.Client.Sandbox.DependencyInjection\LocalStack.Client.Sandbox.DependencyInjection.csproj" />
+    <Project Path="tests\sandboxes\LocalStack.Client.Sandbox.WithGenericHost\LocalStack.Client.Sandbox.WithGenericHost.csproj" />
+    <Project Path="tests\sandboxes\LocalStack.Client.Sandbox\LocalStack.Client.Sandbox.csproj" />
+    <Project Path="tests\sandboxes\LocalStack.Container\LocalStack.Container.csproj" />
+  </Folder>
+  <Folder Name="/_Solution Items/">
+    <File Path=".github\workflows\build-macos.yml" />
+    <File Path=".github\workflows\build-ubuntu.yml" />
+    <File Path=".github\workflows\build-windows.yml" />
+    <File Path="build.ps1" />
+    <File Path="build.sh" />
+    <File Path=".github\workflows\publish-nuget.yml" />
+  </Folder>
+  <Project Path="src\LocalStack.Client.Extensions\LocalStack.Client.Extensions.csproj" />
+  <Project Path="src\LocalStack.Client\LocalStack.Client.csproj" />
+</Solution>

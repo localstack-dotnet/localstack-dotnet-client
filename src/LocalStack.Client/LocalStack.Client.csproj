@@ -14,8 +14,8 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>1.5.0</PackageValidationBaselineVersion>
-		<!-- <GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile> -->
+		<PackageValidationBaselineVersion>1.4.1</PackageValidationBaselineVersion>
+<!--		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>-->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<NoWarn>$(NoWarn);MA0006;CA1510</NoWarn>

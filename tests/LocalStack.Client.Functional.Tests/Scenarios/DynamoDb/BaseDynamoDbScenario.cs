@@ -66,7 +66,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         await CreateTestTableAsync(tableName);
 
         Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
-        IList<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
+        List<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
         List<Document> documents = movieEntities.Select(entity =>
                                                 {
                                                     string serialize = JsonSerializer.Serialize(entity);

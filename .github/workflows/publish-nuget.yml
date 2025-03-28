@@ -37,15 +37,15 @@ jobs:
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1.0.5
 
-      - name: Install .NET 6
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "6.0.x"
-
       - name: Install .NET 8
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "8.0.x"
+
+      - name: Install .NET 9
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "9.0.x"
 
       - name: Build & Test
         run: ./build.sh

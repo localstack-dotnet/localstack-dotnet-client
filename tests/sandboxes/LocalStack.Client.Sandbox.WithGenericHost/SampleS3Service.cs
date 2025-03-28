@@ -1,6 +1,8 @@
-﻿namespace LocalStack.Client.Sandbox.WithGenericHost;
+﻿#pragma warning disable CA1812 // Avoid uninstantiated internal classes
 
-public class SampleS3Service : IHostedService
+namespace LocalStack.Client.Sandbox.WithGenericHost;
+
+internal sealed class SampleS3Service : IHostedService
 {
     private const string BucketName = "localstack-sandbox-with-host";
     private const string FilePath = "SampleData.txt";

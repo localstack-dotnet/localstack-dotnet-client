@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Extensions.Tests.Extensions;
+﻿#pragma warning disable CA1515 // Because an application's API isn't typically referenced from outside the assembly, types can be made internal
+
+namespace LocalStack.Client.Extensions.Tests.Extensions;
 
 public static class ObjectExtensions
 {

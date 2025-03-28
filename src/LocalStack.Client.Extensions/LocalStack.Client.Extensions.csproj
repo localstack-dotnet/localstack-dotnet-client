@@ -27,11 +27,11 @@
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />
 
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" VersionOverride="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" VersionOverride="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" VersionOverride="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" VersionOverride="3.1.32" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" VersionOverride="3.1.32" />
 
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
 	</ItemGroup>

@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Build;
+﻿#pragma warning disable CA1515 // Consider making public types internal
+
+namespace LocalStack.Build;
 
 public sealed class BuildContext : FrostingContext
 {

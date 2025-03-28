@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
         <NoWarn>$(NoWarn);CS0246;S125;CA1305;CA1031;CA1303;CA1848;MA0004;CA2007</NoWarn>
     </PropertyGroup>
@@ -19,11 +19,11 @@
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.S3"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration" VersionOverride="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" VersionOverride="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" VersionOverride="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" VersionOverride="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="8.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
     </ItemGroup>
 
     <ItemGroup>

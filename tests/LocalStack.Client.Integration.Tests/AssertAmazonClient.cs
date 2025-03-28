@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Client.Integration.Tests;
 
-public static class AssertAmazonClient
+internal static class AssertAmazonClient
 {
     public const string TestAwsRegion = "eu-central-1";
     public const bool UseSsl = true;

@@ -24,30 +24,16 @@ public abstract class LocalStackFixtureBase : IAsyncLifetime, ILocalStackFixture
     }
 }
 
-public sealed class LocalStackFixtureV131 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV37 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV131() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV13))
+    public LocalStackFixtureV37() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV37))
     {
     }
 }
 
-public sealed class LocalStackFixtureV23 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV43 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV23() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV23))
-    {
-    }
-}
-
-public sealed class LocalStackFixtureV34 : LocalStackFixtureBase
-{
-    public LocalStackFixtureV34() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV34))
-    {
-    }
-}
-
-public sealed class LocalStackFixtureV38 : LocalStackFixtureBase
-{
-    public LocalStackFixtureV38() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV38))
+    public LocalStackFixtureV43() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV43))
     {
     }
 }

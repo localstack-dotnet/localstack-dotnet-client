@@ -1,4 +1,6 @@
-﻿namespace LocalStack.Client.Tests.SessionTests;
+﻿#pragma warning disable CA2263 // Prefer generic overload when type is known
+
+namespace LocalStack.Client.Tests.SessionTests;
 
 public class SessionLocalStackTests
 {
@@ -6,7 +8,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
 
         mockSession.SessionOptionsMock.SetupDefault();
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
@@ -33,7 +35,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Create_SessionAWSCredentials_With_AwsAccessKeyId_And_AwsAccessKey_And_AwsSessionToken()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -67,7 +69,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Create_ClientConfig_With_UseHttp_Set_Bey_ConfigOptions_UseSsl(bool useSsl)
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -94,7 +96,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Create_ClientConfig_With_UseHttp_And_ProxyHost_And_ProxyPort_By_ServiceEndpoint_Configuration()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
         var configOptions = new ConfigOptions();
@@ -130,7 +132,7 @@ public class SessionLocalStackTests
     {
         var mockSession = MockSession.Create();
 
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -157,7 +159,7 @@ public class SessionLocalStackTests
     {
         var mockSession = MockSession.Create();
 
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -183,7 +185,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Pass_The_ClientConfig_To_SetForcePathStyle()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -207,7 +209,7 @@ public class SessionLocalStackTests
     public void CreateClientByImplementation_Should_Create_AmazonServiceClient_By_Given_Generic_Type_And_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(bool useServiceUrl)
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -255,7 +257,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
 
         mockSession.SessionOptionsMock.SetupDefault();
         mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
@@ -284,7 +286,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Create_ClientConfig_With_UseHttp_Set_Bey_ConfigOptions_UseSsl(bool useSsl)
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -311,7 +313,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Create_SessionAWSCredentials_With_AwsAccessKeyId_And_AwsAccessKey_And_AwsSessionToken()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -343,7 +345,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Create_ClientConfig_With_UseHttp_And_ProxyHost_And_ProxyPort_By_ServiceEndpoint_Configuration()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
         var configOptions = new ConfigOptions();
@@ -381,7 +383,7 @@ public class SessionLocalStackTests
     {
         var mockSession = MockSession.Create();
 
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -409,7 +411,7 @@ public class SessionLocalStackTests
     {
         var mockSession = MockSession.Create();
 
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -435,7 +437,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Pass_The_ClientConfig_To_SetForcePathStyle()
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
 
@@ -460,7 +462,7 @@ public class SessionLocalStackTests
     public void CreateClientByInterface_Should_Create_AmazonServiceClient_By_Given_Generic_Type_And_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(bool useServiceUrl)
     {
         var mockSession = MockSession.Create();
-        IServiceMetadata mockServiceMetadata = new MockServiceMetadata();
+        var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
         var mockClientConfig = new MockClientConfig();
         var configOptions = new ConfigOptions();

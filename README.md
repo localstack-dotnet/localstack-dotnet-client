@@ -36,7 +36,7 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 ## Supported Platforms
 
 - [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [.NET 6](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 9](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 - [.NET 4.6.2 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 
@@ -46,7 +46,7 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 
 - **Adaptable Environment Transition:** Easily switch between LocalStack and actual AWS services with minimal configuration changes.
 
-- **Versatile .NET Compatibility:** Supports a broad spectrum of .NET versions, from .NET 8.0 and .NET Standard 2.0 to .NET Framework 4.6.2 and above.
+- **Versatile .NET Compatibility:** Supports a broad spectrum of .NET versions, from .NET 9.0 and .NET Standard 2.0 to .NET Framework 4.6.2 and above.
 
 - **Reduced Learning Curve:** Offers a familiar interface tailored for LocalStack, ideal for developers acquainted with the AWS SDK for .NET.
 

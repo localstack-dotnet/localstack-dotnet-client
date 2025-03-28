@@ -2,34 +2,18 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.SNS;
 
-[Collection(nameof(LocalStackCollectionV131))]
-public sealed class SnsScenarioV131 : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionV37))]
+public sealed class SnsScenarioV37 : BaseSnsScenario
 {
-    public SnsScenarioV131(TestFixture testFixture, LocalStackFixtureV131 localStackFixtureV131) : base(testFixture, localStackFixtureV131)
+    public SnsScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV23))]
-public sealed class SnsScenarioV23 : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionV43))]
+public sealed class SnsScenarioV43 : BaseSnsScenario
 {
-    public SnsScenarioV23(TestFixture testFixture, LocalStackFixtureV23 localStackFixtureV23) : base(testFixture, localStackFixtureV23)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV34))]
-public sealed class SnsScenarioV34 : BaseSnsScenario
-{
-    public SnsScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV38))]
-public sealed class SnsScenarioV38 : BaseSnsScenario
-{
-    public SnsScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    public SnsScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
     {
     }
 }

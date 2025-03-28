@@ -11,7 +11,7 @@ internal static class TestContainers
                                       .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                       .WithEnvironment("DEBUG", "1")
                                       .WithEnvironment("LS_LOG", "trace-internal")
-                                      .WithPortBinding(4566, true)
+                                      .WithPortBinding(4566, assignRandomHostPort: true)
                                       .WithCleanUp(true);
     }
 }

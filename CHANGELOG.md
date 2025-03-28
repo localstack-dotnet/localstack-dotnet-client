@@ -1,5 +1,35 @@
 # LocalStack .NET Client Change Log
 
+### [v1.6.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.0)
+
+#### 1. General
+
+- **Framework Support Updates:**
+  - **.NET 9** support added.
+  - **Deprecated** support for **.NET 6**.
+  - Continued support for **.NET Standard 2.0** to maintain compatibility with older .NET versions.
+
+- **Functional Tests Enhancements:**
+  - **Removed** tests for legacy LocalStack versions and versions **v1.3.1** and **v2.3.2**.
+    - **Note:** LocalStack.NET no longer guarantees compatibility with v1 and v2 series.
+  - **Added** functional test support for LocalStack versions:
+    - **v3.7.1**
+    - **v4.3.0**
+
+- **Package Updates:**
+  - **AWSSDK.Core** minimum version set to **3.7.402**.
+
+- **Testing Compatibility:**
+  - Successfully tested against LocalStack versions:
+    - **v3.7.1**
+    - **v4.3.0**
+
+#### 3. Warnings
+
+- **Breaking Changes Postponed:**
+  - The planned breaking changes have been postponed to the next release.
+  - **Important:** Users should anticipate some breaking changes in the next release due to the removal of legacy support and configuration updates.
+
 ### [v1.5.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.5.0)
 
 #### 1. New Features

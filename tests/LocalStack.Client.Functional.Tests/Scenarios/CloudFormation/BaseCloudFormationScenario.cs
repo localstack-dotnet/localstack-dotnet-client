@@ -50,14 +50,6 @@ public abstract class BaseCloudFormationScenario : BaseScenario
             Assert.Equal(snsArn, topicAttResponse.Attributes["TopicArn"]);
         }
 
-        Type fixtureType = LocalStackFixture.GetType();
-
-        // AWSSDK.SQS 3.7.300 and above is incompatible with LocalStack v1 and v2 series
-        if (fixtureType == typeof(LocalStackFixtureV131) || fixtureType == typeof(LocalStackFixtureV23))
-        {
-            return;
-        }
-
         GetQueueAttributesResponse queueAttResponse = await AmazonSqs.GetQueueAttributesAsync(queueUrl, ["QueueArn"]);
 
         if (queueAttResponse.HttpStatusCode == HttpStatusCode.OK)

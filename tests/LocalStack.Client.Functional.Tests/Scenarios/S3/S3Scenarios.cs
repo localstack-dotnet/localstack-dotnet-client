@@ -2,34 +2,18 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.S3;
 
-[Collection(nameof(LocalStackCollectionV131))]
-public sealed class S3ScenarioV131 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV37))]
+public sealed class S3ScenarioV37 : BaseS3Scenario
 {
-    public S3ScenarioV131(TestFixture testFixture, LocalStackFixtureV131 localStackFixtureV131) : base(testFixture, localStackFixtureV131)
+    public S3ScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV23))]
-public sealed class S3ScenarioV23 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV43))]
+public sealed class S3ScenarioV43 : BaseS3Scenario
 {
-    public S3ScenarioV23(TestFixture testFixture, LocalStackFixtureV23 localStackFixtureV23) : base(testFixture, localStackFixtureV23)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV34))]
-public sealed class S3ScenarioV34 : BaseS3Scenario
-{
-    public S3ScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV38))]
-public sealed class S3ScenarioV38 : BaseS3Scenario
-{
-    public S3ScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    public S3ScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
     {
     }
 }

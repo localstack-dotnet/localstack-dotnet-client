@@ -2,35 +2,18 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.CloudFormation;
 
-
-[Collection(nameof(LocalStackCollectionV131))]
-public class CloudFormationScenarioV131 : BaseCloudFormationScenario
+[Collection(nameof(LocalStackCollectionV37))]
+public sealed class CloudFormationScenarioV37 : BaseCloudFormationScenario
 {
-    public CloudFormationScenarioV131(TestFixture testFixture, LocalStackFixtureV131 localStackFixtureV131) : base(testFixture, localStackFixtureV131)
+    public CloudFormationScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV23))]
-public sealed class CloudFormationScenarioV23 : BaseCloudFormationScenario
+[Collection(nameof(LocalStackCollectionV43))]
+public sealed class CloudFormationScenarioV43 : BaseCloudFormationScenario
 {
-    public CloudFormationScenarioV23(TestFixture testFixture, LocalStackFixtureV23 localStackFixtureV23) : base(testFixture, localStackFixtureV23)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV34))]
-public sealed class CloudFormationScenarioV34 : BaseCloudFormationScenario
-{
-    public CloudFormationScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV38))]
-public sealed class CloudFormationScenarioV38 : BaseCloudFormationScenario
-{
-    public CloudFormationScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    public CloudFormationScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
     {
     }
 }

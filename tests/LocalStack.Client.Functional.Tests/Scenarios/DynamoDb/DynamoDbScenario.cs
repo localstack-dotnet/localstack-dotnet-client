@@ -2,34 +2,18 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
-[Collection(nameof(LocalStackCollectionV131))]
-public class DynamoDbScenarioV131 : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV37))]
+public sealed class DynamoDbScenarioV37 : BaseDynamoDbScenario
 {
-    public DynamoDbScenarioV131(TestFixture testFixture, LocalStackFixtureV131 localStackFixtureV131) : base(testFixture, localStackFixtureV131)
+    public DynamoDbScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV23))]
-public sealed class DynamoDbScenarioV23 : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV43))]
+public sealed class DynamoDbScenarioV43 : BaseDynamoDbScenario
 {
-    public DynamoDbScenarioV23(TestFixture testFixture, LocalStackFixtureV23 localStackFixtureV23) : base(testFixture, localStackFixtureV23)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV34))]
-public sealed class DynamoDbScenarioV34 : BaseDynamoDbScenario
-{
-    public DynamoDbScenarioV34(TestFixture testFixture, LocalStackFixtureV34 localStackFixtureV34) : base(testFixture, localStackFixtureV34)
-    {
-    }
-}
-
-[Collection(nameof(LocalStackCollectionV38))]
-public sealed class DynamoDbScenarioV38 : BaseDynamoDbScenario
-{
-    public DynamoDbScenarioV38(TestFixture testFixture, LocalStackFixtureV38 localStackFixtureV38) : base(testFixture, localStackFixtureV38)
+    public DynamoDbScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
     {
     }
 }

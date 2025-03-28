@@ -14,7 +14,7 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>1.2.2</PackageValidationBaselineVersion>
+		<PackageValidationBaselineVersion>1.3.0</PackageValidationBaselineVersion>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<NoWarn>$(NoWarn);CA1510</NoWarn>

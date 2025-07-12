@@ -5,7 +5,7 @@
 > **Current Status**: This main branch is under active development for **AWS SDK v4 support (v2.0)**
 > 
 > **Version Strategy**:
-> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](../../tree/sdkv3-lts) (EOL: July 31, 2026)
+> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) (EOL: July 31, 2026)
 > - **v2.x** (AWS SDK v4): Active development → Native AOT support in subsequent v2.x releases
 > 
 > **Migration Timeline**: Q3 2025 for v2.0.0 GA

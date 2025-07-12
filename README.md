@@ -1,16 +1,18 @@
 # LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
 
-> ## ⚠️ AWS SDK v4 Transition Notice
-> 
-> **Current Status**: This main branch is under active development for **AWS SDK v4 support (v2.0)**
-> 
-> **Version Strategy**:
-> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) (EOL: July 31, 2026)
-> - **v2.x** (AWS SDK v4): Active development → Native AOT support in subsequent v2.x releases
-> 
-> **Migration Timeline**: Q3 2025 for v2.0.0 GA
-> 
-> 📖 **[Read Full Roadmap & Migration Guide →](../../discussions)**
+> ## ⚠️ Maintenance Branch for AWS SDK v3 ⚠️
+>
+> **Current Status**: This branch contains the legacy v1.x codebase which supports AWS SDK v3. It is now in **maintenance mode**.
+>
+> **Support Lifecycle**:
+>
+> - This version will only receive **critical security and bug fixes**
+> - **End-of-Life (EOL)**: July 31, 2026
+>
+> For active development, AWS SDK v4 support, and future features like Native AOT, please see the master branch.
+>
+> - 🚀 **[Go to master branch for v2.0 Development →](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)**
+> - 📖 **[Read Full Roadmap & Migration Guide →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 

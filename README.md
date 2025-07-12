@@ -1,10 +1,31 @@
 # LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
 
+> ## ⚠️ AWS SDK v4 Transition Notice
+> 
+> **Current Status**: This main branch is under active development for **AWS SDK v4 support (v2.0)**
+> 
+> **Version Strategy**:
+> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](../../tree/sdkv3-lts) (EOL: July 31, 2026)
+> - **v2.x** (AWS SDK v4): Active development → Native AOT support in subsequent v2.x releases
+> 
+> **Migration Timeline**: Q3 2025 for v2.0.0 GA
+> 
+> 📖 **[Read Full Roadmap & Migration Guide →](../../discussions)**
+
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
 Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
 
-| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
+## Version Compatibility
+
+| LocalStack.NET Version | AWS SDK Version | .NET Support | Status | Branch |
+|------------------------|-----------------|--------------|---------|---------|
+| v1.x | AWS SDK v3 | .NET 8, 9, Standard 2.0, Framework 4.6.2 | Maintenance (until July 2026) | [sdkv3-lts](../../tree/sdkv3-lts) |
+| v2.x | AWS SDK v4 | .NET 8, 9, Standard 2.0, Framework 4.7.2 | Active Development | [master](../../tree/main) |
+
+## Package Status
+
+| Package                      | v1.x (AWS SDK v3)                                                                                                                                    | v2.x (AWS SDK v4) - Development                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
 | LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |

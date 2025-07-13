@@ -10,7 +10,9 @@ public abstract class BaseDynamoDbScenario : BaseScenario
                                    bool useServiceUrl = false) : base(testFixture, localStackFixture, configFile, useServiceUrl)
     {
         DynamoDb = ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
-        DynamoDbContext = new DynamoDBContext(DynamoDb);
+        DynamoDbContext = new DynamoDBContextBuilder()
+            .WithDynamoDBClient(() => DynamoDb)
+            .Build();
     }
 
     protected IAmazonDynamoDB DynamoDb { get; private set; }
@@ -39,19 +41,28 @@ public abstract class BaseDynamoDbScenario : BaseScenario
     public virtual async Task DynamoDbService_Should_Add_A_Record_To_A_DynamoDb_Table_Async()
     {
         var tableName = Guid.NewGuid().ToString();
-        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
+        // Fix: Use GetTargetTableConfig instead of DynamoDBOperationConfig
+        var getTargetTableConfig = new GetTargetTableConfig() { OverrideTableName = tableName };
         await CreateTestTableAsync(tableName);
 
-        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
+        // Fix: Cast to Table and use GetTargetTableConfig
+        Table targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
 
         var movieEntity = new Fixture().Create<MovieEntity>();
         string modelJson = JsonSerializer.Serialize(movieEntity);
         Document item = Document.FromJson(modelJson);
 
         await targetTable.PutItemAsync(item);
-        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
+
+        // Fix: Use QueryConfig instead of DynamoDBOperationConfig
+        var queryConfig = new QueryConfig()
+        {
+            OverrideTableName = tableName,
+            IndexName = TestConstants.MovieTableMovieIdGsi
+        };
+
         List<MovieEntity> movieEntities =
-            await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, dynamoDbOperationConfig).GetRemainingAsync();
+            await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, queryConfig).GetRemainingAsync();
 
         Assert.True(movieEntity.DeepEquals(movieEntities[0]));
     }
@@ -62,10 +73,12 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         var tableName = Guid.NewGuid().ToString();
         const int recordCount = 5;
 
-        var dynamoDbOperationConfig = new DynamoDBOperationConfig() { OverrideTableName = tableName };
+        // Fix: Use GetTargetTableConfig instead of DynamoDBOperationConfig
+        var getTargetTableConfig = new GetTargetTableConfig() { OverrideTableName = tableName };
         await CreateTestTableAsync(tableName);
 
-        Table targetTable = DynamoDbContext.GetTargetTable<MovieEntity>(dynamoDbOperationConfig);
+        // Fix: Cast to Table and use GetTargetTableConfig
+        Table targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
         List<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
         List<Document> documents = movieEntities.Select(entity =>
                                                 {
@@ -81,9 +94,15 @@ public abstract class BaseDynamoDbScenario : BaseScenario
             await targetTable.PutItemAsync(document);
         }
 
-        dynamoDbOperationConfig.IndexName = TestConstants.MovieTableMovieIdGsi;
+        // Fix: Use ScanConfig instead of DynamoDBOperationConfig
+        var scanConfig = new ScanConfig()
+        {
+            OverrideTableName = tableName,
+            IndexName = TestConstants.MovieTableMovieIdGsi
+        };
+
         List<MovieEntity> returnedMovieEntities =
-            await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), dynamoDbOperationConfig).GetRemainingAsync();
+            await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), scanConfig).GetRemainingAsync();
 
         Assert.NotNull(movieEntities);
         Assert.NotEmpty(movieEntities);

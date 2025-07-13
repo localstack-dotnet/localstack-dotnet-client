@@ -92,11 +92,11 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     }
                 }
 
-                if (context.IsRunningOnLinux() && targetFramework == "net462")
+                if (context.IsRunningOnLinux() && targetFramework == "net472")
                 {
-                    context.Warning("Temporarily disabled running net462 tests on Linux because of a problem in mono runtime");
+                    context.Warning("Temporarily disabled running net472 tests on Linux because of a problem in mono runtime");
                 }
-                else if (context.IsRunningOnMacOs() && targetFramework == "net462")
+                else if (context.IsRunningOnMacOs() && targetFramework == "net472")
                 {
                     context.RunXUnitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
                 }

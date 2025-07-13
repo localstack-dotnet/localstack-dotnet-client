@@ -36,9 +36,9 @@ public class SessionReflectionTests
     public void SetForcePathStyle_Should_Return_False_If_Given_ClientConfig_Does_Not_Have_ForcePathStyle()
     {
         var sessionReflection = new SessionReflection();
-        var clientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
-        bool set = sessionReflection.SetForcePathStyle(clientConfig, true);
+        bool set = sessionReflection.SetForcePathStyle(mockClientConfig, true);
 
         Assert.False(set);
     }
@@ -47,7 +47,7 @@ public class SessionReflectionTests
     public void SetForcePathStyle_Should_Set_ForcePathStyle_Of_ClientConfig_If_It_Exists()
     {
         var sessionReflection = new SessionReflection();
-        var clientConfig = new MockClientConfigWithForcePathStyle();
+        var clientConfig = MockClientConfigWithForcePathStyle.CreateDefaultMockClientConfigWithForcePathStyle();
 
         Assert.False(clientConfig.ForcePathStyle);
 
@@ -57,11 +57,11 @@ public class SessionReflectionTests
         Assert.True(clientConfig.ForcePathStyle);
     }
 
-    [Theory, 
-     InlineData("eu-central-1"), 
-     InlineData("us-west-1"), 
+    [Theory,
+     InlineData("eu-central-1"),
+     InlineData("us-west-1"),
      InlineData("af-south-1"),
-     InlineData("ap-southeast-1"), 
+     InlineData("ap-southeast-1"),
      InlineData("ca-central-1"),
      InlineData("eu-west-2"),
      InlineData("sa-east-1")]

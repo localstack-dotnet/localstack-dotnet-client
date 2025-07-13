@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net472;net8.0;net9.0</TargetFrameworks>
 		<NoWarn>$(NoWarn);CA1707;MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
@@ -128,7 +128,7 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
 		<PackageReference Include="Microsoft.TestPlatform.ObjectModel" />
 	</ItemGroup>
 

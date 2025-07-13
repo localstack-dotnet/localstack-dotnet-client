@@ -1,4 +1,6 @@
-﻿using Tag = Amazon.CloudFormation.Model.Tag;
+﻿#pragma warning disable CA2254
+
+using Tag = Amazon.CloudFormation.Model.Tag;
 
 namespace LocalStack.Client.Functional.Tests.CloudFormation;
 
@@ -190,11 +192,11 @@ internal sealed class CloudFormationStackExecutor(IAmazonCloudFormation cloudFor
 
             if (changeSetType == ChangeSetType.CREATE)
             {
-                logger.LogInformation($"Initiated CloudFormation stack creation for {cloudFormationResource.Name}");
+                logger.LogInformation("Initiated CloudFormation stack creation for {Name}", cloudFormationResource.Name);
             }
             else
             {
-                logger.LogInformation($"Initiated CloudFormation stack update on {cloudFormationResource.Name}");
+                logger.LogInformation("Initiated CloudFormation stack update on {Name}", cloudFormationResource.Name);
             }
         }
         catch (Exception e)
@@ -244,7 +246,7 @@ internal sealed class CloudFormationStackExecutor(IAmazonCloudFormation cloudFor
             changeSetType = ChangeSetType.CREATE;
         }
 
-        // If the status was DELETE_IN_PROGRESS then just wait for delete to complete 
+        // If the status was DELETE_IN_PROGRESS then just wait for delete to complete
         else if (stack.StackStatus == StackStatus.DELETE_IN_PROGRESS)
         {
             await WaitForNoLongerInProgressAsync(cancellationToken).ConfigureAwait(false);
@@ -327,7 +329,7 @@ internal sealed class CloudFormationStackExecutor(IAmazonCloudFormation cloudFor
                 if (currentStack != null)
                 {
                     logger.LogInformation(
-                        $"... Waiting for stack's state to change from {currentStack.StackStatus}: {TimeSpan.FromTicks(DateTime.UtcNow.Ticks - start).TotalSeconds.ToString("0", CultureInfo.InvariantCulture).PadLeft(3)} secs");
+                        "... Waiting for stack's state to change from {CurrentStackStackStatus}: {PadLeft} secs", currentStack.StackStatus, TimeSpan.FromTicks(DateTime.UtcNow.Ticks - start).TotalSeconds.ToString("0", CultureInfo.InvariantCulture).PadLeft(3));
                 }
 
                 await Task.Delay(StackPollingDelay, cancellation).ConfigureAwait(false);
@@ -422,7 +424,7 @@ internal sealed class CloudFormationStackExecutor(IAmazonCloudFormation cloudFor
             for (int i = events.Count - 1; i >= 0; i--)
             {
                 var line = new StringBuilder();
-                line.Append(events[i].Timestamp.ToString("g", CultureInfo.InvariantCulture).PadRight(TIMESTAMP_WIDTH));
+                line.Append(events[i].Timestamp?.ToString("g", CultureInfo.InvariantCulture).PadRight(TIMESTAMP_WIDTH));
                 line.Append(' ');
                 line.Append(events[i].LogicalResourceId.PadRight(LOGICAL_RESOURCE_WIDTH));
                 line.Append(' ');
@@ -435,9 +437,9 @@ internal sealed class CloudFormationStackExecutor(IAmazonCloudFormation cloudFor
                     line.Append(events[i].ResourceStatusReason);
                 }
 
-                if (minTimeStampForEvents < events[i].Timestamp)
+                if (minTimeStampForEvents < events[i].Timestamp && events[i].Timestamp != null)
                 {
-                    minTimeStampForEvents = events[i].Timestamp;
+                    minTimeStampForEvents = (DateTimeOffset)events[i].Timestamp!;
                 }
 
                 logger.LogInformation(line.ToString());

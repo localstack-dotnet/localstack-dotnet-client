@@ -1,8 +1,10 @@
-﻿namespace LocalStack.Tests.Common.Mocks.MockServiceClients;
+﻿#pragma warning disable S2325,CA1822
+
+namespace LocalStack.Tests.Common.Mocks.MockServiceClients;
 
 public class MockAmazonServiceClient : AmazonServiceClient, IMockAmazonService
 {
-    public MockAmazonServiceClient() : base(new MockCredentials(), new MockClientConfig())
+    public MockAmazonServiceClient() : base(new MockCredentials(), new MockClientConfig(new MockConfigurationProvider()))
     {
     }
 
@@ -20,10 +22,17 @@ public class MockAmazonServiceClient : AmazonServiceClient, IMockAmazonService
     {
     }
 
-    public AWSCredentials AwsCredentials => Credentials;
+    public AWSCredentials AwsCredentials => Config.DefaultAWSCredentials;
 
-    protected override AbstractAWSSigner CreateSigner()
+#if NET8_0_OR_GREATER
+    public static ClientConfig CreateDefaultClientConfig()
     {
-        return new NullSigner();
+        return MockClientConfig.CreateDefaultMockClientConfig();
     }
+
+    public static IAmazonService CreateDefaultServiceClient(AWSCredentials awsCredentials, ClientConfig clientConfig)
+    {
+        return new MockAmazonServiceClient(awsCredentials, MockClientConfig.CreateDefaultMockClientConfig());
+    }
+#endif
 }

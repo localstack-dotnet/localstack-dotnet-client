@@ -66,7 +66,7 @@ public abstract class BaseRealLife : BaseScenario
 
         Assert.Equal(HttpStatusCode.OK, receiveMessageResponse.HttpStatusCode);
 
-        if (receiveMessageResponse.Messages.Count == 0)
+        if ((receiveMessageResponse.Messages?.Count ?? 0) == 0)
         {
             await Task.Delay(2000);
             receiveMessageResponse = await AmazonSqs.ReceiveMessageAsync(receiveMessageRequest);
@@ -75,7 +75,7 @@ public abstract class BaseRealLife : BaseScenario
         }
 
         Assert.NotNull(receiveMessageResponse.Messages);
-        Assert.NotEmpty(receiveMessageResponse.Messages);
+        Assert.NotEmpty(receiveMessageResponse.Messages!);
         Assert.Single(receiveMessageResponse.Messages);
 
         dynamic? deserializedMessage = JsonConvert.DeserializeObject<ExpandoObject>(receiveMessageResponse.Messages[0].Body, new ExpandoObjectConverter());

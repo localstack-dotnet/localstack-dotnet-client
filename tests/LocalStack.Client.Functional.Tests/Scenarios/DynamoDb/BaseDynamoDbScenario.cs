@@ -10,9 +10,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
                                    bool useServiceUrl = false) : base(testFixture, localStackFixture, configFile, useServiceUrl)
     {
         DynamoDb = ServiceProvider.GetRequiredService<IAmazonDynamoDB>();
-        DynamoDbContext = new DynamoDBContextBuilder()
-            .WithDynamoDBClient(() => DynamoDb)
-            .Build();
+        DynamoDbContext = new DynamoDBContextBuilder().WithDynamoDBClient(() => DynamoDb).Build();
     }
 
     protected IAmazonDynamoDB DynamoDb { get; private set; }
@@ -41,12 +39,25 @@ public abstract class BaseDynamoDbScenario : BaseScenario
     public virtual async Task DynamoDbService_Should_Add_A_Record_To_A_DynamoDb_Table_Async()
     {
         var tableName = Guid.NewGuid().ToString();
+
         // Fix: Use GetTargetTableConfig instead of DynamoDBOperationConfig
         var getTargetTableConfig = new GetTargetTableConfig() { OverrideTableName = tableName };
+
         await CreateTestTableAsync(tableName);
 
+        var describeResponse = await DynamoDb.DescribeTableAsync(new DescribeTableRequest(tableName));
+        var gsiExists = describeResponse.Table.GlobalSecondaryIndexes?.Exists(gsi => gsi.IndexName == TestConstants.MovieTableMovieIdGsi) == true;
+
+        if (!gsiExists)
+        {
+            var availableGsis = describeResponse.Table.GlobalSecondaryIndexes?.Select(g => g.IndexName).ToArray() ?? ["none"];
+
+            throw new System.InvalidOperationException($"GSI '{TestConstants.MovieTableMovieIdGsi}' was not found on table '{tableName}'. " +
+                                                       $"Available GSIs: {string.Join(", ", availableGsis)}");
+        }
+
         // Fix: Cast to Table and use GetTargetTableConfig
-        Table targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
+        var targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
 
         var movieEntity = new Fixture().Create<MovieEntity>();
         string modelJson = JsonSerializer.Serialize(movieEntity);
@@ -55,14 +66,9 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         await targetTable.PutItemAsync(item);
 
         // Fix: Use QueryConfig instead of DynamoDBOperationConfig
-        var queryConfig = new QueryConfig()
-        {
-            OverrideTableName = tableName,
-            IndexName = TestConstants.MovieTableMovieIdGsi
-        };
+        var queryConfig = new QueryConfig() { OverrideTableName = tableName, IndexName = TestConstants.MovieTableMovieIdGsi };
 
-        List<MovieEntity> movieEntities =
-            await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, queryConfig).GetRemainingAsync();
+        List<MovieEntity> movieEntities = await DynamoDbContext.QueryAsync<MovieEntity>(movieEntity.MovieId, queryConfig).GetRemainingAsync();
 
         Assert.True(movieEntity.DeepEquals(movieEntities[0]));
     }
@@ -78,16 +84,15 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         await CreateTestTableAsync(tableName);
 
         // Fix: Cast to Table and use GetTargetTableConfig
-        Table targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
-        List<MovieEntity> movieEntities = new Fixture().CreateMany<MovieEntity>(recordCount).ToList();
-        List<Document> documents = movieEntities.Select(entity =>
+        var targetTable = (Table)DynamoDbContext.GetTargetTable<MovieEntity>(getTargetTableConfig);
+        List<MovieEntity> movieEntities = [.. new Fixture().CreateMany<MovieEntity>(recordCount)];
+        List<Document> documents = [.. movieEntities.Select(entity =>
                                                 {
                                                     string serialize = JsonSerializer.Serialize(entity);
                                                     Document item = Document.FromJson(serialize);
 
                                                     return item;
-                                                })
-                                                .ToList();
+                                                }),];
 
         foreach (Document document in documents)
         {
@@ -95,14 +100,9 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         }
 
         // Fix: Use ScanConfig instead of DynamoDBOperationConfig
-        var scanConfig = new ScanConfig()
-        {
-            OverrideTableName = tableName,
-            IndexName = TestConstants.MovieTableMovieIdGsi
-        };
+        var scanConfig = new ScanConfig() { OverrideTableName = tableName, IndexName = TestConstants.MovieTableMovieIdGsi };
 
-        List<MovieEntity> returnedMovieEntities =
-            await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), scanConfig).GetRemainingAsync();
+        List<MovieEntity> returnedMovieEntities = await DynamoDbContext.ScanAsync<MovieEntity>(new List<ScanCondition>(), scanConfig).GetRemainingAsync();
 
         Assert.NotNull(movieEntities);
         Assert.NotEmpty(movieEntities);
@@ -120,29 +120,28 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         var postTableCreateRequest = new CreateTableRequest
         {
             AttributeDefinitions =
-                new List<AttributeDefinition>
-                {
-                    new() { AttributeName = nameof(MovieEntity.DirectorId), AttributeType = ScalarAttributeType.S },
-                    new() { AttributeName = nameof(MovieEntity.CreateDate), AttributeType = ScalarAttributeType.S },
-                    new() { AttributeName = nameof(MovieEntity.MovieId), AttributeType = ScalarAttributeType.S },
-                },
+            [
+                new AttributeDefinition { AttributeName = nameof(MovieEntity.DirectorId), AttributeType = ScalarAttributeType.S },
+                new AttributeDefinition { AttributeName = nameof(MovieEntity.CreateDate), AttributeType = ScalarAttributeType.S },
+                new AttributeDefinition { AttributeName = nameof(MovieEntity.MovieId), AttributeType = ScalarAttributeType.S },
+            ],
             TableName = tableName ?? TestTableName,
             KeySchema =
-                new List<KeySchemaElement>()
-                {
-                    new() { AttributeName = nameof(MovieEntity.DirectorId), KeyType = KeyType.HASH },
-                    new() { AttributeName = nameof(MovieEntity.CreateDate), KeyType = KeyType.RANGE },
-                },
-            GlobalSecondaryIndexes = new List<GlobalSecondaryIndex>
-            {
-                new()
+            [
+                new KeySchemaElement { AttributeName = nameof(MovieEntity.DirectorId), KeyType = KeyType.HASH },
+                new KeySchemaElement { AttributeName = nameof(MovieEntity.CreateDate), KeyType = KeyType.RANGE },
+            ],
+            GlobalSecondaryIndexes =
+            [
+                new GlobalSecondaryIndex
                 {
                     Projection = new Projection { ProjectionType = ProjectionType.ALL },
                     IndexName = TestConstants.MovieTableMovieIdGsi,
-                    KeySchema = new List<KeySchemaElement> { new() { AttributeName = nameof(MovieEntity.MovieId), KeyType = KeyType.HASH } },
-                    ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 5 }
-                }
-            },
+                    KeySchema = [new KeySchemaElement { AttributeName = nameof(MovieEntity.MovieId), KeyType = KeyType.HASH }],
+                    ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 5 },
+                },
+
+            ],
             ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 6 },
         };
 

@@ -49,8 +49,8 @@ public class AwsClientFactoryWrapperTests
 
         var exception = Assert.Throws<LocalStackClientConfigurationException>(
             () => _awsClientFactoryWrapper.CreateServiceClient<MockAmazonServiceClient>(_mockServiceProvider.Object, _awsOptions));
-        
-        Assert.Contains("Failed to find AWS SDK v4 ClientFactory<T>", exception.Message, StringComparison.Ordinal);
+
+        Assert.Contains("Failed to find internal ClientFactory<T>", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]

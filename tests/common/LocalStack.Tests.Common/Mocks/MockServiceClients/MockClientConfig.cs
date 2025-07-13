@@ -4,6 +4,10 @@ namespace LocalStack.Tests.Common.Mocks.MockServiceClients;
 
 public class MockClientConfig : ClientConfig, IClientConfig
 {
+    public MockClientConfig() : this(new MockConfigurationProvider())
+    {
+    }
+
     public MockClientConfig(IDefaultConfigurationProvider configurationProvider) : base(configurationProvider)
     {
         ServiceURL = "http://localhost";

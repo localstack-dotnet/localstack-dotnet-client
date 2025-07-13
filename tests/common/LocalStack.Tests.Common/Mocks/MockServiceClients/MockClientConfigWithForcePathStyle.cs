@@ -9,5 +9,5 @@ public class MockClientConfigWithForcePathStyle : MockClientConfig
 
     public bool ForcePathStyle { get; set; }
 
-    public static MockClientConfigWithForcePathStyle CreateDefaultMockClientConfigWithForcePathStyle() => new(new MockConfigurationProvider(), forcePathStyle: true);
+    public static MockClientConfigWithForcePathStyle CreateDefaultMockClientConfigWithForcePathStyle() => new(new MockConfigurationProvider(), forcePathStyle: false);
 }

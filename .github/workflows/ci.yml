@@ -71,8 +71,8 @@ jobs:
       - name: "Build"
         run: ${{ matrix.script }} --target build
 
-      - name: "Run Tests (Unit Only)"
-        run: ${{ matrix.script }} --target tests --skipFunctionalTest false --exclusive
+      - name: "Run Tests"
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
 
       - name: "Publish Test Results"
         uses: dorny/test-reporter@v1

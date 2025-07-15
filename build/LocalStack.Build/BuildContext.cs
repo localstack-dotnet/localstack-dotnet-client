@@ -19,7 +19,8 @@ public sealed class BuildContext : FrostingContext
         sourceBuilder.AddRange(new[]
         {
             new KeyValuePair<string, string>("myget", "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
-            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json")
+            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json"),
+            new KeyValuePair<string, string>("github", "https://nuget.pkg.github.com/localstack-dotnet/index.json"),
         });
         PackageSourceMap = sourceBuilder.ToImmutable();
 
@@ -38,7 +39,7 @@ public sealed class BuildContext : FrostingContext
         packIdBuilder.AddRange(new[]
         {
             new KeyValuePair<string, FilePath>("LocalStack.Client", LocalStackClientProjFile),
-            new KeyValuePair<string, FilePath>("LocalStack.Client.Extensions", LocalStackClientExtProjFile)
+            new KeyValuePair<string, FilePath>("LocalStack.Client.Extensions", LocalStackClientExtProjFile),
         });
         PackageIdProjMap = packIdBuilder.ToImmutable();
     }
@@ -100,7 +101,7 @@ public sealed class BuildContext : FrostingContext
 
         var nugetInstallSettings = new NuGetInstallSettings
         {
-            Version = "2.8.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = "."
+            Version = "2.8.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = ".",
         };
 
         this.NuGetInstall("xunit.runner.console", nugetInstallSettings);
@@ -128,6 +129,69 @@ public sealed class BuildContext : FrostingContext
         }
 
         return projMetadata;
+    }
+
+    public void InstallMonoOnLinux()
+    {
+        int result = this.StartProcess("mono", new ProcessSettings
+        {
+            Arguments = "--version",
+            RedirectStandardOutput = true,
+            NoWorkingDirectory = true,
+        });
+
+        if (result == 0)
+        {
+            this.Information("✅ Mono is already installed. Skipping installation.");
+            return;
+        }
+
+        this.Information("Mono not found. Starting installation on Linux for .NET Framework test platform support...");
+
+        // Add Mono repository key
+        int exitCode1 = this.StartProcess("sudo", new ProcessSettings
+        {
+            Arguments = "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF",
+        });
+
+        if (exitCode1 != 0)
+        {
+            this.Warning($"⚠️ Failed to add Mono repository key (exit code: {exitCode1})");
+            return;
+        }
+
+        // Add Mono repository
+        int exitCode2 = this.StartProcess("bash", new ProcessSettings
+        {
+            Arguments = "-c \"echo 'deb https://download.mono-project.com/repo/ubuntu focal main' | sudo tee /etc/apt/sources.list.d/mono-official-stable.list\"",
+        });
+
+        if (exitCode2 != 0)
+        {
+            this.Warning($"⚠️ Failed to add Mono repository (exit code: {exitCode2})");
+            return;
+        }
+
+        // Update package list
+        int exitCode3 = this.StartProcess("sudo", new ProcessSettings { Arguments = "apt update" });
+
+        if (exitCode3 != 0)
+        {
+            this.Warning($"⚠️ Failed to update package list (exit code: {exitCode3})");
+            return;
+        }
+
+        // Install Mono
+        int exitCode4 = this.StartProcess("sudo", new ProcessSettings { Arguments = "apt install -y mono-complete" });
+
+        if (exitCode4 != 0)
+        {
+            this.Warning($"⚠️ Failed to install Mono (exit code: {exitCode4})");
+            this.Warning("This may cause .NET Framework tests to fail on Linux");
+            return;
+        }
+
+        this.Information("✅ Mono installation completed successfully");
     }
 
     public void RunXUnitUsingMono(string targetFramework, string assemblyPath)

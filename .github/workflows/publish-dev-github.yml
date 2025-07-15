@@ -1,0 +1,166 @@
+name: "Auto Publish to GitHub Packages"
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+      - ".github/**"
+      - "docs/**"
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  auto-publish:
+    name: "Auto Publish Development Build"
+    runs-on: ubuntu-22.04
+    if: github.repository == 'localstack-dotnet/localstack-dotnet-client'
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: "Cache NuGet packages"
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: "Make build script executable"
+        run: chmod +x ./build.sh
+
+      - name: "Build & Test"
+        run: ./build.sh --target tests --skipFunctionalTest true
+
+      - name: "Generate Development Version"
+        id: version
+        run: |
+          # Extract base version from Directory.Build.props
+          BASE_VERSION=$(grep -oP '<PackageMainVersion>\K[^<]+' Directory.Build.props)
+
+          # Generate build metadata
+          BUILD_DATE=$(date +%Y%m%d)
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/[^a-zA-Z0-9-]/-/g')
+
+          # Version format: 2.0.0-preview1.20240715.a1b2c3d
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            DEV_VERSION="${BASE_VERSION}.${BUILD_DATE}.${COMMIT_SHA}"
+          else
+            DEV_VERSION="${BASE_VERSION}-${BRANCH_NAME}.${BUILD_DATE}.${COMMIT_SHA}"
+          fi
+
+          echo "base-version=${BASE_VERSION}" >> $GITHUB_OUTPUT
+          echo "dev-version=${DEV_VERSION}" >> $GITHUB_OUTPUT
+          echo "build-date=${BUILD_DATE}" >> $GITHUB_OUTPUT
+          echo "commit-sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
+
+          echo "📦 Generated development version: ${DEV_VERSION}"
+
+      - name: "Setup GitHub Packages Authentication"
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --name github-packages \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text
+
+      - name: "Pack & Publish LocalStack.Client"
+        run: |
+          echo "🔨 Building LocalStack.Client package..."
+          ./build.sh --target nuget-pack \
+            --package-source github \
+            --package-id LocalStack.Client \
+            --package-version ${{ steps.version.outputs.dev-version }}
+
+          echo "📤 Publishing LocalStack.Client to GitHub Packages..."
+          ./build.sh --target nuget-push \
+            --package-source github \
+            --package-id LocalStack.Client \
+            --package-version ${{ steps.version.outputs.dev-version }} \
+            --package-secret ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Update Extensions Dependencies"
+        run: |
+          echo "🔄 Updating LocalStack.Client.Extensions dependencies..."
+          cd src/LocalStack.Client.Extensions/
+
+          # Remove project reference and add package reference
+          dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj
+          dotnet add package LocalStack.Client \
+            --version ${{ steps.version.outputs.dev-version }} \
+            --source github-packages
+
+      - name: "Pack & Publish LocalStack.Client.Extensions"
+        run: |
+          echo "🔨 Building LocalStack.Client.Extensions package..."
+          ./build.sh --target nuget-pack \
+            --package-source github \
+            --package-id LocalStack.Client.Extensions \
+            --package-version ${{ steps.version.outputs.dev-version }}
+
+          echo "📤 Publishing LocalStack.Client.Extensions to GitHub Packages..."
+          ./build.sh --target nuget-push \
+            --package-source github \
+            --package-id LocalStack.Client.Extensions \
+            --package-version ${{ steps.version.outputs.dev-version }} \
+            --package-secret ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Upload Package Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "dev-packages-${{ steps.version.outputs.dev-version }}"
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          retention-days: 7
+
+      - name: "Generate Summary"
+        run: |
+          echo "## 📦 Development Packages Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Package | Version | Source |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|---------|---------|" >> $GITHUB_STEP_SUMMARY
+          echo "| LocalStack.Client | \`${{ steps.version.outputs.dev-version }}\` | GitHub Packages |" >> $GITHUB_STEP_SUMMARY
+          echo "| LocalStack.Client.Extensions | \`${{ steps.version.outputs.dev-version }}\` | GitHub Packages |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Installation Instructions" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "# Add GitHub Packages source" >> $GITHUB_STEP_SUMMARY
+          echo "dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --name github-localstack \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --username USERNAME \\" >> $GITHUB_STEP_SUMMARY
+          echo "  --password GITHUB_TOKEN" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "# Install development packages" >> $GITHUB_STEP_SUMMARY
+          echo "dotnet add package LocalStack.Client --version ${{ steps.version.outputs.dev-version }} --source github-localstack" >> $GITHUB_STEP_SUMMARY
+          echo "dotnet add package LocalStack.Client.Extensions --version ${{ steps.version.outputs.dev-version }} --source github-localstack" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Base Version**: ${{ steps.version.outputs.base-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Date**: ${{ steps.version.outputs.build-date }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ steps.version.outputs.commit-sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY

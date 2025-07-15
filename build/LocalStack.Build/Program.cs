@@ -20,10 +20,6 @@ public sealed class InitTask : FrostingTask<BuildContext>
         }
 
         context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
-
-        context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
-
-        context.InstallXUnitNugetPackage();
     }
 }
 
@@ -45,7 +41,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
         var settings = new DotNetTestSettings
         {
-            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true
+            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true,
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
@@ -92,20 +88,18 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     }
                 }
 
-                if (context.IsRunningOnLinux() && targetFramework == "net472")
+                // .NET Framework testing on non-Windows platforms
+                // - Modern .NET includes built-in Mono runtime
+                // - Test platform still requires external Mono installation on Linux
+                if (targetFramework == "net472" && !context.IsRunningOnWindows())
                 {
-                    context.Warning("Temporarily disabled running net472 tests on Linux because of a problem in mono runtime");
+                    string platform = context.IsRunningOnLinux() ? "Linux (with external Mono)" : "macOS (built-in Mono)";
+                    context.Information($"Running .NET Framework tests on {platform}");
                 }
-                else if (context.IsRunningOnMacOs() && targetFramework == "net472")
-                {
-                    context.RunXUnitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
-                }
-                else
-                {
-                    string testFilePrefix = targetFramework.Replace(".", "-");
-                    settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
-                    context.DotNetTest(testProjectPath, settings);
-                }
+
+                string testFilePrefix = targetFramework.Replace(".", "-");
+                settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
+                context.DotNetTest(testProjectPath, settings);
 
                 context.Warning("==============================================================");
             }
@@ -129,7 +123,7 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 
         var settings = new DotNetPackSettings
         {
-            Configuration = context.BuildConfiguration, OutputDirectory = context.ArtifactOutput, MSBuildSettings = new DotNetMSBuildSettings()
+            Configuration = context.BuildConfiguration, OutputDirectory = context.ArtifactOutput, MSBuildSettings = new DotNetMSBuildSettings(),
         };
 
         settings.MSBuildSettings.SetVersion(context.PackageVersion);
@@ -143,11 +137,18 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
         BuildContext.ValidateArgument("package-version", context.PackageVersion);
         BuildContext.ValidateArgument("package-source", context.PackageSource);
 
-        Match match = Regex.Match(context.PackageVersion, @"^(\d+)\.(\d+)\.(\d+)(\.(\d+))*$", RegexOptions.IgnoreCase);
+        Match match = Regex.Match(context.PackageVersion, @"^(\d+)\.(\d+)\.(\d+)([\.\-].*)*$", RegexOptions.IgnoreCase);
 
         if (!match.Success)
         {
             throw new Exception($"Invalid version: {context.PackageVersion}");
+        }
+
+        // Skip version validation for GitHub Packages - allows overwriting dev builds
+        if (context.PackageSource == "github")
+        {
+            context.Information($"🔄 Skipping version validation for GitHub Packages source");
+            return;
         }
 
         string packageSource = context.PackageSourceMap[context.PackageSource];

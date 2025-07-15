@@ -31,23 +31,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Windows: All frameworks including .NET Framework
           - os: windows-latest
             name: "Windows"
             script: "./build.ps1"
-            frameworks: "net8.0,net9.0,netstandard2.0,net472"
             
-          # Linux: All frameworks with built-in Mono runtime
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             name: "Linux"
             script: "./build.sh"
-            frameworks: "net8.0,net9.0,netstandard2.0,net472"
             
-          # macOS: All frameworks with built-in Mono runtime
           - os: macos-latest
             name: "macOS"
             script: "./build.sh"
-            frameworks: "net8.0,net9.0,netstandard2.0,net472"
 
     steps:
       - name: "Checkout"

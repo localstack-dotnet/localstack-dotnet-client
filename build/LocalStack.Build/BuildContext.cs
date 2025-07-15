@@ -133,7 +133,20 @@ public sealed class BuildContext : FrostingContext
 
     public void InstallMonoOnLinux()
     {
-        this.Information("Installing Mono on Linux for .NET Framework test platform support...");
+        int result = this.StartProcess("mono", new ProcessSettings
+        {
+            Arguments = "--version",
+            RedirectStandardOutput = true,
+            NoWorkingDirectory = true,
+        });
+
+        if (result == 0)
+        {
+            this.Information("✅ Mono is already installed. Skipping installation.");
+            return;
+        }
+
+        this.Information("Mono not found. Starting installation on Linux for .NET Framework test platform support...");
 
         // Add Mono repository key
         int exitCode1 = this.StartProcess("sudo", new ProcessSettings

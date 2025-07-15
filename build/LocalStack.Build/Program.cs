@@ -20,19 +20,6 @@ public sealed class InitTask : FrostingTask<BuildContext>
         }
 
         context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
-
-        // Install Mono on Linux for .NET Framework test platform support
-        if (context.IsRunningOnLinux())
-        {
-            context.InstallMonoOnLinux();
-        }
-
-        // Check Mono version (for .NET Framework testing)
-        int monoExitCode = context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
-        if (monoExitCode != 0)
-        {
-            context.Warning($"Mono not available (exit code: {monoExitCode})");
-        }
     }
 }
 

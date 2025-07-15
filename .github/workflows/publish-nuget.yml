@@ -33,7 +33,7 @@ jobs:
     name: "Publish to ${{ github.event.inputs.package-source }}"
     runs-on: ubuntu-22.04
     env:
-      NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     
     permissions:
       contents: read
@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 

@@ -25,7 +25,7 @@ jobs:
     name: "Build & Test (${{ matrix.name }})"
     runs-on: ${{ matrix.os }}
     env:
-        NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
+      NUGET_PACKAGES: ${{ contains(matrix.os, 'windows') && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
 
     strategy:
       fail-fast: false
@@ -72,7 +72,7 @@ jobs:
         run: ${{ matrix.script }} --target build
 
       - name: "Run Tests (Unit Only)"
-        run: ${{ matrix.script }} --target tests --skipFunctionalTest true --exclusive
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest false --exclusive
 
       - name: "Publish Test Results"
         uses: dorny/test-reporter@v1

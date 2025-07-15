@@ -33,8 +33,6 @@ public sealed class InitTask : FrostingTask<BuildContext>
         {
             context.Warning($"Mono not available (exit code: {monoExitCode})");
         }
-
-        context.InstallXUnitNugetPackage();
     }
 }
 

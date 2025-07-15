@@ -20,7 +20,9 @@ jobs:
     name: "Auto Publish Development Build"
     runs-on: ubuntu-latest
     if: github.repository == 'localstack-dotnet/localstack-dotnet-client'
-    
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
+
     permissions:
       contents: read
       packages: write
@@ -57,24 +59,24 @@ jobs:
         run: |
           # Extract base version from Directory.Build.props
           BASE_VERSION=$(grep -oP '<PackageMainVersion>\K[^<]+' Directory.Build.props)
-          
+
           # Generate build metadata
           BUILD_DATE=$(date +%Y%m%d)
           COMMIT_SHA=$(git rev-parse --short HEAD)
           BRANCH_NAME=$(echo "${{ github.ref_name }}" | sed 's/[^a-zA-Z0-9-]/-/g')
-          
+
           # Version format: 2.0.0-preview1.20240715.a1b2c3d
           if [[ "${{ github.ref_name }}" == "master" ]]; then
             DEV_VERSION="${BASE_VERSION}.${BUILD_DATE}.${COMMIT_SHA}"
           else
             DEV_VERSION="${BASE_VERSION}-${BRANCH_NAME}.${BUILD_DATE}.${COMMIT_SHA}"
           fi
-          
+
           echo "base-version=${BASE_VERSION}" >> $GITHUB_OUTPUT
           echo "dev-version=${DEV_VERSION}" >> $GITHUB_OUTPUT
           echo "build-date=${BUILD_DATE}" >> $GITHUB_OUTPUT
           echo "commit-sha=${COMMIT_SHA}" >> $GITHUB_OUTPUT
-          
+
           echo "📦 Generated development version: ${DEV_VERSION}"
 
       - name: "Setup GitHub Packages Authentication"
@@ -92,7 +94,7 @@ jobs:
             --package-source github \
             --package-id LocalStack.Client \
             --package-version ${{ steps.version.outputs.dev-version }}
-          
+
           echo "📤 Publishing LocalStack.Client to GitHub Packages..."
           ./build.sh --target nuget-push \
             --package-source github \
@@ -104,7 +106,7 @@ jobs:
         run: |
           echo "🔄 Updating LocalStack.Client.Extensions dependencies..."
           cd src/LocalStack.Client.Extensions/
-          
+
           # Remove project reference and add package reference
           dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj
           dotnet add package LocalStack.Client \
@@ -118,7 +120,7 @@ jobs:
             --package-source github \
             --package-id LocalStack.Client.Extensions \
             --package-version ${{ steps.version.outputs.dev-version }}
-          
+
           echo "📤 Publishing LocalStack.Client.Extensions to GitHub Packages..."
           ./build.sh --target nuget-push \
             --package-source github \

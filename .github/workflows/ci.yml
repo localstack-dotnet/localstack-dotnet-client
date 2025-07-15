@@ -24,7 +24,9 @@ jobs:
   build-and-test:
     name: "Build & Test (${{ matrix.name }})"
     runs-on: ${{ matrix.os }}
-    
+    env:
+        NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
+
     strategy:
       fail-fast: false
       matrix:

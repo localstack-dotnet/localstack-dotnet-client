@@ -1,3 +1,6 @@
+permissions:
+  contents: read
+  actions: write
 name: "CI/CD Pipeline"
 
 on:

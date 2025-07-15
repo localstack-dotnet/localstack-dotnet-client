@@ -4,11 +4,10 @@ on:
   push:
     branches:
       - master
-      - "feature/v2-preview1"
   pull_request:
     branches:
       - master
-      - "feature/v2-preview1"
+      - "feature/*"
   schedule:
     # Weekly scan on Monday at 6 AM UTC
     - cron: '0 6 * * 1'

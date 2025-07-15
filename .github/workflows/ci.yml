@@ -13,6 +13,7 @@ on:
       - LICENSE
     branches:
       - master
+      - "feature/*"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -34,17 +35,17 @@ jobs:
             script: "./build.ps1"
             frameworks: "net8.0,net9.0,netstandard2.0,net472"
             
-          # Linux: .NET Core + Mono for Framework testing
+          # Linux: All frameworks with built-in Mono runtime
           - os: ubuntu-latest
             name: "Linux"
             script: "./build.sh"
-            frameworks: "net8.0,net9.0,netstandard2.0"
+            frameworks: "net8.0,net9.0,netstandard2.0,net472"
             
-          # macOS: .NET Core frameworks (most common usage)
+          # macOS: All frameworks with built-in Mono runtime
           - os: macos-latest
             name: "macOS"
             script: "./build.sh"
-            frameworks: "net8.0,net9.0,netstandard2.0"
+            frameworks: "net8.0,net9.0,netstandard2.0,net472"
 
     steps:
       - name: "Checkout"

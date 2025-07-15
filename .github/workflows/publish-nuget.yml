@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       package-version:
-        description: "Package Version (e.g., 2.0.0 or 2.0.0-preview1)"
+        description: "Package Version"
         required: true
       package-source:
         type: choice

@@ -20,18 +20,6 @@ public sealed class InitTask : FrostingTask<BuildContext>
         }
 
         context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
-
-        // Only check mono if it's installed (for .NET Framework testing)
-        try
-        {
-            context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
-        }
-        catch (Exception ex)
-        {
-            context.Warning($"Mono not available: {ex.Message}");
-        }
-
-        context.InstallXUnitNugetPackage();
     }
 }
 
@@ -100,20 +88,15 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     }
                 }
 
-                if (context.IsRunningOnLinux() && targetFramework == "net472")
+                // Modern .NET (8+) includes built-in Mono runtime for cross-platform .NET Framework support
+                if (targetFramework == "net472" && !context.IsRunningOnWindows())
                 {
-                    context.Warning("Temporarily disabled running net472 tests on Linux because of a problem in mono runtime");
+                    context.Information($"Running .NET Framework tests on {context.Environment.Platform} using built-in Mono runtime");
                 }
-                else if (context.IsRunningOnMacOs() && targetFramework == "net472")
-                {
-                    context.RunXUnitUsingMono(targetFramework, $"{testProj.DirectoryPath}/bin/{context.BuildConfiguration}/{targetFramework}/{testProj.AssemblyName}.dll");
-                }
-                else
-                {
-                    string testFilePrefix = targetFramework.Replace(".", "-");
-                    settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
-                    context.DotNetTest(testProjectPath, settings);
-                }
+
+                string testFilePrefix = targetFramework.Replace(".", "-");
+                settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
+                context.DotNetTest(testProjectPath, settings);
 
                 context.Warning("==============================================================");
             }

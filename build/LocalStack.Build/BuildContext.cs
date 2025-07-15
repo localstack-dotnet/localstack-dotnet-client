@@ -19,7 +19,8 @@ public sealed class BuildContext : FrostingContext
         sourceBuilder.AddRange(new[]
         {
             new KeyValuePair<string, string>("myget", "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
-            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json")
+            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json"),
+            new KeyValuePair<string, string>("github", "https://nuget.pkg.github.com/localstack-dotnet/index.json")
         });
         PackageSourceMap = sourceBuilder.ToImmutable();
 

@@ -143,11 +143,18 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
         BuildContext.ValidateArgument("package-version", context.PackageVersion);
         BuildContext.ValidateArgument("package-source", context.PackageSource);
 
-        Match match = Regex.Match(context.PackageVersion, @"^(\d+)\.(\d+)\.(\d+)(\.(\d+))*$", RegexOptions.IgnoreCase);
+        Match match = Regex.Match(context.PackageVersion, @"^(\d+)\.(\d+)\.(\d+)([\.\-].*)*$", RegexOptions.IgnoreCase);
 
         if (!match.Success)
         {
             throw new Exception($"Invalid version: {context.PackageVersion}");
+        }
+
+        // Skip version validation for GitHub Packages - allows overwriting dev builds
+        if (context.PackageSource == "github")
+        {
+            context.Information($"🔄 Skipping version validation for GitHub Packages source");
+            return;
         }
 
         string packageSource = context.PackageSourceMap[context.PackageSource];

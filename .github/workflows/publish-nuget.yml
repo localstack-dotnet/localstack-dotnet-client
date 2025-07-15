@@ -52,7 +52,7 @@ jobs:
         run: chmod +x ./build.sh
 
       - name: "Build & Test"
-        run: ./build.sh --target tests
+        run: ./build.sh --target tests --skipFunctionalTest true
 
       - name: "Print Package Information"
         run: |

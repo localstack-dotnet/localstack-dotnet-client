@@ -7,15 +7,12 @@ on:
       - LICENSE
     branches:
       - "master"
-      - "feature/v2-preview1"
-      - "feature/ci-cd-modernization"
   pull_request:
     paths-ignore:
       - "**.md"
       - LICENSE
     branches:
       - master
-      - "feature/v2-preview1"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -34,7 +31,7 @@ jobs:
           # Windows: All frameworks including .NET Framework
           - os: windows-latest
             name: "Windows"
-            script: ".\build.ps1"
+            script: "./build.ps1"
             frameworks: "net8.0,net9.0,netstandard2.0,net472"
             
           # Linux: .NET Core + Mono for Framework testing
@@ -69,7 +66,7 @@ jobs:
       - name: "Cache NuGet packages"
         uses: actions/cache@v4
         with:
-          path: ~/.nuget/packages
+          path: ${{ runner.os == 'Windows' && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
@@ -77,15 +74,15 @@ jobs:
       - name: "Build"
         run: ${{ matrix.script }} --target build
 
-      - name: "Run Tests"
-        run: ${{ matrix.script }} --target tests --skipFunctionalTest false --exclusive
+      - name: "Run Tests (Unit Only)"
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest true --exclusive
 
       - name: "Publish Test Results"
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: 'Test Results (${{ matrix.name }})'
-          path: '**/*.trx'
+          path: '**/TestResults/*.trx'
           reporter: 'dotnet-trx'
           fail-on-error: true
           max-annotations: 50

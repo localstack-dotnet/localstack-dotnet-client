@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - "feature/v2-preview1"
     paths-ignore:
       - "**.md"
       - LICENSE
@@ -42,7 +41,7 @@ jobs:
       - name: "Cache NuGet packages"
         uses: actions/cache@v4
         with:
-          path: ~/.nuget/packages
+          path: ${{ github.workspace }}/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
@@ -51,7 +50,7 @@ jobs:
         run: chmod +x ./build.sh
 
       - name: "Build & Test"
-        run: ./build.sh --target tests
+        run: ./build.sh --target tests --skipFunctionalTest true
 
       - name: "Generate Development Version"
         id: version

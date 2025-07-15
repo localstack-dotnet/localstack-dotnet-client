@@ -21,7 +21,15 @@ public sealed class InitTask : FrostingTask<BuildContext>
 
         context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
 
-        context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
+        // Only check mono if it's installed (for .NET Framework testing)
+        try
+        {
+            context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
+        }
+        catch (Exception ex)
+        {
+            context.Warning($"Mono not available: {ex.Message}");
+        }
 
         context.InstallXUnitNugetPackage();
     }

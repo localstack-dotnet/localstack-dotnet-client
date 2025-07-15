@@ -20,6 +20,21 @@ public sealed class InitTask : FrostingTask<BuildContext>
         }
 
         context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
+
+        // Install Mono on Linux for .NET Framework test platform support
+        if (context.IsRunningOnLinux())
+        {
+            context.InstallMonoOnLinux();
+        }
+
+        // Check Mono version (for .NET Framework testing)
+        int monoExitCode = context.StartProcess("mono", new ProcessSettings { Arguments = "--version" });
+        if (monoExitCode != 0)
+        {
+            context.Warning($"Mono not available (exit code: {monoExitCode})");
+        }
+
+        context.InstallXUnitNugetPackage();
     }
 }
 
@@ -41,7 +56,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
         var settings = new DotNetTestSettings
         {
-            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true
+            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true,
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
@@ -88,10 +103,13 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     }
                 }
 
-                // Modern .NET (8+) includes built-in Mono runtime for cross-platform .NET Framework support
+                // .NET Framework testing on non-Windows platforms
+                // - Modern .NET includes built-in Mono runtime
+                // - Test platform still requires external Mono installation on Linux
                 if (targetFramework == "net472" && !context.IsRunningOnWindows())
                 {
-                    context.Information($"Running .NET Framework tests on {context.Environment.Platform} using built-in Mono runtime");
+                    string platform = context.IsRunningOnLinux() ? "Linux (with external Mono)" : "macOS (built-in Mono)";
+                    context.Information($"Running .NET Framework tests on {platform}");
                 }
 
                 string testFilePrefix = targetFramework.Replace(".", "-");
@@ -120,7 +138,7 @@ public sealed class NugetPackTask : FrostingTask<BuildContext>
 
         var settings = new DotNetPackSettings
         {
-            Configuration = context.BuildConfiguration, OutputDirectory = context.ArtifactOutput, MSBuildSettings = new DotNetMSBuildSettings()
+            Configuration = context.BuildConfiguration, OutputDirectory = context.ArtifactOutput, MSBuildSettings = new DotNetMSBuildSettings(),
         };
 
         settings.MSBuildSettings.SetVersion(context.PackageVersion);

@@ -4,6 +4,7 @@ global using Cake.Common.IO;
 global using Cake.Common.IO.Paths;
 global using Cake.Common.Tools.DotNet;
 global using Cake.Common.Tools.DotNet.MSBuild;
+global using Cake.Common.Tools.DotNet.Package.Add;
 global using Cake.Common.Tools.NuGet;
 global using Cake.Common.Tools.NuGet.List;
 global using Cake.Core;

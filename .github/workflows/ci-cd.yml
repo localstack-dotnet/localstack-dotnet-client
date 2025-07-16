@@ -156,6 +156,7 @@ jobs:
           cat nuget.config
 
       - name: "Pack & Publish LocalStack.Client"
+        id: pack-client
         run: |
           echo "🔨 Building and publishing LocalStack.Client package..."
           ./build.sh --target nuget-pack-and-publish \
@@ -164,6 +165,14 @@ jobs:
             --use-directory-props-version true \
             --branch-name ${{ github.ref_name }} \
             --package-secret ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Prepare Extensions Project"
+        run: |
+          echo "🔧 Preparing Extensions project to use LocalStack.Client package..."
+          ./build.sh --target nuget-prepare-extensions \
+            --package-source github \
+            --package-id LocalStack.Client.Extensions \
+            --client-version ${{ steps.pack-client.outputs.client-version }}
 
       - name: "Pack & Publish LocalStack.Client.Extensions"
         run: |

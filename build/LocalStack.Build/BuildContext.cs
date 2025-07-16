@@ -11,12 +11,17 @@ public sealed class BuildContext : FrostingContext
     public const string NuGetPackageSource = "nuget";
     public const string MyGetPackageSource = "myget";
 
+    // Cached package versions to ensure consistency across pack/publish operations
+    private string? _clientPackageVersion;
+    private string? _extensionsPackageVersion;
+
     public BuildContext(ICakeContext context) : base(context)
     {
         BuildConfiguration = context.Argument("config", "Release");
         ForceBuild = context.Argument("force-build", defaultValue: false);
         ForceRestore = context.Argument("force-restore", defaultValue: false);
         PackageVersion = context.Argument("package-version", "x.x.x");
+        ClientVersion = context.Argument("client-version", default(string));
         PackageId = context.Argument("package-id", default(string));
         PackageSecret = context.Argument("package-secret", default(string));
         PackageSource = context.Argument("package-source", GitHubPackageSource);
@@ -64,6 +69,8 @@ public sealed class BuildContext : FrostingContext
 
     public string PackageVersion { get; }
 
+    public string ClientVersion { get; }
+
     public string PackageId { get; }
 
     public string PackageSecret { get; }
@@ -97,6 +104,44 @@ public sealed class BuildContext : FrostingContext
     public ConvertableFilePath LocalStackClientProjFile { get; }
 
     public ConvertableFilePath LocalStackClientExtProjFile { get; }
+
+    /// <summary>
+    /// Gets the effective package version for LocalStack.Client package.
+    /// This value is cached to ensure consistency across pack and publish operations.
+    /// </summary>
+    public string GetClientPackageVersion()
+    {
+        return _clientPackageVersion ??= UseDirectoryPropsVersion
+            ? GetDynamicVersionFromProps("PackageMainVersion")
+            : PackageVersion;
+    }
+
+    /// <summary>
+    /// Gets the effective package version for LocalStack.Client.Extensions package.
+    /// This value is cached to ensure consistency across pack and publish operations.
+    /// </summary>
+    public string GetExtensionsPackageVersion()
+    {
+        return _extensionsPackageVersion ??= UseDirectoryPropsVersion
+            ? GetDynamicVersionFromProps("PackageExtensionVersion")
+            : PackageVersion;
+    }
+
+    /// <summary>
+    /// Gets the effective package version for the specified package ID.
+    /// This method provides a unified interface for accessing cached package versions.
+    /// </summary>
+    /// <param name="packageId">The package ID (LocalStack.Client or LocalStack.Client.Extensions)</param>
+    /// <returns>The cached package version</returns>
+    public string GetEffectivePackageVersion(string packageId)
+    {
+        return packageId switch
+        {
+            LocalStackClientProjName => GetClientPackageVersion(),
+            LocalStackClientExtensionsProjName => GetExtensionsPackageVersion(),
+            _ => throw new ArgumentException($"Unknown package ID: {packageId}", nameof(packageId))
+        };
+    }
 
     public static void ValidateArgument(string argumentName, string argument)
     {
@@ -189,48 +234,6 @@ public sealed class BuildContext : FrostingContext
         }
 
         this.Information("✅ Mono installation completed successfully");
-    }
-
-    public string GetProjectVersion()
-    {
-        if (UseDirectoryPropsVersion)
-        {
-            return GetDynamicVersionFromProps("PackageMainVersion");
-        }
-
-        // Original logic for backward compatibility
-        FilePath file = this.File("./src/Directory.Build.props");
-        this.Information(file.FullPath);
-
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
-        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
-        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
-
-        string version = project[startIndex..endIndex];
-        version = $"{version}.{PackageVersion}";
-
-        return version;
-    }
-
-    public string GetExtensionProjectVersion()
-    {
-        if (UseDirectoryPropsVersion)
-        {
-            return GetDynamicVersionFromProps("PackageExtensionVersion");
-        }
-
-        // Original logic for backward compatibility
-        FilePath file = this.File(LocalStackClientExtProjFile);
-        this.Information(file.FullPath);
-
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
-        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
-        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
-
-        string version = project[startIndex..endIndex];
-        version = $"{version}.{PackageVersion}";
-
-        return version;
     }
 
     /// <summary>

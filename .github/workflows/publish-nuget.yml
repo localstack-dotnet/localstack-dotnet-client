@@ -87,23 +87,13 @@ jobs:
           echo "🔧 Using GitHub-optimized nuget.config..."
           cp .github/nuget.config nuget.config
 
-      - name: "Remove Project Reference & Add Package Reference"
+      - name: "Prepare Extensions Project"
         if: ${{ github.event.inputs.package-id == 'LocalStack.Client.Extensions' }}
         run: |
-          cd src/LocalStack.Client.Extensions/
-          
-          # Remove project reference
-          dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj
-          
-          # Add package reference based on target source
-          if [ "${{ github.event.inputs.package-source }}" == "github" ]; then
-            dotnet add package LocalStack.Client \
-              --version ${{ github.event.inputs.package-version }} \
-              --source github-packages
-          else
-            dotnet add package LocalStack.Client \
-              --version ${{ github.event.inputs.package-version }}
-          fi
+          ./build.sh --target nuget-prepare-extensions \
+            --package-source ${{ github.event.inputs.package-source }} \
+            --package-id ${{ github.event.inputs.package-id }} \
+            --package-version ${{ github.event.inputs.package-version }}
 
       - name: "Pack NuGet Package"
         run: |

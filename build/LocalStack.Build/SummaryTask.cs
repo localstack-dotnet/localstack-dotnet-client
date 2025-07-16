@@ -36,7 +36,7 @@ public sealed class SummaryTask : FrostingTask<BuildContext>
         {
             // Summary for all packages
             content.AppendLine(CultureInfo.InvariantCulture, $"[bold]📦 Packages Built:[/]");
-            
+
             foreach (string packageId in context.PackageIdProjMap.Keys)
             {
                 string version = GetPackageVersion(context, packageId);
@@ -121,12 +121,12 @@ public sealed class SummaryTask : FrostingTask<BuildContext>
         // Add build information
         table.AddRow("Build Date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss UTC", CultureInfo.InvariantCulture));
         table.AddRow("Build Configuration", context.BuildConfiguration);
-        
+
         if (context.UseDirectoryPropsVersion)
         {
             table.AddRow("Version Source", "Directory.Build.props (Dynamic)");
             table.AddRow("Branch Name", context.BranchName);
-            
+
             try
             {
                 // Simply skip git commit info since the method is private
@@ -147,7 +147,7 @@ public sealed class SummaryTask : FrostingTask<BuildContext>
         {
             string targetFrameworks = context.GetPackageTargetFrameworks(context.PackageId);
             table.AddRow("Target Frameworks", targetFrameworks);
-            
+
             string downloadUrl = ConsoleHelper.GetDownloadUrl(context.PackageSource, context.PackageId, GetPackageVersion(context, context.PackageId));
             table.AddRow("Download URL", downloadUrl);
         }
@@ -160,8 +160,8 @@ public sealed class SummaryTask : FrostingTask<BuildContext>
     {
         return packageId switch
         {
-            BuildContext.LocalStackClientProjName => context.GetProjectVersion(),
-            BuildContext.LocalStackClientExtensionsProjName => context.GetExtensionProjectVersion(),
+            BuildContext.LocalStackClientProjName => context.GetClientPackageVersion(),
+            BuildContext.LocalStackClientExtensionsProjName => context.GetExtensionsPackageVersion(),
             _ => "Unknown",
         };
     }

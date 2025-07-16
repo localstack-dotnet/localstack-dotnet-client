@@ -1,0 +1,95 @@
+name: "CI/CD Pipeline"
+
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - "master"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - master
+      - "feature/*"
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  build-and-test:
+    name: "Build & Test (${{ matrix.name }})"
+    runs-on: ${{ matrix.os }}
+    env:
+      NUGET_PACKAGES: ${{ contains(matrix.os, 'windows') && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: "Windows"
+            script: "./build.ps1"
+            
+          - os: ubuntu-22.04
+            name: "Linux"
+            script: "./build.sh"
+            
+          - os: macos-latest
+            name: "macOS"
+            script: "./build.sh"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better caching
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: "Make build script executable"
+        if: runner.os != 'Windows'
+        run: chmod +x ./build.sh
+
+      - name: "Cache NuGet packages"
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.os == 'Windows' && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: "Build"
+        run: ${{ matrix.script }} --target build
+
+      - name: "Run Tests"
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
+
+      - name: "Publish Test Results"
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: 'Test Results (${{ matrix.name }})'
+          path: '**/TestResults/*.trx'
+          reporter: 'dotnet-trx'
+          fail-on-error: true
+          max-annotations: 50
+
+      - name: "Upload Test Artifacts"
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ matrix.name }}
+          path: |
+            **/*.trx
+            **/TestResults/**/*
+          retention-days: 7

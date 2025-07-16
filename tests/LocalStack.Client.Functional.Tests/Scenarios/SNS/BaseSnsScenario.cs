@@ -22,7 +22,7 @@ public abstract class BaseSnsScenario : BaseScenario
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
         ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
-        Topic? snsTopic = listTopicsResponse.Topics.SingleOrDefault(topic => topic.TopicArn == createTopicResponse.TopicArn);
+        Topic? snsTopic = listTopicsResponse.Topics?.SingleOrDefault(topic => topic.TopicArn == createTopicResponse.TopicArn);
 
         Assert.NotNull(snsTopic);
         Assert.EndsWith(topicName, snsTopic.TopicArn, StringComparison.Ordinal);
@@ -41,7 +41,7 @@ public abstract class BaseSnsScenario : BaseScenario
         Assert.Equal(HttpStatusCode.OK, deleteTopicResponse.HttpStatusCode);
 
         ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
-        bool hasAny = listTopicsResponse.Topics.Exists(topic => topic.TopicArn == createTopicResponse.TopicArn);
+        bool hasAny = listTopicsResponse.Topics?.Exists(topic => topic.TopicArn == createTopicResponse.TopicArn) ?? false;
 
         Assert.False(hasAny);
     }
@@ -91,9 +91,10 @@ public abstract class BaseSnsScenario : BaseScenario
         var topicArn = $"arn:aws:sns:{systemName}:000000000000:{topicName}";
 
         ListTopicsResponse listTopicsResponse = await AmazonSimpleNotificationService.ListTopicsAsync();
-        Topic? snsTopic = listTopicsResponse.Topics.SingleOrDefault(topic => topic.TopicArn == topicArn);
+        Topic? snsTopic = listTopicsResponse.Topics?.SingleOrDefault(topic => topic.TopicArn == topicArn);
 
         Assert.NotNull(snsTopic);
+        Assert.NotNull(listTopicsResponse.Topics);
         Assert.Single(listTopicsResponse.Topics);
 
         await DeleteSnsTopicAsync(topicArn); //Cleanup

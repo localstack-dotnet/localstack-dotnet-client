@@ -19,17 +19,38 @@ public class AwsClientFactoryWrapperTests
         Type type = _awsClientFactoryWrapper.GetType();
         const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Static;
 
-        FieldInfo? clientFactoryFullNameField = type.GetField("ClientFactoryFullName", bindingFlags);
+        FieldInfo? clientFactoryGenericTypeNameField = type.GetField("ClientFactoryGenericTypeName", bindingFlags);
         FieldInfo? createServiceClientMethodNameFieldInfo = type.GetField("CreateServiceClientMethodName", bindingFlags);
 
-        Assert.NotNull(clientFactoryFullNameField);
+        Assert.NotNull(clientFactoryGenericTypeNameField);
         Assert.NotNull(createServiceClientMethodNameFieldInfo);
 
-        SetPrivateReadonlyField(clientFactoryFullNameField, "NonExistingType");
+        SetPrivateReadonlyField(clientFactoryGenericTypeNameField, "NonExistingType");
         SetPrivateReadonlyField(createServiceClientMethodNameFieldInfo, "NonExistingMethod");
 
         Assert.Throws<LocalStackClientConfigurationException>(
             () => _awsClientFactoryWrapper.CreateServiceClient<MockAmazonServiceClient>(_mockServiceProvider.Object, _awsOptions));
+    }
+
+    [Fact]
+    public void CreateServiceClient_Should_Throw_LocalStackClientConfigurationException_When_ClientFactory_Type_Not_Found()
+    {
+        Type type = _awsClientFactoryWrapper.GetType();
+        const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Static;
+
+        FieldInfo? clientFactoryGenericTypeNameField = type.GetField("ClientFactoryGenericTypeName", bindingFlags);
+        FieldInfo? createServiceClientMethodNameFieldInfo = type.GetField("CreateServiceClientMethodName", bindingFlags);
+
+        Assert.NotNull(clientFactoryGenericTypeNameField);
+        Assert.NotNull(createServiceClientMethodNameFieldInfo);
+
+        SetPrivateReadonlyField(clientFactoryGenericTypeNameField, "NonExistingType");
+        SetPrivateReadonlyField(createServiceClientMethodNameFieldInfo, "NonExistingMethod");
+
+        var exception = Assert.Throws<LocalStackClientConfigurationException>(
+            () => _awsClientFactoryWrapper.CreateServiceClient<MockAmazonServiceClient>(_mockServiceProvider.Object, _awsOptions));
+
+        Assert.Contains("Failed to find internal ClientFactory<T>", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]

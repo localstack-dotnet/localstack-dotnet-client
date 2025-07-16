@@ -324,9 +324,9 @@ public class ServiceCollectionExtensionsTests
         ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
         mockSession.Setup(session => session.CreateClientByInterface<IMockAmazonService>(It.IsAny<bool>()))
-                   .Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
+                   .Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", MockClientConfig.CreateDefaultMockClientConfig()));
         mockClientFactory.Setup(wrapper => wrapper.CreateServiceClient<IMockAmazonService>(It.IsAny<IServiceProvider>(), It.IsAny<AWSOptions>()))
-                         .Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", new MockClientConfig()));
+                         .Returns(() => new MockAmazonServiceClient("tsada", "sadasdas", "sadasda", MockClientConfig.CreateDefaultMockClientConfig()));
 
         var mockAmazonService = provider.GetRequiredService<IMockAmazonService>();
 

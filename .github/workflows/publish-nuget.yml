@@ -1,4 +1,4 @@
-﻿name: "publish-nuget"
+﻿name: "Manual Package Publishing"
 
 on:
   workflow_dispatch:
@@ -10,10 +10,10 @@ on:
         type: choice
         description: Package Source
         required: true
-        default: "myget"
+        default: "nuget"
         options:
-        - myget
         - nuget
+        - github
       package-id:
         type: choice
         description: Package Id
@@ -23,48 +23,111 @@ on:
         - LocalStack.Client
         - LocalStack.Client.Extensions
 
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
 jobs:
-  publish-nuget:
-    runs-on: ubuntu-20.04
+  publish-manual:
+    name: "Publish to ${{ github.event.inputs.package-source }}"
+    runs-on: ubuntu-22.04
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+    
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: "Checkout"
+        uses: actions/checkout@v4
 
-      - name: Init
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: "Cache NuGet packages"
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: "Make build script executable"
         run: chmod +x ./build.sh
 
-      - name: Install NuGet
-        uses: NuGet/setup-nuget@v1.0.5
+      - name: "Build & Test"
+        run: ./build.sh --target tests --skipFunctionalTest true
 
-      - name: Install .NET 8
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Install .NET 9
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: "9.0.x"
-
-      - name: Build & Test
-        run: ./build.sh
-
-      - name: "Print Version"
+      - name: "Print Package Information"
         run: |
-          echo "Package Version: ${{ github.event.inputs.package-version }}"
+          echo "📦 Package: ${{ github.event.inputs.package-id }}"
+          echo "🏷️ Version: ${{ github.event.inputs.package-version }}"
+          echo "🎯 Target: ${{ github.event.inputs.package-source }}"
+          echo "🔗 Repository: ${{ github.repository }}"
 
-      - name: Remove Project Ref & Add latest pack
+      - name: "Setup GitHub Packages Authentication"
+        if: ${{ github.event.inputs.package-source == 'github' }}
+        run: |
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --name github-packages \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text
+
+      - name: "Remove Project Reference & Add Package Reference"
         if: ${{ github.event.inputs.package-id == 'LocalStack.Client.Extensions' }}
-        run: cd src/LocalStack.Client.Extensions/ && dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj && dotnet add package LocalStack.Client
+        run: |
+          cd src/LocalStack.Client.Extensions/
+          
+          # Remove project reference
+          dotnet remove reference ../LocalStack.Client/LocalStack.Client.csproj
+          
+          # Add package reference based on target source
+          if [ "${{ github.event.inputs.package-source }}" == "github" ]; then
+            dotnet add package LocalStack.Client \
+              --version ${{ github.event.inputs.package-version }} \
+              --source github-packages
+          else
+            dotnet add package LocalStack.Client \
+              --version ${{ github.event.inputs.package-version }}
+          fi
 
-      - name: Nuget Pack
-        run: ./build.sh --target nuget-pack --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }}
+      - name: "Pack NuGet Package"
+        run: |
+          ./build.sh --target nuget-pack \
+            --package-source ${{ github.event.inputs.package-source }} \
+            --package-id ${{ github.event.inputs.package-id }} \
+            --package-version ${{ github.event.inputs.package-version }}
 
-      - name: MyGet Push
-        if: ${{ github.event.inputs.package-source == 'myget' }}
-        run: ./build.sh --target nuget-push --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }} --package-secret ${{secrets.MYGET_API_KEY}}
+      - name: "Publish to GitHub Packages"
+        if: ${{ github.event.inputs.package-source == 'github' }}
+        run: |
+          ./build.sh --target nuget-push \
+            --package-source github \
+            --package-id ${{ github.event.inputs.package-id }} \
+            --package-version ${{ github.event.inputs.package-version }} \
+            --package-secret ${{ secrets.GITHUB_TOKEN }}
 
-      - name: NuGet Push
+      - name: "Publish to NuGet.org"
         if: ${{ github.event.inputs.package-source == 'nuget' }}
-        run: ./build.sh --target nuget-push --package-source ${{ github.event.inputs.package-source }} --package-id ${{ github.event.inputs.package-id }} --package-version ${{ github.event.inputs.package-version }} --package-secret ${{secrets.NUGET_API_KEY}}
+        run: |
+          ./build.sh --target nuget-push \
+            --package-source nuget \
+            --package-id ${{ github.event.inputs.package-id }} \
+            --package-version ${{ github.event.inputs.package-version }} \
+            --package-secret ${{ secrets.NUGET_API_KEY }}
+
+      - name: "Upload Package Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "packages-${{ github.event.inputs.package-id }}-${{ github.event.inputs.package-version }}"
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          retention-days: 30

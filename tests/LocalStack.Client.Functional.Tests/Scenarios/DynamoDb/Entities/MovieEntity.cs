@@ -8,9 +8,9 @@ public class MovieEntity
     public Guid DirectorId { get; set; }
 
     [DynamoDBRangeKey]
-
     public string CreateDate { get; set; }
 
+    [DynamoDBGlobalSecondaryIndexHashKey(TestConstants.MovieTableMovieIdGsi)]
     public Guid MovieId { get; set; }
 
     public string MovieName { get; set; }

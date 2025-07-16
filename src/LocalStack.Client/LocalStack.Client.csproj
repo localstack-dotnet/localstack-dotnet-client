@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net462;net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net472;net8.0;net9.0</TargetFrameworks>
 		<AssemblyName>LocalStack.Client</AssemblyName>
 		<RootNamespace>LocalStack.Client</RootNamespace>
 
@@ -51,8 +51,8 @@
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
-		<DefineConstants>NET462</DefineConstants>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+		<DefineConstants>NET472</DefineConstants>
 	</PropertyGroup>
 
 </Project>

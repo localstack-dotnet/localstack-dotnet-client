@@ -1,21 +1,42 @@
-# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![Space Metric](https://localstack-dotnet.testspace.com/spaces/232580/badge?token=bc6aa170f4388c662b791244948f6d2b14f16983)](https://localstack-dotnet.testspace.com/spaces/232580?utm_campaign=metric&utm_medium=referral&utm_source=badge "Test Cases")
+# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml)
+
+> ## ⚠️ AWS SDK v4 Transition Notice
+> 
+> **Current Status**: This main branch is under active development for **AWS SDK v4 support (v2.0)**
+> 
+> **Version Strategy**:
+> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) (EOL: July 31, 2026)
+> - **v2.x** (AWS SDK v4): Active development → Native AOT support in subsequent v2.x releases
+> 
+> **Migration Timeline**: Q3 2025 for v2.0.0 GA
+> 
+> 📖 **[Read Full Roadmap & Migration Guide →](../../discussions)**
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
 Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
 
-| Package                      | Stable                                                                                                                                    | Nightly                                                                                                                                                                                                          |
+## Version Compatibility
+
+| LocalStack.NET Version | AWS SDK Version | .NET Support | Status | Branch |
+|------------------------|-----------------|--------------|---------|---------|
+| v1.x | AWS SDK v3 | .NET 8, 9, Standard 2.0, Framework 4.6.2 | Maintenance (until July 2026) | [sdkv3-lts](../../tree/sdkv3-lts) |
+| v2.x | AWS SDK v4 | .NET 8, 9, Standard 2.0, Framework 4.7.2 | Active Development | [master](../../tree/main) |
+
+## Package Status
+
+| Package                      | v1.x (AWS SDK v3)                                                                                                                                    | v2.x (AWS SDK v4) - Development                                                                                                                                                                                                          |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client)                       |
-| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![MyGet](https://img.shields.io/myget/localstack-dotnet-client/v/LocalStack.Client.Extensions.svg?label=myget)](https://www.myget.org/feed/localstack-dotnet-client/package/nuget/LocalStack.Client.Extensions) |
+| LocalStack.Client            | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/)                       | [![GitHub Packages](https://img.shields.io/github/v/release/localstack-dotnet/localstack-dotnet-client?include_prereleases&label=github%20packages)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages)                       |
+| LocalStack.Client.Extensions | [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.Extensions.svg)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![GitHub Packages](https://img.shields.io/github/v/release/localstack-dotnet/localstack-dotnet-client?include_prereleases&label=github%20packages)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages) |
 
 ## Continuous Integration
 
-| Build server   | Platform | Build status                                                                                                                                                                                                                       |
-| -------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Github Actions | Ubuntu   | [![build-ubuntu](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-ubuntu.yml)    |
-| Github Actions | Windows  | [![build-windows](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-windows.yml) |
-| Github Actions | macOS    | [![build-macos](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/build-macos.yml)       |
+| Build Platform | Status | Description |
+|----------------|--------|-------------|
+| **Cross-Platform CI** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml) | Matrix testing: Windows, Linux, macOS |
+| **Security Analysis** | [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml) | CodeQL analysis & dependency review |
+| **Automated Publishing** | [![Auto Publish](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/publish-dev-github.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/publish-dev-github.yml) | Daily GitHub Packages builds |
 
 ## Table of Contents
 
@@ -60,12 +81,36 @@ For detailed installation and setup instructions, please refer to the [official 
 
 ## Getting Started
 
-LocalStack.NET is installed from NuGet. To work with LocalStack in your .NET applications, you'll need the main library and its extensions. Here's how you can install them:
+LocalStack.NET is available through multiple package sources to support different development workflows.
+
+### 📦 Package Installation
+
+#### Stable Releases (NuGet.org)
+
+For production use and stable releases:
 
 ```bash
 dotnet add package LocalStack.Client
 dotnet add package LocalStack.Client.Extensions
 ```
+
+#### Development Builds (GitHub Packages)
+
+For testing latest features and bug fixes:
+
+```bash
+# Add GitHub Packages source
+dotnet nuget add source https://nuget.pkg.github.com/localstack-dotnet/index.json \
+  --name github-localstack \
+  --username YOUR_GITHUB_USERNAME \
+  --password YOUR_GITHUB_TOKEN
+
+# Install development packages
+dotnet add package LocalStack.Client --prerelease --source github-localstack
+dotnet add package LocalStack.Client.Extensions --prerelease --source github-localstack
+```
+
+> **🔑 GitHub Packages Authentication**: You'll need a GitHub account and [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with `read:packages` permission.
 
 Refer to [documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Getting-Started#installation) for more information on how to install LocalStack.NET.
 

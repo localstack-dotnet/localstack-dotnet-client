@@ -1,11 +1,13 @@
-﻿#pragma warning disable S1144, CA1823
+﻿using Amazon.Runtime.Credentials;
+
+#pragma warning disable S1144, CA1823
 namespace LocalStack.Tests.Common.Mocks.MockServiceClients;
 
 public class MockAmazonServiceWithServiceMetadataClient : AmazonServiceClient, IMockAmazonServiceWithServiceMetadata
 {
     private static IServiceMetadata serviceMetadata = new MockServiceMetadata();
 
-    public MockAmazonServiceWithServiceMetadataClient() : base(FallbackCredentialsFactory.GetCredentials(), new MockClientConfig())
+    public MockAmazonServiceWithServiceMetadataClient() : base(DefaultAWSCredentialsIdentityResolver.GetCredentials(), MockClientConfig.CreateDefaultMockClientConfig())
     {
     }
 
@@ -23,10 +25,15 @@ public class MockAmazonServiceWithServiceMetadataClient : AmazonServiceClient, I
     {
     }
 
-    public AWSCredentials AwsCredentials => Credentials;
-
-    protected override AbstractAWSSigner CreateSigner()
+#if NET8_0_OR_GREATER
+    public static ClientConfig CreateDefaultClientConfig()
     {
-        return new NullSigner();
+        return MockClientConfig.CreateDefaultMockClientConfig();
     }
+
+    public static IAmazonService CreateDefaultServiceClient(AWSCredentials awsCredentials, ClientConfig clientConfig)
+    {
+        return new MockAmazonServiceWithServiceMetadataClient(awsCredentials, MockClientConfig.CreateDefaultMockClientConfig());
+    }
+#endif
 }

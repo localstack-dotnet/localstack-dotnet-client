@@ -5,39 +5,36 @@ namespace LocalStack.Client.Extensions;
 
 public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
 {
-    private static readonly string ClientFactoryFullName = "Amazon.Extensions.NETCore.Setup.ClientFactory";
+    private static readonly string ClientFactoryGenericTypeName = "Amazon.Extensions.NETCore.Setup.ClientFactory`1";
     private static readonly string CreateServiceClientMethodName = "CreateServiceClient";
 
     public AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions? awsOptions) where TClient : IAmazonService
     {
-        Type? clientFactoryType = typeof(ConfigurationException).Assembly.GetType(ClientFactoryFullName);
+        Type? genericFactoryType = typeof(ConfigurationException).Assembly.GetType(ClientFactoryGenericTypeName);
 
-        if (clientFactoryType == null)
+        if (genericFactoryType == null)
         {
-            throw new LocalStackClientConfigurationException($"Failed to find internal ClientFactory in {ClientFactoryFullName}");
+            throw new LocalStackClientConfigurationException($"Failed to find internal ClientFactory<T> in {ClientFactoryGenericTypeName}");
         }
 
-        ConstructorInfo? constructorInfo =
-            clientFactoryType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(Type), typeof(AWSOptions) }, null);
+        // Create ClientFactory<TClient>
+        Type concreteFactoryType = genericFactoryType.MakeGenericType(typeof(TClient));
+        ConstructorInfo? constructor = concreteFactoryType.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(AWSOptions) }, null);
 
-        if (constructorInfo == null)
+        if (constructor == null)
         {
-            throw new LocalStackClientConfigurationException("ClientFactory missing a constructor with parameters Type and AWSOptions.");
+            throw new LocalStackClientConfigurationException("ClientFactory<T> missing constructor with AWSOptions parameter.");
         }
 
-        Type clientType = typeof(TClient);
+        object factory = constructor.Invoke(new object[] { awsOptions! });
+        MethodInfo? createMethod = factory.GetType().GetMethod(CreateServiceClientMethodName, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(IServiceProvider) }, null);
 
-        object clientFactory = constructorInfo.Invoke(new object[] { clientType, awsOptions! });
-
-        MethodInfo? methodInfo = clientFactory.GetType().GetMethod(CreateServiceClientMethodName, BindingFlags.NonPublic | BindingFlags.Instance);
-
-        if (methodInfo == null)
+        if (createMethod == null)
         {
-            throw new LocalStackClientConfigurationException($"Failed to find internal method {CreateServiceClientMethodName} in {ClientFactoryFullName}");
+            throw new LocalStackClientConfigurationException($"ClientFactory<T> missing {CreateServiceClientMethodName}(IServiceProvider) method.");
         }
 
-        object serviceInstance = methodInfo.Invoke(clientFactory, new object[] { provider });
-
+        object serviceInstance = createMethod.Invoke(factory, new object[] { provider });
         return (AmazonServiceClient)serviceInstance;
     }
 }

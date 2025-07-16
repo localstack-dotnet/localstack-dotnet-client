@@ -37,7 +37,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         (string awsAccessKeyId, string awsAccessKey, string awsSessionToken, _) = mockSession.SessionOptionsMock.SetupDefault();
 
@@ -71,7 +71,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         mockSession.SessionOptionsMock.SetupDefault();
 
@@ -98,7 +98,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
         var configOptions = new ConfigOptions();
 
         mockSession.SessionOptionsMock.SetupDefault();
@@ -134,7 +134,7 @@ public class SessionLocalStackTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
 
@@ -161,7 +161,7 @@ public class SessionLocalStackTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
 #pragma warning disable CS8604 // Possible null reference argument.
         mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
@@ -187,7 +187,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         mockSession.SessionOptionsMock.SetupDefault();
 
@@ -211,7 +211,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault();
 
@@ -288,7 +288,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         mockSession.SessionOptionsMock.SetupDefault();
 
@@ -315,7 +315,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         (string awsAccessKeyId, string awsAccessKey, string awsSessionToken, _) = mockSession.SessionOptionsMock.SetupDefault();
 
@@ -347,7 +347,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
         var configOptions = new ConfigOptions();
 
         mockSession.SessionOptionsMock.SetupDefault();
@@ -385,7 +385,7 @@ public class SessionLocalStackTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
 
@@ -413,7 +413,7 @@ public class SessionLocalStackTests
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
 #pragma warning disable CS8604 // Possible null reference argument.
         mockSession.SessionOptionsMock.SetupDefault(regionName: systemName);
@@ -439,7 +439,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
 
         mockSession.SessionOptionsMock.SetupDefault();
 
@@ -464,7 +464,7 @@ public class SessionLocalStackTests
         var mockSession = MockSession.Create();
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
-        var mockClientConfig = new MockClientConfig();
+        var mockClientConfig = MockClientConfig.CreateDefaultMockClientConfig();
         var configOptions = new ConfigOptions();
 
         (_, _, _, string regionName) = mockSession.SessionOptionsMock.SetupDefault();

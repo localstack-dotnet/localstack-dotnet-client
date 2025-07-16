@@ -7,5 +7,5 @@ public static class TestConstants
     public const string LocalStackV37 = "3.7.1";
     public const string LocalStackV43 = "4.3.0";
 
-    public const string MovieTableMovieIdGsi = "MoiveTableMovie-Index";
+    public const string MovieTableMovieIdGsi = "MovieTableMovie-Index";
 }

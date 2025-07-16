@@ -93,7 +93,7 @@ jobs:
 
       - name: "Generate Build Summary"
         run: |
-          echo "📦 Generating rich build summary..."
+          echo "📦 Generating build summary..."
           ./build.sh --target workflow-summary \
             --use-directory-props-version true \
             --branch-name ${{ github.ref_name }}

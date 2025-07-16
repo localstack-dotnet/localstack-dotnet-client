@@ -388,3 +388,25 @@ public sealed class NugetPushTask : FrostingTask<BuildContext>
         ConsoleHelper.WriteSuccess($"Successfully published {context.PackageId} v{packageVersion}");
     }
 }
+
+[TaskName("nuget-pack-and-publish")]
+public sealed class NugetPackAndPublishTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        ConsoleHelper.WriteRule("Pack & Publish Pipeline");
+
+        // First pack the package
+        ConsoleHelper.WriteProcessing("Step 1: Creating package...");
+        var packTask = new NugetPackTask();
+        packTask.Run(context);
+
+        // Then publish the package
+        ConsoleHelper.WriteProcessing("Step 2: Publishing package...");
+        var pushTask = new NugetPushTask();
+        pushTask.Run(context);
+
+        ConsoleHelper.WriteSuccess("Pack & Publish pipeline completed successfully!");
+        ConsoleHelper.WriteRule();
+    }
+}

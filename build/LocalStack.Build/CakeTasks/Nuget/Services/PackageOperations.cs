@@ -193,7 +193,7 @@ public static class PackageOperations
             BuildContext.GitHubPackageSource => $"https://github.com/localstack-dotnet/localstack-dotnet-client/packages/nuget/{packageId}",
             BuildContext.NuGetPackageSource => $"https://www.nuget.org/packages/{packageId}/{version}",
             BuildContext.MyGetPackageSource => $"https://www.myget.org/packages/{packageId}/{version}",
-            _ => "Unknown package source"
+            _ => "Unknown package source",
         };
     }
 

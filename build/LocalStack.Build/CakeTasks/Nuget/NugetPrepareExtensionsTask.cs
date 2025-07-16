@@ -43,7 +43,7 @@ public sealed class NugetPrepareExtensionsTask : FrostingTask<BuildContext>
             // Add package reference with specific version and source
             var packageSettings = new DotNetPackageAddSettings
             {
-                Version = version
+                Version = version,
             };
 
             // Add source if not NuGet (GitHub Packages, MyGet, etc.)

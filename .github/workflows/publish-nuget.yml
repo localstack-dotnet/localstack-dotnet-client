@@ -6,11 +6,14 @@ on:
       package-version:
         description: "Package Version"
         required: true
+      localstack-client-version:
+        description: "LocalStack Client Version"
+        required: true
       package-source:
         type: choice
         description: Package Source
         required: true
-        default: "nuget"
+        default: "github"
         options:
         - nuget
         - github
@@ -93,7 +96,7 @@ jobs:
           ./build.sh --target nuget-prepare-extensions \
             --package-source ${{ github.event.inputs.package-source }} \
             --package-id ${{ github.event.inputs.package-id }} \
-            --package-version ${{ github.event.inputs.package-version }}
+            --client-version ${{ github.event.inputs.localstack-client-version }}
 
       - name: "Pack NuGet Package"
         run: |

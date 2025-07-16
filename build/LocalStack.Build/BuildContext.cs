@@ -139,7 +139,7 @@ public sealed class BuildContext : FrostingContext
         {
             LocalStackClientProjName => GetClientPackageVersion(),
             LocalStackClientExtensionsProjName => GetExtensionsPackageVersion(),
-            _ => throw new ArgumentException($"Unknown package ID: {packageId}", nameof(packageId))
+            _ => throw new ArgumentException($"Unknown package ID: {packageId}", nameof(packageId)),
         };
     }
 

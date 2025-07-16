@@ -1,4 +1,4 @@
-# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml)
+# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet](https://img.shields.io/nuget/v/LocalStack.Client.svg)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql)
 
 > ## ⚠️ AWS SDK v4 Transition Notice
 > 
@@ -34,9 +34,9 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 
 | Build Platform | Status | Description |
 |----------------|--------|-------------|
-| **Cross-Platform CI** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci.yml) | Matrix testing: Windows, Linux, macOS |
-| **Security Analysis** | [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/security.yml) | CodeQL analysis & dependency review |
-| **Automated Publishing** | [![Auto Publish](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/publish-dev-github.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/publish-dev-github.yml) | Daily GitHub Packages builds |
+| **Cross-Platform CI** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) | Matrix testing: Windows, Linux, macOS |
+| **Security Analysis** | [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql) | CodeQL analysis & dependency review |
+| **Automated Publishing** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) | Automated GitHub Packages builds |
 
 ## Table of Contents
 

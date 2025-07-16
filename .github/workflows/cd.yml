@@ -1,14 +1,12 @@
-name: "Auto Publish to GitHub Packages"
+name: "CD - Auto Publish to GitHub Packages"
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI/CD Pipeline"]
+    types:
+      - completed
     branches:
       - master
-    paths-ignore:
-      - "**.md"
-      - LICENSE
-      - ".github/**"
-      - "docs/**"
 
 env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -16,10 +14,12 @@ env:
   DOTNET_NOLOGO: true
 
 jobs:
-  auto-publish:
-    name: "Auto Publish Development Build"
+  continuous-deployment:
+    name: "Continuous Deployment"
     runs-on: ubuntu-22.04
-    if: github.repository == 'localstack-dotnet/localstack-dotnet-client'
+    if: |
+      github.repository == 'localstack-dotnet/localstack-dotnet-client' &&
+      github.event.workflow_run.conclusion == 'success'
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 

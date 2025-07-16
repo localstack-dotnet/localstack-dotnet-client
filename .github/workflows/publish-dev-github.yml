@@ -54,8 +54,15 @@ jobs:
       - name: "Build & Test"
         run: ./build.sh --target tests --skipFunctionalTest true
 
-      - name: "Setup GitHub Packages Authentication"
+      - name: "Setup GitHub Packages Configuration"
         run: |
+          echo "📝 Backing up original nuget.config..."
+          cp nuget.config nuget.config.backup
+          
+          echo "🔧 Using GitHub-optimized nuget.config..."
+          cp .github/nuget.config nuget.config
+          
+          echo "🔐 Adding GitHub Packages authentication..."
           dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
             --name github-packages \
             --username ${{ github.actor }} \

@@ -71,14 +71,21 @@ jobs:
           echo "🎯 Target: ${{ github.event.inputs.package-source }}"
           echo "🔗 Repository: ${{ github.repository }}"
 
-      - name: "Setup GitHub Packages Authentication"
+      - name: "Setup GitHub Packages Configuration"
         if: ${{ github.event.inputs.package-source == 'github' }}
-        run: |
+        run: |   
+          echo "🔐 Adding GitHub Packages authentication..."
           dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
             --name github-packages \
             --username ${{ github.actor }} \
             --password ${{ secrets.GITHUB_TOKEN }} \
             --store-password-in-clear-text
+          
+          echo "📝 Backing up original nuget.config..."
+          cp nuget.config nuget.config.backup
+          
+          echo "🔧 Using GitHub-optimized nuget.config..."
+          cp .github/nuget.config nuget.config
 
       - name: "Remove Project Reference & Add Package Reference"
         if: ${{ github.event.inputs.package-id == 'LocalStack.Client.Extensions' }}

@@ -1,15 +1,20 @@
-# LocalStack .NET Client ![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql)
+# LocalStack .NET Client
 
-> ## ⚠️ AWS SDK v4 Transition Notice
-> 
-> **Current Status**: This main branch is under active development for **AWS SDK v4 support (v2.0)**
-> 
+[![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql)
+
+---
+
+> ## 🎉 AWS SDK v4 Preview Now Available
+>
+> **v2.0.0-preview1** is now available on both NuGet and GitHub Packages with **complete AWS SDK v4 support**!
+>
 > **Version Strategy**:
+>
 > - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) (EOL: July 31, 2026)
-> - **v2.x** (AWS SDK v4): Active development → Native AOT support in subsequent v2.x releases
-> 
+> - **v2.x** (AWS SDK v4): **Preview Available** → Native AOT support in subsequent v2.x releases
+>
 > **Migration Timeline**: Q3 2025 for v2.0.0 GA
-> 
+>
 > 📖 **[Read Full Roadmap & Migration Guide →](../../discussions)**
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
@@ -21,7 +26,7 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 | LocalStack.NET Version | AWS SDK Version | .NET Support | Status | Branch |
 |------------------------|-----------------|--------------|---------|---------|
 | v1.x | AWS SDK v3 | .NET 8, 9, Standard 2.0, Framework 4.6.2 | Maintenance (until July 2026) | [sdkv3-lts](../../tree/sdkv3-lts) |
-| v2.x | AWS SDK v4 | .NET 8, 9, Standard 2.0, Framework 4.7.2 | Active Development | [master](../../tree/main) |
+| v2.x | AWS SDK v4 | .NET 8, 9, Standard 2.0, Framework 4.7.2 | Preview Available (v2.0.0-preview1) | [master](../../tree/main) |
 
 ## Package Status
 
@@ -87,13 +92,14 @@ LocalStack.NET is available through multiple package sources to support differen
 
 ### 📦 Package Installation
 
-#### Stable Releases (NuGet.org)
+#### AWS SDK v4 Preview (v2.0.0-preview1)
 
-For production use and stable releases:
+For testing AWS SDK v4 compatibility:
 
 ```bash
-dotnet add package LocalStack.Client
-dotnet add package LocalStack.Client.Extensions
+# Install v2.0.0-preview1 with AWS SDK v4 support
+dotnet add package LocalStack.Client --version 2.0.0-preview1
+dotnet add package LocalStack.Client.Extensions --version 2.0.0-preview1
 ```
 
 #### Development Builds (GitHub Packages)

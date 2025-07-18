@@ -35,14 +35,17 @@ jobs:
           - os: windows-latest
             name: "Windows"
             script: "./build.ps1"
+            gist_id: "3640d86bbf37520844f737e6a76b4d90"
             
           - os: ubuntu-22.04
             name: "Linux"
             script: "./build.sh"
+            gist_id: "c149767013f99f00791256d9036ef71b"
             
           - os: macos-latest
             name: "macOS"
             script: "./build.sh"
+            gist_id: "db58d93cf17ee5db079d06e3bfa4c069"
 
     steps:
       - name: "Checkout"
@@ -76,6 +79,7 @@ jobs:
         run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
 
       - name: "Publish Test Results"
+        id: test-results
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
@@ -84,6 +88,23 @@ jobs:
           reporter: 'dotnet-trx'
           fail-on-error: true
           max-annotations: 50
+
+      - name: "Update Test Results Badge"
+        if: always()  # Run even if tests failed or were skipped
+        continue-on-error: true  # Don't fail workflow if badge update fails
+        uses: ./.github/actions/update-test-badge
+        with:
+          platform: ${{ matrix.name }}
+          gist_id: ${{ matrix.gist_id }}
+          gist_token: ${{ secrets.GIST_SECRET }}
+          test_passed: ${{ steps.test-results.outputs.passed || 0 }}
+          test_failed: ${{ steps.test-results.outputs.failed || 0 }}
+          test_skipped: ${{ steps.test-results.outputs.skipped || 0 }}
+          test_url_html: ${{ steps.test-results.outputs.url_html || '' }}
+          commit_sha: ${{ github.sha }}
+          run_id: ${{ github.run_id }}
+          repository: ${{ github.repository }}
+          server_url: ${{ github.server_url }}
 
       - name: "Upload Test Artifacts"
         uses: actions/upload-artifact@v4

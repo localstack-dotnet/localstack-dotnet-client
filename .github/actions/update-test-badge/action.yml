@@ -1,0 +1,117 @@
+name: 'Update Test Results Badge'
+description: 'Updates test results badge data in GitHub Gist and displays badge URLs'
+author: 'LocalStack .NET Team'
+
+inputs:
+  platform:
+    description: 'Platform name (Linux, Windows, macOS)'
+    required: true
+  gist_id:
+    description: 'GitHub Gist ID for storing test results'
+    required: true
+  gist_token:
+    description: 'GitHub token with gist permissions'
+    required: true
+  test_passed:
+    description: 'Number of passed tests'
+    required: true
+  test_failed:
+    description: 'Number of failed tests'
+    required: true
+  test_skipped:
+    description: 'Number of skipped tests'
+    required: true
+  test_url_html:
+    description: 'URL to test results page'
+    required: false
+    default: ''
+  commit_sha:
+    description: 'Git commit SHA'
+    required: true
+  run_id:
+    description: 'GitHub Actions run ID'
+    required: true
+  repository:
+    description: 'Repository in owner/repo format'
+    required: true
+  server_url:
+    description: 'GitHub server URL'
+    required: true
+  api_domain:
+    description: 'Badge API domain for displaying URLs'
+    required: false
+    default: 'your-api-domain'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Update Test Results Badge Data'
+      shell: bash
+      run: |
+        # Calculate totals
+        TOTAL=$((${{ inputs.test_passed }} + ${{ inputs.test_failed }} + ${{ inputs.test_skipped }}))
+        
+        # Create JSON payload for badge API
+        cat > test-results.json << EOF
+        {
+          "platform": "${{ inputs.platform }}",
+          "passed": ${{ inputs.test_passed }},
+          "failed": ${{ inputs.test_failed }}, 
+          "skipped": ${{ inputs.test_skipped }},
+          "total": ${TOTAL},
+          "url_html": "${{ inputs.test_url_html }}",
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "commit": "${{ inputs.commit_sha }}",
+          "run_id": "${{ inputs.run_id }}",
+          "workflow_run_url": "${{ inputs.server_url }}/${{ inputs.repository }}/actions/runs/${{ inputs.run_id }}"
+        }
+        EOF
+        
+        echo "📊 Generated test results JSON for ${{ inputs.platform }}:"
+        cat test-results.json | jq '.' 2>/dev/null || cat test-results.json
+        
+        # Upload to platform-specific Gist
+        echo "📤 Uploading to Gist: ${{ inputs.gist_id }}"
+        
+        # Create gist update payload
+        cat > gist-payload.json << EOF
+        {
+          "files": {
+            "test-results.json": {
+              "content": $(cat test-results.json | jq -R -s '.')
+            }
+          }
+        }
+        EOF
+        
+        # Update Gist using GitHub API
+        HTTP_STATUS=$(curl -s -X PATCH \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ inputs.gist_token }}" \
+          "https://api.github.com/gists/${{ inputs.gist_id }}" \
+          -d @gist-payload.json \
+          -w "%{http_code}" \
+          -o response.json)
+        
+        if [ "$HTTP_STATUS" -eq 200 ]; then
+          echo "✅ Successfully updated Gist (HTTP $HTTP_STATUS)"
+        else
+          echo "⚠️ Failed to update Gist (HTTP $HTTP_STATUS)"
+          echo "Response:"
+          cat response.json 2>/dev/null || echo "No response body"
+        fi
+
+    - name: 'Display Badge URLs'
+      shell: bash
+      run: |
+        PLATFORM_LOWER=$(echo "${{ inputs.platform }}" | tr '[:upper:]' '[:lower:]')
+        
+        echo "🎯 Badge URL for ${{ inputs.platform }}:"
+        echo ""
+        echo "**${{ inputs.platform }} Badge:**"
+        echo "[![Test Results (${{ inputs.platform }})](https://${{ inputs.api_domain }}/badge/tests/${PLATFORM_LOWER})](https://${{ inputs.api_domain }}/redirect/tests/${PLATFORM_LOWER})"
+        echo ""
+        echo "**Raw URLs:**"
+        echo "- Badge: https://${{ inputs.api_domain }}/badge/tests/${PLATFORM_LOWER}"
+        echo "- Redirect: https://${{ inputs.api_domain }}/redirect/tests/${PLATFORM_LOWER}"
+        echo "- Gist: https://gist.github.com/${{ inputs.gist_id }}" 

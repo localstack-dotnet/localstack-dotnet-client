@@ -9,6 +9,9 @@ inputs:
   gist_id:
     description: 'GitHub Gist ID for storing test results'
     required: true
+  filename:
+    description: 'Filename for the platform-specific JSON file (e.g., test-results-linux.json)'
+    required: true
   gist_token:
     description: 'GitHub token with gist permissions'
     required: true
@@ -48,6 +51,9 @@ runs:
     - name: 'Update Test Results Badge Data'
       shell: bash
       run: |
+        # Use explicit filename from input
+        FILENAME="${{ inputs.filename }}"
+        
         # Calculate totals
         TOTAL=$((${{ inputs.test_passed }} + ${{ inputs.test_failed }} + ${{ inputs.test_skipped }}))
         
@@ -70,14 +76,14 @@ runs:
         echo "📊 Generated test results JSON for ${{ inputs.platform }}:"
         cat test-results.json | jq '.' 2>/dev/null || cat test-results.json
         
-        # Upload to platform-specific Gist
-        echo "📤 Uploading to Gist: ${{ inputs.gist_id }}"
+        # Upload to single Gist with platform-specific filename
+        echo "📤 Uploading to Gist: ${{ inputs.gist_id }} (file: ${FILENAME})"
         
-        # Create gist update payload
+        # Create gist update payload - only update the specific platform file
         cat > gist-payload.json << EOF
         {
           "files": {
-            "test-results.json": {
+            "${FILENAME}": {
               "content": $(cat test-results.json | jq -R -s '.')
             }
           }
@@ -94,9 +100,9 @@ runs:
           -o response.json)
         
         if [ "$HTTP_STATUS" -eq 200 ]; then
-          echo "✅ Successfully updated Gist (HTTP $HTTP_STATUS)"
+          echo "✅ Successfully updated Gist file ${FILENAME} (HTTP $HTTP_STATUS)"
         else
-          echo "⚠️ Failed to update Gist (HTTP $HTTP_STATUS)"
+          echo "⚠️ Failed to update Gist file ${FILENAME} (HTTP $HTTP_STATUS)"
           echo "Response:"
           cat response.json 2>/dev/null || echo "No response body"
         fi
@@ -105,6 +111,7 @@ runs:
       shell: bash
       run: |
         PLATFORM_LOWER=$(echo "${{ inputs.platform }}" | tr '[:upper:]' '[:lower:]')
+        FILENAME="${{ inputs.filename }}"
         
         echo "🎯 Badge URL for ${{ inputs.platform }}:"
         echo ""
@@ -114,4 +121,5 @@ runs:
         echo "**Raw URLs:**"
         echo "- Badge: https://${{ inputs.api_domain }}/badge/tests/${PLATFORM_LOWER}"
         echo "- Redirect: https://${{ inputs.api_domain }}/redirect/tests/${PLATFORM_LOWER}"
-        echo "- Gist: https://gist.github.com/${{ inputs.gist_id }}" 
+        echo "- Gist: https://gist.github.com/${{ inputs.gist_id }}"
+        echo "- Gist File: https://gist.githubusercontent.com/${{ inputs.gist_id }}/raw/${FILENAME}" 

@@ -27,6 +27,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       NUGET_PACKAGES: ${{ contains(matrix.os, 'windows') && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
+      BADGE_GIST_ID: "472c59b7c2a1898c48a29f3c88897c5a"
 
     strategy:
       fail-fast: false
@@ -35,23 +36,23 @@ jobs:
           - os: windows-latest
             name: "Windows"
             script: "./build.ps1"
-            gist_id: "3640d86bbf37520844f737e6a76b4d90"
+            filename: "test-results-windows.json"
             
           - os: ubuntu-22.04
             name: "Linux"
             script: "./build.sh"
-            gist_id: "c149767013f99f00791256d9036ef71b"
+            filename: "test-results-linux.json"
             
           - os: macos-latest
             name: "macOS"
             script: "./build.sh"
-            gist_id: "db58d93cf17ee5db079d06e3bfa4c069"
+            filename: "test-results-macos.json"
 
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history for better caching
+          fetch-depth: 0 # Full history for better caching
 
       - name: "Setup .NET SDK"
         uses: actions/setup-dotnet@v4
@@ -83,19 +84,20 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: 'Test Results (${{ matrix.name }})'
-          path: '**/TestResults/*.trx'
-          reporter: 'dotnet-trx'
+          name: "Test Results (${{ matrix.name }})"
+          path: "**/TestResults/*.trx"
+          reporter: "dotnet-trx"
           fail-on-error: true
           max-annotations: 50
 
       - name: "Update Test Results Badge"
-        if: always()  # Run even if tests failed or were skipped
-        continue-on-error: true  # Don't fail workflow if badge update fails
+        if: always() # Run even if tests failed or were skipped
+        continue-on-error: true # Don't fail workflow if badge update fails
         uses: ./.github/actions/update-test-badge
         with:
           platform: ${{ matrix.name }}
-          gist_id: ${{ matrix.gist_id }}
+          gist_id: ${{ env.BADGE_GIST_ID }}
+          filename: ${{ matrix.filename }}
           gist_token: ${{ secrets.GIST_SECRET }}
           test_passed: ${{ steps.test-results.outputs.passed || 0 }}
           test_failed: ${{ steps.test-results.outputs.failed || 0 }}
@@ -156,20 +158,20 @@ jobs:
         run: chmod +x ./build.sh
 
       - name: "Setup GitHub Packages Configuration"
-        run: |         
+        run: |
           echo "🔐 Adding GitHub Packages authentication..."
           dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
             --name github-packages \
             --username ${{ github.actor }} \
             --password ${{ secrets.GITHUB_TOKEN }} \
             --store-password-in-clear-text
-          
+
           echo "🔧 Original nuget.config..."
           cat nuget.config
-        
+
           echo "📝 Backing up original nuget.config..."
           cp nuget.config nuget.config.backup
-          
+
           echo "🔧 Using GitHub-optimized nuget.config..."
           cp .github/nuget.config nuget.config
 

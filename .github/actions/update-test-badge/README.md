@@ -5,6 +5,7 @@ A reusable GitHub Action that updates test result badges by uploading test data 
 ## Purpose
 
 This action simplifies the process of maintaining dynamic test result badges by:
+
 - Creating structured JSON data from test results
 - Uploading the data to platform-specific files in a single GitHub Gist
 - Providing ready-to-use badge URLs for documentation
@@ -61,6 +62,7 @@ Gist ID: 472c59b7c2a1898c48a29f3c88897c5a
 ## Outputs
 
 This action produces:
+
 - **Gist File Update**: Updates the platform-specific file in the single Gist
 - **Console Output**: Displays badge URLs ready for README usage
 - **Debug Info**: Shows HTTP status and error details
@@ -94,6 +96,7 @@ The action creates JSON data in this format for each platform file:
 ## Integration with Badge API
 
 This action is designed to work with the LocalStack .NET Client Badge API that:
+
 - Reads from the updated Gist files
 - Generates shields.io-compatible badge JSON
 - Provides redirect endpoints to test result pages
@@ -166,12 +169,14 @@ The action displays ready-to-use markdown for README files:
 ## Troubleshooting
 
 **Common Issues:**
+
 - **403 Forbidden**: Check `GIST_SECRET` permissions
 - **404 Not Found**: Verify `gist_id` is correct
 - **JSON Errors**: Ensure `jq` is available in runner
 - **File Missing**: Gist files are created automatically on first update
 
 **Debug Steps:**
+
 1. Check action output for HTTP status codes
 2. Verify Gist exists and is publicly accessible  
 3. Confirm token has proper `gist` scope

@@ -122,4 +122,4 @@ runs:
         echo "- Badge: https://${{ inputs.api_domain }}/badge/tests/${PLATFORM_LOWER}"
         echo "- Redirect: https://${{ inputs.api_domain }}/redirect/tests/${PLATFORM_LOWER}"
         echo "- Gist: https://gist.github.com/${{ inputs.gist_id }}"
-        echo "- Gist File: https://gist.githubusercontent.com/${{ inputs.gist_id }}/raw/${FILENAME}" 
+        echo "- Gist File: https://gist.githubusercontent.com/Blind-Striker/${{ inputs.gist_id }}/raw/${FILENAME}" 

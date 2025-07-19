@@ -1,49 +1,55 @@
 # LocalStack .NET Client
 
-[![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql)
+[![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql)
+
+> **🚀 Quick Start**: `dotnet add package LocalStack.Client --version 2.0.0-preview1` (AWS SDK v4) | [Installation Guide](#-installation) | [GA Timeline](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)
 
 ---
 
-> ## 🎉 AWS SDK v4 Preview Now Available
->
-> **v2.0.0-preview1** is now available on both NuGet and GitHub Packages with **complete AWS SDK v4 support**!
->
-> **Version Strategy**:
->
-> - **v1.x** (AWS SDK v3): Maintenance mode → Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) (EOL: July 31, 2026)
-> - **v2.x** (AWS SDK v4): **Preview Available** → Native AOT support in subsequent v2.x releases
->
-> **Migration Timeline**: Q3 2025 for v2.0.0 GA
->
-> 📖 **[Read Full Roadmap & Migration Guide →](../../discussions)**
+## 🎉 What's New: AWS SDK v4 Support Available
+
+**v2.0.0-preview1** is live with complete AWS SDK v4 support - easier migration than expected!
+
+- ✅ **1,099 tests passing** across all frameworks
+- ✅ **Minimal breaking changes** (just .NET Framework 4.6.2 → 4.7.2 and AWS SDK v3 → v4)  
+- ✅ **Public APIs unchanged** - your code should work as-is!
+- 📖 **[Read Full Roadmap](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+
+**Version Strategy**:
+
+- v2.x (AWS SDK v4) active development on [master branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)
+- v1.x (AWS SDK v3) Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts), maintenance until July 2026
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
 Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
 
-## Version Compatibility
+## 🚀 Platform Compatibility & Quality Status
 
-| LocalStack.NET Version | AWS SDK Version | .NET Support | Status | Branch |
-|------------------------|-----------------|--------------|---------|---------|
-| v1.x | AWS SDK v3 | .NET 8, 9, Standard 2.0, Framework 4.6.2 | Maintenance (until July 2026) | [sdkv3-lts](../../tree/sdkv3-lts) |
-| v2.x | AWS SDK v4 | .NET 8, 9, Standard 2.0, Framework 4.7.2 | Preview Available (v2.0.0-preview1) | [master](../../tree/main) |
+### Supported Platforms
+
+- [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0) | [.NET 9](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+- [.NET Framework 4.7.2 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
+
+### Build & Test Matrix
+
+| Category | Platform/Type | Status | Description |
+|----------|---------------|--------|-------------|
+| **🔧 Build** | Cross-Platform | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) | Matrix testing: Windows, Linux, macOS |
+| **🔒 Security** | Static Analysis | [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql) | CodeQL analysis & dependency review |
+| **🧪 Tests** | Linux | [![Linux Tests](https://img.shields.io/endpoint?url=https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/badge/tests/linux?label=Tests)](https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/redirect/test-results/linux) | All framework targets |
+| **🧪 Tests** | Windows | [![Windows Tests](https://img.shields.io/endpoint?url=https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/badge/tests/windows?label=Tests)](https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/redirect/test-results/windows) | All framework targets |
+| **🧪 Tests** | macOS | [![macOS Tests](https://img.shields.io/endpoint?url=https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/badge/tests/macos?label=Tests)](https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/redirect/test-results/macos) | All framework targets |
 
 ## Package Status
 
-| Package | NuGet.org (Stable + Prerelease) | GitHub Packages (Nightly) |
-|---------|----------------------------------|---------------------------|
-| **LocalStack.Client v1.x** | [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![GitHub Packages v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dgithub%26track%3D1%26includeprerelease%3Dtrue%26prefer-clean%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages) |
-| **LocalStack.Client v2.x** | [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![GitHub Packages v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dgithub%26track%3D2%26includeprerelease%3Dtrue%26prefer-clean%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages) |
-| **LocalStack.Client.Extensions v1.x** | [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![GitHub Packages v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dgithub%26track%3D1%26includeprerelease%3Dtrue%26prefer-clean%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages) |
-| **LocalStack.Client.Extensions v2.x** | [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![GitHub Packages v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dgithub%26track%3D2%26includeprerelease%3Dtrue%26prefer-clean%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/packages) |
-
-## Continuous Integration
-
-| Build Platform | Status | Description |
-|----------------|--------|-------------|
-| **Cross-Platform CI** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) | Matrix testing: Windows, Linux, macOS |
-| **Security Analysis** | [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql) | CodeQL analysis & dependency review |
-| **Automated Publishing** | [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) | Automated GitHub Packages builds |
+| Package | NuGet.org | GitHub Packages (Nightly) |
+|---------|-----------|---------------------------|
+| **LocalStack.Client v1.x** | [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dnuget%26track%3D1%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![Github v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dgithub%26track%3D1%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client) |
+| **LocalStack.Client v2.x** | [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![Github v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dgithub%26track%3D2%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client) |
+| **LocalStack.Client.Extensions v1.x** | [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client.extensions%3Fsource%3Dnuget%26track%3D1%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![GitHub Packages v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dgithub%26track%3D1%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client.Extensions) |
+| **LocalStack.Client.Extensions v2.x** | [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client.extensions%3Fsource%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client.Extensions/) | [![GitHub Packages v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client.extensions%26source%3Dgithub%26track%3D2%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client.Extensions) |
 
 ## Table of Contents
 
@@ -60,13 +66,6 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
    - [Running Tests](#running-tests)
 7. [Changelog](#changelog)
 8. [License](#license)
-
-## Supported Platforms
-
-- [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [.NET 9](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
-- [.NET 4.6.2 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 
 ## Why LocalStack.NET Client?
 

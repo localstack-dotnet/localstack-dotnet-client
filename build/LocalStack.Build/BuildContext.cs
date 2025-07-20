@@ -4,23 +4,39 @@ namespace LocalStack.Build;
 
 public sealed class BuildContext : FrostingContext
 {
+    public const string LocalStackClientProjName = "LocalStack.Client";
+    public const string LocalStackClientExtensionsProjName = "LocalStack.Client.Extensions";
+
+    public const string GitHubPackageSource = "github";
+    public const string NuGetPackageSource = "nuget";
+    public const string MyGetPackageSource = "myget";
+
+    // Cached package versions to ensure consistency across pack/publish operations
+    private string? _clientPackageVersion;
+    private string? _extensionsPackageVersion;
+
     public BuildContext(ICakeContext context) : base(context)
     {
         BuildConfiguration = context.Argument("config", "Release");
-        ForceBuild = context.Argument("force-build", false);
-        ForceRestore = context.Argument("force-restore", false);
+        ForceBuild = context.Argument("force-build", defaultValue: false);
+        ForceRestore = context.Argument("force-restore", defaultValue: false);
         PackageVersion = context.Argument("package-version", "x.x.x");
+        ClientVersion = context.Argument("client-version", default(string));
         PackageId = context.Argument("package-id", default(string));
         PackageSecret = context.Argument("package-secret", default(string));
-        PackageSource = context.Argument("package-source", default(string));
-        SkipFunctionalTest = context.Argument("skipFunctionalTest", true);
+        PackageSource = context.Argument("package-source", GitHubPackageSource);
+        SkipFunctionalTest = context.Argument("skipFunctionalTest", defaultValue: true);
+
+        // New version generation arguments
+        UseDirectoryPropsVersion = context.Argument("use-directory-props-version", defaultValue: false);
+        BranchName = context.Argument("branch-name", "sdkv3-lts");
 
         var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>();
-        sourceBuilder.AddRange(new[]
-        {
-            new KeyValuePair<string, string>("myget", "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
-            new KeyValuePair<string, string>("nuget", "https://api.nuget.org/v3/index.json")
-        });
+        sourceBuilder.AddRange([
+            new KeyValuePair<string, string>(MyGetPackageSource, "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
+            new KeyValuePair<string, string>(NuGetPackageSource, "https://api.nuget.org/v3/index.json"),
+            new KeyValuePair<string, string>(GitHubPackageSource, "https://nuget.pkg.github.com/localstack-dotnet/index.json"),
+        ]);
         PackageSourceMap = sourceBuilder.ToImmutable();
 
         SolutionRoot = context.Directory("../../");
@@ -28,18 +44,18 @@ public sealed class BuildContext : FrostingContext
         TestsPath = SolutionRoot + context.Directory("tests");
         BuildPath = SolutionRoot + context.Directory("build");
         ArtifactOutput = SolutionRoot + context.Directory("artifacts");
-        LocalStackClientFolder = SrcPath + context.Directory("LocalStack.Client");
-        LocalStackClientExtFolder = SrcPath + context.Directory("LocalStack.Client.Extensions");
+        LocalStackClientFolder = SrcPath + context.Directory(LocalStackClientProjName);
+        LocalStackClientExtFolder = SrcPath + context.Directory(LocalStackClientExtensionsProjName);
         SlnFilePath = SolutionRoot + context.File("LocalStack.sln");
-        LocalStackClientProjFile = LocalStackClientFolder + context.File("LocalStack.Client.csproj");
-        LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File("LocalStack.Client.Extensions.csproj");
+        LocalStackClientProjFile = LocalStackClientFolder + context.File($"{LocalStackClientProjName}.csproj");
+        LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File($"{LocalStackClientExtensionsProjName}.csproj");
 
         var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>();
-        packIdBuilder.AddRange(new[]
-        {
-            new KeyValuePair<string, FilePath>("LocalStack.Client", LocalStackClientProjFile),
-            new KeyValuePair<string, FilePath>("LocalStack.Client.Extensions", LocalStackClientExtProjFile)
-        });
+        packIdBuilder.AddRange(
+        [
+            new KeyValuePair<string, FilePath>(LocalStackClientProjName, LocalStackClientProjFile),
+            new KeyValuePair<string, FilePath>(LocalStackClientExtensionsProjName, LocalStackClientExtProjFile),
+        ]);
         PackageIdProjMap = packIdBuilder.ToImmutable();
     }
 
@@ -53,11 +69,17 @@ public sealed class BuildContext : FrostingContext
 
     public string PackageVersion { get; }
 
+    public string ClientVersion { get; }
+
     public string PackageId { get; }
 
     public string PackageSecret { get; }
 
     public string PackageSource { get; }
+
+    public bool UseDirectoryPropsVersion { get; }
+
+    public string BranchName { get; }
 
     public ImmutableDictionary<string, string> PackageSourceMap { get; }
 
@@ -83,6 +105,44 @@ public sealed class BuildContext : FrostingContext
 
     public ConvertableFilePath LocalStackClientExtProjFile { get; }
 
+    /// <summary>
+    /// Gets the effective package version for LocalStack.Client package.
+    /// This value is cached to ensure consistency across pack and publish operations.
+    /// </summary>
+    public string GetClientPackageVersion()
+    {
+        return _clientPackageVersion ??= UseDirectoryPropsVersion
+            ? GetDynamicVersionFromProps("PackageMainVersion")
+            : PackageVersion;
+    }
+
+    /// <summary>
+    /// Gets the effective package version for LocalStack.Client.Extensions package.
+    /// This value is cached to ensure consistency across pack and publish operations.
+    /// </summary>
+    public string GetExtensionsPackageVersion()
+    {
+        return _extensionsPackageVersion ??= UseDirectoryPropsVersion
+            ? GetDynamicVersionFromProps("PackageExtensionVersion")
+            : PackageVersion;
+    }
+
+    /// <summary>
+    /// Gets the effective package version for the specified package ID.
+    /// This method provides a unified interface for accessing cached package versions.
+    /// </summary>
+    /// <param name="packageId">The package ID (LocalStack.Client or LocalStack.Client.Extensions)</param>
+    /// <returns>The cached package version</returns>
+    public string GetEffectivePackageVersion(string packageId)
+    {
+        return packageId switch
+        {
+            LocalStackClientProjName => GetClientPackageVersion(),
+            LocalStackClientExtensionsProjName => GetExtensionsPackageVersion(),
+            _ => throw new ArgumentException($"Unknown package ID: {packageId}", nameof(packageId)),
+        };
+    }
+
     public static void ValidateArgument(string argumentName, string argument)
     {
         if (string.IsNullOrWhiteSpace(argument))
@@ -91,27 +151,10 @@ public sealed class BuildContext : FrostingContext
         }
     }
 
-    public void InstallXUnitNugetPackage()
-    {
-        if (!Directory.Exists("testrunner"))
-        {
-            Directory.CreateDirectory("testrunner");
-        }
-
-        var nugetInstallSettings = new NuGetInstallSettings
-        {
-            Version = "2.8.1", Verbosity = NuGetVerbosity.Normal, OutputDirectory = "testrunner", WorkingDirectory = "."
-        };
-
-        this.NuGetInstall("xunit.runner.console", nugetInstallSettings);
-    }
-
     public IEnumerable<ProjMetadata> GetProjMetadata()
     {
         DirectoryPath testsRoot = this.Directory(TestsPath);
-        List<FilePath> csProjFile = this.GetFiles($"{testsRoot}/**/*.csproj")
-                                        .Where(fp => fp.FullPath.EndsWith("Tests.csproj", StringComparison.InvariantCulture))
-                                        .ToList();
+        List<FilePath> csProjFile = [.. this.GetFiles($"{testsRoot}/**/*.csproj").Where(fp => fp.FullPath.EndsWith("Tests.csproj", StringComparison.InvariantCulture))];
 
         var projMetadata = new List<ProjMetadata>();
 
@@ -130,47 +173,161 @@ public sealed class BuildContext : FrostingContext
         return projMetadata;
     }
 
-    public void RunXUnitUsingMono(string targetFramework, string assemblyPath)
+    public void InstallMonoOnLinux()
     {
-        int exitCode = this.StartProcess(
-            "mono", new ProcessSettings { Arguments = $"./testrunner/xunit.runner.console.2.8.1/tools/{targetFramework}/xunit.console.exe {assemblyPath}" });
-
-        if (exitCode != 0)
+        int result = this.StartProcess("mono", new ProcessSettings
         {
-            throw new InvalidOperationException($"Exit code: {exitCode}");
+            Arguments = "--version",
+            RedirectStandardOutput = true,
+            NoWorkingDirectory = true,
+        });
+
+        if (result == 0)
+        {
+            this.Information("✅ Mono is already installed. Skipping installation.");
+            return;
+        }
+
+        this.Information("Mono not found. Starting installation on Linux for .NET Framework test platform support...");
+
+        // Add Mono repository key
+        int exitCode1 = this.StartProcess("sudo", new ProcessSettings
+        {
+            Arguments = "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF",
+        });
+
+        if (exitCode1 != 0)
+        {
+            this.Warning($"⚠️ Failed to add Mono repository key (exit code: {exitCode1})");
+            return;
+        }
+
+        // Add Mono repository
+        int exitCode2 = this.StartProcess("bash", new ProcessSettings
+        {
+            Arguments = "-c \"echo 'deb https://download.mono-project.com/repo/ubuntu focal main' | sudo tee /etc/apt/sources.list.d/mono-official-stable.list\"",
+        });
+
+        if (exitCode2 != 0)
+        {
+            this.Warning($"⚠️ Failed to add Mono repository (exit code: {exitCode2})");
+            return;
+        }
+
+        // Update package list
+        int exitCode3 = this.StartProcess("sudo", new ProcessSettings { Arguments = "apt update" });
+
+        if (exitCode3 != 0)
+        {
+            this.Warning($"⚠️ Failed to update package list (exit code: {exitCode3})");
+            return;
+        }
+
+        // Install Mono
+        int exitCode4 = this.StartProcess("sudo", new ProcessSettings { Arguments = "apt install -y mono-complete" });
+
+        if (exitCode4 != 0)
+        {
+            this.Warning($"⚠️ Failed to install Mono (exit code: {exitCode4})");
+            this.Warning("This may cause .NET Framework tests to fail on Linux");
+            return;
+        }
+
+        this.Information("✅ Mono installation completed successfully");
+    }
+
+    /// <summary>
+    /// Gets the target frameworks for a specific package using the existing proven method
+    /// </summary>
+    /// <param name="packageId">The package identifier</param>
+    /// <returns>Comma-separated target frameworks</returns>
+    public string GetPackageTargetFrameworks(string packageId)
+    {
+        if (!PackageIdProjMap.TryGetValue(packageId, out FilePath? projectFile) || projectFile == null)
+        {
+            throw new ArgumentException($"Unknown package ID: {packageId}", nameof(packageId));
+        }
+
+        string[] frameworks = GetProjectTargetFrameworks(projectFile.FullPath);
+        return string.Join(", ", frameworks);
+    }
+
+    /// <summary>
+    /// Generates dynamic version from Directory.Build.props with build metadata
+    /// </summary>
+    /// <param name="versionPropertyName">The property name to extract (PackageMainVersion or PackageExtensionVersion)</param>
+    /// <returns>Version with build metadata (e.g., 2.0.0-preview1.20240715.a1b2c3d)</returns>
+    private string GetDynamicVersionFromProps(string versionPropertyName)
+    {
+        // Extract base version from Directory.Build.props
+        FilePath propsFile = this.File("../../Directory.Build.props");
+        string content = File.ReadAllText(propsFile.FullPath, Encoding.UTF8);
+
+        string startElement = $"<{versionPropertyName}>";
+        string endElement = $"</{versionPropertyName}>";
+
+        int startIndex = content.IndexOf(startElement, StringComparison.Ordinal) + startElement.Length;
+        int endIndex = content.IndexOf(endElement, startIndex, StringComparison.Ordinal);
+
+        if (startIndex < startElement.Length || endIndex < 0)
+        {
+            throw new InvalidOperationException($"Could not find {versionPropertyName} in Directory.Build.props");
+        }
+
+        string baseVersion = content[startIndex..endIndex];
+
+        // Generate build metadata
+        string buildDate = DateTime.UtcNow.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+        string commitSha = GetGitCommitSha();
+        string safeBranchName = BranchName.Replace('/', '-').Replace('_', '-');
+
+        // Simplified NuGet-compliant version format
+        if (BranchName == "sdkv3-lts")
+        {
+            // For sdkv3-lts: 2.0.0-preview1-20240715-a1b2c3d
+            return $"{baseVersion}-{buildDate}-{commitSha}";
+        }
+        else
+        {
+            // For feature branches: 2.0.0-preview1-feature-branch-20240715-a1b2c3d
+            return $"{baseVersion}-{safeBranchName}-{buildDate}-{commitSha}";
         }
     }
 
-    public string GetProjectVersion()
+    /// <summary>
+    /// Gets the short git commit SHA for version metadata
+    /// </summary>
+    /// <returns>Short commit SHA or timestamp fallback</returns>
+    private string GetGitCommitSha()
     {
-        FilePath file = this.File("./src/Directory.Build.props");
+        try
+        {
+            var processSettings = new ProcessSettings
+            {
+                Arguments = "rev-parse --short HEAD",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                Silent = true,
+            };
 
-        this.Information(file.FullPath);
+            var exitCode = this.StartProcess("git", processSettings, out IEnumerable<string> output);
 
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
-        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
-        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
+            if (exitCode == 0 && output?.Any() == true)
+            {
+                string? commitSha = output.FirstOrDefault()?.Trim();
+                if (!string.IsNullOrEmpty(commitSha))
+                {
+                    return commitSha;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Warning($"Failed to get git commit SHA: {ex.Message}");
+        }
 
-        string version = project.Substring(startIndex, endIndex - startIndex);
-        version = $"{version}.{PackageVersion}";
-
-        return version;
-    }
-
-    public string GetExtensionProjectVersion()
-    {
-        FilePath file = this.File(LocalStackClientExtProjFile);
-
-        this.Information(file.FullPath);
-
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
-        int startIndex = project.IndexOf("<Version>", StringComparison.Ordinal) + "<Version>".Length;
-        int endIndex = project.IndexOf("</Version>", startIndex, StringComparison.Ordinal);
-
-        string version = project.Substring(startIndex, endIndex - startIndex);
-        version = $"{version}.{PackageVersion}";
-
-        return version;
+        // Fallback to timestamp-based identifier
+        return DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private string[] GetProjectTargetFrameworks(string csprojPath)
@@ -185,7 +342,7 @@ public sealed class BuildContext : FrostingContext
         int startIndex = project.IndexOf(startElement, StringComparison.Ordinal) + startElement.Length;
         int endIndex = project.IndexOf(endElement, startIndex, StringComparison.Ordinal);
 
-        string targetFrameworks = project.Substring(startIndex, endIndex - startIndex);
+        string targetFrameworks = project[startIndex..endIndex];
 
         return targetFrameworks.Split(';');
     }
@@ -204,14 +361,14 @@ public sealed class BuildContext : FrostingContext
             int startIndex = project.IndexOf("<AssemblyName>", StringComparison.Ordinal) + "<AssemblyName>".Length;
             int endIndex = project.IndexOf("</AssemblyName>", startIndex, StringComparison.Ordinal);
 
-            assemblyName = project.Substring(startIndex, endIndex - startIndex);
+            assemblyName = project[startIndex..endIndex];
         }
         else
         {
             int startIndex = csprojPath.LastIndexOf('/') + 1;
             int endIndex = csprojPath.IndexOf(".csproj", startIndex, StringComparison.Ordinal);
 
-            assemblyName = csprojPath.Substring(startIndex, endIndex - startIndex);
+            assemblyName = csprojPath[startIndex..endIndex];
         }
 
         return assemblyName;

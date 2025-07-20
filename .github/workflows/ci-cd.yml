@@ -1,0 +1,230 @@
+name: "CI/CD Pipeline"
+
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - "sdkv3-lts"
+      - "feature/*"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - LICENSE
+    branches:
+      - sdkv3-lts
+      - "feature/*"
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  build-and-test:
+    name: "Build & Test (${{ matrix.name }})"
+    runs-on: ${{ matrix.os }}
+    env:
+      NUGET_PACKAGES: ${{ contains(matrix.os, 'windows') && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
+      BADGE_GIST_ID: "fab5b0837878e8cad455ad28190e0ef0"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: "Windows"
+            script: "./build.ps1"
+            filename: "test-results-windows.json"
+            
+          - os: ubuntu-22.04
+            name: "Linux"
+            script: "./build.sh"
+            filename: "test-results-linux.json"
+            
+          - os: macos-latest
+            name: "macOS"
+            script: "./build.sh"
+            filename: "test-results-macos.json"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for better caching
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: "Make build script executable"
+        if: runner.os != 'Windows'
+        run: chmod +x ./build.sh
+
+      - name: "Cache NuGet packages"
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.os == 'Windows' && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
+          key: ${{ runner.os }}-nuget-v1-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-v1-
+
+      - name: "Build"
+        run: ${{ matrix.script }} --target build
+
+      - name: "Run Tests"
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
+
+      - name: "Publish Test Results"
+        id: test-results
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: "Test Results (${{ matrix.name }})"
+          path: "**/TestResults/*.trx"
+          reporter: "dotnet-trx"
+          fail-on-error: true
+          max-annotations: 50
+
+      - name: "Update Test Results Badge"
+        if: always() # Run even if tests failed or were skipped
+        continue-on-error: true # Don't fail workflow if badge update fails
+        uses: ./.github/actions/update-test-badge
+        with:
+          platform: ${{ matrix.name }}
+          gist_id: ${{ env.BADGE_GIST_ID }}
+          filename: ${{ matrix.filename }}
+          gist_token: ${{ secrets.GIST_SECRET }}
+          test_passed: ${{ steps.test-results.outputs.passed || 0 }}
+          test_failed: ${{ steps.test-results.outputs.failed || 0 }}
+          test_skipped: ${{ steps.test-results.outputs.skipped || 0 }}
+          test_url_html: ${{ steps.test-results.outputs.url_html || '' }}
+          commit_sha: ${{ github.sha }}
+          run_id: ${{ github.run_id }}
+          repository: ${{ github.repository }}
+          server_url: ${{ github.server_url }}
+
+      - name: "Upload Test Artifacts"
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-${{ matrix.name }}
+          path: |
+            **/*.trx
+            **/TestResults/**/*
+          retention-days: 7
+
+  continuous-deployment:
+    name: "Continuous Deployment"
+    runs-on: ubuntu-22.04
+    needs: build-and-test
+    if: |
+      github.repository == 'localstack-dotnet/localstack-dotnet-client' &&
+      github.event_name == 'push' &&
+      (github.ref == 'refs/heads/sdkv3-lts' || startsWith(github.ref, 'refs/heads/feature/'))
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: "Cache NuGet packages"
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-v1-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-v1-
+
+      - name: "Make build script executable"
+        run: chmod +x ./build.sh
+
+      - name: "Setup GitHub Packages Configuration"
+        run: |
+          echo "🔐 Adding GitHub Packages authentication..."
+          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --name github-packages \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }} \
+            --store-password-in-clear-text
+
+          echo "🔧 Original nuget.config..."
+          cat nuget.config
+
+          echo "📝 Backing up original nuget.config..."
+          cp nuget.config nuget.config.backup
+
+          echo "🔧 Using GitHub-optimized nuget.config..."
+          cp .github/nuget.config nuget.config
+
+          echo "🔧 Replaced nuget.config..."
+          cat nuget.config
+
+      - name: "Pack & Publish LocalStack.Client"
+        id: pack-client
+        run: |
+          echo "🔨 Building and publishing LocalStack.Client package..."
+          ./build.sh --target nuget-pack-and-publish \
+            --package-source github \
+            --package-id LocalStack.Client \
+            --use-directory-props-version true \
+            --branch-name ${{ github.ref_name }} \
+            --package-secret ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Prepare Extensions Project"
+        run: |
+          echo "🔧 Preparing Extensions project to use LocalStack.Client package..."
+          ./build.sh --target nuget-prepare-extensions \
+            --package-source github \
+            --package-id LocalStack.Client.Extensions \
+            --client-version ${{ steps.pack-client.outputs.client-version }}
+
+      - name: "Pack & Publish LocalStack.Client.Extensions"
+        run: |
+          echo "🔨 Building and publishing LocalStack.Client.Extensions package..."
+          ./build.sh --target nuget-pack-and-publish \
+            --package-source github \
+            --package-id LocalStack.Client.Extensions \
+            --use-directory-props-version true \
+            --branch-name ${{ github.ref_name }} \
+            --package-secret ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Upload Package Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "packages-${{ github.ref_name }}-${{ github.run_number }}"
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          retention-days: 7
+
+      - name: "Generate Build Summary"
+        run: |
+          echo "📦 Generating build summary..."
+          ./build.sh --target workflow-summary \
+            --use-directory-props-version true \
+            --branch-name ${{ github.ref_name }}
+
+      - name: "Cleanup Configuration"
+        if: always()
+        run: |
+          echo "🧹 Restoring original nuget.config..."
+          mv nuget.config.backup nuget.config || echo "⚠️  Original config not found, skipping restore"

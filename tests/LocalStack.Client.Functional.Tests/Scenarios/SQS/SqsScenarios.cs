@@ -10,10 +10,10 @@ public sealed class SqsScenarioV37 : BaseSqsScenario
     }
 }
 
-[Collection(nameof(LocalStackCollectionV43))]
-public sealed class SqsScenarioV43 : BaseSqsScenario
+[Collection(nameof(LocalStackCollectionV46))]
+public sealed class SqsScenarioV46 : BaseSqsScenario
 {
-    public SqsScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
+    public SqsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
     {
     }
 }

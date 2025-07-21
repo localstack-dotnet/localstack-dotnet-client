@@ -5,8 +5,8 @@
         <Owners>LocalStack.NET</Owners>
         <PackageProjectUrl>https://github.com/localstack-dotnet/localstack-dotnet-client</PackageProjectUrl>
         <PackageIcon>localstack-dotnet-square.png</PackageIcon>
-        <PackageMainVersion>1.6.0</PackageMainVersion>
-        <PackageExtensionVersion>1.4.0</PackageExtensionVersion>
+        <PackageMainVersion>1.6.1</PackageMainVersion>
+        <PackageExtensionVersion>1.4.1</PackageExtensionVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <LangVersion>13.0</LangVersion>

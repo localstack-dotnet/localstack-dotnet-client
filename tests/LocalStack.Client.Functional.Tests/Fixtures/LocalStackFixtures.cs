@@ -31,9 +31,9 @@ public sealed class LocalStackFixtureV37 : LocalStackFixtureBase
     }
 }
 
-public sealed class LocalStackFixtureV43 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV46 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV43() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV43))
+    public LocalStackFixtureV46() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV46))
     {
     }
 }

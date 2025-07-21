@@ -1,9 +1,4 @@
-﻿using Amazon.AppConfigData;
-using Amazon.Pinpoint;
-using Amazon.Pipes;
-using Amazon.RAM;
-
-namespace LocalStack.Client.Integration.Tests;
+﻿namespace LocalStack.Client.Integration.Tests;
 
 public class CreateClientByInterfaceTests
 {
@@ -1040,5 +1035,104 @@ public class CreateClientByInterfaceTests
 
         Assert.NotNull(amazonPipes);
         AssertAmazonClient.AssertClientConfiguration(amazonPipes);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonAccount()
+    {
+        AmazonServiceClient amazonAccount = Session.CreateClientByInterface<IAmazonAccount>();
+
+        Assert.NotNull(amazonAccount);
+        AssertAmazonClient.AssertClientConfiguration(amazonAccount);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonACMPCA()
+    {
+        AmazonServiceClient amazonAcmpca = Session.CreateClientByInterface<IAmazonACMPCA>();
+
+        Assert.NotNull(amazonAcmpca);
+        AssertAmazonClient.AssertClientConfiguration(amazonAcmpca);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonBedrock()
+    {
+        AmazonServiceClient amazonBedrock = Session.CreateClientByInterface<IAmazonBedrock>();
+
+        Assert.NotNull(amazonBedrock);
+        AssertAmazonClient.AssertClientConfiguration(amazonBedrock);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCloudControlApi()
+    {
+        AmazonServiceClient amazonCloudControlApi = Session.CreateClientByInterface<IAmazonCloudControlApi>();
+
+        Assert.NotNull(amazonCloudControlApi);
+        AssertAmazonClient.AssertClientConfiguration(amazonCloudControlApi);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeConnections()
+    {
+        AmazonServiceClient amazonCodeConnections = Session.CreateClientByInterface<IAmazonCodeConnections>();
+
+        Assert.NotNull(amazonCodeConnections);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeConnections);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeDeploy()
+    {
+        AmazonServiceClient amazonCodeDeploy = Session.CreateClientByInterface<IAmazonCodeDeploy>();
+
+        Assert.NotNull(amazonCodeDeploy);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeDeploy);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodePipeline()
+    {
+        AmazonServiceClient amazonCodePipeline = Session.CreateClientByInterface<IAmazonCodePipeline>();
+
+        Assert.NotNull(amazonCodePipeline);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodePipeline);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonElasticTranscoder()
+    {
+        AmazonServiceClient amazonElasticTranscoder = Session.CreateClientByInterface<IAmazonElasticTranscoder>();
+
+        Assert.NotNull(amazonElasticTranscoder);
+        AssertAmazonClient.AssertClientConfiguration(amazonElasticTranscoder);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonMemoryDB()
+    {
+        AmazonServiceClient amazonMemoryDb = Session.CreateClientByInterface<IAmazonMemoryDB>();
+
+        Assert.NotNull(amazonMemoryDb);
+        AssertAmazonClient.AssertClientConfiguration(amazonMemoryDb);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonShield()
+    {
+        AmazonServiceClient amazonShield = Session.CreateClientByInterface<IAmazonShield>();
+
+        Assert.NotNull(amazonShield);
+        AssertAmazonClient.AssertClientConfiguration(amazonShield);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonVerifiedPermissions()
+    {
+        AmazonServiceClient amazonVerifiedPermissions = Session.CreateClientByInterface<IAmazonVerifiedPermissions>();
+
+        Assert.NotNull(amazonVerifiedPermissions);
+        AssertAmazonClient.AssertClientConfiguration(amazonVerifiedPermissions);
     }
 }

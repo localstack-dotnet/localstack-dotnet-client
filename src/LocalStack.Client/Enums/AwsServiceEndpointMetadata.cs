@@ -115,6 +115,18 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata AppConfigData = new("AppConfigData", "appconfigdata", CommonEndpointPattern, 4632, AwsService.AppConfigData);
     public static readonly AwsServiceEndpointMetadata Pinpoint = new("Pinpoint", "pinpoint", CommonEndpointPattern, 4566, AwsService.Pinpoint);
     public static readonly AwsServiceEndpointMetadata Pipes = new("Pipes", "pipes", CommonEndpointPattern, 4566, AwsService.Pipes);
+    public static readonly AwsServiceEndpointMetadata Account = new("Account", "account", CommonEndpointPattern, 4567, AwsService.Account);
+    public static readonly AwsServiceEndpointMetadata ACMPCA = new("ACM PCA", "acm-pca", CommonEndpointPattern, 4567, AwsService.ACMPCA);
+    public static readonly AwsServiceEndpointMetadata Bedrock = new("Bedrock", "bedrock", CommonEndpointPattern, 4567, AwsService.Bedrock);
+    public static readonly AwsServiceEndpointMetadata CloudControl = new("CloudControl", "cloudcontrol", CommonEndpointPattern, 4567, AwsService.CloudControl);
+    public static readonly AwsServiceEndpointMetadata CodeBuild = new("CodeBuild", "codebuild", CommonEndpointPattern, 4567, AwsService.CodeBuild);
+    public static readonly AwsServiceEndpointMetadata CodeConnections = new("CodeConnections", "codeconnections", CommonEndpointPattern, 4567, AwsService.CodeConnections);
+    public static readonly AwsServiceEndpointMetadata CodeDeploy = new("CodeDeploy", "codedeploy", CommonEndpointPattern, 4567, AwsService.CodeDeploy);
+    public static readonly AwsServiceEndpointMetadata CodePipeline = new("CodePipeline", "codepipeline", CommonEndpointPattern, 4567, AwsService.CodePipeline);
+    public static readonly AwsServiceEndpointMetadata ElasticTranscoder = new("Elastic Transcoder", "elastictranscoder", CommonEndpointPattern, 4567, AwsService.ElasticTranscoder);
+    public static readonly AwsServiceEndpointMetadata MemoryDb = new("MemoryDB", "memorydb", CommonEndpointPattern, 4567, AwsService.MemoryDb);
+    public static readonly AwsServiceEndpointMetadata Shield = new("Shield", "shield", CommonEndpointPattern, 4567, AwsService.Shield);
+    public static readonly AwsServiceEndpointMetadata VerifiedPermissions = new("VerifiedPermissions", "verifiedpermissions", CommonEndpointPattern, 4567, AwsService.VerifiedPermissions);
 
     public static readonly AwsServiceEndpointMetadata[] All =
     [
@@ -124,7 +136,7 @@ public class AwsServiceEndpointMetadata
         CloudTrail, Glacier, Batch, Organizations, AutoScaling, MediaStore, MediaStoreData, Transfer, Acm, CodeCommit, KinesisAnalytics, KinesisAnalyticsV2, Amplify, ApplicationAutoscaling, Kafka, ApiGatewayManagementApi,
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
         ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler, Ram, AppConfigData,
-        Pinpoint, Pipes,
+        Pinpoint, Pipes, Account, ACMPCA, Bedrock, CloudControl, CodeBuild, CodeConnections, CodeDeploy, CodePipeline, ElasticTranscoder, MemoryDb, Shield, VerifiedPermissions,
     ];
 
     private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsService @enum)

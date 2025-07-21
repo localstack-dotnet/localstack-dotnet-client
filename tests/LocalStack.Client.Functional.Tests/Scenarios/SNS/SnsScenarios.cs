@@ -10,10 +10,10 @@ public sealed class SnsScenarioV37 : BaseSnsScenario
     }
 }
 
-[Collection(nameof(LocalStackCollectionV43))]
-public sealed class SnsScenarioV43 : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionV46))]
+public sealed class SnsScenarioV46 : BaseSnsScenario
 {
-    public SnsScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
+    public SnsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
     {
     }
 }

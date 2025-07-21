@@ -12,7 +12,8 @@
 > For active development, AWS SDK v4 support, and future features like Native AOT, please see the master branch.
 >
 > - 🚀 **[Go to master branch for v2.0 Development →](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)**
-> - 📖 **[Read Full Roadmap & Migration Guide →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+> - 📖 **[See v2 Changelog →](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md)**
+> - 📖 **[Read Full Roadmap →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
 
 ### [v1.6.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.1)
 

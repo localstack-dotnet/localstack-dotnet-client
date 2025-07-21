@@ -2,7 +2,7 @@
 
 [![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql) [![macOS Tests](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Ftests%2Fmacos%3Flabel%3DTests%26track%3Dv1)](https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/redirect/test-results/macos?track=v1)
 
-> ## ⚠️ Maintenance Branch for AWS SDK v3 ⚠️
+> ## ⚠️ Maintenance for LocalStack.NET v1.x and AWS SDK v3 ⚠️
 >
 > **Current Status**: This branch contains the legacy v1.x codebase which supports AWS SDK v3. It is now in **maintenance mode**.
 >
@@ -14,7 +14,7 @@
 > For active development, AWS SDK v4 support, and future features like Native AOT, please see the master branch.
 >
 > - 🚀 **[Go to master branch for v2.0 Development →](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)**
-> - 📖 **[Read Full Roadmap & Migration Guide →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+> - 📖 **[Read Full Roadmap →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
 
 **Version Strategy**:
 

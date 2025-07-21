@@ -1,5 +1,44 @@
 # LocalStack .NET Client Change Log
 
+### [v1.6.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.1)
+
+> ## ⚠️ Maintenance for LocalStack.NET v1.x and AWS SDK v3 ⚠️
+>
+> **Current Status**: The legacy v1.x LocalStack.NET libs which supports AWS SDK v3. It is now in **maintenance mode**.
+>
+> **Support Lifecycle**:
+>
+> - This version will only receive **critical security and bug fixes**
+> - **End-of-Life (EOL)**: July 31, 2026
+>
+> For active development, AWS SDK v4 support, and future features like Native AOT, please see the master branch.
+>
+> - 🚀 **[Go to master branch for v2.0 Development →](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)**
+> - 📖 **[Read Full Roadmap & Migration Guide →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+
+#### 1. New Features
+
+- **Added Endpoints from [Localstack Python Client](https://github.com/localstack/localstack-python-client) v2.9:**
+  - **Account Management**
+  - **Certificate Manager Private Certificate Authority (ACMPCA)**
+  - **Bedrock**
+  - **Cloud Control API**
+  - **Code Build**
+  - **Code Connections**
+  - **Code Deploy**
+  - **Code Pipeline**
+  - **Elastic Transcoder**
+  - **MemoryDB for Redis**
+  - **Shield**
+  - **Verified Permissions**
+
+#### 2. General
+
+- **Testing Compatibility:**
+  - Successfully tested against LocalStack versions:
+    - **v3.7.1**
+    - **v4.6.0**
+
 ### [v1.6.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.0)
 
 #### 1. General

@@ -1,6 +1,4 @@
-# LocalStack .NET Client Change Log
-
-### [v1.6.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.1)
+# LocalStack .NET Client v1.x Change Log
 
 > ## ⚠️ Maintenance for LocalStack.NET v1.x and AWS SDK v3 ⚠️
 >
@@ -15,6 +13,8 @@
 >
 > - 🚀 **[Go to master branch for v2.0 Development →](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)**
 > - 📖 **[Read Full Roadmap & Migration Guide →](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+
+### [v1.6.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v1.6.1)
 
 #### 1. New Features
 

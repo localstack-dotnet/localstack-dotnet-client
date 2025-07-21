@@ -54,13 +54,10 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     }
                 }
 
-                // .NET Framework testing on non-Windows platforms
-                // - Modern .NET includes built-in Mono runtime
-                // - Test platform still requires external Mono installation on Linux
                 if (targetFramework == "net462" && !context.IsRunningOnWindows())
                 {
-                    string platform = context.IsRunningOnLinux() ? "Linux (with external Mono)" : "macOS (built-in Mono)";
-                    context.Information($"Running .NET Framework tests on {platform}");
+                    context.Warning("Skipping net462 tests on non-Windows platform");
+                    continue;
                 }
 
                 string testFilePrefix = targetFramework.Replace('.', '-');

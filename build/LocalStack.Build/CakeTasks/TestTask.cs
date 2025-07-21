@@ -17,24 +17,23 @@ public sealed class TestTask : FrostingTask<BuildContext>
             string testProjectPath = testProj.CsProjPath;
             string targetFrameworks = string.Join(',', testProj.TargetFrameworks);
 
-            context.Warning($"Target Frameworks {targetFrameworks}");
+            ConsoleHelper.WriteInfo($"Target Frameworks: {targetFrameworks}");
 
             foreach (string targetFramework in testProj.TargetFrameworks)
             {
                 if (context.SkipFunctionalTest && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {
-                    context.Warning("Skipping Functional Tests");
+                    ConsoleHelper.WriteWarning("Skipping Functional Tests");
 
                     continue;
                 }
 
-                context.Warning(
-                    $"=============Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}=============");
+                ConsoleHelper.WriteRule($"Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}");
                 settings.Framework = targetFramework;
 
                 if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {
-                    context.Warning("Deleting running docker containers");
+                    ConsoleHelper.WriteProcessing("Deleting running docker containers");
 
                     try
                     {
@@ -42,7 +41,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
                         if (!string.IsNullOrEmpty(psOutput))
                         {
-                            context.Warning(psOutput);
+                            ConsoleHelper.WriteInfo($"Found containers: {psOutput}");
 
                             string[] containers = psOutput.Split([Environment.NewLine], StringSplitOptions.None);
                             context.DockerRm(containers);
@@ -60,14 +59,14 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 if (targetFramework == "net472" && !context.IsRunningOnWindows())
                 {
                     string platform = context.IsRunningOnLinux() ? "Linux (with external Mono)" : "macOS (built-in Mono)";
-                    context.Information($"Running .NET Framework tests on {platform}");
+                    ConsoleHelper.WriteInfo($"Running .NET Framework tests on {platform}");
                 }
 
                 string testFilePrefix = targetFramework.Replace('.', '-');
                 settings.ArgumentCustomization = args => args.Append($" --logger \"trx;LogFileName={testFilePrefix}_{testResults}\"");
                 context.DotNetTest(testProjectPath, settings);
 
-                context.Warning("==============================================================");
+                ConsoleHelper.WriteSuccess($"Completed {targetFramework} tests for {testProj.AssemblyName}");
             }
         }
     }

@@ -5,5 +5,5 @@ namespace LocalStack.Client.Functional.Tests.Fixtures;
 [CollectionDefinition(nameof(LocalStackCollectionV37))]
 public class LocalStackCollectionV37 : ICollectionFixture<LocalStackFixtureV37>, ICollectionFixture<TestFixture>;
 
-[CollectionDefinition(nameof(LocalStackCollectionV43))]
-public class LocalStackCollectionV43 : ICollectionFixture<LocalStackFixtureV43>, ICollectionFixture<TestFixture>;
+[CollectionDefinition(nameof(LocalStackCollectionV46))]
+public class LocalStackCollectionV46 : ICollectionFixture<LocalStackFixtureV46>, ICollectionFixture<TestFixture>;

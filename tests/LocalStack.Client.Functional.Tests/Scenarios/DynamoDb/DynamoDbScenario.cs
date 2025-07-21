@@ -10,10 +10,10 @@ public sealed class DynamoDbScenarioV37 : BaseDynamoDbScenario
     }
 }
 
-[Collection(nameof(LocalStackCollectionV43))]
-public sealed class DynamoDbScenarioV43 : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV46))]
+public sealed class DynamoDbScenarioV46 : BaseDynamoDbScenario
 {
-    public DynamoDbScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
+    public DynamoDbScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
     {
     }
 }

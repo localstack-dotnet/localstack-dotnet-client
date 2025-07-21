@@ -14,6 +14,8 @@
     <!-- packages -->
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.2" />
     <PackageVersion Include="AWSSDK.Core" Version="4.0.0.15" />
+    <PackageVersion Include="AWSSDK.Account" Version="4.0.0.14" />
+    <PackageVersion Include="AWSSDK.ACMPCA" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.Amplify" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.APIGateway" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.ApiGatewayManagementApi" Version="4.0.0.13" />
@@ -28,7 +30,9 @@
     <PackageVersion Include="AWSSDK.AWSMarketplaceMetering" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.Backup" Version="4.0.2.4" />
     <PackageVersion Include="AWSSDK.Batch" Version="4.0.1.2" />
+    <PackageVersion Include="AWSSDK.Bedrock" Version="4.0.8" />
     <PackageVersion Include="AWSSDK.CertificateManager" Version="4.0.1.4" />
+    <PackageVersion Include="AWSSDK.CloudControlApi" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.CloudFormation" Version="4.0.2.2" />
     <PackageVersion Include="AWSSDK.CloudFront" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.CloudSearch" Version="4.0.0.13" />
@@ -36,7 +40,11 @@
     <PackageVersion Include="AWSSDK.CloudWatch" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.CloudWatchEvents" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.5.2" />
-    <PackageVersion Include="AWSSDK.CodeCommit" Version="4.0.0.13" />
+    <PackageVersion Include="AWSSDK.CodeBuild" Version="4.0.1.11" />
+    <PackageVersion Include="AWSSDK.CodeConnections" Version="4.0.0.14" />
+    <PackageVersion Include="AWSSDK.CodeCommit" Version="4.0.0.14" />
+    <PackageVersion Include="AWSSDK.CodeDeploy" Version="4.0.0.14" />
+    <PackageVersion Include="AWSSDK.CodePipeline" Version="4.0.2.10" />
     <PackageVersion Include="AWSSDK.CognitoIdentity" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.CognitoIdentityProvider" Version="4.0.1.11" />
     <PackageVersion Include="AWSSDK.ConfigService" Version="4.0.1.2" />
@@ -57,6 +65,7 @@
     <PackageVersion Include="AWSSDK.ElasticLoadBalancingV2" Version="4.0.1.2" />
     <PackageVersion Include="AWSSDK.ElasticMapReduce" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.Elasticsearch" Version="4.0.0.13" />
+    <PackageVersion Include="AWSSDK.ElasticTranscoder" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.EMRServerless" Version="4.0.4.3" />
     <PackageVersion Include="AWSSDK.FIS" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="4.0.0.13" />
@@ -80,6 +89,7 @@
     <PackageVersion Include="AWSSDK.MediaConvert" Version="4.0.4.3" />
     <PackageVersion Include="AWSSDK.MediaStore" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.MediaStoreData" Version="4.0.0.13" />
+    <PackageVersion Include="AWSSDK.MemoryDB" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.MQ" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.Neptune" Version="4.0.1.9" />
     <PackageVersion Include="AWSSDK.Organizations" Version="4.0.1.4" />
@@ -111,12 +121,14 @@
     <PackageVersion Include="AWSSDK.SimpleNotificationService" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.2" />
     <PackageVersion Include="AWSSDK.SimpleWorkflow" Version="4.0.0.13" />
+    <PackageVersion Include="AWSSDK.Shield" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.SQS" Version="4.0.0.14" />
     <PackageVersion Include="AWSSDK.StepFunctions" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.TimestreamQuery" Version="4.0.1.11" />
     <PackageVersion Include="AWSSDK.TimestreamWrite" Version="4.0.1.11" />
     <PackageVersion Include="AWSSDK.Transfer" Version="4.0.1.2" />
     <PackageVersion Include="AWSSDK.TranscribeService" Version="4.0.2.2" />
+    <PackageVersion Include="AWSSDK.VerifiedPermissions" Version="4.0.1.13" />
     <PackageVersion Include="AWSSDK.WAF" Version="4.0.0.13" />
     <PackageVersion Include="AWSSDK.WAFV2" Version="4.0.3.4" />
     <PackageVersion Include="AWSSDK.XRay" Version="4.0.0.13" />

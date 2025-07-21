@@ -1,9 +1,4 @@
-﻿using Amazon.AppConfigData;
-using Amazon.Pinpoint;
-using Amazon.Pipes;
-using Amazon.RAM;
-
-namespace LocalStack.Client.Integration.Tests;
+﻿namespace LocalStack.Client.Integration.Tests;
 
 public class CreateClientByImplementationTests
 {
@@ -1040,5 +1035,113 @@ public class CreateClientByImplementationTests
 
         Assert.NotNull(amazonPipesClient);
         AssertAmazonClient.AssertClientConfiguration(amazonPipesClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonAccount()
+    {
+        var amazonAccountClient = Session.CreateClientByImplementation<AmazonAccountClient>();
+
+        Assert.NotNull(amazonAccountClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonAccountClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonACMPCAClient()
+    {
+        var amazonAcmpcaClient = Session.CreateClientByImplementation<AmazonACMPCAClient>();
+
+        Assert.NotNull(amazonAcmpcaClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonAcmpcaClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonBedrockClient()
+    {
+        var amazonBedrockClient = Session.CreateClientByImplementation<AmazonBedrockClient>();
+
+        Assert.NotNull(amazonBedrockClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonBedrockClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCloudControlApiClient()
+    {
+        var amazonCloudControlApiClient = Session.CreateClientByImplementation<AmazonCloudControlApiClient>();
+
+        Assert.NotNull(amazonCloudControlApiClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCloudControlApiClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeBuildClient()
+    {
+        var amazonCodeBuildClient = Session.CreateClientByImplementation<AmazonCodeBuildClient>();
+
+        Assert.NotNull(amazonCodeBuildClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeBuildClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeConnectionsClient()
+    {
+        var amazonCodeConnectionsClient = Session.CreateClientByImplementation<AmazonCodeConnectionsClient>();
+
+        Assert.NotNull(amazonCodeConnectionsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeConnectionsClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeDeployClient()
+    {
+        var amazonCodeDeployClient = Session.CreateClientByImplementation<AmazonCodeDeployClient>();
+
+        Assert.NotNull(amazonCodeDeployClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeDeployClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodePipelineClient()
+    {
+        var amazonCodePipelineClient = Session.CreateClientByImplementation<AmazonCodePipelineClient>();
+
+        Assert.NotNull(amazonCodePipelineClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodePipelineClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonElasticTranscoderClient()
+    {
+        var amazonElasticTranscoderClient = Session.CreateClientByImplementation<AmazonElasticTranscoderClient>();
+
+        Assert.NotNull(amazonElasticTranscoderClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonElasticTranscoderClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonMemoryDBClient()
+    {
+        var amazonMemoryDbClient = Session.CreateClientByImplementation<AmazonMemoryDBClient>();
+
+        Assert.NotNull(amazonMemoryDbClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonMemoryDbClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonShieldClient()
+    {
+        var amazonShieldClient = Session.CreateClientByImplementation<AmazonShieldClient>();
+
+        Assert.NotNull(amazonShieldClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonShieldClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonVerifiedPermissionsClient()
+    {
+        var amazonVerifiedPermissionsClient = Session.CreateClientByImplementation<AmazonVerifiedPermissionsClient>();
+
+        Assert.NotNull(amazonVerifiedPermissionsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonVerifiedPermissionsClient);
     }
 }

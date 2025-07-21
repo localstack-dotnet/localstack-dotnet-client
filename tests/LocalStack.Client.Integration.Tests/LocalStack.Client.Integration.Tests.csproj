@@ -7,6 +7,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />
+		<PackageReference Include="AWSSDK.Account" />
+		<PackageReference Include="AWSSDK.ACMPCA" />
 		<PackageReference Include="AWSSDK.Amplify" />
 		<PackageReference Include="AWSSDK.APIGateway" />
 		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" />
@@ -21,7 +23,9 @@
 		<PackageReference Include="AWSSDK.AWSMarketplaceMetering" />
 		<PackageReference Include="AWSSDK.Backup" />
 		<PackageReference Include="AWSSDK.Batch" />
+		<PackageReference Include="AWSSDK.Bedrock" />
 		<PackageReference Include="AWSSDK.CertificateManager" />
+		<PackageReference Include="AWSSDK.CloudControlApi" />
 		<PackageReference Include="AWSSDK.CloudFormation" />
 		<PackageReference Include="AWSSDK.CloudFront" />
 		<PackageReference Include="AWSSDK.CloudSearch" />
@@ -29,7 +33,11 @@
 		<PackageReference Include="AWSSDK.CloudWatch" />
 		<PackageReference Include="AWSSDK.CloudWatchEvents" />
 		<PackageReference Include="AWSSDK.CloudWatchLogs" />
+		<PackageReference Include="AWSSDK.CodeBuild" />
+		<PackageReference Include="AWSSDK.CodeConnections" />
 		<PackageReference Include="AWSSDK.CodeCommit" />
+		<PackageReference Include="AWSSDK.CodeDeploy" />
+		<PackageReference Include="AWSSDK.CodePipeline" />
 		<PackageReference Include="AWSSDK.CognitoIdentity" />
 		<PackageReference Include="AWSSDK.CognitoIdentityProvider" />
 		<PackageReference Include="AWSSDK.ConfigService" />
@@ -50,6 +58,7 @@
 		<PackageReference Include="AWSSDK.ElasticLoadBalancingV2" />
 		<PackageReference Include="AWSSDK.ElasticMapReduce" />
 		<PackageReference Include="AWSSDK.Elasticsearch" />
+		<PackageReference Include="AWSSDK.ElasticTranscoder" />
 		<PackageReference Include="AWSSDK.EMRServerless" />
 		<PackageReference Include="AWSSDK.FIS" />
 		<PackageReference Include="AWSSDK.OpenSearchService" />
@@ -73,6 +82,7 @@
 		<PackageReference Include="AWSSDK.MediaConvert" />
 		<PackageReference Include="AWSSDK.MediaStore" />
 		<PackageReference Include="AWSSDK.MediaStoreData" />
+		<PackageReference Include="AWSSDK.MemoryDB" />
 		<PackageReference Include="AWSSDK.MQ" />
 		<PackageReference Include="AWSSDK.Neptune" />
 		<PackageReference Include="AWSSDK.Organizations" />
@@ -104,12 +114,14 @@
 		<PackageReference Include="AWSSDK.SimpleNotificationService" />
 		<PackageReference Include="AWSSDK.SimpleSystemsManagement" />
 		<PackageReference Include="AWSSDK.SimpleWorkflow" />
+		<PackageReference Include="AWSSDK.Shield" />
 		<PackageReference Include="AWSSDK.SQS" />
 		<PackageReference Include="AWSSDK.StepFunctions" />
 		<PackageReference Include="AWSSDK.TimestreamQuery" />
 		<PackageReference Include="AWSSDK.TimestreamWrite" />
 		<PackageReference Include="AWSSDK.Transfer" />
 		<PackageReference Include="AWSSDK.TranscribeService" />
+		<PackageReference Include="AWSSDK.VerifiedPermissions" />
 		<PackageReference Include="AWSSDK.WAF" />
 		<PackageReference Include="AWSSDK.WAFV2" />
 		<PackageReference Include="AWSSDK.XRay" />

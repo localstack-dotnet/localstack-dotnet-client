@@ -10,10 +10,10 @@ public sealed class SnsToSqsScenarioV37 : BaseRealLife
     }
 }
 
-[Collection(nameof(LocalStackCollectionV43))]
-public sealed class SnsToSqsScenarioV43 : BaseRealLife
+[Collection(nameof(LocalStackCollectionV46))]
+public sealed class SnsToSqsScenarioV46 : BaseRealLife
 {
-    public SnsToSqsScenarioV43(TestFixture testFixture, LocalStackFixtureV43 localStackFixtureV43) : base(testFixture, localStackFixtureV43)
+    public SnsToSqsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
     {
     }
 }

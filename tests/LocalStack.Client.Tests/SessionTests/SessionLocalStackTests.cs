@@ -246,12 +246,52 @@ public class SessionLocalStackTests
     }
 
     [Fact]
+    public void CreateClientByInterface_Should_Throw_AmazonClientException_If_Given_AwsClientConfig_Could_Not_Constructed()
+    {
+        var mockSession = MockSession.Create();
+        var mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+
+        mockSession.SessionOptionsMock.SetupDefault();
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Throws<ArgumentException>();
+
+        Assert.Throws<ArgumentException>(() => mockSession.CreateClientByInterface<IMockAmazonService>());
+
+        mockSession.SessionReflectionMock.Verify(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);
+        mockSession.SessionReflectionMock.Verify(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);
+    }
+
+    [Fact]
+    public void CreateClientByInterface_Should_Create_Client_And_Set_Configurations()
+    {
+        var mockSession = MockSession.Create();
+        var mockServiceMetadata = new MockServiceMetadata();
+        var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
+        var mockClientConfig = new MockClientConfig();
+
+        mockSession.SessionOptionsMock.SetupDefault();
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockServiceMetadata);
+        mockSession.ConfigMock.Setup(config => config.GetAwsServiceEndpoint(It.IsAny<string>())).Returns(() => mockAwsServiceEndpoint);
+        mockSession.SessionReflectionMock.Setup(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient)))).Returns(() => mockClientConfig);
+
+        mockSession.CreateClientByInterface<IMockAmazonService>();
+
+        mockSession.SessionReflectionMock.Verify(reflection => reflection.ExtractServiceMetadata(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);
+        mockSession.SessionReflectionMock.Verify(reflection => reflection.CreateClientConfig(It.Is<Type>(type => type == typeof(MockAmazonServiceClient))), Times.Once);
+        mockSession.SessionReflectionMock.Verify(reflection => reflection.SetForcePathStyle(It.Is<ClientConfig>(config => config == mockClientConfig), true), Times.Once);
+    }
+
+#if !NET8_0_OR_GREATER
+    [Fact]
     public void CreateClientByInterface_Should_Throw_AmazonClientException_If_Given_Generic_AmazonService_Could_Not_Found_In_Aws_Extension_Assembly()
     {
         var mockSession = MockSession.Create();
 
         Assert.Throws<AmazonClientException>(() => mockSession.CreateClientByInterface(typeof(MockAmazonServiceClient)));
     }
+#endif
 
     [Fact]
     public void CreateClientByInterface_Should_Throw_NotSupportedClientException_If_Given_ServiceId_Is_Not_Supported()

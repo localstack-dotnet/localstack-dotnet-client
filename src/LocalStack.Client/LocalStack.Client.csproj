@@ -25,7 +25,7 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0'">
+	<PropertyGroup Condition="'$(Net8OrAbove)' == 'true'">
 		<IsAotCompatible>true</IsAotCompatible>
 		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
@@ -35,6 +35,13 @@
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+	</ItemGroup>
+
+	<!-- Source generator reference for .NET 8+ targets only -->
+	<ItemGroup Condition="'$(Net8OrAbove)' == 'true'">
+		<ProjectReference Include="..\LocalStack.Client.Generators\LocalStack.Client.Generators.csproj" 
+		                  OutputItemType="Analyzer"
+		                  ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" AfterTargets="PreBuildEvent">

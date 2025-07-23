@@ -7,11 +7,13 @@
 /// </summary>
 public class SessionReflection : ISessionReflection
 {
+#pragma warning disable CA1859 // Use concrete types when possible for improved performance
 #if NET8_0_OR_GREATER
     private static readonly ISessionReflection _implementation = new SessionReflectionModern();
-#else
+#else 
     private static readonly ISessionReflection _implementation = new SessionReflectionLegacy();
 #endif
+#pragma warning restore CA1859 // Use concrete types when possible for improved performance
 
     public IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient
     {

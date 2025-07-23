@@ -69,27 +69,16 @@ internal sealed class SessionReflectionModern : ISessionReflection
             throw new ArgumentNullException(nameof(clientConfig));
         }
 
-        // Get the client type from the config type
-        // AWS configs follow pattern: AmazonS3Config -> AmazonS3Client  
+        // Find the accessor whose ConfigType matches the provided config
         var configType = clientConfig.GetType();
-        var configTypeName = configType.FullName;
         
-        if (configTypeName == null || !configTypeName.EndsWith("Config", StringComparison.Ordinal))
-        {
-            return false;
-        }
+        var matchingAccessor = AwsAccessorRegistry.RegisteredClientTypes
+            .Select(clientType => AwsAccessorRegistry.Get(clientType))
+            .FirstOrDefault(accessor => accessor.ConfigType == configType);
 
-        var clientTypeName = configTypeName.Replace("Config", "Client", StringComparison.Ordinal);
-        
-        // For AOT builds, we cannot use Assembly.GetType() as it's not trim-safe
-        // Instead, we'll find the matching registered client type
-        var matchingClientType = AwsAccessorRegistry.RegisteredClientTypes
-            .FirstOrDefault(type => string.Equals(type.FullName, clientTypeName, StringComparison.Ordinal));
-        
-        if (matchingClientType != null)
+        if (matchingAccessor != null)
         {
-            var accessor = AwsAccessorRegistry.Get(matchingClientType);
-            return accessor.TrySetForcePathStyle(clientConfig, value);
+            return matchingAccessor.TrySetForcePathStyle(clientConfig, value);
         }
 
         return false;

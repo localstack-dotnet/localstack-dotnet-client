@@ -9,6 +9,7 @@
         <PackageExtensionVersion>2.0.0</PackageExtensionVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Net8OrAbove Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' and $([MSBuild]::VersionGreaterThanOrEquals('$(TargetFrameworkVersion)', '8.0'))">true</Net8OrAbove>
         <LangVersion>13.0</LangVersion>
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
         <AnalysisLevel>latest</AnalysisLevel>

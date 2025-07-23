@@ -7,6 +7,16 @@ namespace LocalStack.Client.Utils;
 public interface IAwsAccessor
 {
     /// <summary>
+    /// Gets the AWS client type this accessor supports.
+    /// </summary>
+    Type ClientType { get; }
+
+    /// <summary>
+    /// Gets the AWS client configuration type this accessor supports.
+    /// </summary>
+    Type ConfigType { get; }
+
+    /// <summary>
     /// Gets the service metadata for the AWS client.
     /// Accesses the private static 'serviceMetadata' field.
     /// </summary>
@@ -17,6 +27,12 @@ public interface IAwsAccessor
     /// Uses the appropriate constructor for the client's configuration type.
     /// </summary>
     ClientConfig CreateClientConfig();
+
+    /// <summary>
+    /// Creates a new AWS service client instance with the specified credentials and configuration.
+    /// Uses the appropriate constructor to instantiate the client.
+    /// </summary>
+    AmazonServiceClient CreateClient(AWSCredentials credentials, ClientConfig clientConfig);
 
     /// <summary>
     /// Sets the region endpoint on the client configuration.

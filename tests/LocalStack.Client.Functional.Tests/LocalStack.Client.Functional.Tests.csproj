@@ -71,8 +71,4 @@
     </None>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <DefineConstants>NETCOREAPP</DefineConstants>
-  </PropertyGroup>
-
 </Project>

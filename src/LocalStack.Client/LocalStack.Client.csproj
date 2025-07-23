@@ -25,6 +25,13 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
@@ -50,9 +57,5 @@
 		</None>
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
-		<DefineConstants>NET472</DefineConstants>
-	</PropertyGroup>
 
 </Project>

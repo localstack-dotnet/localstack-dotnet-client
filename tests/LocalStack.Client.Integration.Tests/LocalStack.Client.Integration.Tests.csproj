@@ -5,6 +5,10 @@
 		<NoWarn>$(NoWarn);CA1707;MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />
 		<PackageReference Include="AWSSDK.Account" />

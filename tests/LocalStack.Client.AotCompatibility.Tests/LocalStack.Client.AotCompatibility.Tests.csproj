@@ -20,6 +20,10 @@
         
         <!-- Test project specific settings -->
         <GenerateProgramFile>false</GenerateProgramFile>
+        
+        <!-- Enable viewing generated source output for debugging -->
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
     </PropertyGroup>
 
     <ItemGroup>

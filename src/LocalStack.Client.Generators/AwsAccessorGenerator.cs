@@ -1,3 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+
 namespace LocalStack.Client.Generators;
 
 /// <summary>
@@ -13,14 +23,9 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         var isNet8OrAbove = context.CompilationProvider
             .Select((compilation, _) => IsTargetFrameworkNet8OrAbove(compilation));
 
-        // Discover AWS service clients in the consumer's compilation
-        var awsClients = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (s, _) => IsAwsClientClass(s),
-                transform: static (ctx, _) => GetAwsClientInfo(ctx))
-            .Where(static info => info is not null)
-            .Select(static (info, _) => info!)
-            .Collect();
+        // Discover AWS service clients from compilation metadata (referenced assemblies)
+        var awsClients = context.CompilationProvider
+            .Select((compilation, _) => FindAwsClientsInMetadata(compilation).ToImmutableArray());
 
         // Combine framework check with discovered clients
         var generationInput = isNet8OrAbove
@@ -87,54 +92,67 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         return new[] { "NET8_0_OR_GREATER" };
     }
 
-    private static bool IsAwsClientClass(SyntaxNode syntaxNode)
+    private static IEnumerable<AwsClientInfo> FindAwsClientsInMetadata(Compilation compilation)
     {
-        // Look for class declarations that might be AWS clients
-        if (syntaxNode is not ClassDeclarationSyntax classDecl)
-            return false;
-
-        // Quick syntactic check: class name ends with "Client"
-        return classDecl.Identifier.ValueText.EndsWith("Client", StringComparison.Ordinal);
-    }
-
-    private static AwsClientInfo? GetAwsClientInfo(GeneratorSyntaxContext context)
-    {
-        var classDecl = (ClassDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-
-        // Get the symbol for this class
-        if (semanticModel.GetDeclaredSymbol(classDecl) is not INamedTypeSymbol classSymbol)
-            return null;
-
-        // Check if it inherits from AmazonServiceClient
-        if (!InheritsFromAmazonServiceClient(classSymbol))
-            return null;
-
-        // Try to find the corresponding ClientConfig type
-        var configType = FindClientConfigType(classSymbol);
-        if (configType == null)
-            return null;
-
-        // Find the corresponding service interface
-        var serviceInterface = FindServiceInterface(classSymbol);
-
-        return new AwsClientInfo(
-            ClientType: classSymbol,
-            ConfigType: configType,
-            ServiceInterface: serviceInterface);
-    }
-
-    private static bool InheritsFromAmazonServiceClient(INamedTypeSymbol classSymbol)
-    {
-        var baseType = classSymbol.BaseType;
-        while (baseType != null)
+        // Find the AmazonServiceClient base type
+        var baseSym = compilation.GetTypeByMetadataName("Amazon.Runtime.AmazonServiceClient");
+        if (baseSym is null)
         {
-            if (string.Equals(baseType.Name, "AmazonServiceClient", StringComparison.Ordinal) && 
-                string.Equals(baseType.ContainingNamespace.ToDisplayString(), "Amazon.Runtime", StringComparison.Ordinal))
+            // AWS SDK not referenced, no clients to find
+            yield break;
+        }
+
+        foreach (var reference in compilation.References)
+        {
+            if (compilation.GetAssemblyOrModuleSymbol(reference) is IAssemblySymbol assembly)
+            {
+                foreach (var client in GetAwsClientsFromAssembly(assembly.GlobalNamespace, baseSym))
+                {
+                    yield return client;
+                }
+            }
+        }
+    }
+
+    private static IEnumerable<AwsClientInfo> GetAwsClientsFromAssembly(INamespaceSymbol namespaceSymbol, INamedTypeSymbol baseType)
+    {
+        foreach (var member in namespaceSymbol.GetMembers())
+        {
+            if (member is INamespaceSymbol nestedNamespace)
+            {
+                foreach (var client in GetAwsClientsFromAssembly(nestedNamespace, baseType))
+                {
+                    yield return client;
+                }
+            }
+            else if (member is INamedTypeSymbol typeSymbol && InheritsFromAmazonServiceClient(typeSymbol, baseType))
+            {
+                // Try to find the corresponding ClientConfig type
+                var configType = FindClientConfigType(typeSymbol);
+                if (configType != null)
+                {
+                    // Find the corresponding service interface
+                    var serviceInterface = FindServiceInterface(typeSymbol);
+                    
+                    yield return new AwsClientInfo(
+                        clientType: typeSymbol,
+                        configType: configType,
+                        serviceInterface: serviceInterface);
+                }
+            }
+        }
+    }
+
+    private static bool InheritsFromAmazonServiceClient(INamedTypeSymbol typeSymbol, INamedTypeSymbol baseType)
+    {
+        var current = typeSymbol.BaseType;
+        while (current != null)
+        {
+            if (SymbolEqualityComparer.Default.Equals(current, baseType))
             {
                 return true;
             }
-            baseType = baseType.BaseType;
+            current = current.BaseType;
         }
         return false;
     }
@@ -146,7 +164,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         if (!clientName.EndsWith("Client", StringComparison.Ordinal))
             return null;
 
-        var configName = clientName[..^6] + "Config"; // Remove "Client", add "Config"
+        var configName = clientName.Substring(0, clientName.Length - 6) + "Config"; // Remove "Client", add "Config"
         var containingNamespace = clientSymbol.ContainingNamespace;
 
         // Look for the config type in the same namespace
@@ -160,7 +178,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         if (!clientName.EndsWith("Client", StringComparison.Ordinal))
             return null;
 
-        var interfaceName = "I" + clientName[..^6]; // Remove "Client", add "I" prefix
+        var interfaceName = "I" + clientName.Substring(0, clientName.Length - 6); // Remove "Client", add "I" prefix
         var containingNamespace = clientSymbol.ContainingNamespace;
 
         // Look for the interface in the same namespace
@@ -171,7 +189,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
     {
         var sourceBuilder = new StringBuilder();
 
-        // Generate file header
+        // Generate file header with single namespace
         sourceBuilder.AppendLine("// <auto-generated/>");
         sourceBuilder.AppendLine("// Generated by LocalStack.Client.Generators");
         sourceBuilder.AppendLine("#nullable enable");
@@ -179,19 +197,30 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         sourceBuilder.AppendLine("using System;");
         sourceBuilder.AppendLine("using System.Diagnostics.CodeAnalysis;");
         sourceBuilder.AppendLine("using System.Runtime.CompilerServices;");
+        sourceBuilder.AppendLine("using Amazon;");
         sourceBuilder.AppendLine("using Amazon.Runtime;");
+        sourceBuilder.AppendLine("using Amazon.Runtime.Internal;");
         sourceBuilder.AppendLine("using LocalStack.Client.Utils;");
         sourceBuilder.AppendLine();
+        sourceBuilder.AppendLine("namespace LocalStack.Client.Generated");
+        sourceBuilder.AppendLine("{");
 
         // Generate accessor for each client
-        foreach (var client in clients)
+        for (int i = 0; i < clients.Length; i++)
         {
-            GenerateAccessorClass(sourceBuilder, client);
-            sourceBuilder.AppendLine();
+            if (i > 0)
+            {
+                sourceBuilder.AppendLine();
+            }
+            GenerateAccessorClass(sourceBuilder, clients[i]);
         }
 
+        sourceBuilder.AppendLine();
+        
         // Generate module initializer
         GenerateModuleInitializer(sourceBuilder, clients);
+
+        sourceBuilder.AppendLine("}"); // Close namespace
 
         // Add the generated source
         context.AddSource("AwsAccessors.g.cs", SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
@@ -203,98 +232,112 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         var configTypeName = client.ConfigType.ToDisplayString();
         var accessorClassName = client.ClientType.Name + "_Accessor";
 
-        builder.AppendLine("namespace LocalStack.Client.Generated;");
-        builder.AppendLine();
-
-        // Add DynamicDependency attributes for trimming safety
-        builder.AppendLine($"[DynamicDependency(\"serviceMetadata\", typeof({clientTypeName}))]");
-        builder.AppendLine($"[DynamicDependency(\".ctor\", typeof({configTypeName}))]");
-        builder.AppendLine($"internal sealed class {accessorClassName} : IAwsAccessor");
-        builder.AppendLine("{");
+        builder.AppendLine($"    internal sealed class {accessorClassName} : IAwsAccessor");
+        builder.AppendLine("    {");
 
         // Type properties
-        builder.AppendLine($"    public Type ClientType => typeof({clientTypeName});");
-        builder.AppendLine($"    public Type ConfigType => typeof({configTypeName});");
+        builder.AppendLine($"        public Type ClientType => typeof({clientTypeName});");
+        builder.AppendLine($"        public Type ConfigType => typeof({configTypeName});");
         builder.AppendLine();
 
         // UnsafeAccessor methods
-        builder.AppendLine("    [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = \"serviceMetadata\")]");
-        builder.AppendLine($"    private static extern ref IServiceMetadata GetServiceMetadataField({clientTypeName}? instance);");
+        builder.AppendLine("        [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = \"serviceMetadata\")]");
+        builder.AppendLine($"        private static extern ref IServiceMetadata GetServiceMetadataField({clientTypeName}? instance);");
         builder.AppendLine();
 
-        builder.AppendLine("    [UnsafeAccessor(UnsafeAccessorKind.Constructor)]");
-        builder.AppendLine($"    private static extern {configTypeName} CreateConfig();");
+        builder.AppendLine("        [UnsafeAccessor(UnsafeAccessorKind.Constructor)]");
+        builder.AppendLine($"        private static extern {configTypeName} CreateConfig();");
         builder.AppendLine();
 
-        builder.AppendLine("    [UnsafeAccessor(UnsafeAccessorKind.Constructor)]");
-        builder.AppendLine($"    private static extern {clientTypeName} CreateClient(AWSCredentials credentials, {configTypeName} config);");
+        builder.AppendLine("        [UnsafeAccessor(UnsafeAccessorKind.Constructor)]");
+        builder.AppendLine($"        private static extern {clientTypeName} CreateClient(AWSCredentials credentials, {configTypeName} config);");
         builder.AppendLine();
 
-        // Interface implementations
-        builder.AppendLine("    public IServiceMetadata GetServiceMetadata()");
-        builder.AppendLine("        => GetServiceMetadataField(null);");
+        // Interface implementations - add DynamicDependency to the methods that need them
+        builder.AppendLine($"        [DynamicDependency(\"serviceMetadata\", typeof({clientTypeName}))]");
+        builder.AppendLine("        public IServiceMetadata GetServiceMetadata()");
+        builder.AppendLine("        {");
+        builder.AppendLine("            ref var metadata = ref GetServiceMetadataField(null);");
+        builder.AppendLine("            return metadata;");
+        builder.AppendLine("        }");
         builder.AppendLine();
 
-        builder.AppendLine("    public ClientConfig CreateClientConfig()");
-        builder.AppendLine("        => CreateConfig();");
+        builder.AppendLine($"        [DynamicDependency(\".ctor\", typeof({configTypeName}))]");
+        builder.AppendLine("        public ClientConfig CreateClientConfig()");
+        builder.AppendLine("            => CreateConfig();");
         builder.AppendLine();
 
-        builder.AppendLine("    public AmazonServiceClient CreateClient(AWSCredentials credentials, ClientConfig clientConfig)");
-        builder.AppendLine($"        => CreateClient(credentials, ({configTypeName})clientConfig);");
+        builder.AppendLine("        public AmazonServiceClient CreateClient(AWSCredentials credentials, ClientConfig clientConfig)");
+        builder.AppendLine($"            => CreateClient(credentials, ({configTypeName})clientConfig);");
         builder.AppendLine();
 
-        builder.AppendLine("    public void SetRegion(ClientConfig clientConfig, RegionEndpoint regionEndpoint)");
-        builder.AppendLine("    {");
-        builder.AppendLine("        // TODO: Generate UnsafeAccessor for region field");
-        builder.AppendLine("        throw new NotImplementedException(\"SetRegion will be implemented in next iteration\");");
+        builder.AppendLine("        public void SetRegion(ClientConfig clientConfig, RegionEndpoint regionEndpoint)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            // TODO: Generate UnsafeAccessor for region field");
+        builder.AppendLine("            throw new NotImplementedException(\"SetRegion will be implemented in next iteration\");");
+        builder.AppendLine("        }");
+        builder.AppendLine();
+
+        builder.AppendLine("        public bool TrySetForcePathStyle(ClientConfig clientConfig, bool value)");
+        builder.AppendLine("        {");
+        builder.AppendLine("            // TODO: Generate UnsafeAccessor for ForcePathStyle property");
+        builder.AppendLine("            return false; // Will be implemented in next iteration");
+        builder.AppendLine("        }");
+
         builder.AppendLine("    }");
-        builder.AppendLine();
-
-        builder.AppendLine("    public bool TrySetForcePathStyle(ClientConfig clientConfig, bool value)");
-        builder.AppendLine("    {");
-        builder.AppendLine("        // TODO: Generate UnsafeAccessor for ForcePathStyle property");
-        builder.AppendLine("        return false; // Will be implemented in next iteration");
-        builder.AppendLine("    }");
-
-        builder.AppendLine("}");
     }
 
     private static void GenerateModuleInitializer(StringBuilder builder, ImmutableArray<AwsClientInfo> clients)
     {
-        builder.AppendLine("namespace LocalStack.Client.Generated;");
-        builder.AppendLine();
-        builder.AppendLine("internal static class GeneratedModuleInitializer");
-        builder.AppendLine("{");
-        builder.AppendLine("    [ModuleInitializer]");
-        builder.AppendLine("    public static void RegisterGeneratedAccessors()");
+        builder.AppendLine("    internal static class GeneratedModuleInitializer");
         builder.AppendLine("    {");
+        builder.AppendLine("        [ModuleInitializer]");
+        builder.AppendLine("        public static void RegisterGeneratedAccessors()");
+        builder.AppendLine("        {");
 
         foreach (var client in clients)
         {
             var clientTypeName = client.ClientType.ToDisplayString();
             var accessorClassName = client.ClientType.Name + "_Accessor";
             
-            builder.AppendLine($"        AwsAccessorRegistry.Register<{clientTypeName}>(new {accessorClassName}());");
+            builder.AppendLine($"            AwsAccessorRegistry.Register<{clientTypeName}>(new {accessorClassName}());");
             
             if (client.ServiceInterface != null)
             {
                 var interfaceTypeName = client.ServiceInterface.ToDisplayString();
-                builder.AppendLine($"        AwsAccessorRegistry.RegisterInterface<{interfaceTypeName}, {clientTypeName}>();");
+                builder.AppendLine($"            AwsAccessorRegistry.RegisterInterface<{interfaceTypeName}, {clientTypeName}>();");
             }
         }
 
+        builder.AppendLine("        }");
         builder.AppendLine("    }");
-        builder.AppendLine("}");
     }
 }
 
 /// <summary>
 /// Information about a discovered AWS client and its related types.
 /// </summary>
-/// <param name="ClientType">The AWS service client type (e.g., AmazonS3Client)</param>
-/// <param name="ConfigType">The corresponding client configuration type (e.g., AmazonS3Config)</param>
-/// <param name="ServiceInterface">The service interface, if found (e.g., IAmazonS3)</param>
-internal sealed record AwsClientInfo(
-    INamedTypeSymbol ClientType,
-    INamedTypeSymbol ConfigType,
-    INamedTypeSymbol? ServiceInterface); 
+internal sealed class AwsClientInfo
+{
+    public AwsClientInfo(INamedTypeSymbol clientType, INamedTypeSymbol configType, INamedTypeSymbol? serviceInterface)
+    {
+        ClientType = clientType;
+        ConfigType = configType;
+        ServiceInterface = serviceInterface;
+    }
+
+    /// <summary>
+    /// The AWS service client type (e.g., AmazonS3Client)
+    /// </summary>
+    public INamedTypeSymbol ClientType { get; }
+
+    /// <summary>
+    /// The corresponding client configuration type (e.g., AmazonS3Config)
+    /// </summary>
+    public INamedTypeSymbol ConfigType { get; }
+
+    /// <summary>
+    /// The service interface, if found (e.g., IAmazonS3)
+    /// </summary>
+    public INamedTypeSymbol? ServiceInterface { get; }
+} 

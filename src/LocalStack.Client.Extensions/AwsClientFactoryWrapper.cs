@@ -8,6 +8,10 @@ public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
     private static readonly string ClientFactoryGenericTypeName = "Amazon.Extensions.NETCore.Setup.ClientFactory`1";
     private static readonly string CreateServiceClientMethodName = "CreateServiceClient";
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Creates generic ClientFactory<T> and invokes internal members via reflection"),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public AmazonServiceClient CreateServiceClient<TClient>(IServiceProvider provider, AWSOptions? awsOptions) where TClient : IAmazonService
     {
         Type? genericFactoryType = typeof(ConfigurationException).Assembly.GetType(ClientFactoryGenericTypeName);

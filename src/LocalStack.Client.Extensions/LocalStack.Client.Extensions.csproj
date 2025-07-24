@@ -25,6 +25,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup"/>
 
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" VersionOverride="3.1.32"/>

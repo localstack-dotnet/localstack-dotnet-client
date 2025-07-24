@@ -10,6 +10,10 @@ public class SessionReflection : ISessionReflection
         return ExtractServiceMetadata(clientType);
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Accesses private field 'serviceMetadata' with reflection; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public IServiceMetadata ExtractServiceMetadata(Type clientType)
     {
         if (clientType == null)
@@ -33,6 +37,10 @@ public class SessionReflection : ISessionReflection
         return CreateClientConfig(clientType);
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Uses Activator.CreateInstance on derived ClientConfig types; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public ClientConfig CreateClientConfig(Type clientType)
     {
         if (clientType == null)
@@ -46,6 +54,10 @@ public class SessionReflection : ISessionReflection
         return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType);
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Reflects over Config.RegionEndpoint property; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
     {
         if (amazonServiceClient == null)
@@ -59,6 +71,10 @@ public class SessionReflection : ISessionReflection
         regionEndpointProperty?.SetValue(amazonServiceClient.Config, RegionEndpoint.GetBySystemName(systemName));
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Reflects over ForcePathStyle property; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
     {
         if (clientConfig == null)

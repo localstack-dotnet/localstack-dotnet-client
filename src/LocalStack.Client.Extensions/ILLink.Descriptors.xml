@@ -1,0 +1,6 @@
+﻿<linker>
+    <assembly fullname="Amazon.Extensions.NETCore.Setup">
+        <!-- Preserve the whole generic type (safer and still small) -->
+        <type fullname="Amazon.Extensions.NETCore.Setup.ClientFactory`1" preserve="all" />
+    </assembly>
+</linker>

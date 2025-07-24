@@ -32,6 +32,27 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 - [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 - [.NET Framework 4.7.2 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 
+## ⚡ Native AOT & Trimming Status
+
+> **Heads‑up for `dotnet publish -p:PublishAot=true` / `PublishTrimmed=true` users**
+
+- **v2.0.0 GA ships without Native AOT support.**  
+  The current build still relies on reflection for some AWS SDK internals.  
+  - Public entry points that touch reflection are tagged with  
+    `[RequiresDynamicCode]` / `[RequiresUnreferencedCode]`.  
+  - You’ll see IL3050 / IL2026 warnings at compile time (promoted to errors in a strict AOT publish).
+- We ship the necessary linker descriptor with **`LocalStack.Client.Extensions`** to keep the private
+  `ClientFactory<T>` members alive. No extra steps on your side.
+- Until the reflection‑free, source‑generated path lands (work in progress in
+  [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) and tracked on
+  [roadmap #48](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/48)):
+  1. **Suppress** the warnings in your app *or* call the APIs that don’t rely on reflection.  
+  2. If you hit a runtime “missing member” error, ensure you’re on AWS SDK v4 **≥ 4.1.\*** and include the
+     concrete `AWSSDK.*` package you’re instantiating.
+
+> **Planned** – v2.1 will introduce an AOT‑friendly factory that avoids reflection entirely; once you
+> migrate to that API the warnings disappear.
+
 ### Build & Test Matrix
 
 | Category | Platform/Type | Status | Description |

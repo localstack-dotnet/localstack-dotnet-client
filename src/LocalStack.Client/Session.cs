@@ -15,6 +15,10 @@ public class Session : ISession
         _sessionReflection = sessionReflection;
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public TClient CreateClientByImplementation<TClient>(bool useServiceUrl = false) where TClient : AmazonServiceClient
     {
         Type clientType = typeof(TClient);
@@ -22,7 +26,17 @@ public class Session : ISession
         return (TClient)CreateClientByImplementation(clientType, useServiceUrl);
     }
 
-    public AmazonServiceClient CreateClientByImplementation(Type implType, bool useServiceUrl = false)
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
+    public AmazonServiceClient CreateClientByImplementation(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]Type implType,
+#else
+Type implType,
+#endif
+        bool useServiceUrl = false)
     {
         if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
@@ -55,6 +69,10 @@ public class Session : ISession
         return clientInstance;
     }
 
+#if NET8_0_OR_GREATER
+    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
+     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
+#endif
     public AmazonServiceClient CreateClientByInterface<TClient>(bool useServiceUrl = false) where TClient : IAmazonService
     {
         Type serviceInterfaceType = typeof(TClient);
@@ -62,7 +80,13 @@ public class Session : ISession
         return CreateClientByInterface(serviceInterfaceType, useServiceUrl);
     }
 
-    public AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType, bool useServiceUrl = false)
+    public AmazonServiceClient CreateClientByInterface(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]Type serviceInterfaceType,
+#else
+Type serviceInterfaceType,
+#endif
+        bool useServiceUrl = false)
     {
         if (serviceInterfaceType == null)
         {

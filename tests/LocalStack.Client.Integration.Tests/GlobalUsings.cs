@@ -1,6 +1,10 @@
 ﻿global using System;
 global using System.Diagnostics.CodeAnalysis;
+
+#if NETSTANDARD || NET472
 global using System.Reflection;
+#endif
+
 global using Amazon;
 global using Amazon.Account;
 global using Amazon.ACMPCA;
@@ -125,5 +129,9 @@ global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
+
+#if NET8_0_OR_GREATER
+global using LocalStack.Client.Utils;
+#endif
 
 global using Xunit;

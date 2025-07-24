@@ -1,4 +1,6 @@
-﻿using JsonSerializer = System.Text.Json.JsonSerializer;
+﻿using System.Reflection;
+
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using MessageAttributeValue = Amazon.SimpleNotificationService.Model.MessageAttributeValue;
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.SNS;
@@ -76,10 +78,12 @@ public abstract class BaseSnsScenario : BaseScenario
      InlineData("eu-west-2"), InlineData("sa-east-1")]
     public virtual async Task Multi_Region_Tests_Async(string systemName)
     {
-        var sessionReflection = ServiceProvider.GetRequiredService<ISessionReflection>();
         var amazonSimpleNotificationService = ServiceProvider.GetRequiredService<IAmazonSimpleNotificationService>();
 
-        sessionReflection.SetClientRegion((AmazonSimpleNotificationServiceClient)amazonSimpleNotificationService, systemName);
+        Type clientType = amazonSimpleNotificationService.Config.GetType();
+        const string configRegionEndpointName = nameof(amazonSimpleNotificationService.Config.RegionEndpoint);
+        PropertyInfo? regionEndpointProperty = clientType.GetProperty(configRegionEndpointName, BindingFlags.Public | BindingFlags.Instance);
+        regionEndpointProperty?.SetValue(amazonSimpleNotificationService.Config, RegionEndpoint.GetBySystemName(systemName));
 
         Assert.Equal(RegionEndpoint.GetBySystemName(systemName), amazonSimpleNotificationService.Config.RegionEndpoint);
 

@@ -1,12 +1,19 @@
-﻿#pragma warning disable S3011 // We need to use reflection to access private fields for service metadata
+#if NETFRAMEWORK || NETSTANDARD
+#pragma warning disable S3011 // We need to use reflection to access private fields for service metadata
+using System.Reflection;
+
 namespace LocalStack.Client.Utils;
 
-public class SessionReflection : ISessionReflection
+/// <summary>
+/// Legacy reflection-based implementation for .NET Framework and .NET Standard 2.0
+/// Uses traditional reflection to access private AWS SDK members.
+/// This class is excluded from .NET 8+ builds to ensure zero reflection code in AOT scenarios.
+/// </summary>
+public sealed class SessionReflection : ISessionReflection
 {
     public IServiceMetadata ExtractServiceMetadata<TClient>() where TClient : AmazonServiceClient
     {
         Type clientType = typeof(TClient);
-
         return ExtractServiceMetadata(clientType);
     }
 
@@ -22,14 +29,12 @@ public class SessionReflection : ISessionReflection
 
         #pragma warning disable CS8600,CS8603 // Not possible to get null value from this private field
         var serviceMetadata = (IServiceMetadata)serviceMetadataField.GetValue(null);
-
         return serviceMetadata;
     }
 
     public ClientConfig CreateClientConfig<TClient>() where TClient : AmazonServiceClient
     {
         Type clientType = typeof(TClient);
-
         return CreateClientConfig(clientType);
     }
 
@@ -43,7 +48,7 @@ public class SessionReflection : ISessionReflection
         ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(clientType);
         ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];
 
-        return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType);
+        return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType)!;
     }
 
     public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
@@ -74,7 +79,6 @@ public class SessionReflection : ISessionReflection
         }
 
         forcePathStyleProperty.SetValue(clientConfig, value);
-
         return true;
     }
 
@@ -100,3 +104,4 @@ public class SessionReflection : ISessionReflection
                          });
     }
 }
+#endif

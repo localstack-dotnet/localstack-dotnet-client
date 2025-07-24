@@ -32,6 +32,20 @@ internal static class AssertAmazonClient
 
         Assert.Equal(UseSsl, !clientConfig.UseHttp);
 
+#if NET8_0_OR_GREATER
+        // Modern approach: Use accessor-based TryGetForcePathStyle method for .NET 8+ builds
+        // This avoids reflection and provides AOT compatibility
+        System.Type clientType = amazonServiceClient.GetType();
+        if (AwsAccessorRegistry.TryGet(clientType, out IAwsAccessor? accessor) &&
+            accessor != null &&
+            clientConfig is ClientConfig config &&
+            accessor.TryGetForcePathStyle(config, out bool? forcePathStyle))
+        {
+            Assert.True(forcePathStyle.HasValue);
+            Assert.True(forcePathStyle.Value);
+        }
+#elif NETFRAMEWORK || NETSTANDARD
+        // Legacy approach: Use reflection for .NET Framework and .NET Standard builds
         PropertyInfo? forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);
 
         if (forcePathStyleProperty != null)
@@ -39,6 +53,9 @@ internal static class AssertAmazonClient
             bool useForcePathStyle = forcePathStyleProperty.GetValue(clientConfig) is bool && (bool)forcePathStyleProperty.GetValue(clientConfig)!;
             Assert.True(useForcePathStyle);
         }
+#else
+        throw new NotSupportedException("This library is only supported on .NET Framework, .NET Standard, or .NET 8.0 or higher.");
+#endif
 
         Assert.Equal(Constants.LocalStackHost, clientConfig.ProxyHost);
         Assert.Equal(Constants.EdgePort, clientConfig.ProxyPort);

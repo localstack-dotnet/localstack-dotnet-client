@@ -177,6 +177,7 @@ public class ServiceCollectionExtensionsTests
         Assert.IsType(factoryType, awsClientFactoryWrapper);
     }
 
+#if NETFRAMEWORK || NETSTANDARD
     [Fact]
     public void AddLocalStackServices_Should_Add_ISessionReflection_To_Container_As_SessionReflection()
     {
@@ -191,6 +192,7 @@ public class ServiceCollectionExtensionsTests
         Assert.NotNull(sessionReflection);
         Assert.IsType<SessionReflection>(sessionReflection);
     }
+#endif
 
     [Theory, InlineData(true, "eu-central-1"), InlineData(true, "us-west-1"), InlineData(true, "af-south-1"), InlineData(true, "ap-southeast-1"),
      InlineData(true, "ca-central-1"), InlineData(true, "eu-west-2"), InlineData(true, "sa-east-1"), InlineData(false, "eu-central-1"), InlineData(false, "us-west-1"),

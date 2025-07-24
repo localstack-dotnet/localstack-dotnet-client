@@ -1,4 +1,5 @@
-﻿namespace LocalStack.Client.Contracts;
+﻿#if NETFRAMEWORK || NETSTANDARD
+namespace LocalStack.Client.Contracts;
 
 public interface ISessionReflection
 {
@@ -14,3 +15,4 @@ public interface ISessionReflection
 
     void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName);
 }
+#endif

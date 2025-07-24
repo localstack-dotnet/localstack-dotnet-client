@@ -5,7 +5,6 @@ global using System.Collections.Generic;
 
 global using Amazon.Runtime;
 global using Amazon.Runtime.Internal;
-global using Amazon.Runtime.Internal.Auth;
 global using Amazon.Util.Internal;
 
 global using LocalStack.Client;

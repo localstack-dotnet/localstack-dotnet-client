@@ -20,7 +20,6 @@ global using LocalStack.Client.Extensions.Contracts;
 global using LocalStack.Client.Extensions.Exceptions;
 global using LocalStack.Client.Extensions.Tests.Extensions;
 global using LocalStack.Client.Options;
-global using LocalStack.Client.Utils;
 global using LocalStack.Client.Models;
 global using LocalStack.Tests.Common.Mocks.MockServiceClients;
 

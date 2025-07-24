@@ -1,4 +1,5 @@
-﻿namespace LocalStack.Client.Tests.SessionTests;
+﻿#if NETFRAMEWORK || NETSTANDARD
+namespace LocalStack.Client.Tests.SessionTests;
 
 public class SessionReflectionTests
 {
@@ -78,3 +79,4 @@ public class SessionReflectionTests
         Assert.Equal(RegionEndpoint.GetBySystemName(systemName), mockAmazonServiceClient.Config.RegionEndpoint);
     }
 }
+#endif

@@ -341,3 +341,7 @@ testrunner
 
 # Visual Studio Code options directory
 .vscode/
+
+internal-docs/
+
+copilot-instructions.md

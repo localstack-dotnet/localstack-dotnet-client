@@ -25,9 +25,23 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Net8OrAbove)' == 'true'">
+		<IsAotCompatible>true</IsAotCompatible>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+	</ItemGroup>
+
+	<!-- Source generator reference for .NET 8+ targets only -->
+	<ItemGroup Condition="'$(Net8OrAbove)' == 'true'">
+		<ProjectReference Include="..\LocalStack.Client.Generators\LocalStack.Client.Generators.csproj" 
+		                  OutputItemType="Analyzer"
+		                  ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" AfterTargets="PreBuildEvent">
@@ -50,9 +64,5 @@
 		</None>
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
-		<DefineConstants>NET472</DefineConstants>
-	</PropertyGroup>
 
 </Project>

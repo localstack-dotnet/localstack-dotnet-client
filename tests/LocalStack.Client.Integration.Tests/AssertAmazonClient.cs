@@ -1,6 +1,4 @@
-﻿using Type = System.Type;
-
-namespace LocalStack.Client.Integration.Tests;
+﻿namespace LocalStack.Client.Integration.Tests;
 
 internal static class AssertAmazonClient
 {
@@ -37,7 +35,7 @@ internal static class AssertAmazonClient
 #if NET8_0_OR_GREATER
         // Modern approach: Use accessor-based TryGetForcePathStyle method for .NET 8+ builds
         // This avoids reflection and provides AOT compatibility
-        Type clientType = amazonServiceClient.GetType();
+        System.Type clientType = amazonServiceClient.GetType();
         if (AwsAccessorRegistry.TryGet(clientType, out IAwsAccessor? accessor) &&
             accessor != null &&
             clientConfig is ClientConfig config &&

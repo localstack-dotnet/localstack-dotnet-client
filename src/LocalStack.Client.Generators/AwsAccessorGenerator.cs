@@ -1,13 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-
 namespace LocalStack.Client.Generators;
 
 /// <summary>
@@ -288,19 +278,19 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
     private static void GenerateSetRegionMethod(StringBuilder builder, AwsClientInfo client)
     {
         var configTypeName = client.ConfigType.ToDisplayString();
-        
+
         // Check if the config type has RegionEndpoint property (including base classes)
         var hasRegionEndpointProperty = GetAllProperties(client.ConfigType)
             .Any(p => p.Name == "RegionEndpoint" && p.SetMethod != null);
 
         builder.AppendLine("        public void SetRegion(ClientConfig clientConfig, RegionEndpoint regionEndpoint)");
         builder.AppendLine("        {");
-        
+
         // Always add null check (matches SessionReflectionLegacy behavior)
         builder.AppendLine("            if (clientConfig == null)");
         builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
         builder.AppendLine();
-        
+
         if (hasRegionEndpointProperty)
         {
             // Use public property approach - matches legacy: amazonServiceClient.Config.RegionEndpoint = ...
@@ -311,29 +301,29 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
             // Silent no-op if property doesn't exist (matches legacy behavior with optional chaining)
             builder.AppendLine($"            // RegionEndpoint property not available on {configTypeName}");
         }
-        
+
         builder.AppendLine("        }");
     }
 
     private static void GenerateForcePathStyleSetMethod(StringBuilder builder, AwsClientInfo client)
     {
         var configTypeName = client.ConfigType.ToDisplayString();
-        
+
         // Pure property discovery - matches SessionReflectionLegacy.SetForcePathStyle exactly
         var hasForcePathStyleProperty = GetAllProperties(client.ConfigType)
-            .Any(p => p.Name == "ForcePathStyle" && 
+            .Any(p => p.Name == "ForcePathStyle" &&
                      p.SetMethod?.DeclaredAccessibility == Accessibility.Public &&
-                     (p.Type.SpecialType == SpecialType.System_Boolean || 
+                     (p.Type.SpecialType == SpecialType.System_Boolean ||
                       p.Type.Name == "Boolean"));
 
         builder.AppendLine("        public bool TrySetForcePathStyle(ClientConfig clientConfig, bool value)");
         builder.AppendLine("        {");
-        
+
         // Always add null check (matches SessionReflectionLegacy behavior)
         builder.AppendLine("            if (clientConfig == null)");
         builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
         builder.AppendLine();
-        
+
         if (hasForcePathStyleProperty)
         {
             // Property exists - set it and return true (matches legacy)
@@ -345,29 +335,29 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
             // Property doesn't exist - return false (matches legacy: forcePathStyleProperty == null)
             builder.AppendLine("            return false;");
         }
-        
+
         builder.AppendLine("        }");
     }
 
     private static void GenerateForcePathStyleGetMethod(StringBuilder builder, AwsClientInfo client)
     {
         var configTypeName = client.ConfigType.ToDisplayString();
-        
+
         // Same property discovery logic as the set method
         var hasForcePathStyleProperty = GetAllProperties(client.ConfigType)
-            .Any(p => p.Name == "ForcePathStyle" && 
+            .Any(p => p.Name == "ForcePathStyle" &&
                      p.GetMethod?.DeclaredAccessibility == Accessibility.Public &&
-                     (p.Type.SpecialType == SpecialType.System_Boolean || 
+                     (p.Type.SpecialType == SpecialType.System_Boolean ||
                       p.Type.Name == "Boolean"));
 
         builder.AppendLine("        public bool TryGetForcePathStyle(ClientConfig clientConfig, out bool? value)");
         builder.AppendLine("        {");
-        
+
         // Always add null check
         builder.AppendLine("            if (clientConfig == null)");
         builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
         builder.AppendLine();
-        
+
         if (hasForcePathStyleProperty)
         {
             // Property exists - get its value and return true
@@ -380,7 +370,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
             builder.AppendLine("            value = null;");
             builder.AppendLine("            return false;");
         }
-        
+
         builder.AppendLine("        }");
     }
 

@@ -3,7 +3,6 @@ global using System.Collections.Generic;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Linq;
-global using System.Reflection;
 global using System.Runtime.Serialization;
 
 global using Amazon;
@@ -19,8 +18,10 @@ global using LocalStack.Client.Utils;
 
 #pragma warning disable MA0048 // File name must match type name
 #if NETSTANDARD || NET472
+global using System.Reflection;
 namespace System.Runtime.CompilerServices
 {
+    using System.Reflection;
     using System.ComponentModel;
     /// <summary>
     /// Reserved to be used by the compiler for tracking metadata.

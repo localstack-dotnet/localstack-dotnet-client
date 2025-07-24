@@ -31,14 +31,10 @@ global using Amazon.SimpleNotificationService.Model;
 
 global using AutoFixture;
 
-global using DotNet.Testcontainers.Builders;
-
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Converters;
 
 global using LocalStack.Client.Extensions;
-global using LocalStack.Client.Enums;
-global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Extensions.Tests.Extensions;
 global using LocalStack.Client.Functional.Tests.CloudFormation;
 global using LocalStack.Client.Functional.Tests.Fixtures;
@@ -53,10 +49,12 @@ global using Testcontainers.LocalStack;
 global using Xunit;
 
 #pragma warning disable MA0048 // File name must match type name
-#if NETCOREAPP
+#if NETSTANDARD || NET472
 namespace System.Runtime.CompilerServices
 {
     using System.ComponentModel;
+    using System.Reflection;
+
     /// <summary>
     /// Reserved to be used by the compiler for tracking metadata.
     /// This class should not be used by developers in source code.

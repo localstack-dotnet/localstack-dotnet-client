@@ -11,7 +11,6 @@ global using Amazon.S3.Transfer;
 global using LocalStack.Client;
 global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Options;
-global using LocalStack.Client.Utils;
 
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

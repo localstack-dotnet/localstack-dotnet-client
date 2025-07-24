@@ -25,7 +25,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
+        <!-- Root descriptor lives at package root for easy path reference -->
+        <None Include="ILLink.Descriptors.xml" Pack="true" PackagePath="" />
+
+        <!-- The transitive props goes under buildTransitive -->
+        <None Include="buildTransitive\\localstack.extensions.trimming.props"
+              Pack="true"
+              PackagePath="buildTransitive\\" />
     </ItemGroup>
 
     <ItemGroup>

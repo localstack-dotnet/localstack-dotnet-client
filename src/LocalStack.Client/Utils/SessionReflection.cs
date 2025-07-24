@@ -14,7 +14,12 @@ public class SessionReflection : ISessionReflection
     [RequiresDynamicCode("Accesses private field 'serviceMetadata' with reflection; not safe for Native AOT."),
      RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
 #endif
-    public IServiceMetadata ExtractServiceMetadata(Type clientType)
+    public IServiceMetadata ExtractServiceMetadata(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields)]
+#endif
+        Type clientType
+        )
     {
         if (clientType == null)
         {
@@ -41,7 +46,13 @@ public class SessionReflection : ISessionReflection
     [RequiresDynamicCode("Uses Activator.CreateInstance on derived ClientConfig types; not safe for Native AOT."),
      RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
 #endif
-    public ClientConfig CreateClientConfig(Type clientType)
+    public ClientConfig CreateClientConfig(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+#endif
+        Type clientType
+
+        )
     {
         if (clientType == null)
         {
@@ -58,7 +69,12 @@ public class SessionReflection : ISessionReflection
     [RequiresDynamicCode("Reflects over Config.RegionEndpoint property; not safe for Native AOT."),
      RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
 #endif
-    public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
+    public void SetClientRegion(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+#endif
+        AmazonServiceClient amazonServiceClient,
+        string systemName)
     {
         if (amazonServiceClient == null)
         {
@@ -75,7 +91,12 @@ public class SessionReflection : ISessionReflection
     [RequiresDynamicCode("Reflects over ForcePathStyle property; not safe for Native AOT."),
      RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
 #endif
-    public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
+    public bool SetForcePathStyle(
+#if NET8_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
+#endif
+        ClientConfig clientConfig,
+        bool value = true)
     {
         if (clientConfig == null)
         {

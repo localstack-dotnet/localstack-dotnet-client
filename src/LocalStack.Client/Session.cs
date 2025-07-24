@@ -32,10 +32,9 @@ public class Session : ISession
 #endif
     public AmazonServiceClient CreateClientByImplementation(
 #if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]Type implType,
-#else
-Type implType,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]
 #endif
+        Type implType,
         bool useServiceUrl = false)
     {
         if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
@@ -82,10 +81,9 @@ Type implType,
 
     public AmazonServiceClient CreateClientByInterface(
 #if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]Type serviceInterfaceType,
-#else
-Type serviceInterfaceType,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]
 #endif
+        Type serviceInterfaceType,
         bool useServiceUrl = false)
     {
         if (serviceInterfaceType == null)

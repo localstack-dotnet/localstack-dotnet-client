@@ -1,5 +1,8 @@
 ﻿namespace LocalStack.Client.Options;
 
+#if NET8_0_OR_GREATER
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
+#endif
 public class SessionOptions : ISessionOptions
 {
     public SessionOptions()

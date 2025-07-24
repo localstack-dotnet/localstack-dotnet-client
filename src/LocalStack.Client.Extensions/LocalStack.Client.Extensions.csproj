@@ -25,14 +25,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- Root descriptor lives at package root for easy path reference -->
-        <None Include="ILLink.Descriptors.xml" Pack="true" PackagePath="" />
+        <!-- Root descriptor at package root -->
+        <None Include="ILLink.Descriptors.xml"
+              Pack="true"
+              PackagePath="" />
 
-        <!-- The transitive props goes under buildTransitive -->
-        <None Include="buildTransitive\\localstack.extensions.trimming.props"
+        <!-- Transitive props goes into buildTransitive folder -->
+        <None Include="buildTransitive\\LocalStack.Client.Extensions.props"
               Pack="true"
               PackagePath="buildTransitive\\" />
     </ItemGroup>
+
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup"/>

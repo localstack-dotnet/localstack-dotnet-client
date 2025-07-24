@@ -1,0 +1,9 @@
+<Project>
+    <!-- Auto‑inject the descriptor when trimming or AOT is enabled -->
+    <ItemGroup>
+        <TrimmerRootDescriptor Include="ILLink.Descriptors.xml"
+                               Condition=" '$(EnableAotAnalyzer)' == 'true'
+                                     Or '$(PublishTrimmed)'   == 'true'
+                                     Or '$(PublishAot)'       == 'true' " />
+    </ItemGroup>
+</Project>

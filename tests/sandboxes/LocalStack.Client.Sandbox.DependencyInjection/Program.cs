@@ -38,14 +38,12 @@ collection.AddTransient<IConfig, Config>(provider =>
 
               return new Config(options);
           })
-          .AddSingleton<ISessionReflection, SessionReflection>()
           .AddSingleton<ISession, Session>(provider =>
           {
               SessionOptions sessionOptions = provider.GetRequiredService<IOptions<SessionOptions>>().Value;
               var config = provider.GetRequiredService<IConfig>();
-              var sessionReflection = provider.GetRequiredService<ISessionReflection>();
 
-              return new Session(sessionOptions, config, sessionReflection);
+              return new Session(sessionOptions, config);
           })
           .AddTransient<IAmazonS3>(provider =>
           {

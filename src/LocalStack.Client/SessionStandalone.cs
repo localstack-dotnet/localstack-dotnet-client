@@ -27,9 +27,16 @@ public class SessionStandalone : ISessionStandalone
     {
         ISessionOptions sessionOptions = _sessionOptions ?? new SessionOptions();
         IConfig config = new Config(_configOptions ?? new ConfigOptions());
+
+#if NETFRAMEWORK || NETSTANDARD
         ISessionReflection sessionReflection = new SessionReflection();
 
         return new Session(sessionOptions, config, sessionReflection);
+#elif NET8_0_OR_GREATER
+        return new Session(sessionOptions, config);
+#else
+        throw new NotSupportedException("This library is only supported on .NET Framework, .NET Standard, and .NET 8.0 and above.");
+#endif
     }
 
     public static ISessionStandalone Init()

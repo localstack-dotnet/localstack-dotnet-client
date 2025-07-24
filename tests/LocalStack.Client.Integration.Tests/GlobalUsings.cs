@@ -125,5 +125,6 @@ global using LocalStack.Client.Contracts;
 global using LocalStack.Client.Exceptions;
 global using LocalStack.Client.Models;
 global using LocalStack.Client.Options;
+global using LocalStack.Client.Utils;
 
 global using Xunit;

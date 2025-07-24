@@ -35,13 +35,13 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(generationInput, (spc, input) =>
         {
             var (isNet8Plus, clients) = input;
-            
+
             // Always emit diagnostics for debugging
             spc.ReportDiagnostic(Diagnostic.Create(
                 DiagnosticDescriptors.AwsClientsGenerated,
                 Location.None,
                 $"Generator running: .NET8+ = {isNet8Plus}, Found {clients.Length} potential clients"));
-            
+
             // Only proceed if .NET 8+
             if (!isNet8Plus)
             {
@@ -51,7 +51,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
                     "Skipping generation - not .NET 8+"));
                 return;
             }
-                
+
             if (clients.IsDefaultOrEmpty)
             {
                 // Emit diagnostic: No AWS clients found
@@ -75,7 +75,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         // Check for .NET 8+ via predefined preprocessor symbols
         if (compilation.Options is not CSharpCompilationOptions options)
             return false;
-            
+
         // Try to get preprocessor symbols via reflection since the property might not be available in all versions
         var preprocessorSymbols = GetPreprocessorSymbols(options);
         return preprocessorSymbols.Contains("NET8_0_OR_GREATER", StringComparer.Ordinal);
@@ -87,7 +87,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         var property = options.GetType().GetProperty("PreprocessorSymbolNames");
         if (property?.GetValue(options) is IEnumerable<string> symbols)
             return symbols;
-            
+
         // Fallback: assume .NET 8+ since generator only runs on modern frameworks
         return new[] { "NET8_0_OR_GREATER" };
     }
@@ -133,7 +133,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
                 {
                     // Find the corresponding service interface
                     var serviceInterface = FindServiceInterface(typeSymbol);
-                    
+
                     yield return new AwsClientInfo(
                         clientType: typeSymbol,
                         configType: configType,
@@ -216,7 +216,7 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         }
 
         sourceBuilder.AppendLine();
-        
+
         // Generate module initializer
         GenerateModuleInitializer(sourceBuilder, clients);
 
@@ -236,8 +236,8 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         builder.AppendLine("    {");
 
         // Type properties
-        builder.AppendLine($"        public Type ClientType => typeof({clientTypeName});");
-        builder.AppendLine($"        public Type ConfigType => typeof({configTypeName});");
+        builder.AppendLine($"        public System.Type ClientType => typeof({clientTypeName});");
+        builder.AppendLine($"        public System.Type ConfigType => typeof({configTypeName});");
         builder.AppendLine();
 
         // UnsafeAccessor methods
@@ -271,20 +271,133 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         builder.AppendLine($"            => CreateClient(credentials, ({configTypeName})clientConfig);");
         builder.AppendLine();
 
+        // Generate SetRegion implementation
+        GenerateSetRegionMethod(builder, client);
+        builder.AppendLine();
+
+        // Generate TrySetForcePathStyle implementation
+        GenerateForcePathStyleSetMethod(builder, client);
+        builder.AppendLine();
+
+        // Generate TryGetForcePathStyle implementation
+        GenerateForcePathStyleGetMethod(builder, client);
+
+        builder.AppendLine("    }");
+    }
+
+    private static void GenerateSetRegionMethod(StringBuilder builder, AwsClientInfo client)
+    {
+        var configTypeName = client.ConfigType.ToDisplayString();
+        
+        // Check if the config type has RegionEndpoint property (including base classes)
+        var hasRegionEndpointProperty = GetAllProperties(client.ConfigType)
+            .Any(p => p.Name == "RegionEndpoint" && p.SetMethod != null);
+
         builder.AppendLine("        public void SetRegion(ClientConfig clientConfig, RegionEndpoint regionEndpoint)");
         builder.AppendLine("        {");
-        builder.AppendLine("            // TODO: Generate UnsafeAccessor for region field");
-        builder.AppendLine("            throw new NotImplementedException(\"SetRegion will be implemented in next iteration\");");
-        builder.AppendLine("        }");
+        
+        // Always add null check (matches SessionReflectionLegacy behavior)
+        builder.AppendLine("            if (clientConfig == null)");
+        builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
         builder.AppendLine();
+        
+        if (hasRegionEndpointProperty)
+        {
+            // Use public property approach - matches legacy: amazonServiceClient.Config.RegionEndpoint = ...
+            builder.AppendLine($"            (({configTypeName})clientConfig).RegionEndpoint = regionEndpoint;");
+        }
+        else
+        {
+            // Silent no-op if property doesn't exist (matches legacy behavior with optional chaining)
+            builder.AppendLine($"            // RegionEndpoint property not available on {configTypeName}");
+        }
+        
+        builder.AppendLine("        }");
+    }
+
+    private static void GenerateForcePathStyleSetMethod(StringBuilder builder, AwsClientInfo client)
+    {
+        var configTypeName = client.ConfigType.ToDisplayString();
+        
+        // Pure property discovery - matches SessionReflectionLegacy.SetForcePathStyle exactly
+        var hasForcePathStyleProperty = GetAllProperties(client.ConfigType)
+            .Any(p => p.Name == "ForcePathStyle" && 
+                     p.SetMethod?.DeclaredAccessibility == Accessibility.Public &&
+                     (p.Type.SpecialType == SpecialType.System_Boolean || 
+                      p.Type.Name == "Boolean"));
 
         builder.AppendLine("        public bool TrySetForcePathStyle(ClientConfig clientConfig, bool value)");
         builder.AppendLine("        {");
-        builder.AppendLine("            // TODO: Generate UnsafeAccessor for ForcePathStyle property");
-        builder.AppendLine("            return false; // Will be implemented in next iteration");
+        
+        // Always add null check (matches SessionReflectionLegacy behavior)
+        builder.AppendLine("            if (clientConfig == null)");
+        builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
+        builder.AppendLine();
+        
+        if (hasForcePathStyleProperty)
+        {
+            // Property exists - set it and return true (matches legacy)
+            builder.AppendLine($"            (({configTypeName})clientConfig).ForcePathStyle = value;");
+            builder.AppendLine("            return true;");
+        }
+        else
+        {
+            // Property doesn't exist - return false (matches legacy: forcePathStyleProperty == null)
+            builder.AppendLine("            return false;");
+        }
+        
         builder.AppendLine("        }");
+    }
 
-        builder.AppendLine("    }");
+    private static void GenerateForcePathStyleGetMethod(StringBuilder builder, AwsClientInfo client)
+    {
+        var configTypeName = client.ConfigType.ToDisplayString();
+        
+        // Same property discovery logic as the set method
+        var hasForcePathStyleProperty = GetAllProperties(client.ConfigType)
+            .Any(p => p.Name == "ForcePathStyle" && 
+                     p.GetMethod?.DeclaredAccessibility == Accessibility.Public &&
+                     (p.Type.SpecialType == SpecialType.System_Boolean || 
+                      p.Type.Name == "Boolean"));
+
+        builder.AppendLine("        public bool TryGetForcePathStyle(ClientConfig clientConfig, out bool? value)");
+        builder.AppendLine("        {");
+        
+        // Always add null check
+        builder.AppendLine("            if (clientConfig == null)");
+        builder.AppendLine("                throw new ArgumentNullException(nameof(clientConfig));");
+        builder.AppendLine();
+        
+        if (hasForcePathStyleProperty)
+        {
+            // Property exists - get its value and return true
+            builder.AppendLine($"            value = (({configTypeName})clientConfig).ForcePathStyle;");
+            builder.AppendLine("            return true;");
+        }
+        else
+        {
+            // Property doesn't exist - set value to null and return false
+            builder.AppendLine("            value = null;");
+            builder.AppendLine("            return false;");
+        }
+        
+        builder.AppendLine("        }");
+    }
+
+    private static IEnumerable<IPropertySymbol> GetAllProperties(INamedTypeSymbol typeSymbol)
+    {
+        var type = typeSymbol;
+        while (type != null && type.SpecialType != SpecialType.System_Object)
+        {
+            foreach (var member in type.GetMembers())
+            {
+                if (member is IPropertySymbol property)
+                {
+                    yield return property;
+                }
+            }
+            type = type.BaseType;
+        }
     }
 
     private static void GenerateModuleInitializer(StringBuilder builder, ImmutableArray<AwsClientInfo> clients)
@@ -299,9 +412,9 @@ public sealed class AwsAccessorGenerator : IIncrementalGenerator
         {
             var clientTypeName = client.ClientType.ToDisplayString();
             var accessorClassName = client.ClientType.Name + "_Accessor";
-            
+
             builder.AppendLine($"            AwsAccessorRegistry.Register<{clientTypeName}>(new {accessorClassName}());");
-            
+
             if (client.ServiceInterface != null)
             {
                 var interfaceTypeName = client.ServiceInterface.ToDisplayString();
@@ -340,4 +453,4 @@ internal sealed class AwsClientInfo
     /// The service interface, if found (e.g., IAmazonS3)
     /// </summary>
     public INamedTypeSymbol? ServiceInterface { get; }
-} 
+}

@@ -8,8 +8,8 @@ namespace LocalStack.Client.Utils;
 /// </summary>
 public static class AwsAccessorRegistry
 {
-    private static readonly ConcurrentDictionary<Type, IAwsAccessor> _accessors = new();
-    private static readonly ConcurrentDictionary<Type, Type> _interfaceToClientMap = new();
+    private static readonly ConcurrentDictionary<Type, IAwsAccessor> Accessors = new();
+    private static readonly ConcurrentDictionary<Type, Type> InterfaceToClientMap = new();
 
     /// <summary>
     /// Registers an accessor for a specific AWS client type.
@@ -17,7 +17,7 @@ public static class AwsAccessorRegistry
     /// </summary>
     public static void Register<TClient>(IAwsAccessor accessor) where TClient : AmazonServiceClient
     {
-        _accessors.TryAdd(typeof(TClient), accessor);
+        Accessors.TryAdd(typeof(TClient), accessor);
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public static class AwsAccessorRegistry
         where TInterface : IAmazonService
         where TClient : AmazonServiceClient
     {
-        _interfaceToClientMap.TryAdd(typeof(TInterface), typeof(TClient));
+        InterfaceToClientMap.TryAdd(typeof(TInterface), typeof(TClient));
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public static class AwsAccessorRegistry
             throw new ArgumentNullException(nameof(clientType));
         }
 
-        if (_accessors.TryGetValue(clientType, out var accessor))
+        if (Accessors.TryGetValue(clientType, out var accessor))
         {
             return accessor;
         }
@@ -74,7 +74,7 @@ public static class AwsAccessorRegistry
             throw new ArgumentNullException(nameof(interfaceType));
         }
 
-        if (!_interfaceToClientMap.TryGetValue(interfaceType, out var clientType))
+        if (!InterfaceToClientMap.TryGetValue(interfaceType, out var clientType))
         {
             throw new NotSupportedException(
                 $"No AWS client type registered for interface '{interfaceType.FullName}'. " +
@@ -90,24 +90,24 @@ public static class AwsAccessorRegistry
     /// </summary>
     public static bool TryGet(Type clientType, out IAwsAccessor? accessor)
     {
-        return _accessors.TryGetValue(clientType, out accessor);
+        return Accessors.TryGetValue(clientType, out accessor);
     }
 
     /// <summary>
     /// Gets the number of registered accessors.
     /// Used for diagnostics and testing.
     /// </summary>
-    public static int Count => _accessors.Count;
+    public static int Count => Accessors.Count;
 
     /// <summary>
     /// Gets all registered client types.
     /// Used for diagnostics and testing.
     /// </summary>
-    public static IEnumerable<Type> RegisteredClientTypes => _accessors.Keys;
+    public static IEnumerable<Type> RegisteredClientTypes => Accessors.Keys;
 
     /// <summary>
     /// Gets all registered interface types.
     /// Used for diagnostics and testing.
     /// </summary>
-    public static IEnumerable<Type> RegisteredInterfaceTypes => _interfaceToClientMap.Keys;
+    public static IEnumerable<Type> RegisteredInterfaceTypes => InterfaceToClientMap.Keys;
 }

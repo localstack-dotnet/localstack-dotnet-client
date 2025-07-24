@@ -188,8 +188,20 @@ public static class ServiceCollectionExtensions
                     ConfigOptions options = provider.GetRequiredService<IOptions<ConfigOptions>>().Value;
 
                     return new Config(options);
-                })
-                .AddSingleton<ISessionReflection, SessionReflection>()
+                });
+
+#if NET8_0_OR_GREATER
+        // Modern: Pure accessor-based, no reflection dependency
+        services.AddSingleton<ISession, Session>(provider =>
+        {
+            SessionOptions sessionOptions = provider.GetRequiredService<IOptions<SessionOptions>>().Value;
+            var config = provider.GetRequiredService<IConfig>();
+
+            return new Session(sessionOptions, config);
+        });
+#elif NETFRAMEWORK || NETSTANDARD
+        // Legacy: Reflection-based implementation
+        services.AddSingleton<ISessionReflection, SessionReflection>()
                 .AddSingleton<ISession, Session>(provider =>
                 {
                     SessionOptions sessionOptions = provider.GetRequiredService<IOptions<SessionOptions>>().Value;
@@ -197,8 +209,12 @@ public static class ServiceCollectionExtensions
                     var sessionReflection = provider.GetRequiredService<ISessionReflection>();
 
                     return new Session(sessionOptions, config, sessionReflection);
-                })
-                .AddSingleton<IAwsClientFactoryWrapper, AwsClientFactoryWrapper>();
+                });
+#else
+        throw new NotSupportedException("This library is only supported on .NET Framework, .NET Standard, or .NET 8.0 or higher.");
+#endif
+
+        services.AddSingleton<IAwsClientFactoryWrapper, AwsClientFactoryWrapper>();
 
         return services;
     }

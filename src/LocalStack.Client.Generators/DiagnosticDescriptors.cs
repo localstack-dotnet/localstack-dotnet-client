@@ -17,7 +17,7 @@ internal static class DiagnosticDescriptors
         description: "The LocalStack source generator could not find any AWS service client types to generate accessors for. This is expected if no AWS SDK packages are referenced.");
 
     public static readonly DiagnosticDescriptor MissingConfigType = new(
-        id: "LSG002", 
+        id: "LSG002",
         title: "AWS client configuration type not found",
         messageFormat: "Could not find configuration type for AWS client '{0}'. Expected type '{1}' in the same namespace.",
         category: Category,
@@ -42,4 +42,4 @@ internal static class DiagnosticDescriptors
         defaultSeverity: DiagnosticSeverity.Info,
         isEnabledByDefault: true,
         description: "Successfully generated UnsafeAccessor implementations for the discovered AWS clients.");
-} 
+}

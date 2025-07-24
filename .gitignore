@@ -343,3 +343,5 @@ testrunner
 .vscode/
 
 internal-docs/
+
+copilot-instructions.md

@@ -5,9 +5,19 @@
 		<NoWarn>$(NoWarn);CA1707;MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Net8OrAbove)' == 'true'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0'">
 		<IsAotCompatible>true</IsAotCompatible>
+		
+		<!-- Enable viewing generated source output for debugging -->
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<CompilerGeneratedFilesOutputPath>$(BaseIntermediateOutputPath)Generated</CompilerGeneratedFilesOutputPath>
 	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0' OR '$(TargetFramework)' == 'net9.0'">
+		<ProjectReference Include="..\..\src\LocalStack.Client.Generators\LocalStack.Client.Generators.csproj" 
+		                  OutputItemType="Analyzer"
+		                  ReferenceOutputAssembly="false" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" />

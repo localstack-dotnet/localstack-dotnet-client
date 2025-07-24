@@ -63,8 +63,7 @@ static void TestClientCreation()
     var sessionOptions = new SessionOptions("us-east-1");
     var configOptions = new ConfigOptions("localhost.localstack.cloud", false, false, 4566);
     var config = new Config(configOptions);
-    var sessionReflection = new SessionReflection();
-    var session = new Session(sessionOptions, config, sessionReflection);
+    var session = new Session(sessionOptions, config);
 
     // Test creating clients by implementation type
     Console.WriteLine("   Testing CreateClientByImplementation<T>()...");
@@ -100,8 +99,7 @@ static void TestInterfaceMapping()
     var sessionOptions = new SessionOptions("us-east-1");
     var configOptions = new ConfigOptions("localhost.localstack.cloud", false, false, 4566);
     var config = new Config(configOptions);
-    var sessionReflection = new SessionReflection();
-    var session = new Session(sessionOptions, config, sessionReflection);
+    var session = new Session(sessionOptions, config);
 
     // Test creating clients by interface type
     Console.WriteLine("   Testing CreateClientByInterface<T>()...");

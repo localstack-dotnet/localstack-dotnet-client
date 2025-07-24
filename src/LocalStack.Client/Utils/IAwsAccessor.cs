@@ -45,4 +45,11 @@ public interface IAwsAccessor
     /// Returns true if the property exists and was set, false otherwise.
     /// </summary>
     bool TrySetForcePathStyle(ClientConfig clientConfig, bool value);
+
+    /// <summary>
+    /// Attempts to get the ForcePathStyle property value from the client configuration.
+    /// Returns true if the property exists and the value was retrieved, false otherwise.
+    /// When false is returned, the value parameter will be null.
+    /// </summary>
+    bool TryGetForcePathStyle(ClientConfig clientConfig, out bool? value);
 }

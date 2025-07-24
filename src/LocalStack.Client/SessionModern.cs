@@ -1,20 +1,23 @@
-﻿#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type. - disabled because of it's not possible for this case
+#if NET8_0_OR_GREATER
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type. - disabled because of it's not possible for this case
 #pragma warning disable CS8603 // Possible null reference return. - disabled because of it's not possible for this case
-using LocalStack.Client.Utils;
+#pragma warning disable MA0048 // File name must match type name
 
 namespace LocalStack.Client;
 
+/// <summary>
+/// Modern Session implementation for .NET 8+ using generated accessors.
+/// Zero reflection dependencies - pure AOT compatibility.
+/// </summary>
 public class Session : ISession
 {
     private readonly IConfig _config;
     private readonly ISessionOptions _sessionOptions;
-    private readonly ISessionReflection _sessionReflection;
 
-    public Session(ISessionOptions sessionOptions, IConfig config, ISessionReflection sessionReflection)
+    public Session(ISessionOptions sessionOptions, IConfig config)
     {
         _sessionOptions = sessionOptions;
         _config = config;
-        _sessionReflection = sessionReflection;
     }
 
     public TClient CreateClientByImplementation<TClient>(bool useServiceUrl = false) where TClient : AmazonServiceClient
@@ -24,15 +27,17 @@ public class Session : ISession
             throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
         }
 
-        IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata<TClient>();
+        // Modern: Direct accessor-based approach - zero reflection
+        var accessor = AwsAccessorRegistry.Get(typeof(TClient));
+        IServiceMetadata serviceMetadata = accessor.GetServiceMetadata();
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
                                                 throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
 
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
-        ClientConfig clientConfig = _sessionReflection.CreateClientConfig<TClient>();
+        ClientConfig clientConfig = accessor.CreateClientConfig();
 
         clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
-        _sessionReflection.SetForcePathStyle(clientConfig);
+        accessor.TrySetForcePathStyle(clientConfig, true);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
@@ -42,18 +47,10 @@ public class Session : ISession
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
-            clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
+            accessor.SetRegion(clientConfig, RegionEndpoint.GetBySystemName(_sessionOptions.RegionName));
         }
 
-#if NET8_0_OR_GREATER
-        // Modern: Use accessor-based client creation for AOT compatibility
-        var accessor = AwsAccessorRegistry.Get(typeof(TClient));
         var clientInstance = (TClient)accessor.CreateClient(awsCredentials, clientConfig);
-#else
-        // Legacy: Use reflection-based client creation
-        var clientInstance = (TClient)Activator.CreateInstance(typeof(TClient), awsCredentials, clientConfig);
-#endif
-
         return clientInstance;
     }
 
@@ -64,15 +61,17 @@ public class Session : ISession
             throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
         }
 
-        IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata(implType);
+        // Modern: Direct accessor-based approach - zero reflection
+        var accessor = AwsAccessorRegistry.Get(implType);
+        IServiceMetadata serviceMetadata = accessor.GetServiceMetadata();
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
                                                 throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
 
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
-        ClientConfig clientConfig = _sessionReflection.CreateClientConfig(implType);
+        ClientConfig clientConfig = accessor.CreateClientConfig();
 
         clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
-        _sessionReflection.SetForcePathStyle(clientConfig);
+        accessor.TrySetForcePathStyle(clientConfig, true);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
@@ -82,11 +81,10 @@ public class Session : ISession
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
-            clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
+            accessor.SetRegion(clientConfig, RegionEndpoint.GetBySystemName(_sessionOptions.RegionName));
         }
 
-        var clientInstance = (AmazonServiceClient)Activator.CreateInstance(implType, awsCredentials, clientConfig);
-
+        var clientInstance = accessor.CreateClient(awsCredentials, clientConfig);
         return clientInstance;
     }
 
@@ -97,10 +95,8 @@ public class Session : ISession
             throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
         }
 
-#if NET8_0_OR_GREATER
-        // Modern: Use registry-based interface-to-client mapping for AOT compatibility
+        // Modern: Direct registry-based interface-to-client mapping - zero reflection
         var accessor = AwsAccessorRegistry.GetByInterface<TClient>();
-        
         IServiceMetadata serviceMetadata = accessor.GetServiceMetadata();
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
                                                 throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
@@ -109,7 +105,7 @@ public class Session : ISession
         ClientConfig clientConfig = accessor.CreateClientConfig();
 
         clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
-        _sessionReflection.SetForcePathStyle(clientConfig);
+        accessor.TrySetForcePathStyle(clientConfig, true);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
@@ -119,16 +115,11 @@ public class Session : ISession
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
-            clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
+            accessor.SetRegion(clientConfig, RegionEndpoint.GetBySystemName(_sessionOptions.RegionName));
         }
 
         var client = accessor.CreateClient(awsCredentials, clientConfig);
         return client;
-#else
-        // Legacy: Use reflection-based interface-to-client mapping
-        Type serviceInterfaceType = typeof(TClient);
-        return CreateClientByInterface(serviceInterfaceType, useServiceUrl);
-#endif
     }
 
     public AmazonServiceClient CreateClientByInterface(Type serviceInterfaceType, bool useServiceUrl = false)
@@ -138,30 +129,22 @@ public class Session : ISession
             throw new ArgumentNullException(nameof(serviceInterfaceType));
         }
 
-        var clientTypeName = $"{serviceInterfaceType.Namespace}.{serviceInterfaceType.Name.Substring(1)}Client";
-        Type clientType = serviceInterfaceType.GetTypeInfo().Assembly.GetType(clientTypeName);
-
-        if (clientType == null)
-        {
-            throw new AmazonClientException($"Failed to find service client {clientTypeName} which implements {serviceInterfaceType.FullName}.");
-        }
-
         if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
             throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
         }
 
-        IServiceMetadata serviceMetadata = _sessionReflection.ExtractServiceMetadata(clientType);
-
+        // Modern: Direct registry-based interface-to-client mapping with Type parameter - zero reflection
+        var accessor = AwsAccessorRegistry.GetByInterface(serviceInterfaceType);
+        IServiceMetadata serviceMetadata = accessor.GetServiceMetadata();
         AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceMetadata.ServiceId) ??
                                                 throw new NotSupportedClientException($"{serviceMetadata.ServiceId} is not supported by this mock session.");
 
         AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
-
-        ClientConfig clientConfig = _sessionReflection.CreateClientConfig(clientType);
+        ClientConfig clientConfig = accessor.CreateClientConfig();
 
         clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
-        _sessionReflection.SetForcePathStyle(clientConfig);
+        accessor.TrySetForcePathStyle(clientConfig, true);
         clientConfig.ProxyHost = awsServiceEndpoint.Host;
         clientConfig.ProxyPort = awsServiceEndpoint.Port;
 
@@ -171,20 +154,11 @@ public class Session : ISession
         }
         else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
         {
-            clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
+            accessor.SetRegion(clientConfig, RegionEndpoint.GetBySystemName(_sessionOptions.RegionName));
         }
 
-        ConstructorInfo? constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
-
-        if (constructor == null)
-        {
-            var message = $"Service client {clientTypeName} missing a constructor with parameters AWSCredentials and {clientConfig.GetType().FullName}.";
-
-            throw new AmazonClientException(message);
-        }
-
-        var client = (AmazonServiceClient)constructor.Invoke(new object[] { awsCredentials, clientConfig });
-
+        var client = accessor.CreateClient(awsCredentials, clientConfig);
         return client;
     }
 }
+#endif

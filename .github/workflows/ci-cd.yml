@@ -7,7 +7,6 @@ on:
       - LICENSE
     branches:
       - "master"
-      - "feature/*"
   pull_request:
     paths-ignore:
       - "**.md"
@@ -124,8 +123,8 @@ jobs:
     needs: build-and-test
     if: |
       github.repository == 'localstack-dotnet/localstack-dotnet-client' &&
-      github.event_name == 'push' &&
-      (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/feature/'))
+      ((github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+       (github.event_name == 'pull_request' && startsWith(github.head_ref, 'feature/')))
     env:
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
@@ -186,7 +185,7 @@ jobs:
             --package-source github \
             --package-id LocalStack.Client \
             --use-directory-props-version true \
-            --branch-name ${{ github.ref_name }} \
+            --branch-name ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }} \
             --package-secret ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Prepare Extensions Project"
@@ -204,13 +203,13 @@ jobs:
             --package-source github \
             --package-id LocalStack.Client.Extensions \
             --use-directory-props-version true \
-            --branch-name ${{ github.ref_name }} \
+            --branch-name ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }} \
             --package-secret ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Upload Package Artifacts"
         uses: actions/upload-artifact@v4
         with:
-          name: "packages-${{ github.ref_name }}-${{ github.run_number }}"
+          name: "packages-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}-${{ github.run_number }}"
           path: |
             artifacts/*.nupkg
             artifacts/*.snupkg
@@ -221,7 +220,7 @@ jobs:
           echo "📦 Generating build summary..."
           ./build.sh --target workflow-summary \
             --use-directory-props-version true \
-            --branch-name ${{ github.ref_name }}
+            --branch-name ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
 
       - name: "Cleanup Configuration"
         if: always()

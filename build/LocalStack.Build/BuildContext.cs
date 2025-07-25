@@ -281,16 +281,16 @@ public sealed class BuildContext : FrostingContext
         string commitSha = GetGitCommitSha();
         string safeBranchName = BranchName.Replace('/', '-').Replace('_', '-');
 
-        // Simplified NuGet-compliant version format
+        // SemVer-compliant pre-release versioning
         if (BranchName == "master")
         {
-            // Nightly off main — use build metadata
-            return $"{baseVersion}+{buildDate}.{commitSha}";
+            // Master nightlies: 2.0.0-nightly.20250725.sha
+            return $"{baseVersion}-nightly.{buildDate}.{commitSha}";
         }
         else
         {
-            // Feature branch / preview line
-            return $"{baseVersion}.{safeBranchName}.{buildDate}.{commitSha}";
+            // Feature branches: 2.0.0-feature-name.20250725.sha  
+            return $"{baseVersion}-{safeBranchName}.{buildDate}.{commitSha}";
         }
     }
 

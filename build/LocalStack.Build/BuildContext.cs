@@ -284,13 +284,13 @@ public sealed class BuildContext : FrostingContext
         // Simplified NuGet-compliant version format
         if (BranchName == "master")
         {
-            // For master: 2.0.0-preview1-20240715-a1b2c3d
-            return $"{baseVersion}-{buildDate}-{commitSha}";
+            // Nightly off main — use build metadata
+            return $"{baseVersion}+{buildDate}.{commitSha}";
         }
         else
         {
-            // For feature branches: 2.0.0-preview1-feature-branch-20240715-a1b2c3d
-            return $"{baseVersion}-{safeBranchName}-{buildDate}-{commitSha}";
+            // Feature branch / preview line
+            return $"{baseVersion}.{safeBranchName}.{buildDate}.{commitSha}";
         }
     }
 

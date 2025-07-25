@@ -4,15 +4,47 @@ This document outlines the changes, updates, and important notes for the LocalSt
 
 See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
 
-### [v2.0.0-preview1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.0-preview1)
+## [v2.0.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.0)
 
-#### 1. Breaking Changes
+> **Heads‑up**: Native AOT is not yet supported in GA.  
+> Follow  [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) for the reflection‑free path planned for v2.1.
+
+### ✨ New features (since `v2.0.0‑preview1`)
+
+- **Added Endpoints from [Localstack Python Client](https://github.com/localstack/localstack-python-client) v2.9:**
+  - **Account Management**
+  - **Certificate Manager Private Certificate Authority (ACMPCA)**
+  - **Bedrock**
+  - **Cloud Control API**
+  - **Code Build**
+  - **Code Connections**
+  - **Code Deploy**
+  - **Code Pipeline**
+  - **Elastic Transcoder**
+  - **MemoryDB for Redis**
+  - **Shield**
+  - **Verified Permissions**
+
+### 🛠️ General
+
+- **Testing Compatibility:**
+  - Successfully tested against LocalStack versions:
+    - **v3.7.1**
+    - **v4.6.0**
+
+*See [`v2.0.0-preview1`](#v200-preview1) for the complete migration from v1.x and the AWS SDK v4 overhaul.*
+
+---
+
+## [v2.0.0-preview1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.0-preview1)
+
+### 1. Breaking Changes
 
 - **Framework Support Updates:**
   - **Deprecated** support for **.NET Framework 4.6.2**.
   - **Added** support for **.NET Framework 4.7.2** (required for AWS SDK v4 compatibility).
 
-#### 2. General
+### 2. General
 
 - **AWS SDK v4 Migration:**
   - **Complete migration** from AWS SDK for .NET v3 to v4.
@@ -33,7 +65,7 @@ See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/loc
     - **v3.7.1**
     - **v4.3.0**
 
-#### 3. Important Notes
+### 3. Important Notes
 
 - **Preview Release**: This is a preview release for early adopters and testing. See the [v2.0.0 Roadmap & Migration Guide](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45) for the complete migration plan.
 - **No API Changes**: LocalStack.NET public APIs remain unchanged. All changes are internal to support AWS SDK v4 compatibility.

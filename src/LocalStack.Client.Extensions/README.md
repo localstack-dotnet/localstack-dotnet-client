@@ -41,17 +41,48 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
   - Public entry points that touch reflection are tagged with  
     `[RequiresDynamicCode]` / `[RequiresUnreferencedCode]`.  
   - You’ll see IL3050 / IL2026 warnings at compile time (promoted to errors in a strict AOT publish).
-- We ship the necessary linker descriptor with **`LocalStack.Client.Extensions`** to keep the private
-  `ClientFactory<T>` members alive. No extra steps on your side.
-- Until the reflection‑free, source‑generated path lands (work in progress in
-  [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) and tracked on
+- We already ship a linker descriptor with **`LocalStack.Client.Extensions`**  
+  to keep the private `ClientFactory<T>` machinery alive. **Nothing to configure for that part.**
+- Until the reflection‑free, source‑generated path lands (work in progress in  
+  [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) and tracked on  
   [roadmap #48](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/48)):
-  1. **Suppress** the warnings in your app *or* call the APIs that don’t rely on reflection.  
-  2. If you hit a runtime “missing member” error, ensure you’re on AWS SDK v4 **≥ 4.1.\*** and include the
-     concrete `AWSSDK.*` package you’re instantiating.
+
+  1. **Suppress** the warnings in your app *or* call only the APIs that don’t rely on reflection.  
+  2. Add a tiny **service‑specific** linker descriptor for every `AWSSDK.*` package you reference  
+     (S3, DynamoDB, etc.). For example, for S3:
+
+     ```xml
+     <!-- ILLink.Descriptors.xml -->
+     <linker>
+       <assembly fullname="AWSSDK.S3">
+         <type fullname="Amazon.S3.AmazonS3Client" />
+         <type fullname="Amazon.S3.Internal.AmazonS3Metadata" />
+         <type fullname="Amazon.S3.AmazonS3Config" />
+       </assembly>
+
+       <!-- LocalStack options classes already carry [DAM] attributes,
+            but you can include them if you prefer explicit rules -->
+       <assembly fullname="LocalStack.Client">
+         <type fullname="LocalStack.Client.Options.LocalStackOptions" />
+         <type fullname="LocalStack.Client.Options.SessionOptions" />
+         <type fullname="LocalStack.Client.Options.ConfigOptions" />
+       </assembly>
+     </linker>
+     ```
+
+  3. Wire it into your project once:
+
+     ```xml
+     <ItemGroup>
+       <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
+     </ItemGroup>
+     ```
+
+  4. If you hit a runtime “missing member” error, ensure you’re on AWS SDK v4 **≥ 4.1.\*** and that
+     the concrete `AWSSDK.*` package you’re using is included in the descriptor above.
 
 > **Planned** – v2.1 will introduce an AOT‑friendly factory that avoids reflection entirely; once you
-> migrate to that API the warnings disappear.
+> migrate to that API these warnings and extra XML files go away.
 
 ### Build & Test Matrix
 

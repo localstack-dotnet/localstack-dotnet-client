@@ -1,9 +1,0 @@
-<Project>
-    <PropertyGroup>
-        <_LocalStackDescriptor>$(MSBuildThisFileDirectory)..\ILLink.Descriptors.xml</_LocalStackDescriptor>
-    </PropertyGroup>
-
-    <ItemGroup Condition=" '$(PublishTrimmed)' == 'true' Or '$(PublishAot)' == 'true' Or '$(EnableAotAnalyzer)' == 'true' ">
-        <TrimmerRootDescriptor Include="$(_LocalStackDescriptor)"/>
-    </ItemGroup>
-</Project>

@@ -25,24 +25,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- Root descriptor at package root -->
-        <None Include="ILLink.Descriptors.xml"
-              Pack="true"
-              PackagePath="" />
-
-        <!-- Transitive props goes into buildTransitive folder -->
-        <None Include="buildTransitive\\LocalStack.Client.Extensions.props"
-              Pack="true"
-              PackagePath="buildTransitive\\" />
+        <EmbeddedResource Include="ILLink.Descriptors.xml" LogicalName="ILLink.Descriptors.xml" />
     </ItemGroup>
-
 
     <ItemGroup>
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup"/>
 
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" VersionOverride="3.1.32"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" VersionOverride="3.1.32"/>
-<!--        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" VersionOverride="3.1.32"/>-->
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" VersionOverride="3.1.32"/>
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" VersionOverride="3.1.32"/>
 

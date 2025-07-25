@@ -4,6 +4,9 @@ public static class ServiceCollectionExtensions
 {
     private const string LocalStackSectionName = "LocalStack";
 
+#if NET8_0_OR_GREATER
+    [RequiresUnreferencedCode("ConfigurationBinder.Bind() sets options via reflection; keep non‑public setters or suppress in AOT build.")]
+#endif
     public static IServiceCollection AddLocalStack(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.Configure<LocalStackOptions>(options => configuration.GetSection(LocalStackSectionName).Bind(options, c => c.BindNonPublicProperties = true));

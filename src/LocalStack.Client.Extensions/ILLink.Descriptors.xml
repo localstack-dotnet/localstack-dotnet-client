@@ -1,5 +1,5 @@
 ﻿<linker>
     <assembly fullname="AWSSDK.Extensions.NETCore.Setup">
-        <type fullname="Amazon.Extensions.NETCore.Setup.ClientFactory`1" preserve="all" />
+        <type fullname="Amazon.Extensions.NETCore.Setup.ClientFactory`1" preserve="all"/>
     </assembly>
 </linker>

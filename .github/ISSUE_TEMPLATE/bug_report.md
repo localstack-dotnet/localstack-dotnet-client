@@ -1,7 +1,11 @@
-<!-- 
-Thank you for taking the time to report an issue! 
-Please fill out the template below to help us investigate and resolve your issue quickly.
--->
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: bug
+assignees: ''
+
+---
 
 ## 🐛 Bug Description
 

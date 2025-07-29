@@ -1,113 +1,206 @@
-# Contributing to [LocalStack.NET Client](https://github.com/localstack-dotnet/localstack-dotnet-client)
+# Contributing to LocalStack .NET Client
 
-All kind of pull requests even for things like typos, documentation, test cases, etc are always welcome. By submitting a pull request for this project, you agree to license your contribution under the MIT license to this project.
+🎉 **Thank you for your interest in contributing to LocalStack .NET Client!**
 
-Please read these guidelines before contributing to LocalStack.NET Client:
+We welcome contributions of all kinds - from bug reports and feature requests to code improvements and documentation updates. This guide will help you get started and ensure your contributions have the best chance of being accepted.
 
- - [Question or Problem?](#question)
- - [Issues and Bugs](#issue)
- - [Feature Requests](#feature)
- - [Submitting a Pull Request](#submit-pull-request)
-    - [Getting Started](#getting-started)
-    - [Pull Requests](#pull-requests)
+## 📋 Quick Reference
 
-## <a name="question"></a> Got a Question or Problem?
+- 🐛 **Found a bug?** → [Create an Issue](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/new)
+- 💡 **Have an idea?** → [Start a Discussion](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions)
+- ❓ **Need help?** → [Q&A Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/q-a)
+- 🚨 **Security issue?** → See our [Security Policy](.github/SECURITY.md)
+- 🔧 **Ready to code?** → [Submit a Pull Request](https://github.com/localstack-dotnet/localstack-dotnet-client/compare)
 
-If you have questions about how to use LocalStack.NET Client, you can ask by submitting an issue to the [GitHub Repository][github]
+## 🤝 Code of Conduct
 
-## <a name="issue"></a> Found an Issue?
+This project follows the [.NET Foundation Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating, you're expected to uphold this code. Please report unacceptable behavior to [localstack.dotnet@gmail.com](mailto:localstack.dotnet@gmail.com).
 
-If you find a bug in the source code or a mistake in the documentation, you can help by
-submitting an issue to the [GitHub Repository][github]. Even better you can submit a Pull Request
-with a fix.
+## 📝 Contributor License Agreement (CLA)
 
-When submitting an issue please include the following information:
+**Important**: As this project is pursuing .NET Foundation membership, contributors may be required to sign a Contributor License Agreement (CLA) as part of the contribution process. This helps ensure that contributions can be used by the project and the community. By submitting a pull request, you agree to license your contribution under the MIT license.
 
-- A description of the issue
-- The exception message and stacktrace if an error was thrown
-- If possible, please include code that reproduces the issue. [DropBox][dropbox] or GitHub's
-[Gist][gist] can be used to share large code samples, or you could
-[submit a pull request](#pullrequest) with the issue reproduced in a new test.
+## 🎯 Version Strategy
 
-The more information you include about the issue, the more likely it is to be fixed!
+We maintain a **dual-track versioning strategy**:
 
+- **v2.x (AWS SDK v4)** - Active development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master) branch
+- **v1.x (AWS SDK v3)** - Long-term support on [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch (maintained until July 2026)
 
-## <a name="feature"></a> Want a Feature?
+When contributing, please specify which version track your contribution targets.
 
-You can request a new feature by submitting an issue to the [GitHub Repository][github]
+## 🚀 Getting Started
 
-## <a name="submit-pull-request"></a> Submitting a Pull Request
+### Prerequisites
 
-Good pull requests, patches, improvements and new features are a fantastic
-help. They should remain focused in scope and avoid containing unrelatedcahe
-commits. When submitting a pull request to the [GitHub Repository][github] make sure to do the following:
+- [.NET SDK 8.0+](https://dotnet.microsoft.com/download) (for development)
+- [Docker](https://docs.docker.com/get-docker/) (for LocalStack testing)
+- [Git](https://git-scm.com/downloads)
+- IDE: [Visual Studio](https://visualstudio.microsoft.com/), [Rider](https://www.jetbrains.com/rider/), or [VS Code](https://code.visualstudio.com/)
 
-- Check that new and updated code follows LocalStack.NET Client's existing code formatting and naming standard
-- Run LocalStack.NET Client's unit tests to ensure no existing functionality has been affected
-- Write new unit tests to test your changes. All features and fixed bugs must have tests to verify
-they work
+### Development Environment Setup
 
-Read [GitHub Help][pullrequesthelp] for more details about creating pull requests.
-
-### <a name="getting-started"></a> Getting Started
-
--   Make sure you have a [GitHub account](https://github.com/signup/free)
--   Submit a ticket for your issue, assuming one does not already exist.
-    -   Clearly describe the issue including steps to reproduce the bug.
--   Fork the repository on GitHub
-
-### <a name="pull-requests"></a> Pull requests
-
-Adhering to the following process is the best way to get your work
-included in the project:
-
-1. [Fork](http://help.github.com/fork-a-repo/) the project, clone your fork,
-   and configure the remotes:
+1. **Fork and Clone**
 
    ```bash
-   # Clone your fork of the repo into the current directory
-   git clone git@github.com:<user-name>/localstack-dotnet-client.git
-   # Navigate to the newly cloned directory
-   cd <folder-name>
-   # Assign the original repo to a remote called "upstream"
-   git remote add upstream git@github.com:localstack-dotnet/localstack-dotnet-client.git
+   # Fork the repository on GitHub, then clone your fork
+   git clone https://github.com/YOUR-USERNAME/localstack-dotnet-client.git
+   cd localstack-dotnet-client
+   
+   # Add upstream remote
+   git remote add upstream https://github.com/localstack-dotnet/localstack-dotnet-client.git
    ```
 
-2. If you cloned a while ago, get the latest changes from upstream:
+2. **Build the Project**
 
    ```bash
-   git checkout master
-   git pull upstream master
+   # Windows
+   .\build.ps1
+   
+   # Linux/macOS  
+   ./build.sh
    ```
 
-3. Create a new topic branch (off the main project development branch) to
-   contain your feature, change, or fix:
+3. **Run Tests**
 
    ```bash
-   git checkout -b <topic-branch-name>
+   # All tests (requires Docker for functional tests)
+   .\build.ps1 --target tests
+   
+   # Unit/Integration tests only
+   .\build.ps1 --target tests --skipFunctionalTest true
    ```
 
-4. Commit your changes in logical chunks. Use Git's
-   [interactive rebase](https://thoughtbot.com/blog/git-interactive-rebase-squash-amend-rewriting-history)
-   feature to tidy up your commits before making them public.
+## 🐛 Reporting Issues
 
-5. Locally merge (or rebase) the upstream development branch into your topic branch:
+### Before Creating an Issue
+
+1. **Search existing issues** to avoid duplicates
+2. **Check [Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions)** - your question might already be answered
+3. **Verify the issue** occurs with LocalStack (not real AWS services)
+4. **Test with latest version** when possible
+
+### Creating a Bug Report
+
+Use our [Issue Template](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/new) which will guide you through providing:
+
+- **Environment details** (LocalStack version, .NET version, OS)
+- **Minimal reproduction** case
+- **Expected vs actual** behavior
+- **Configuration** and error messages
+
+## 💡 Suggesting Features
+
+We love new ideas! Here's how to suggest features:
+
+1. **Check [existing discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/ideas)** for similar requests
+2. **Start a [Discussion](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/new?category=ideas)** to gauge community interest
+3. **Create an issue** if there's positive feedback and clear requirements
+
+## 🔧 Contributing Code
+
+### Before You Start
+
+1. **Discuss significant changes** in [Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions) first
+2. **Check for existing work** - someone might already be working on it
+3. **Create an issue** if one doesn't exist (for tracking)
+
+### Pull Request Process
+
+1. **Create a feature branch**
 
    ```bash
-   git pull [--rebase] upstream master
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-number-description
    ```
 
-6. Push your topic branch up to your fork:
+2. **Make your changes**
+   - Follow existing code style and conventions
+   - Add tests for new functionality
+   - Update documentation as needed
+   - Ensure all analyzers pass without warnings
+
+3. **Test thoroughly**
 
    ```bash
-   git push origin <topic-branch-name>
+   # Run all tests
+   ./build.sh --target tests
+   
+   # Test specific scenarios with LocalStack
+   # (see sandbox projects for examples)
    ```
 
-7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/)
-    with a clear title and description against the `master` branch.
+4. **Commit with conventional commits**
 
+   ```bash
+   git commit -m "feat: add support for XYZ service"
+   git commit -m "fix: resolve timeout issue in DynamoDB client"
+   git commit -m "docs: update installation guide"
+   ```
 
-[github]: https://github.com/localstack-dotnet/localstack-dotnet-client
-[dropbox]: https://www.dropbox.com
-[gist]: https://gist.github.com
-[pullrequesthelp]: https://help.github.com/articles/using-pull-requests
+5. **Submit the Pull Request**
+   - Use our [PR Template](https://github.com/localstack-dotnet/localstack-dotnet-client/compare)
+   - Provide clear description of changes
+   - Link related issues
+   - Specify target version track (v1.x or v2.x)
+
+### Code Quality Standards
+
+- ✅ **Follow existing patterns** and architectural decisions
+- ✅ **Write comprehensive tests** (unit, integration, functional where applicable)
+- ✅ **Add XML documentation** for public APIs
+- ✅ **No analyzer warnings** - we treat warnings as errors
+- ✅ **Maintain backward compatibility** (unless it's a breaking change PR)
+- ✅ **Performance considerations** - avoid introducing regressions
+
+### Testing Guidelines
+
+We have multiple test types:
+
+- **Unit Tests** - Fast, isolated, no external dependencies
+- **Integration Tests** - Test AWS SDK integration and client creation
+- **Functional Tests** - Full end-to-end with LocalStack containers
+
+When adding tests:
+
+- Place them in the appropriate test project
+- Follow existing naming conventions
+- Test both success and error scenarios
+- Include tests for edge cases
+
+## 📚 Documentation
+
+- **Code comments** - Explain the "why", not the "what"
+- **XML documentation** - Required for all public APIs
+- **README updates** - For feature additions or breaking changes
+- **CHANGELOG** - Add entries for user-facing changes
+
+## 🔍 Review Process
+
+1. **Automated checks** must pass (build, tests, code analysis)
+2. **Maintainer review** - we aim to review within 48 hours
+3. **Community feedback** - other contributors may provide input
+4. **Iterative improvements** - address feedback promptly
+5. **Final approval** and merge
+
+## ❓ Getting Help
+
+- **Questions about usage** → [Q&A Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/q-a)
+- **Ideas for features** → [Ideas Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/ideas)
+- **General discussion** → [General Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/general)
+- **Show your work** → [Show and Tell](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/show-and-tell)
+
+## 🎉 Recognition
+
+Contributors are recognized in:
+
+- Our [Contributors](https://github.com/localstack-dotnet/localstack-dotnet-client/graphs/contributors) page
+- Release notes for significant contributions
+- Project documentation for major features
+
+---
+
+**By contributing to this project, you agree to abide by our [Code of Conduct](.github/CODE_OF_CONDUCT.md) and understand that your contributions will be licensed under the MIT License.**
+
+Thank you for making LocalStack .NET Client better! 🚀

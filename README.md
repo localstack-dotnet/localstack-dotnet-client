@@ -285,6 +285,12 @@ Linux
 ./build.sh --target=tests
 ```
 
+## Community
+
+Got questions or wild feature ideas?  
+
+👉 Join the conversation in [GitHub Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions).
+
 ## Changelog
 
 Please refer to [`CHANGELOG.md`](CHANGELOG.md) to see the complete list of changes for each release.

@@ -49,23 +49,24 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Full history for better caching
 
       - name: "Setup .NET SDK"
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             9.0.x
+          global-json-file: global.json
 
       - name: "Make build script executable"
         if: runner.os != 'Windows'
         run: chmod +x ./build.sh
 
       - name: "Cache NuGet packages"
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.os == 'Windows' && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
@@ -78,9 +79,15 @@ jobs:
       - name: "Run Tests"
         run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
 
+      # AWSSDK.Extensions.NETCore.Setup 4.0.4 changed the internal ClientFactory<T> constructor (issue #52).
+      # The default track pins a post-4.0.4 version; this leg proves we still work against the older shape.
+      - name: "Run Tests (legacy AWS SDK track, pre-4.0.4)"
+        if: runner.os == 'Linux'
+        run: ${{ matrix.script }} --target tests --skipFunctionalTest true --aws-setup-track legacy --force-restore true --exclusive
+
       - name: "Publish Test Results"
         id: test-results
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: "Test Results (${{ matrix.name }})"
@@ -108,7 +115,7 @@ jobs:
           server_url: ${{ github.server_url }}
 
       - name: "Upload Test Artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: test-results-${{ matrix.name }}
@@ -134,19 +141,20 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: "Setup .NET SDK"
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             9.0.x
+          global-json-file: global.json
 
       - name: "Cache NuGet packages"
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
@@ -207,7 +215,7 @@ jobs:
             --package-secret ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Upload Package Artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: "packages-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}-${{ github.run_number }}"
           path: |

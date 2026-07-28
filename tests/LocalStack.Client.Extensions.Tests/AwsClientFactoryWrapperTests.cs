@@ -54,6 +54,7 @@ public class AwsClientFactoryWrapperTests
     }
 
     [Fact]
+    [Trait("Category", "SdkCompat")]
     public void CreateServiceClient_Should_Create_Client_When_UseLocalStack_False()
     {
         ConfigurationBuilder configurationBuilder = new();

@@ -4,6 +4,34 @@ This document outlines the changes, updates, and important notes for the LocalSt
 
 See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
 
+## [Unreleased]
+
+### 🐞 Fixes
+
+- **Fixed `LocalStackClientConfigurationException` when `UseLocalStack` is `false`
+  ([#52](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/52)).**
+  `AWSSDK.Extensions.NETCore.Setup` **4.0.4** (2026-05-20) changed the internal `ClientFactory<T>`
+  constructor from `(AWSOptions)` to `(AWSOptions, Action<ClientConfig, IServiceProvider> = null)`.
+  Because the added parameter is optional this was source-compatible for AWS and shipped as a patch,
+  but it broke our exact-signature reflection lookup. `AwsClientFactoryWrapper` now matches on the
+  `AWSOptions` parameter instead of the full signature and defaults any trailing parameters, so both
+  the pre-4.0.4 and 4.0.4+ shapes work. Only the `UseLocalStack: false` path was affected.
+  - Failure messages now list the constructor signatures actually discovered, so future AWS SDK
+    changes can be diagnosed from a bug report without a version bisect.
+
+### 🛠️ General
+
+- **Dependency refresh:** `AWSSDK.Core` → 4.0.100.6, `AWSSDK.Extensions.NETCore.Setup` → 4.0.100.5,
+  120 AWSSDK service packages, `Microsoft.Extensions.*` → 10.0.10, and the full analyzer/test
+  toolchain updated. Resolves the `NU1901` advisory (GHSA-9cvc-h2w8-phrp) on `AWSSDK.Core` 4.0.0.15.
+- **AWS SDK compatibility testing:** the `AwsSetupTrack` MSBuild property
+  (`current` | `legacy` | `latest`) switches the whole package graph, so the same suite runs against
+  both the pre-4.0.4 and 4.0.4+ `ClientFactory<T>` shapes. Exposed through Cake as
+  `--aws-setup-track`, wired into CI, plus a scheduled canary that floats to the newest AWS SDK.
+- **Public API unchanged.**
+
+---
+
 ## [v2.0.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.0)
 
 > **Heads‑up**: Native AOT is not yet supported in GA.  

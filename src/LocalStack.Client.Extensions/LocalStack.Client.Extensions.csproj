@@ -29,6 +29,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <!-- Lets the tests drive the ClientFactory<T> constructor-resolution helpers directly,
+             including against synthetic AWS SDK shapes, without widening the public API. -->
+        <InternalsVisibleTo Include="LocalStack.Client.Extensions.Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="AWSSDK.Extensions.NETCore.Setup"/>
 
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" VersionOverride="3.1.32"/>

@@ -31,7 +31,11 @@ public sealed class BuildContext : FrostingContext
         UseDirectoryPropsVersion = context.Argument("use-directory-props-version", defaultValue: false);
         BranchName = context.Argument("branch-name", "master");
 
-        var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>();
+        // Selects which AWSSDK.Extensions.NETCore.Setup shape to build/test against.
+        // See the $(AwsSetupTrack) switch in Directory.Packages.props. Values: current | legacy | latest.
+        AwsSetupTrack = context.Argument("aws-setup-track", "current");
+
+        var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.Ordinal);
         sourceBuilder.AddRange([
             new KeyValuePair<string, string>(MyGetPackageSource, "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
             new KeyValuePair<string, string>(NuGetPackageSource, "https://api.nuget.org/v3/index.json"),
@@ -50,7 +54,7 @@ public sealed class BuildContext : FrostingContext
         LocalStackClientProjFile = LocalStackClientFolder + context.File($"{LocalStackClientProjName}.csproj");
         LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File($"{LocalStackClientExtensionsProjName}.csproj");
 
-        var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>();
+        var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>(StringComparer.Ordinal);
         packIdBuilder.AddRange(
         [
             new KeyValuePair<string, FilePath>(LocalStackClientProjName, LocalStackClientProjFile),
@@ -80,6 +84,12 @@ public sealed class BuildContext : FrostingContext
     public bool UseDirectoryPropsVersion { get; }
 
     public string BranchName { get; }
+
+    /// <summary>
+    /// Which AWSSDK.Extensions.NETCore.Setup constructor shape to build and test against
+    /// (current = post-4.0.4, legacy = pre-4.0.4, latest = floating canary).
+    /// </summary>
+    public string AwsSetupTrack { get; }
 
     public ImmutableDictionary<string, string> PackageSourceMap { get; }
 

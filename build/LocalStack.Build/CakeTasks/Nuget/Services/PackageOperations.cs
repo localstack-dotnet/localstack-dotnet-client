@@ -150,7 +150,7 @@ public static class PackageOperations
 
     private static void ValidatePackageVersion(BuildContext context, string packageId, string version)
     {
-        Match match = Regex.Match(version, @"^(\d+)\.(\d+)\.(\d+)([\.\-].*)*$", RegexOptions.IgnoreCase);
+        Match match = Regex.Match(version, @"^(\d+)\.(\d+)\.(\d+)([\.\-].*)*$", RegexOptions.IgnoreCase, TimeSpan.FromSeconds(5));
 
         if (!match.Success)
         {

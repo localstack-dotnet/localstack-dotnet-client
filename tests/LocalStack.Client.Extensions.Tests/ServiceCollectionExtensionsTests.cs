@@ -22,8 +22,8 @@ public class ServiceCollectionExtensionsTests
     [Fact]
     public void AddLocalStack_Should_Configure_LocalStackOptions_By_LocalStack_Section()
     {
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" } };
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" } };
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddLocalStack(configuration);
@@ -61,7 +61,7 @@ public class ServiceCollectionExtensionsTests
         const string awsSessionToken = "myawsst";
         const string regionName = "mars-central-1";
 
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal)
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal)
         {
             { "LocalStack:Session:AwsAccessKeyId", awsAccessKeyId },
             { "LocalStack:Session:AwsAccessKey", awsAccessKey },
@@ -69,7 +69,7 @@ public class ServiceCollectionExtensionsTests
             { "LocalStack:Session:RegionName", regionName },
         };
 
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddLocalStack(configuration);
 
@@ -107,7 +107,7 @@ public class ServiceCollectionExtensionsTests
         const bool useLegacyPorts = true;
         const int edgePort = 1245;
 
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal)
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal)
         {
             { "LocalStack:Config:LocalStackHost", localStackHost },
             { "LocalStack:Config:UseSsl", useSsl.ToString() },
@@ -115,7 +115,7 @@ public class ServiceCollectionExtensionsTests
             { "LocalStack:Config:EdgePort", edgePort.ToString(CultureInfo.InvariantCulture) },
         };
 
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddLocalStack(configuration);
 
@@ -199,8 +199,8 @@ public class ServiceCollectionExtensionsTests
     public void GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True(
         bool useAlternateNameAddServiceMethod, string systemName)
     {
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" }, { "LocalStack:Session:RegionName", systemName } };
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" }, { "LocalStack:Session:RegionName", systemName } };
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
@@ -241,8 +241,8 @@ public class ServiceCollectionExtensionsTests
         GetRequiredService_Should_Return_AmazonService_That_Configured_For_LocalStack_If_UseLocalStack_Is_True_And_Should_Configure_ServiceUrl_Or_RegionEndpoint_By_Given_UseServiceUrl_Parameter(
             bool useAlternateNameAddServiceMethod, bool useServiceUrl)
     {
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" } };
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", "true" } };
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
         var mockServiceMetadata = new MockServiceMetadata();
         var mockAwsServiceEndpoint = new MockAwsServiceEndpoint();
@@ -298,8 +298,8 @@ public class ServiceCollectionExtensionsTests
         int sessionInvolved = useLocalStack ? 1 : 0;
         int awsClientFactoryInvolved = useLocalStack ? 0 : 1;
 
-        var configurationValue = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", useLocalStack.ToString() } };
-        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue!).Build();
+        var configurationValue = new Dictionary<string, string?>(StringComparer.Ordinal) { { "LocalStack:UseLocalStack", useLocalStack.ToString() } };
+        IConfiguration configuration = new ConfigurationBuilder().AddInMemoryCollection(configurationValue).Build();
 
         var mockSession = new Mock<ISession>(MockBehavior.Strict);
         var mockClientFactory = new Mock<IAwsClientFactoryWrapper>(MockBehavior.Strict);

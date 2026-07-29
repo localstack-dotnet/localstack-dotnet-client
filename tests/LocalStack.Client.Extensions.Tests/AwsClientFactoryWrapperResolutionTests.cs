@@ -124,6 +124,17 @@ public class AwsClientFactoryWrapperResolutionTests
     }
 
     [Fact]
+    public void DescribeConstructors_Should_Expand_Generic_Arguments()
+    {
+        // Type.Name alone renders this parameter as "Action`2", dropping the very part that identifies it.
+        // This text is what a bug report quotes, so the arguments have to survive.
+        string described = AwsClientFactoryWrapper.DescribeConstructors(CtorsOf<CurrentShapeFactory>());
+
+        Assert.Contains("Action<ClientConfig, IServiceProvider>", described, StringComparison.Ordinal);
+        Assert.DoesNotContain("`", described, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void DescribeConstructors_Should_Report_None_When_Empty()
     {
         Assert.Equal("<none>", AwsClientFactoryWrapper.DescribeConstructors([]));

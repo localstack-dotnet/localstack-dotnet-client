@@ -178,12 +178,49 @@ public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
                     builder.Append(", ");
                 }
 
-                builder.Append(parameters[index].ParameterType.Name);
+                AppendTypeName(builder, parameters[index].ParameterType);
             }
 
             builder.Append(')');
         }
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// Writes a readable type name, expanding generic arguments.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="MemberInfo.Name" /> renders the parameter added in 4.0.4 as <c>Action`2</c>, dropping exactly the part
+    /// that identifies it. Since this text is what a bug report will quote, the arguments are spelled out so the signature
+    /// reads as <c>Action&lt;ClientConfig, IServiceProvider&gt;</c>.
+    /// </remarks>
+    private static void AppendTypeName(StringBuilder builder, Type type)
+    {
+        if (!type.IsGenericType)
+        {
+            builder.Append(type.Name);
+
+            return;
+        }
+
+        // Split rather than IndexOf: the StringComparison overload CA1307 asks for does not exist on
+        // netstandard2.0, and this runs once, on a failure path, so the extra array is irrelevant.
+        builder.Append(type.Name.Split('`')[0]);
+        builder.Append('<');
+
+        Type[] arguments = type.GetGenericArguments();
+
+        for (var index = 0; index < arguments.Length; index++)
+        {
+            if (index > 0)
+            {
+                builder.Append(", ");
+            }
+
+            AppendTypeName(builder, arguments[index]);
+        }
+
+        builder.Append('>');
     }
 }

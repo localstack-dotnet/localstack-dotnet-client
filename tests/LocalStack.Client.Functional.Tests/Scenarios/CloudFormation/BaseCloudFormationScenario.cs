@@ -92,7 +92,7 @@ public abstract class BaseCloudFormationScenario : BaseScenario
                     return;
                 }
             }
-            catch (AmazonCloudFormationException)
+            catch (AmazonCloudFormationException exception) when (IsStackGone(exception))
             {
                 // Once the stack is fully gone CloudFormation refuses to describe it, which is the success signal.
                 return;
@@ -102,5 +102,18 @@ public abstract class BaseCloudFormationScenario : BaseScenario
         }
 
         throw new TimeoutException($"CloudFormation stack '{stackName}' was not deleted within {StackDeletionTimeout.TotalSeconds:0} seconds.");
+    }
+
+    /// <summary>
+    /// Distinguishes "the stack is gone" from every other CloudFormation failure.
+    /// </summary>
+    /// <remarks>
+    /// Describing a deleted stack fails with a <c>ValidationError</c>. Catching <see cref="AmazonCloudFormationException" />
+    /// indiscriminately would also swallow throttling, credential and service errors, reporting a clean teardown while the
+    /// stack - and the SNS topic and SQS queue its template owns - stayed behind in the shared container for the next test.
+    /// </remarks>
+    private static bool IsStackGone(AmazonCloudFormationException exception)
+    {
+        return string.Equals(exception.ErrorCode, "ValidationError", StringComparison.Ordinal);
     }
 }

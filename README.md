@@ -231,6 +231,14 @@ The `RegionName` is important as LocalStack creates resources based on the speci
 
 ## Known Issues
 
+- **`LocalStackClientConfigurationException` on `LocalStack.Client.Extensions` v2.0.0 and earlier:** If `UseLocalStack` is `false` and `AWSSDK.Extensions.NETCore.Setup` resolves to **4.0.4 or newer**, client creation throws `LocalStackClientConfigurationException`. AWS changed an internal `ClientFactory<T>` constructor in 4.0.4; the new parameter is optional, so it shipped as a patch release and is source-compatible on their side, but it is binary-breaking for the reflection lookup used here. Because v2.0.0 declares `AWSSDK.Extensions.NETCore.Setup >= 4.0.2`, NuGet floats new installs straight onto the broken versions. Only the `UseLocalStack: false` path is affected — LocalStack-only usage never reaches this code. **Fixed in v2.0.1**, so upgrading is the recommended fix. If you cannot upgrade yet, pin the AWS package to the last working version, which v2.0.0's range still allows:
+
+  ```xml
+  <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.40" />
+  ```
+
+  See [issue #52](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/52) for the full analysis.
+
 - **SNS with LocalStack v3.7.2 and v3.8.0:** During development on the new version, it was discovered that SNS functional tests are not working in LocalStack versions v3.7.2 and v3.8.0. This issue was reported in LocalStack [issue #11652](https://github.com/localstack/localstack/issues/11652). The LocalStack team identified a bug related to handling SNS URIs and resolved it in [PR #11653](https://github.com/localstack/localstack/pull/11653). The fix will be included in an upcoming release of LocalStack. In the meantime, if you're using SNS, it is recommended to stick to version v3.7.1 of LocalStack until the fix is available.
 
 - **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest v3 series container from Docker Hub.

@@ -1,10 +1,14 @@
 #pragma warning disable S3011 // We need to use reflection to access private fields for service metadata
 #pragma warning disable CS8600,CS8603 // Not possible to get null value from this private field
-#pragma warning disable CA1802 // We need to use reflection to access private fields for service metadata
+#pragma warning disable CA1802 // Deliberately readonly, not const - see the note on the fields below
 namespace LocalStack.Client.Extensions;
 
 public sealed class AwsClientFactoryWrapper : IAwsClientFactoryWrapper
 {
+    // These MUST stay 'readonly' rather than 'const'. AwsClientFactoryWrapperTests overwrites them by
+    // reflection to simulate the AWS SDK renaming its internals, which is how the failure paths below are
+    // covered. A 'const' is inlined at every use site, so overwriting the field would change nothing and
+    // those tests would silently stop testing anything. CA1802/S3962 flag this; they cannot see the tests.
     private static readonly string ClientFactoryGenericTypeName = "Amazon.Extensions.NETCore.Setup.ClientFactory`1";
     private static readonly string CreateServiceClientMethodName = "CreateServiceClient";
 

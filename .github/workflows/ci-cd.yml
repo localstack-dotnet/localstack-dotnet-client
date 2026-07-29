@@ -91,12 +91,6 @@ jobs:
       - name: "Run Tests"
         run: ${{ matrix.script }} --target tests --skipFunctionalTest ${{ runner.os == 'Linux' && 'false' || 'true' }} --exclusive
 
-      # AWSSDK.Extensions.NETCore.Setup 4.0.4 changed the internal ClientFactory<T> constructor (issue #52).
-      # The default track pins a post-4.0.4 version; this leg proves we still work against the older shape.
-      - name: "Run Tests (legacy AWS SDK track, pre-4.0.4)"
-        if: runner.os == 'Linux'
-        run: ${{ matrix.script }} --target tests --skipFunctionalTest true --aws-setup-track legacy --force-restore true --exclusive
-
       - name: "Publish Test Results"
         id: test-results
         uses: dorny/test-reporter@v3
@@ -136,10 +130,42 @@ jobs:
             **/TestResults/**/*
           retention-days: 7
 
+  # AWSSDK.Extensions.NETCore.Setup 4.0.4 changed the internal ClientFactory<T> constructor (issue #52).
+  # We support both shapes, so the older one is exercised on every run.
+  #
+  # This lives in its own job on purpose. Sharing the build-and-test job would rerun the same projects
+  # and target frameworks, and TestTask names its TRX by target framework alone
+  # (net8-0_results.trx), so the second pass overwrote the first - the published report and the badge
+  # would have shown these results instead of the real ones, minus the functional tests this leg skips.
+  # A separate job gets its own workspace, and deliberately publishes no test report.
+  sdk-compat:
+    name: "AWS SDK Compat (pre-4.0.4)"
+    runs-on: ubuntu-22.04
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v7
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+          global-json-file: global.json
+
+      - name: "Make build script executable"
+        run: chmod +x ./build.sh
+
+      - name: "Build & test against the pre-4.0.4 AWS SDK"
+        run: ./build.sh --target tests --skipFunctionalTest true --aws-setup-track legacy --exclusive
+
   continuous-deployment:
     name: "Continuous Deployment"
     runs-on: ubuntu-22.04
-    needs: build-and-test
+    needs: [build-and-test, sdk-compat]
     if: |
       github.repository == 'localstack-dotnet/localstack-dotnet-client' &&
       ((github.event_name == 'push' && github.ref == 'refs/heads/master') ||

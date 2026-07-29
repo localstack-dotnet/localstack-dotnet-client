@@ -341,3 +341,7 @@ testrunner
 
 # Visual Studio Code options directory
 .vscode/
+# Agent/MCP server configuration is per-developer: it pins machine-local endpoints
+# (e.g. a Rider SSE port) and personal tooling, so it is not shareable. Commit a
+# .mcp.json.example instead if the project ever needs shared agent servers.
+.mcp.json

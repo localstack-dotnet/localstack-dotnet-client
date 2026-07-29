@@ -108,9 +108,24 @@ public abstract class BaseCloudFormationScenario : BaseScenario
     /// Distinguishes "the stack is gone" from every other CloudFormation failure.
     /// </summary>
     /// <remarks>
-    /// Describing a deleted stack fails with a <c>ValidationError</c>. Catching <see cref="AmazonCloudFormationException" />
-    /// indiscriminately would also swallow throttling, credential and service errors, reporting a clean teardown while the
-    /// stack - and the SNS topic and SQS queue its template owns - stayed behind in the shared container for the next test.
+    /// Catching <see cref="AmazonCloudFormationException" /> indiscriminately would also swallow throttling, credential
+    /// and service errors, reporting a clean teardown while the stack - and the SNS topic and SQS queue its template
+    /// owns - stayed behind in the shared container for the next test.
+    /// <para>
+    /// The error code below is measured, not assumed. Against both LocalStack versions these scenarios run on, creating
+    /// a stack, deleting it and then describing it by name gives:
+    /// </para>
+    /// <code>
+    /// AmazonCloudFormationException
+    ///   ErrorCode  = ValidationError
+    ///   StatusCode = 400 BadRequest
+    ///   Message    = Stack with id &lt;name&gt; does not exist
+    /// </code>
+    /// <para>
+    /// Identical on 3.7.1 and 4.6.0, and the throw arrives on the first poll - LocalStack drops the stack immediately
+    /// rather than parking it in <c>DELETE_COMPLETE</c>, so this catch really is the loop's exit path, not a fallback.
+    /// If a future LocalStack starts reporting <c>DELETE_COMPLETE</c> instead, the status check above already covers it.
+    /// </para>
     /// </remarks>
     private static bool IsStackGone(AmazonCloudFormationException exception)
     {

@@ -26,10 +26,14 @@ public abstract class BaseRealLife : BaseScenario
         var createTopicRequest = new CreateTopicRequest(topicName);
         CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest);
 
+        TrackForCleanup(createTopicResponse.TopicArn, () => AmazonSimpleNotificationService.DeleteTopicAsync(new DeleteTopicRequest(createTopicResponse.TopicArn)));
+
         Assert.Equal(HttpStatusCode.OK, createTopicResponse.HttpStatusCode);
 
         var createQueueRequest = new CreateQueueRequest(queueName);
         CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
+
+        TrackForCleanup(createQueueResponse.QueueUrl, () => AmazonSqs.DeleteQueueAsync(new DeleteQueueRequest(createQueueResponse.QueueUrl)));
 
         Assert.Equal(HttpStatusCode.OK, createQueueResponse.HttpStatusCode);
 
@@ -43,6 +47,10 @@ public abstract class BaseRealLife : BaseScenario
 
         var subscribeRequest = new SubscribeRequest(createTopicResponse.TopicArn, "sqs", queueArn);
         SubscribeResponse subscribeResponse = await AmazonSimpleNotificationService.SubscribeAsync(subscribeRequest);
+
+        // Registered after the topic and queue so teardown removes it first - LIFO.
+        TrackForCleanup(subscribeResponse.SubscriptionArn,
+                        () => AmazonSimpleNotificationService.UnsubscribeAsync(new UnsubscribeRequest(subscribeResponse.SubscriptionArn)));
 
         Assert.Equal(HttpStatusCode.OK, subscribeResponse.HttpStatusCode);
 

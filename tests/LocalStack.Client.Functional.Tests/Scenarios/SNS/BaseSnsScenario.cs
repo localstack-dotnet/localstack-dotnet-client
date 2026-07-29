@@ -106,6 +106,8 @@ public abstract class BaseSnsScenario : BaseScenario
 
         CreateTopicResponse createTopicResponse = await AmazonSimpleNotificationService.CreateTopicAsync(createTopicRequest);
 
+        TrackForCleanup(createTopicResponse.TopicArn, () => AmazonSimpleNotificationService.DeleteTopicAsync(new DeleteTopicRequest(createTopicResponse.TopicArn)));
+
         return createTopicResponse;
     }
 
@@ -114,6 +116,8 @@ public abstract class BaseSnsScenario : BaseScenario
         var deleteTopicRequest = new DeleteTopicRequest(topic);
 
         DeleteTopicResponse deleteTopicResponse = await AmazonSimpleNotificationService.DeleteTopicAsync(deleteTopicRequest);
+
+        UntrackCleanup(topic);
 
         return deleteTopicResponse;
     }

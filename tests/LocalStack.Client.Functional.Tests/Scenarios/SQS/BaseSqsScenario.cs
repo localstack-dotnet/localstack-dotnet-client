@@ -109,6 +109,8 @@ public abstract class BaseSqsScenario : BaseScenario
 
         CreateQueueResponse createDlqResult = await AmazonSqs.CreateQueueAsync(createDlqRequest);
 
+        TrackForCleanup(createDlqResult.QueueUrl, () => AmazonSqs.DeleteQueueAsync(new DeleteQueueRequest(createDlqResult.QueueUrl)));
+
         GetQueueAttributesResponse attributes = await AmazonSqs.GetQueueAttributesAsync(new GetQueueAttributesRequest
                                                                {
                                                                    QueueUrl = createDlqResult.QueueUrl,
@@ -127,14 +129,22 @@ public abstract class BaseSqsScenario : BaseScenario
             },
         };
 
-        return await AmazonSqs.CreateQueueAsync(createQueueRequest);
+        CreateQueueResponse createFifoQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
+
+        TrackForCleanup(createFifoQueueResponse.QueueUrl, () => AmazonSqs.DeleteQueueAsync(new DeleteQueueRequest(createFifoQueueResponse.QueueUrl)));
+
+        return createFifoQueueResponse;
     }
 
     protected async Task<CreateQueueResponse> CreateQueueAsync(string? queueName = null)
     {
         var createQueueRequest = new CreateQueueRequest(queueName ?? TestQueueName);
 
-        return await AmazonSqs.CreateQueueAsync(createQueueRequest);
+        CreateQueueResponse createQueueResponse = await AmazonSqs.CreateQueueAsync(createQueueRequest);
+
+        TrackForCleanup(createQueueResponse.QueueUrl, () => AmazonSqs.DeleteQueueAsync(new DeleteQueueRequest(createQueueResponse.QueueUrl)));
+
+        return createQueueResponse;
     }
 
     [SuppressMessage("Design", "CA1054:URI-like parameters should not be strings")]
@@ -142,6 +152,10 @@ public abstract class BaseSqsScenario : BaseScenario
     {
         var deleteQueueRequest = new DeleteQueueRequest(queueUrl);
 
-        return await AmazonSqs.DeleteQueueAsync(deleteQueueRequest);
+        DeleteQueueResponse deleteQueueResponse = await AmazonSqs.DeleteQueueAsync(deleteQueueRequest);
+
+        UntrackCleanup(queueUrl);
+
+        return deleteQueueResponse;
     }
 }

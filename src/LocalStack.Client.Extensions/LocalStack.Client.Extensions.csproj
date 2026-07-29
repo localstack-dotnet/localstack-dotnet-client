@@ -14,7 +14,7 @@
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <EnablePackageValidation>true</EnablePackageValidation>
-        <PackageValidationBaselineVersion>1.2.2</PackageValidationBaselineVersion>
+        <PackageValidationBaselineVersion>2.0.0</PackageValidationBaselineVersion>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <NoWarn>$(NoWarn);CA1510</NoWarn>
@@ -26,6 +26,12 @@
 
     <ItemGroup>
         <EmbeddedResource Include="ILLink.Descriptors.xml" LogicalName="ILLink.Descriptors.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Lets the tests drive the ClientFactory<T> constructor-resolution helpers directly,
+             including against synthetic AWS SDK shapes, without widening the public API. -->
+        <InternalsVisibleTo Include="LocalStack.Client.Extensions.Tests" />
     </ItemGroup>
 
     <ItemGroup>

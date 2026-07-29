@@ -6,7 +6,7 @@ internal static class TestContainers
 {
     public static LocalStackBuilder LocalStackBuilder(string version)
     {
-        return new LocalStackBuilder().WithImage($"localstack/localstack:{version}")
+        return new LocalStackBuilder($"localstack/localstack:{version}")
                                       .WithName($"localStack-{version}-{Guid.NewGuid().ToString().ToLower()}")
                                       .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                       .WithEnvironment("DEBUG", "1")

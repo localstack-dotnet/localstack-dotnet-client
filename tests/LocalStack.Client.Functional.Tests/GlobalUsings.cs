@@ -22,6 +22,7 @@ global using Amazon.DynamoDBv2.DataModel;
 global using Amazon.DynamoDBv2.DocumentModel;
 global using Amazon.DynamoDBv2.Model;
 global using Amazon.S3;
+global using Amazon.S3.Util;
 global using Amazon.S3.Model;
 global using Amazon.S3.Transfer;
 global using Amazon.SQS;

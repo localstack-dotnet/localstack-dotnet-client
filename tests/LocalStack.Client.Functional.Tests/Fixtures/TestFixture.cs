@@ -11,8 +11,8 @@ public class TestFixture
         builder.SetBasePath(Directory.GetCurrentDirectory());
         builder.AddJsonFile("appsettings.json", optional: true);
         builder.AddJsonFile(configFile, optional: true);
-        var keyValuePairs = new Dictionary<string, string>(StringComparer.Ordinal) { { "LocalStack:Config:EdgePort", hostPort.ToString(CultureInfo.InvariantCulture) }, };
-        builder.AddInMemoryCollection(keyValuePairs!);
+        var keyValuePairs = new Dictionary<string, string?>(StringComparer.Ordinal) { { "LocalStack:Config:EdgePort", hostPort.ToString(CultureInfo.InvariantCulture) }, };
+        builder.AddInMemoryCollection(keyValuePairs);
         builder.AddEnvironmentVariables();
 
         return builder;

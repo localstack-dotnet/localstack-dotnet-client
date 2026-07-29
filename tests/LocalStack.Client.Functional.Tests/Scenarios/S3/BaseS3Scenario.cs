@@ -83,18 +83,29 @@ public abstract class BaseS3Scenario : BaseScenario
         Assert.All(fileNames, s => Assert.NotNull(s3Objects.Find(o => o.Key == s)));
     }
 
-    protected Task<PutBucketResponse> CreateTestBucketAsync(string? bucketName = null)
+    protected async Task<PutBucketResponse> CreateTestBucketAsync(string? bucketName = null)
     {
-        var putBucketRequest = new PutBucketRequest { BucketName = bucketName ?? BucketName, UseClientRegion = true };
+        string effectiveBucketName = bucketName ?? BucketName;
+        var putBucketRequest = new PutBucketRequest { BucketName = effectiveBucketName, UseClientRegion = true };
 
-        return AmazonS3.PutBucketAsync(putBucketRequest);
+        PutBucketResponse putBucketResponse = await AmazonS3.PutBucketAsync(putBucketRequest);
+
+        // S3 refuses to drop a non-empty bucket, and these scenarios upload into it, so the objects go first.
+        TrackForCleanup(effectiveBucketName, () => AmazonS3Util.DeleteS3BucketWithObjectsAsync(AmazonS3, effectiveBucketName));
+
+        return putBucketResponse;
     }
 
-    protected Task<DeleteBucketResponse> DeleteTestBucketAsync(string? bucketName = null)
+    protected async Task<DeleteBucketResponse> DeleteTestBucketAsync(string? bucketName = null)
     {
-        var deleteBucketRequest = new DeleteBucketRequest { BucketName = bucketName ?? BucketName, UseClientRegion = true };
+        string effectiveBucketName = bucketName ?? BucketName;
+        var deleteBucketRequest = new DeleteBucketRequest { BucketName = effectiveBucketName, UseClientRegion = true };
 
-        return AmazonS3.DeleteBucketAsync(deleteBucketRequest);
+        DeleteBucketResponse deleteBucketResponse = await AmazonS3.DeleteBucketAsync(deleteBucketRequest);
+
+        UntrackCleanup(effectiveBucketName);
+
+        return deleteBucketResponse;
     }
 
     protected async Task UploadTestFileAsync(string? key = null, string? bucketName = null)

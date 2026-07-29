@@ -4,6 +4,32 @@ This document outlines the changes, updates, and important notes for the LocalSt
 
 See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
 
+## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
+
+> Maintenance release for **`LocalStack.Client.Extensions` only**. `LocalStack.Client` stays at 2.0.0.
+
+### 🐞 Fixes
+
+- **Fixed `LocalStackClientConfigurationException` when `UseLocalStack` is `false`
+  ([#52](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/52)).**
+  `AWSSDK.Extensions.NETCore.Setup` 4.0.4 added an optional parameter to the internal
+  `ClientFactory<T>` constructor, which broke our exact-signature reflection lookup. Resolution now
+  matches on the `AWSOptions` parameter and defaults any trailing ones.
+- Failure messages now list the constructor signatures actually discovered.
+
+### 🛠️ General
+
+- **Minimum `AWSSDK.Extensions.NETCore.Setup` is now 4.0.100.5** (was 4.0.2). No other dependency
+  floor changed.
+- **Internal dependency refresh:** `AWSSDK.Core` → 4.0.100.6, 120 AWSSDK service packages, and the
+  analyzer/test toolchain. Clears the `NU1901` advisory (GHSA-9cvc-h2w8-phrp) on `AWSSDK.Core`
+  4.0.0.15.
+- **Added a scheduled AWS SDK canary** that builds against the newest `AWSSDK.Core` and
+  `AWSSDK.Extensions.NETCore.Setup`, so upstream changes surface before they reach users.
+- **Public API unchanged.**
+
+---
+
 ## [v2.0.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.0)
 
 > **Heads‑up**: Native AOT is not yet supported in GA.  

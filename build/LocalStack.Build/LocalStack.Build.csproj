@@ -11,5 +11,6 @@
 	<ItemGroup>
 		<PackageReference Include="Cake.Docker" />
 		<PackageReference Include="Cake.Frosting" />
+		<PackageReference Include="NuGet.Versioning" />
 	</ItemGroup>
 </Project>

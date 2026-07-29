@@ -31,7 +31,10 @@ public sealed class BuildContext : FrostingContext
         UseDirectoryPropsVersion = context.Argument("use-directory-props-version", defaultValue: false);
         BranchName = context.Argument("branch-name", "master");
 
-        var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>();
+        // Which AWS SDK versions to build/test against: 'current' (pinned) or 'latest' (floating, canary only).
+        AwsSetupTrack = context.Argument("aws-setup-track", "current");
+
+        var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.Ordinal);
         sourceBuilder.AddRange([
             new KeyValuePair<string, string>(MyGetPackageSource, "https://www.myget.org/F/localstack-dotnet-client/api/v3/index.json"),
             new KeyValuePair<string, string>(NuGetPackageSource, "https://api.nuget.org/v3/index.json"),
@@ -46,11 +49,11 @@ public sealed class BuildContext : FrostingContext
         ArtifactOutput = SolutionRoot + context.Directory("artifacts");
         LocalStackClientFolder = SrcPath + context.Directory(LocalStackClientProjName);
         LocalStackClientExtFolder = SrcPath + context.Directory(LocalStackClientExtensionsProjName);
-        SlnFilePath = SolutionRoot + context.File("LocalStack.sln");
+        SlnFilePath = SolutionRoot + context.File("LocalStack.slnx");
         LocalStackClientProjFile = LocalStackClientFolder + context.File($"{LocalStackClientProjName}.csproj");
         LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File($"{LocalStackClientExtensionsProjName}.csproj");
 
-        var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>();
+        var packIdBuilder = ImmutableDictionary.CreateBuilder<string, FilePath>(StringComparer.Ordinal);
         packIdBuilder.AddRange(
         [
             new KeyValuePair<string, FilePath>(LocalStackClientProjName, LocalStackClientProjFile),
@@ -80,6 +83,12 @@ public sealed class BuildContext : FrostingContext
     public bool UseDirectoryPropsVersion { get; }
 
     public string BranchName { get; }
+
+    /// <summary>
+    /// Which AWSSDK.Extensions.NETCore.Setup constructor shape to build and test against
+    /// (current = post-4.0.4, legacy = pre-4.0.4, latest = floating canary).
+    /// </summary>
+    public string AwsSetupTrack { get; }
 
     public ImmutableDictionary<string, string> PackageSourceMap { get; }
 
@@ -276,49 +285,68 @@ public sealed class BuildContext : FrostingContext
 
         string baseVersion = content[startIndex..endIndex];
 
+        if (!NuGetVersion.TryParse(baseVersion, out NuGetVersion? _))
+        {
+            throw new InvalidOperationException($"<{versionPropertyName}> in Directory.Build.props is not a valid NuGet version: '{baseVersion}'.");
+        }
+
         // Generate build metadata
         string buildDate = DateTime.UtcNow.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
         string commitSha = GetGitCommitSha();
-        string safeBranchName = BranchName.Replace('/', '-').Replace('_', '-');
 
-        // SemVer-compliant pre-release versioning
-        if (BranchName == "master")
+        // Master nightlies: 2.0.0-nightly.20250725.sha
+        // Feature branches:  2.0.0-feature-name.20250725.sha
+        string label = BranchName == "master" ? "nightly" : ToPreReleaseIdentifier(BranchName);
+        string version = $"{baseVersion}-{label}.{buildDate}.{commitSha}";
+
+        // Backstop: NuGet is the consumer of this string, so let it be the judge. A version that only
+        // fails at `dotnet pack` time - as the leading-zero timestamp did - should fail here instead,
+        // with the offending value in the message.
+        if (!NuGetVersion.TryParse(version, out NuGetVersion? _))
         {
-            // Master nightlies: 2.0.0-nightly.20250725.sha
-            return $"{baseVersion}-nightly.{buildDate}.{commitSha}";
+            throw new InvalidOperationException(
+                $"Generated package version '{version}' is not a valid NuGet version " +
+                $"(base '{baseVersion}', branch '{BranchName}', build date '{buildDate}', commit '{commitSha}').");
         }
-        else
-        {
-            // Feature branches: 2.0.0-feature-name.20250725.sha  
-            return $"{baseVersion}-{safeBranchName}.{buildDate}.{commitSha}";
-        }
+
+        return version;
     }
 
     /// <summary>
     /// Gets the short git commit SHA for version metadata
     /// </summary>
     /// <returns>Short commit SHA or timestamp fallback</returns>
+    [SuppressMessage("Security", "S4036:Use an absolute path for this command",
+                     Justification = "Build tooling deliberately resolves git from PATH; the absolute location differs per developer machine and CI image.")]
     private string GetGitCommitSha()
     {
         try
         {
-            var processSettings = new ProcessSettings
+            // Cake's StartProcess returned exit code 0 but an empty stdout here, so every build fell through
+            // to the timestamp and no published package ever carried its commit SHA. Reading the process
+            // directly keeps the capture explicit and independent of Cake's redirection behaviour.
+            var startInfo = new System.Diagnostics.ProcessStartInfo("git", "rev-parse --short HEAD")
             {
-                Arguments = "rev-parse --short HEAD",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                Silent = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
             };
 
-            var exitCode = this.StartProcess("git", processSettings, out IEnumerable<string> output);
+            using System.Diagnostics.Process? process = System.Diagnostics.Process.Start(startInfo);
 
-            if (exitCode == 0 && output?.Any() == true)
+            if (process != null)
             {
-                string? commitSha = output.FirstOrDefault()?.Trim();
-                if (!string.IsNullOrEmpty(commitSha))
+                string commitSha = process.StandardOutput.ReadToEnd().Trim();
+                process.WaitForExit();
+
+                if (process.ExitCode == 0 && !string.IsNullOrEmpty(commitSha))
                 {
-                    return commitSha;
+                    return ToPreReleaseIdentifier(commitSha);
                 }
+
+                this.Warning($"'git rev-parse --short HEAD' exited with code {process.ExitCode} and no usable output; " +
+                             "the package version will carry a timestamp instead of the commit SHA.");
             }
         }
         catch (Exception ex)
@@ -327,7 +355,31 @@ public sealed class BuildContext : FrostingContext
         }
 
         // Fallback to timestamp-based identifier
-        return DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture);
+        return ToPreReleaseIdentifier(DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>
+    /// Makes an arbitrary string safe to use as a single pre-release identifier.
+    /// </summary>
+    /// <remarks>
+    /// Pre-release identifiers are limited to <c>[0-9A-Za-z-]</c>, and SemVer 2.0.0 additionally forbids a
+    /// leading zero on a purely numeric one. The timestamp fallback produces exactly that for any build before
+    /// 10:00 UTC - "075853" - which made `dotnet pack` fail depending purely on the time of day; an all-digit
+    /// git short SHA can hit the same trap. Rather than reimplement the rule, we ask NuGet - the library that
+    /// decides whether the package is publishable - and only prefix when it objects.
+    /// </remarks>
+    private static string ToPreReleaseIdentifier(string identifier)
+    {
+        var builder = new StringBuilder(identifier.Length);
+
+        foreach (char character in identifier)
+        {
+            builder.Append(char.IsAsciiLetterOrDigit(character) || character == '-' ? character : '-');
+        }
+
+        string sanitised = builder.ToString();
+
+        return NuGetVersion.TryParse($"0.0.0-{sanitised}", out NuGetVersion? _) ? sanitised : $"g{sanitised}";
     }
 
     private string[] GetProjectTargetFrameworks(string csprojPath)

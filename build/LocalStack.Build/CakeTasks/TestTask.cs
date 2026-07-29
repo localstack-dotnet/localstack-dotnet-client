@@ -7,7 +7,13 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
         var settings = new DotNetTestSettings
         {
-            NoRestore = !context.ForceRestore, NoBuild = !context.ForceBuild, Configuration = context.BuildConfiguration, Blame = true,
+            NoRestore = !context.ForceRestore,
+            NoBuild = !context.ForceBuild,
+            Configuration = context.BuildConfiguration,
+            Blame = true,
+            // Must match the track the solution was built with, otherwise dotnet test re-evaluates
+            // the project with a different AWSSDK.Extensions.NETCore.Setup version than was compiled.
+            MSBuildSettings = new DotNetMSBuildSettings().WithProperty("AwsSetupTrack", context.AwsSetupTrack),
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();

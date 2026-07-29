@@ -20,6 +20,9 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_NOLOGO: true
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     name: "Build & Test (${{ matrix.name }})"
@@ -27,6 +30,13 @@ jobs:
     env:
       NUGET_PACKAGES: ${{ contains(matrix.os, 'windows') && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
       BADGE_GIST_ID: "472c59b7c2a1898c48a29f3c88897c5a"
+
+    # dorny/test-reporter publishes a check run. The badge step authenticates with its own
+    # PAT (secrets.GIST_SECRET), so it needs nothing from GITHUB_TOKEN.
+    permissions:
+      contents: read
+      actions: read
+      checks: write
 
     strategy:
       fail-fast: false
@@ -49,23 +59,32 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Full history for better caching
 
       - name: "Setup .NET SDK"
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             9.0.x
+          global-json-file: global.json
 
-      - name: "Make build script executable"
-        if: runner.os != 'Windows'
-        run: chmod +x ./build.sh
+      # The macOS runner image no longer ships Mono, and VSTest needs the real 'mono' host
+      # on the PATH to execute the net472 test assemblies.
+      - name: "Install Mono (macOS)"
+        if: runner.os == 'macOS'
+        run: |
+          if command -v mono >/dev/null 2>&1; then
+            echo "✅ Mono already present: $(mono --version | head -1)"
+          else
+            brew install mono
+            echo "✅ Installed: $(mono --version | head -1)"
+          fi
 
       - name: "Cache NuGet packages"
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.os == 'Windows' && format('{0}\.nuget\packages', github.workspace) || format('{0}/.nuget/packages', github.workspace) }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
@@ -80,7 +99,7 @@ jobs:
 
       - name: "Publish Test Results"
         id: test-results
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: success() || failure()
         with:
           name: "Test Results (${{ matrix.name }})"
@@ -108,7 +127,7 @@ jobs:
           server_url: ${{ github.server_url }}
 
       - name: "Upload Test Artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: test-results-${{ matrix.name }}
@@ -120,7 +139,7 @@ jobs:
   continuous-deployment:
     name: "Continuous Deployment"
     runs-on: ubuntu-22.04
-    needs: build-and-test
+    needs: [build-and-test]
     if: |
       github.repository == 'localstack-dotnet/localstack-dotnet-client' &&
       ((github.event_name == 'push' && github.ref == 'refs/heads/master') ||
@@ -134,27 +153,32 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: "Setup .NET SDK"
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             8.0.x
             9.0.x
+          global-json-file: global.json
 
       - name: "Cache NuGet packages"
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/Directory.Packages.props') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: "Make build script executable"
-        run: chmod +x ./build.sh
+      # Upload-artifact rejects '/' in artifact names, and every deploy from this job runs on a
+      # feature/* branch. Mirrors the sanitising BuildContext already applies to the package version.
+      - name: "Compute artifact-safe branch name"
+        run: |
+          RAW_REF="${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}"
+          echo "SAFE_REF=${RAW_REF//\//-}" >> "$GITHUB_ENV"
 
       - name: "Setup GitHub Packages Configuration"
         run: |
@@ -207,9 +231,9 @@ jobs:
             --package-secret ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Upload Package Artifacts"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: "packages-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}-${{ github.run_number }}"
+          name: "packages-${{ env.SAFE_REF }}-${{ github.run_number }}"
           path: |
             artifacts/*.nupkg
             artifacts/*.snupkg

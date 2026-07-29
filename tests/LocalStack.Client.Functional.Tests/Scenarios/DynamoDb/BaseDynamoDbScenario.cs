@@ -115,8 +115,10 @@ public abstract class BaseDynamoDbScenario : BaseScenario
         });
     }
 
-    protected Task<CreateTableResponse> CreateTestTableAsync(string? tableName = null)
+    protected async Task<CreateTableResponse> CreateTestTableAsync(string? tableName = null)
     {
+        string effectiveTableName = tableName ?? TestTableName;
+
         var postTableCreateRequest = new CreateTableRequest
         {
             AttributeDefinitions =
@@ -125,7 +127,7 @@ public abstract class BaseDynamoDbScenario : BaseScenario
                 new AttributeDefinition { AttributeName = nameof(MovieEntity.CreateDate), AttributeType = ScalarAttributeType.S },
                 new AttributeDefinition { AttributeName = nameof(MovieEntity.MovieId), AttributeType = ScalarAttributeType.S },
             ],
-            TableName = tableName ?? TestTableName,
+            TableName = effectiveTableName,
             KeySchema =
             [
                 new KeySchemaElement { AttributeName = nameof(MovieEntity.DirectorId), KeyType = KeyType.HASH },
@@ -145,13 +147,22 @@ public abstract class BaseDynamoDbScenario : BaseScenario
             ProvisionedThroughput = new ProvisionedThroughput { ReadCapacityUnits = 5, WriteCapacityUnits = 6 },
         };
 
-        return DynamoDb.CreateTableAsync(postTableCreateRequest);
+        CreateTableResponse createTableResponse = await DynamoDb.CreateTableAsync(postTableCreateRequest);
+
+        TrackForCleanup(effectiveTableName, () => DynamoDb.DeleteTableAsync(new DeleteTableRequest(effectiveTableName)));
+
+        return createTableResponse;
     }
 
-    protected Task<DeleteTableResponse> DeleteTestTableAsync(string? tableName = null)
+    protected async Task<DeleteTableResponse> DeleteTestTableAsync(string? tableName = null)
     {
-        var deleteTableRequest = new DeleteTableRequest(tableName ?? TestTableName);
+        string effectiveTableName = tableName ?? TestTableName;
+        var deleteTableRequest = new DeleteTableRequest(effectiveTableName);
 
-        return DynamoDb.DeleteTableAsync(deleteTableRequest);
+        DeleteTableResponse deleteTableResponse = await DynamoDb.DeleteTableAsync(deleteTableRequest);
+
+        UntrackCleanup(effectiveTableName);
+
+        return deleteTableResponse;
     }
 }

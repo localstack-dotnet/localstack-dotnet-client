@@ -2,7 +2,7 @@
 Console.ReadLine();
 
 string containerId = Guid.NewGuid().ToString().ToUpperInvariant();
-LocalStackBuilder localStackBuilder = new LocalStackBuilder().WithImage($"localstack/localstack:4.6.0")
+LocalStackBuilder localStackBuilder = new LocalStackBuilder("localstack/localstack:4.6.0")
                                                              .WithName($"localStack-latest-{containerId}")
                                                              .WithEnvironment("DOCKER_HOST", "unix:///var/run/docker.sock")
                                                              .WithEnvironment("DEBUG", "1")

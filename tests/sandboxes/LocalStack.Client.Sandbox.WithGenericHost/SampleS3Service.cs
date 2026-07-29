@@ -62,7 +62,7 @@ internal sealed class SampleS3Service : IHostedService
     {
         var request = new GetBucketLocationRequest() { BucketName = bucketName };
         GetBucketLocationResponse response = await client.GetBucketLocationAsync(request);
-        var bucketLocation = response.Location.ToString();
+        var bucketLocation = response.Location.Value;
 
         return bucketLocation;
     }

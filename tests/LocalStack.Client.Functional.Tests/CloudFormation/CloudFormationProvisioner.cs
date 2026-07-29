@@ -32,7 +32,7 @@ public sealed class CloudFormationProvisioner
             // Capture the CloudFormation stack output parameters on to the Aspire CloudFormation resource. This
             // allows projects that have a reference to the stack have the output parameters applied to the
             // projects IConfiguration.
-            resource.Outputs = stack!.Outputs;
+            resource.Outputs = stack.Outputs;
 
             resource.ProvisioningTaskCompletionSource?.TrySetResult();
         }

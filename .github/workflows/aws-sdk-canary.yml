@@ -1,0 +1,70 @@
+name: "AWS SDK Canary"
+
+# Early warning for AWS SDK drift.
+#
+# The normal build pins AWSSDK.* so it stays reproducible - which is exactly why the
+# AWSSDK.Extensions.NETCore.Setup 4.0.4 breaking change (issue #52) went unnoticed for 70 days:
+# CI only ever saw the pinned version, while consumers float to whatever is newest.
+#
+# This job floats both AWSSDK.Core and AWSSDK.Extensions.NETCore.Setup to the latest 4.x and runs
+# the suite against them. A failure here means "AWS moved", not "we broke something".
+
+on:
+  schedule:
+    # 05:00 UTC daily
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    name: "Latest AWS SDK"
+    runs-on: ubuntu-22.04
+    if: github.repository == 'localstack-dotnet/localstack-dotnet-client'
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v7
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+          global-json-file: global.json
+
+      # Floating versions resolve against NuGet's cached feed index, so a warm HTTP cache can pin this
+      # job to a stale "latest" without saying so - the exact drift it exists to detect.
+      - name: "Clear NuGet HTTP cache"
+        run: dotnet nuget locals http-cache --clear
+
+      # Deliberately no NuGet package cache either: the point is to resolve the newest AWSSDK every run.
+      - name: "Build & test against floating AWS SDK"
+        run: ./build.sh --target tests --skipFunctionalTest true --aws-setup-track latest --force-restore true --exclusive
+
+      - name: "Report resolved AWS SDK versions"
+        if: always()
+        run: |
+          echo "### Resolved AWS SDK versions" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -rhoE '"AWSSDK\.(Extensions\.NETCore\.Setup|Core)/[^"]+"' \
+            tests/*/obj/project.assets.json 2>/dev/null | sort -u >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: "Upload test artifacts"
+        uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: canary-test-results
+          path: |
+            **/*.trx
+            **/TestResults/**/*
+          retention-days: 7

@@ -22,7 +22,9 @@ public class MockAmazonServiceClient : AmazonServiceClient, IMockAmazonService
     {
     }
 
-    public AWSCredentials AwsCredentials => Config.DefaultAWSCredentials;
+    // AWSSDK.Core >= 4.0.100 stores constructor-supplied credentials in ExplicitAWSCredentials.
+    // Older versions assigned them to Config.DefaultAWSCredentials, which is now left null.
+    public AWSCredentials AwsCredentials => ExplicitAWSCredentials;
 
 #if NET8_0_OR_GREATER
     public static ClientConfig CreateDefaultClientConfig()

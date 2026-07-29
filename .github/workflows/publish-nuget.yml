@@ -41,6 +41,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write # OIDC token for NuGet.org Trusted Publishing
 
     steps:
       - name: "Checkout"
@@ -112,6 +113,17 @@ jobs:
             --package-version ${{ github.event.inputs.package-version }} \
             --package-secret ${{ secrets.GITHUB_TOKEN }}
 
+      # Trusted Publishing: exchange a GitHub OIDC token for a short-lived NuGet.org key, so there is no
+      # long-lived NUGET_API_KEY to rotate or leak. The key lives one hour, hence immediately before the
+      # push rather than at the top of the job.
+      # Policy: owner LocalStack.NET, repo localstack-dotnet/localstack-dotnet-client, workflow publish-nuget.yml.
+      - name: "NuGet.org login (OIDC)"
+        id: nuget-login
+        if: ${{ github.event.inputs.package-source == 'nuget' }}
+        uses: NuGet/login@v1
+        with:
+          user: localstack-dotnet
+
       - name: "Publish to NuGet.org"
         if: ${{ github.event.inputs.package-source == 'nuget' }}
         run: |
@@ -119,7 +131,7 @@ jobs:
             --package-source nuget \
             --package-id ${{ github.event.inputs.package-id }} \
             --package-version ${{ github.event.inputs.package-version }} \
-            --package-secret ${{ secrets.NUGET_API_KEY }}
+            --package-secret ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
 
       - name: "Upload Package Artifacts"
         uses: actions/upload-artifact@v7

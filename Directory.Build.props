@@ -6,7 +6,7 @@
         <PackageProjectUrl>https://github.com/localstack-dotnet/localstack-dotnet-client</PackageProjectUrl>
         <PackageIcon>localstack-dotnet-square.png</PackageIcon>
         <PackageMainVersion>2.0.0</PackageMainVersion>
-        <PackageExtensionVersion>2.0.0</PackageExtensionVersion>
+        <PackageExtensionVersion>2.0.1</PackageExtensionVersion>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <LangVersion>13.0</LangVersion>

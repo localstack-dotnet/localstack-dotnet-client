@@ -4,30 +4,28 @@ This document outlines the changes, updates, and important notes for the LocalSt
 
 See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
 
-## [Unreleased]
+## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
+
+> Maintenance release for **`LocalStack.Client.Extensions` only**. `LocalStack.Client` stays at 2.0.0.
 
 ### 🐞 Fixes
 
 - **Fixed `LocalStackClientConfigurationException` when `UseLocalStack` is `false`
   ([#52](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/52)).**
-  `AWSSDK.Extensions.NETCore.Setup` **4.0.4** (2026-05-20) changed the internal `ClientFactory<T>`
-  constructor from `(AWSOptions)` to `(AWSOptions, Action<ClientConfig, IServiceProvider> = null)`.
-  Because the added parameter is optional this was source-compatible for AWS and shipped as a patch,
-  but it broke our exact-signature reflection lookup. `AwsClientFactoryWrapper` now matches on the
-  `AWSOptions` parameter instead of the full signature and defaults any trailing parameters, so both
-  the pre-4.0.4 and 4.0.4+ shapes work. Only the `UseLocalStack: false` path was affected.
-  - Failure messages now list the constructor signatures actually discovered, so future AWS SDK
-    changes can be diagnosed from a bug report without a version bisect.
+  `AWSSDK.Extensions.NETCore.Setup` 4.0.4 added an optional parameter to the internal
+  `ClientFactory<T>` constructor, which broke our exact-signature reflection lookup. Resolution now
+  matches on the `AWSOptions` parameter and defaults any trailing ones.
+- Failure messages now list the constructor signatures actually discovered.
 
 ### 🛠️ General
 
-- **Dependency refresh:** `AWSSDK.Core` → 4.0.100.6, `AWSSDK.Extensions.NETCore.Setup` → 4.0.100.5,
-  120 AWSSDK service packages, `Microsoft.Extensions.*` → 10.0.10, and the full analyzer/test
-  toolchain updated. Resolves the `NU1901` advisory (GHSA-9cvc-h2w8-phrp) on `AWSSDK.Core` 4.0.0.15.
-- **AWS SDK compatibility testing:** the `AwsSetupTrack` MSBuild property
-  (`current` | `legacy` | `latest`) switches the whole package graph, so the same suite runs against
-  both the pre-4.0.4 and 4.0.4+ `ClientFactory<T>` shapes. Exposed through Cake as
-  `--aws-setup-track`, wired into CI, plus a scheduled canary that floats to the newest AWS SDK.
+- **Minimum `AWSSDK.Extensions.NETCore.Setup` is now 4.0.100.5** (was 4.0.2). No other dependency
+  floor changed.
+- **Internal dependency refresh:** `AWSSDK.Core` → 4.0.100.6, 120 AWSSDK service packages, and the
+  analyzer/test toolchain. Clears the `NU1901` advisory (GHSA-9cvc-h2w8-phrp) on `AWSSDK.Core`
+  4.0.0.15.
+- **Added a scheduled AWS SDK canary** that builds against the newest `AWSSDK.Core` and
+  `AWSSDK.Extensions.NETCore.Setup`, so upstream changes surface before they reach users.
 - **Public API unchanged.**
 
 ---

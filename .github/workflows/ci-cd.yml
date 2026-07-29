@@ -176,6 +176,13 @@ jobs:
       - name: "Make build script executable"
         run: chmod +x ./build.sh
 
+      # Upload-artifact rejects '/' in artifact names, and every deploy from this job runs on a
+      # feature/* branch. Mirrors the sanitising BuildContext already applies to the package version.
+      - name: "Compute artifact-safe branch name"
+        run: |
+          RAW_REF="${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}"
+          echo "SAFE_REF=${RAW_REF//\//-}" >> "$GITHUB_ENV"
+
       - name: "Setup GitHub Packages Configuration"
         run: |
           echo "🔐 Adding GitHub Packages authentication..."
@@ -229,7 +236,7 @@ jobs:
       - name: "Upload Package Artifacts"
         uses: actions/upload-artifact@v7
         with:
-          name: "packages-${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}-${{ github.run_number }}"
+          name: "packages-${{ env.SAFE_REF }}-${{ github.run_number }}"
           path: |
             artifacts/*.nupkg
             artifacts/*.snupkg

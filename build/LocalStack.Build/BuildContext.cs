@@ -49,7 +49,7 @@ public sealed class BuildContext : FrostingContext
         ArtifactOutput = SolutionRoot + context.Directory("artifacts");
         LocalStackClientFolder = SrcPath + context.Directory(LocalStackClientProjName);
         LocalStackClientExtFolder = SrcPath + context.Directory(LocalStackClientExtensionsProjName);
-        SlnFilePath = SolutionRoot + context.File("LocalStack.sln");
+        SlnFilePath = SolutionRoot + context.File("LocalStack.slnx");
         LocalStackClientProjFile = LocalStackClientFolder + context.File($"{LocalStackClientProjName}.csproj");
         LocalStackClientExtProjFile = LocalStackClientExtFolder + context.File($"{LocalStackClientExtensionsProjName}.csproj");
 

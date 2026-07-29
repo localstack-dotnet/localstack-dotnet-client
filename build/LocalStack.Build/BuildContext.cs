@@ -308,27 +308,37 @@ public sealed class BuildContext : FrostingContext
     /// Gets the short git commit SHA for version metadata
     /// </summary>
     /// <returns>Short commit SHA or timestamp fallback</returns>
+    [SuppressMessage("Security", "S4036:Use an absolute path for this command",
+                     Justification = "Build tooling deliberately resolves git from PATH; the absolute location differs per developer machine and CI image.")]
     private string GetGitCommitSha()
     {
         try
         {
-            var processSettings = new ProcessSettings
+            // Cake's StartProcess returned exit code 0 but an empty stdout here, so every build fell through
+            // to the timestamp and no published package ever carried its commit SHA. Reading the process
+            // directly keeps the capture explicit and independent of Cake's redirection behaviour.
+            var startInfo = new System.Diagnostics.ProcessStartInfo("git", "rev-parse --short HEAD")
             {
-                Arguments = "rev-parse --short HEAD",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
-                Silent = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
             };
 
-            var exitCode = this.StartProcess("git", processSettings, out IEnumerable<string> output);
+            using System.Diagnostics.Process? process = System.Diagnostics.Process.Start(startInfo);
 
-            if (exitCode == 0 && output?.Any() == true)
+            if (process != null)
             {
-                string? commitSha = output.FirstOrDefault()?.Trim();
-                if (!string.IsNullOrEmpty(commitSha))
+                string commitSha = process.StandardOutput.ReadToEnd().Trim();
+                process.WaitForExit();
+
+                if (process.ExitCode == 0 && !string.IsNullOrEmpty(commitSha))
                 {
-                    return commitSha;
+                    return ToSemVerIdentifier(commitSha);
                 }
+
+                this.Warning($"'git rev-parse --short HEAD' exited with code {process.ExitCode} and no usable output; " +
+                             "the package version will carry a timestamp instead of the commit SHA.");
             }
         }
         catch (Exception ex)
@@ -337,7 +347,26 @@ public sealed class BuildContext : FrostingContext
         }
 
         // Fallback to timestamp-based identifier
-        return DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture);
+        return ToSemVerIdentifier(DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture));
+    }
+
+    /// <summary>
+    /// Makes an identifier safe to use inside a SemVer pre-release tag.
+    /// </summary>
+    /// <remarks>
+    /// SemVer 2.0.0 forbids leading zeroes in <em>numeric</em> pre-release identifiers, and NuGet enforces it.
+    /// The timestamp fallback produces exactly that for any build before 10:00 UTC - "075853" - which made
+    /// `dotnet pack` fail with "is not a valid version string" depending purely on the time of day. A git short
+    /// SHA can hit the same trap when it happens to be all digits. Prefixing keeps the identifier alphanumeric,
+    /// which SemVer allows to start with anything.
+    /// </remarks>
+    private static string ToSemVerIdentifier(string identifier)
+    {
+        bool isNumericWithLeadingZero = identifier.Length > 1
+                                        && identifier[0] == '0'
+                                        && identifier.All(char.IsDigit);
+
+        return isNumericWithLeadingZero ? $"g{identifier}" : identifier;
     }
 
     private string[] GetProjectTargetFrameworks(string csprojPath)

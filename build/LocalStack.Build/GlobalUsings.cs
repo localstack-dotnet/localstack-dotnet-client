@@ -12,6 +12,8 @@ global using Cake.Core.IO;
 global using Cake.Docker;
 global using Cake.Frosting;
 
+global using NuGet.Versioning;
+
 global using Spectre.Console;
 
 global using LocalStack.Build;

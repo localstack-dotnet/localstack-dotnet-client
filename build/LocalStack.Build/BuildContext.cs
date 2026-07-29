@@ -31,8 +31,7 @@ public sealed class BuildContext : FrostingContext
         UseDirectoryPropsVersion = context.Argument("use-directory-props-version", defaultValue: false);
         BranchName = context.Argument("branch-name", "master");
 
-        // Selects which AWSSDK.Extensions.NETCore.Setup shape to build/test against.
-        // See the $(AwsSetupTrack) switch in Directory.Packages.props. Values: current | legacy | latest.
+        // Which AWS SDK versions to build/test against: 'current' (pinned) or 'latest' (floating, canary only).
         AwsSetupTrack = context.Argument("aws-setup-track", "current");
 
         var sourceBuilder = ImmutableDictionary.CreateBuilder<string, string>(StringComparer.Ordinal);
@@ -286,22 +285,31 @@ public sealed class BuildContext : FrostingContext
 
         string baseVersion = content[startIndex..endIndex];
 
+        if (!NuGetVersion.TryParse(baseVersion, out NuGetVersion? _))
+        {
+            throw new InvalidOperationException($"<{versionPropertyName}> in Directory.Build.props is not a valid NuGet version: '{baseVersion}'.");
+        }
+
         // Generate build metadata
         string buildDate = DateTime.UtcNow.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
         string commitSha = GetGitCommitSha();
-        string safeBranchName = BranchName.Replace('/', '-').Replace('_', '-');
 
-        // SemVer-compliant pre-release versioning
-        if (BranchName == "master")
+        // Master nightlies: 2.0.0-nightly.20250725.sha
+        // Feature branches:  2.0.0-feature-name.20250725.sha
+        string label = BranchName == "master" ? "nightly" : ToPreReleaseIdentifier(BranchName);
+        string version = $"{baseVersion}-{label}.{buildDate}.{commitSha}";
+
+        // Backstop: NuGet is the consumer of this string, so let it be the judge. A version that only
+        // fails at `dotnet pack` time - as the leading-zero timestamp did - should fail here instead,
+        // with the offending value in the message.
+        if (!NuGetVersion.TryParse(version, out NuGetVersion? _))
         {
-            // Master nightlies: 2.0.0-nightly.20250725.sha
-            return $"{baseVersion}-nightly.{buildDate}.{commitSha}";
+            throw new InvalidOperationException(
+                $"Generated package version '{version}' is not a valid NuGet version " +
+                $"(base '{baseVersion}', branch '{BranchName}', build date '{buildDate}', commit '{commitSha}').");
         }
-        else
-        {
-            // Feature branches: 2.0.0-feature-name.20250725.sha  
-            return $"{baseVersion}-{safeBranchName}.{buildDate}.{commitSha}";
-        }
+
+        return version;
     }
 
     /// <summary>
@@ -334,7 +342,7 @@ public sealed class BuildContext : FrostingContext
 
                 if (process.ExitCode == 0 && !string.IsNullOrEmpty(commitSha))
                 {
-                    return ToSemVerIdentifier(commitSha);
+                    return ToPreReleaseIdentifier(commitSha);
                 }
 
                 this.Warning($"'git rev-parse --short HEAD' exited with code {process.ExitCode} and no usable output; " +
@@ -347,26 +355,31 @@ public sealed class BuildContext : FrostingContext
         }
 
         // Fallback to timestamp-based identifier
-        return ToSemVerIdentifier(DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture));
+        return ToPreReleaseIdentifier(DateTime.UtcNow.ToString("HHmmss", System.Globalization.CultureInfo.InvariantCulture));
     }
 
     /// <summary>
-    /// Makes an identifier safe to use inside a SemVer pre-release tag.
+    /// Makes an arbitrary string safe to use as a single pre-release identifier.
     /// </summary>
     /// <remarks>
-    /// SemVer 2.0.0 forbids leading zeroes in <em>numeric</em> pre-release identifiers, and NuGet enforces it.
-    /// The timestamp fallback produces exactly that for any build before 10:00 UTC - "075853" - which made
-    /// `dotnet pack` fail with "is not a valid version string" depending purely on the time of day. A git short
-    /// SHA can hit the same trap when it happens to be all digits. Prefixing keeps the identifier alphanumeric,
-    /// which SemVer allows to start with anything.
+    /// Pre-release identifiers are limited to <c>[0-9A-Za-z-]</c>, and SemVer 2.0.0 additionally forbids a
+    /// leading zero on a purely numeric one. The timestamp fallback produces exactly that for any build before
+    /// 10:00 UTC - "075853" - which made `dotnet pack` fail depending purely on the time of day; an all-digit
+    /// git short SHA can hit the same trap. Rather than reimplement the rule, we ask NuGet - the library that
+    /// decides whether the package is publishable - and only prefix when it objects.
     /// </remarks>
-    private static string ToSemVerIdentifier(string identifier)
+    private static string ToPreReleaseIdentifier(string identifier)
     {
-        bool isNumericWithLeadingZero = identifier.Length > 1
-                                        && identifier[0] == '0'
-                                        && identifier.All(char.IsDigit);
+        var builder = new StringBuilder(identifier.Length);
 
-        return isNumericWithLeadingZero ? $"g{identifier}" : identifier;
+        foreach (char character in identifier)
+        {
+            builder.Append(char.IsAsciiLetterOrDigit(character) || character == '-' ? character : '-');
+        }
+
+        string sanitised = builder.ToString();
+
+        return NuGetVersion.TryParse($"0.0.0-{sanitised}", out NuGetVersion? _) ? sanitised : $"g{sanitised}";
     }
 
     private string[] GetProjectTargetFrameworks(string csprojPath)

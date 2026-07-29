@@ -12,36 +12,17 @@ namespace LocalStack.Client.Extensions.Tests;
 /// <remarks>
 /// AWSSDK.Extensions.NETCore.Setup 4.0.4 changed the internal <c>ClientFactory&lt;T&gt;</c> constructor from
 /// <c>(AWSOptions)</c> to <c>(AWSOptions, Action&lt;ClientConfig, IServiceProvider&gt; = null)</c> and broke us
-/// (issue #52). Tests that talk to the real AWS SDK can only ever see whichever version is pinned, so the shapes
-/// are modelled with local stand-ins here. That covers both known shapes at once - and shapes AWS has not shipped
-/// yet - without a second test project or a package-version dance.
-/// <para>
-/// The companion real-SDK check is <see cref="SelectFactoryConstructor_Should_Resolve_Against_The_Real_Aws_Sdk" />,
-/// which is deliberately shape-agnostic so it passes on both <c>-p:AwsSetupTrack=current</c> and
-/// <c>-p:AwsSetupTrack=legacy</c>.
-/// </para>
+/// (issue #52). We pin a floor, but a NuGet floor is a minimum - consumers still float upwards, so the next
+/// such change reaches them before it reaches our pinned build. These tests therefore cover shapes AWS has
+/// <em>not</em> shipped yet, using local stand-ins, because a test against the real SDK can only ever see
+/// whichever version is currently pinned.
 /// </remarks>
 public class AwsClientFactoryWrapperResolutionTests
 {
-    private const string CategoryTrait = "Category";
-    private const string SdkCompatCategory = "SdkCompat";
-
     [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
-    public void SelectFactoryConstructor_Should_Select_Ctor_On_Pre_4_0_4_Shape()
+    public void SelectFactoryConstructor_Should_Select_Ctor_On_The_Current_Shape()
     {
-        ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PreV404Factory>());
-
-        Assert.NotNull(selected);
-        Assert.Single(selected.GetParameters());
-        Assert.Equal(typeof(AWSOptions), selected.GetParameters()[0].ParameterType);
-    }
-
-    [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
-    public void SelectFactoryConstructor_Should_Select_Ctor_On_Post_4_0_4_Shape()
-    {
-        ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PostV404Factory>());
+        ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<CurrentShapeFactory>());
 
         Assert.NotNull(selected);
         Assert.Equal(2, selected.GetParameters().Length);
@@ -49,7 +30,6 @@ public class AwsClientFactoryWrapperResolutionTests
     }
 
     [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
     public void SelectFactoryConstructor_Should_Select_Ctor_On_Unknown_Future_Shape()
     {
         ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<FutureShapeFactory>());
@@ -62,7 +42,7 @@ public class AwsClientFactoryWrapperResolutionTests
     [Fact]
     public void SelectFactoryConstructor_Should_Ignore_The_Parameterless_Ctor()
     {
-        ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PreV404Factory>());
+        ConstructorInfo? selected = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<CurrentShapeFactory>());
 
         Assert.NotNull(selected);
         Assert.NotEmpty(selected.GetParameters());
@@ -86,10 +66,9 @@ public class AwsClientFactoryWrapperResolutionTests
     }
 
     [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
     public void BuildConstructorArguments_Should_Default_The_Trailing_Parameters()
     {
-        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PostV404Factory>())!;
+        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<CurrentShapeFactory>())!;
         var awsOptions = new AWSOptions();
 
         object?[] arguments = AwsClientFactoryWrapper.BuildConstructorArguments(constructor, awsOptions);
@@ -112,12 +91,11 @@ public class AwsClientFactoryWrapperResolutionTests
     }
 
     [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
     public void BuildConstructorArguments_Should_Allow_Null_AwsOptions()
     {
         // AddAwsService<T>() without explicit options passes null, and the AWS factory then resolves
         // AWSOptions from the IServiceProvider or IConfiguration. Null must survive the call.
-        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PostV404Factory>())!;
+        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<CurrentShapeFactory>())!;
 
         object?[] arguments = AwsClientFactoryWrapper.BuildConstructorArguments(constructor, awsOptions: null);
 
@@ -127,10 +105,10 @@ public class AwsClientFactoryWrapperResolutionTests
     [Fact]
     public void BuildConstructorArguments_Should_Produce_Invokable_Arguments()
     {
-        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<PostV404Factory>())!;
+        ConstructorInfo constructor = AwsClientFactoryWrapper.SelectFactoryConstructor(CtorsOf<CurrentShapeFactory>())!;
         var awsOptions = new AWSOptions();
 
-        var created = (PostV404Factory)constructor.Invoke(AwsClientFactoryWrapper.BuildConstructorArguments(constructor, awsOptions));
+        var created = (CurrentShapeFactory)constructor.Invoke(AwsClientFactoryWrapper.BuildConstructorArguments(constructor, awsOptions));
 
         Assert.Same(awsOptions, created.AwsOptions);
         Assert.Null(created.ConfigAction);
@@ -139,7 +117,7 @@ public class AwsClientFactoryWrapperResolutionTests
     [Fact]
     public void DescribeConstructors_Should_Render_Discovered_Signatures()
     {
-        string described = AwsClientFactoryWrapper.DescribeConstructors(CtorsOf<PostV404Factory>());
+        string described = AwsClientFactoryWrapper.DescribeConstructors(CtorsOf<CurrentShapeFactory>());
 
         Assert.Contains("AWSOptions", described, StringComparison.Ordinal);
         Assert.Contains(".ctor(", described, StringComparison.Ordinal);
@@ -152,11 +130,10 @@ public class AwsClientFactoryWrapperResolutionTests
     }
 
     [Fact]
-    [Trait(CategoryTrait, SdkCompatCategory)]
     public void SelectFactoryConstructor_Should_Resolve_Against_The_Real_Aws_Sdk()
     {
-        // Shape-agnostic on purpose: pre-4.0.4 exposes one parameter, 4.0.4+ exposes two.
-        // Both must resolve, so this passes on either AwsSetupTrack.
+        // Deliberately shape-agnostic: this also runs on the floating canary track, where it must go red
+        // only when we genuinely cannot resolve - not merely because AWS appended another parameter.
         Type factoryType = typeof(ConfigurationException).Assembly.GetType("Amazon.Extensions.NETCore.Setup.ClientFactory`1")!
                                                          .MakeGenericType(typeof(IAmazonS3));
 
@@ -166,8 +143,8 @@ public class AwsClientFactoryWrapperResolutionTests
         Assert.NotNull(selected);
 
         ParameterInfo[] parameters = selected.GetParameters();
+        Assert.NotEmpty(parameters);
         Assert.Equal(typeof(AWSOptions), parameters[0].ParameterType);
-        Assert.InRange(parameters.Length, 1, 2);
     }
 
     private static ConstructorInfo[] CtorsOf<T>()
@@ -175,29 +152,14 @@ public class AwsClientFactoryWrapperResolutionTests
         return typeof(T).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance);
     }
 
-    /// <summary>Mirrors AWSSDK.Extensions.NETCore.Setup &lt;= 4.0.3.40.</summary>
-    private sealed class PreV404Factory
+    /// <summary>Mirrors AWSSDK.Extensions.NETCore.Setup &gt;= 4.0.4, the shape we pin against.</summary>
+    private sealed class CurrentShapeFactory
     {
-        private PreV404Factory()
+        private CurrentShapeFactory()
         {
         }
 
-        internal PreV404Factory(AWSOptions awsOptions)
-        {
-            AwsOptions = awsOptions;
-        }
-
-        public AWSOptions? AwsOptions { get; }
-    }
-
-    /// <summary>Mirrors AWSSDK.Extensions.NETCore.Setup &gt;= 4.0.4.</summary>
-    private sealed class PostV404Factory
-    {
-        private PostV404Factory()
-        {
-        }
-
-        internal PostV404Factory(AWSOptions awsOptions, Action<ClientConfig, IServiceProvider>? configAction = null)
+        internal CurrentShapeFactory(AWSOptions awsOptions, Action<ClientConfig, IServiceProvider>? configAction = null)
         {
             AwsOptions = awsOptions;
             ConfigAction = configAction;

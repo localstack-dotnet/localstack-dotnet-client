@@ -32,6 +32,13 @@
         <!-- Enable central package management -->
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 
+        <!-- Which AWS SDK versions to build against: 'current' (pinned, the default) or
+             'latest' (floating, scheduled canary only). See Directory.Packages.props. -->
+        <AwsSetupTrack Condition="'$(AwsSetupTrack)' == ''">current</AwsSetupTrack>
+
+        <!-- Floating versions are opt-in under central package management (NU1011). -->
+        <CentralPackageFloatingVersionsEnabled Condition="'$(AwsSetupTrack)' == 'latest'">true</CentralPackageFloatingVersionsEnabled>
+
     </PropertyGroup>
 
     <!-- third-party analyzers -->

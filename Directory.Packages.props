@@ -1,39 +1,14 @@
 ﻿<Project>
-  <!--
-    Which shape of the internal Amazon.Extensions.NETCore.Setup.ClientFactory<T> we build and test against.
-    AWS changed its constructor in AWSSDK.Extensions.NETCore.Setup 4.0.4 (see issue #52):
-
-      <= 4.0.3.40  ClientFactory(AWSOptions awsOptions)
-      >= 4.0.4     ClientFactory(AWSOptions awsOptions, Action<ClientConfig, IServiceProvider> configAction = null)
-
-    The version must move for the WHOLE graph at once - src and tests together - otherwise NuGet
-    reports NU1605 (package downgrade), which is an error here because TreatWarningsAsErrors is on.
-    That is why this is a central switch rather than a per-project VersionOverride.
-
-      current (default) - post-4.0.4 shape, the version consumers realistically resolve
-      legacy            - pre-4.0.4 shape, proves backwards compatibility
-      latest            - floating, scheduled canary ONLY (never in a reproducible build)
-  -->
-  <PropertyGroup>
-    <AwsSetupTrack Condition="'$(AwsSetupTrack)' == ''">current</AwsSetupTrack>
-  </PropertyGroup>
-
-  <!-- Floating versions are opt-in under Central Package Management (NU1011). Enable them ONLY for the
-       scheduled canary, so 'current' and 'legacy' stay strictly reproducible. -->
-  <PropertyGroup Condition="'$(AwsSetupTrack)' == 'latest'">
-    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(AwsSetupTrack)' == 'current'">
+  <!-- The two packages we depend on structurally. $(AwsSetupTrack) floats them for the scheduled
+       canary so AWS moving under us is caught early, as it was not for 4.0.4 (issue #52). -->
+  <ItemGroup Condition="'$(AwsSetupTrack)' != 'latest'">
+    <PackageVersion Include="AWSSDK.Core" Version="4.0.100.6" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.100.5" />
   </ItemGroup>
-  <ItemGroup Condition="'$(AwsSetupTrack)' == 'legacy'">
-    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.40" />
-  </ItemGroup>
   <ItemGroup Condition="'$(AwsSetupTrack)' == 'latest'">
+    <PackageVersion Include="AWSSDK.Core" Version="4.*" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.*" />
   </ItemGroup>
-
   <ItemGroup>
     <!-- third-party analyzers -->
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.134" />
@@ -47,8 +22,7 @@
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.30.0.144632" />
     <PackageVersion Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0" />
     <!-- packages -->
-    <!-- AWSSDK.Extensions.NETCore.Setup is declared above, switched by $(AwsSetupTrack) -->
-    <PackageVersion Include="AWSSDK.Core" Version="4.0.100.6" />
+    <!-- AWSSDK.Core and AWSSDK.Extensions.NETCore.Setup are declared above, switched by $(AwsSetupTrack) -->
     <PackageVersion Include="AWSSDK.Account" Version="4.0.101" />
     <PackageVersion Include="AWSSDK.ACMPCA" Version="4.0.100.7" />
     <PackageVersion Include="AWSSDK.Amplify" Version="4.0.100.7" />
@@ -169,21 +143,24 @@
     <PackageVersion Include="AWSSDK.XRay" Version="4.0.100.7" />
     <PackageVersion Include="Cake.Docker" Version="1.5.0" />
     <PackageVersion Include="Cake.Frosting" Version="6.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.10" />
+    <!-- Highest TFM in the repo is net9.0, so these track the .NET 9 servicing line.
+         Microsoft.SourceLink.GitHub is the exception: it has no 9.x release at all. -->
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.18" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.301" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="System.Text.Json" Version="10.0.10" />
+    <PackageVersion Include="NuGet.Versioning" Version="7.6.0" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.18" />
     <PackageVersion Include="System.ValueTuple" Version="4.6.2" />
     <!-- test packages -->
     <PackageVersion Include="AutoFixture" Version="4.18.1" />

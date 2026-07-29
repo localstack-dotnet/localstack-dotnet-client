@@ -62,9 +62,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: "Make build script executable"
-        run: chmod +x ./build.sh
-
       - name: "Build & Test"
         run: ./build.sh --target tests --skipFunctionalTest true
 

@@ -65,6 +65,18 @@ jobs:
         if: runner.os != 'Windows'
         run: chmod +x ./build.sh
 
+      # The macOS runner image no longer ships Mono, and VSTest needs the real 'mono' host
+      # on the PATH to execute the net472 test assemblies.
+      - name: "Install Mono (macOS)"
+        if: runner.os == 'macOS'
+        run: |
+          if command -v mono >/dev/null 2>&1; then
+            echo "✅ Mono already present: $(mono --version | head -1)"
+          else
+            brew install mono
+            echo "✅ Installed: $(mono --version | head -1)"
+          fi
+
       - name: "Cache NuGet packages"
         uses: actions/cache@v6
         with:

@@ -26,9 +26,9 @@ Provide a clear and concise description of the changes.
 
 ## 🎯 Target Version Track
 
-- [ ] v1.x (AWS SDK v3) - LTS Branch (`sdkv3-lts`)
-- [ ] v2.x (AWS SDK v4) - Current Branch (`master`)
-- [ ] Both versions (requires separate PRs)
+- [ ] v2.x (AWS SDK v4) - Supported branch (`master`)
+
+The v1.x / AWS SDK v3 line is no longer supported; do not target new fixes to `sdkv3-lts`. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 ## 🧪 Testing
 
@@ -98,6 +98,6 @@ If applicable, add screenshots or code examples showing the changes in action.
 
 By submitting this pull request, I confirm that:
 
-- [ ] I have read and agree to the project's [Code of Conduct](.github/CODE_OF_CONDUCT.md)
-- [ ] I understand that this contribution may be subject to the [.NET Foundation CLA](.github/CONTRIBUTING.md)
+- [ ] I have read and agree to the project's [Code of Conduct](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/CODE_OF_CONDUCT.md)
+- [ ] I understand that this contribution may be subject to the [.NET Foundation CLA](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/CONTRIBUTING.md)
 - [ ] My contribution is licensed under the same terms as the project (MIT License)

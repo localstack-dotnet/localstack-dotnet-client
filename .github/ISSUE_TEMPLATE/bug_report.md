@@ -32,9 +32,11 @@ A clear and concise description of what you expected to happen.
 
 **LocalStack.Client Version:**
 
-- [ ] v1.x (AWS SDK v3) - LTS Branch
+- [ ] v1.x (AWS SDK v3) - Unsupported historical release
 - [ ] v2.x (AWS SDK v4) - Current Branch
 - Version:
+
+The v1.x maintenance window ended in July 2026; new fixes target v2.x. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 **LocalStack Information:**
 

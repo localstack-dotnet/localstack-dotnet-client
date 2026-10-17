@@ -2,20 +2,20 @@
 
 ## Supported Versions
 
-We maintain a dual-track versioning strategy with different support levels for each track. Security patches are released based on the CVSS v3.0 Rating and version track:
+Security patches are released for the supported v2.x line according to the CVSS v3.0 rating below. Previously published v1.x packages remain available, but availability does not mean the line is still maintained.
 
 ### Version Tracks
 
 - **v2.x (AWS SDK v4)**: Active development on [master branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)
-- **v1.x (AWS SDK v3)**: Long-term support (LTS) on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts), maintained until **July 2026**
+- **v1.x (AWS SDK v3)**: The [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) is no longer supported. Its announced maintenance window ended in **July 2026**. We do not plan further v1.x bug fixes, security patches, or service updates; migrate to v2.x. The upstream [AWS SDK for .NET v3 reached end-of-support on June 1, 2026](https://aws.amazon.com/blogs/devops/announcing-the-end-of-support-for-the-aws-sdk-for-net-v3/).
 
 ### Security Patch Policy
 
-| CVSS v3.0 | v2.x (Current) | v1.x (LTS) |
-| --------- | -------------- | ---------- |
-| 9.0-10.0  | ✅ All releases within previous 3 months | ✅ Latest LTS release |
-| 4.0-8.9   | ✅ Most recent release | ✅ Latest LTS release |
-| < 4.0     | ⚠️ Best effort | ❌ No patches (upgrade recommended) |
+| CVSS v3.0 | v2.x (Current) |
+| --------- | -------------- |
+| 9.0-10.0  | ✅ All releases within previous 3 months |
+| 4.0-8.9   | ✅ Most recent release |
+| < 4.0     | ⚠️ Best effort |
 
 ## Reporting a Vulnerability
 
@@ -59,4 +59,4 @@ Security updates will be released as soon as possible after a vulnerability is c
 
 ## Comments on this Policy
 
-If you have suggestions on how this process could be improved, please submit a pull request or open an issue to discuss. 
+If you have suggestions on how this process could be improved, please submit a pull request or open an issue to discuss.

@@ -9,12 +9,12 @@ We welcome contributions of all kinds - from bug reports and feature requests to
 - 🐛 **Found a bug?** → [Create an Issue](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/new)
 - 💡 **Have an idea?** → [Start a Discussion](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions)
 - ❓ **Need help?** → [Q&A Discussions](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/categories/q-a)
-- 🚨 **Security issue?** → See our [Security Policy](.github/SECURITY.md)
+- 🚨 **Security issue?** → See our [Security Policy](SECURITY.md)
 - 🔧 **Ready to code?** → [Submit a Pull Request](https://github.com/localstack-dotnet/localstack-dotnet-client/compare)
 
 ## 🤝 Code of Conduct
 
-This project follows the [.NET Foundation Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating, you're expected to uphold this code. Please report unacceptable behavior to [localstack.dotnet@gmail.com](mailto:localstack.dotnet@gmail.com).
+This project follows the [.NET Foundation Code of Conduct](CODE_OF_CONDUCT.md). By participating, you're expected to uphold this code. Please report unacceptable behavior to [localstack.dotnet@gmail.com](mailto:localstack.dotnet@gmail.com).
 
 ## 📝 Contributor License Agreement (CLA)
 
@@ -25,15 +25,15 @@ This project follows the [.NET Foundation Code of Conduct](.github/CODE_OF_CONDU
 We maintain a **dual-track versioning strategy**:
 
 - **v2.x (AWS SDK v4)** - Active development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master) branch
-- **v1.x (AWS SDK v3)** - Long-term support on [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch (maintained until July 2026)
+- **v1.x (AWS SDK v3)** - The [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch preserves published releases but is no longer supported; its maintenance window ended in July 2026. See the [security policy](SECURITY.md).
 
-When contributing, please specify which version track your contribution targets.
+New changes target v2.x on `master`. The v1.x branch is not accepting maintenance fixes.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- [.NET SDK 8.0+](https://dotnet.microsoft.com/download) (for development)
+- A [.NET SDK](https://dotnet.microsoft.com/download) compatible with the repository's [`global.json`](../global.json) (for development)
 - [Docker](https://docs.docker.com/get-docker/) (for LocalStack testing)
 - [Git](https://git-scm.com/downloads)
 - IDE: [Visual Studio](https://visualstudio.microsoft.com/), [Rider](https://www.jetbrains.com/rider/), or [VS Code](https://code.visualstudio.com/)
@@ -61,15 +61,16 @@ When contributing, please specify which version track your contribution targets.
    ./build.sh
    ```
 
+   On Unix, the Cake initialization task changes your global Git `core.autocrlf` setting. Read the [quality gates](../docs/engineering/quality-gates.md) before using the script on a shared development machine.
+
 3. **Run Tests**
 
    ```bash
-   # All tests (requires Docker for functional tests)
+   # Default unit and client-construction tests (functional tests are skipped)
    .\build.ps1 --target tests
-   
-   # Unit/Integration tests only
-   .\build.ps1 --target tests --skipFunctionalTest true
    ```
+
+   Functional tests require LocalStack containers. The Cake opt-in task attempts to remove **every** Docker container returned by `docker ps --all`, not only this project's containers. Use an isolated Docker daemon before opting in; see [quality gates](../docs/engineering/quality-gates.md).
 
 ## 🐛 Reporting Issues
 
@@ -124,7 +125,7 @@ We love new ideas! Here's how to suggest features:
 3. **Test thoroughly**
 
    ```bash
-   # Run all tests
+   # Run the default suite (functional tests skipped)
    ./build.sh --target tests
    
    # Test specific scenarios with LocalStack
@@ -143,7 +144,7 @@ We love new ideas! Here's how to suggest features:
    - Use our [PR Template](https://github.com/localstack-dotnet/localstack-dotnet-client/compare)
    - Provide clear description of changes
    - Link related issues
-   - Specify target version track (v1.x or v2.x)
+   - Target the supported v2.x line
 
 ### Code Quality Standards
 
@@ -201,6 +202,6 @@ Contributors are recognized in:
 
 ---
 
-**By contributing to this project, you agree to abide by our [Code of Conduct](.github/CODE_OF_CONDUCT.md) and understand that your contributions will be licensed under the MIT License.**
+**By contributing to this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md) and understand that your contributions will be licensed under the MIT License.**
 
 Thank you for making LocalStack .NET Client better! 🚀

@@ -2,27 +2,25 @@
 
 [![Nuget](https://img.shields.io/nuget/dt/LocalStack.Client)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2F%3Fpackage%3Dlocalstack.client%26source%3Dnuget%26track%3D1%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) [![CI/CD Pipeline](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/ci-cd.yml) [![Security](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/localstack-dotnet/localstack-dotnet-client/actions/workflows/github-code-scanning/codeql) [![Linux Tests](https://img.shields.io/endpoint?url=https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/badge/tests/linux?label=Tests)](https://yvfdbfas85.execute-api.eu-central-1.amazonaws.com/live/redirect/test-results/linux)
 
-> **🚀 Quick Start**: `dotnet add package LocalStack.Client --version 2.0.0` (AWS SDK v4) | [Installation Guide](#-installation) | [GA Timeline](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)
+> **🚀 Quick Start**: `dotnet add package LocalStack.Client --version 2.0.0` (AWS SDK v4) | [Package installation](#-package-installation) | [Migration context](https://github.com/orgs/localstack-dotnet/discussions/45)
 
 ---
 
 ## 🎉 What's New: AWS SDK v4 Support Available
 
-**v2.0.0** is live with complete AWS SDK v4 support - easier migration than expected!
+**v2.0.0** introduced AWS SDK for .NET v4 compatibility. Service reachability depends on this library's catalog mapping and the capabilities of the LocalStack release and edition you use.
 
-- ✅ **1,168 tests passing** across all frameworks
-- ✅ **Minimal breaking changes** (just .NET Framework 4.6.2 → 4.7.2 and AWS SDK v3 → v4)  
-- ✅ **Public APIs unchanged** - your code should work as-is!
-- 📖 **[Read Full Roadmap](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/45)**
+- 🧪 Unit tests, AWS client-construction tests, and container-backed functional tests cover different parts of the library. See the [test and CI boundaries](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/engineering/quality-gates.md) rather than relying on a fixed pass count.
+- ⚠️ **Migration changes** include .NET Framework 4.6.2 → 4.7.2 and AWS SDK v3 → v4; see the [changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) before upgrading.
 
 **Version Strategy**:
 
 - v2.x (AWS SDK v4) active development on [master branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master)
-- v1.x (AWS SDK v3) Available on [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts), maintenance until July 2026
+- v1.x (AWS SDK v3) remains available on the [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts), but support ended in July 2026. Use v2.x for maintained releases; see the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 ![LocalStack](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/assets/localstack-dotnet.png?raw=true)
 
-Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com/localstack/localstack), a fully functional local AWS cloud stack. The client library provides a thin wrapper around [aws-sdk-net](https://github.com/aws/aws-sdk-net) which automatically configures the target endpoints to use LocalStack for your local cloud application development.
+LocalStack.NET is a .NET client library for [LocalStack](https://github.com/localstack/localstack), a local AWS cloud emulator. It configures AWS SDK clients for LocalStack when LocalStack mode is enabled; the same application registration can instead create ordinary AWS clients.
 
 ## 🚀 Platform Compatibility & Quality Status
 
@@ -36,53 +34,8 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 
 > **Heads‑up for `dotnet publish -p:PublishAot=true` / `PublishTrimmed=true` users**
 
-- **v2.0.0 GA ships without Native AOT support.**  
-  The current build still relies on reflection for some AWS SDK internals.  
-  - Public entry points that touch reflection are tagged with  
-    `[RequiresDynamicCode]` / `[RequiresUnreferencedCode]`.  
-  - You’ll see IL3050 / IL2026 warnings at compile time (promoted to errors in a strict AOT publish).
-- We already ship a linker descriptor with **`LocalStack.Client.Extensions`**  
-  to keep the private `ClientFactory<T>` machinery alive. **Nothing to configure for that part.**
-- Until the reflection‑free, source‑generated path lands (work in progress in  
-  [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) and tracked on  
-  [roadmap #48](https://github.com/localstack-dotnet/localstack-dotnet-client/discussions/48)):
-
-  1. **Suppress** the warnings in your app *or* call only the APIs that don’t rely on reflection.  
-  2. Add a tiny **service‑specific** linker descriptor for every `AWSSDK.*` package you reference  
-     (S3, DynamoDB, etc.). For example, for S3:
-
-     ```xml
-     <!-- ILLink.Descriptors.xml -->
-     <linker>
-       <assembly fullname="AWSSDK.S3">
-         <type fullname="Amazon.S3.AmazonS3Client" />
-         <type fullname="Amazon.S3.Internal.AmazonS3Metadata" />
-         <type fullname="Amazon.S3.AmazonS3Config" />
-       </assembly>
-
-       <!-- LocalStack options classes already carry [DAM] attributes,
-            but you can include them if you prefer explicit rules -->
-       <assembly fullname="LocalStack.Client">
-         <type fullname="LocalStack.Client.Options.LocalStackOptions" />
-         <type fullname="LocalStack.Client.Options.SessionOptions" />
-         <type fullname="LocalStack.Client.Options.ConfigOptions" />
-       </assembly>
-     </linker>
-     ```
-
-  3. Wire it into your project once:
-
-     ```xml
-     <ItemGroup>
-       <TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
-     </ItemGroup>
-     ```
-
-  4. If you hit a runtime “missing member” error, ensure you’re on AWS SDK v4 **≥ 4.1.\*** and that
-     the concrete `AWSSDK.*` package you’re using is included in the descriptor above.
-
-> **Planned** – v2.1 will introduce an AOT‑friendly factory that avoids reflection entirely; once you
-> migrate to that API these warnings and extra XML files go away.
+- **The current v2 packages do not support Native AOT.** Both client-creation paths still use reflection over AWS SDK internals. Entry points carry `[RequiresDynamicCode]` and `[RequiresUnreferencedCode]` annotations where available, and Extensions embeds a linker descriptor for its internal AWS factory; neither guarantees that an application will trim or publish successfully with Native AOT.
+- The reflection-free source-generator work is in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49), not in `master`. Do not suppress trimming/AOT warnings or adopt an unverified service descriptor on the assumption that this draft has shipped. See the [platform boundary](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md).
 
 ### Build & Test Matrix
 
@@ -96,7 +49,7 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 
 ## Package Status
 
-| Package | NuGet.org | GitHub Packages (Nightly) |
+| Package | NuGet.org | GitHub Packages (development builds) |
 |---------|-----------|---------------------------|
 | **LocalStack.Client v1.x** | [![NuGet v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dnuget%26track%3D1%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![Github v1.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dgithub%26track%3D1%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client) |
 | **LocalStack.Client v2.x** | [![NuGet v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dnuget%26track%3D2%26includeprerelease%3Dtrue%26label%3Dnuget)](https://www.nuget.org/packages/LocalStack.Client/) | [![Github v2.x](https://img.shields.io/endpoint?url=https%3A%2F%2Fyvfdbfas85.execute-api.eu-central-1.amazonaws.com%2Flive%2Fbadge%2Fpackages%2Flocalstack.client%3Fsource%3Dgithub%26track%3D2%26includeprerelease%3Dtrue%26label%3Dgithub)](https://github.com/localstack-dotnet/localstack-dotnet-client/pkgs/nuget/LocalStack.Client) |
@@ -125,7 +78,7 @@ Localstack.NET is an easy-to-use .NET client for [LocalStack](https://github.com
 
 - **Adaptable Environment Transition:** Easily switch between LocalStack and actual AWS services with minimal configuration changes.
 
-- **Versatile .NET Compatibility:** Supports a broad spectrum of .NET versions, from .NET 9.0 and .NET Standard 2.0 to .NET Framework 4.6.2 and above.
+- **Versatile .NET Compatibility:** Both packages target .NET 8, .NET 9, and .NET Standard 2.0; Core also has an explicit .NET Framework 4.7.2 target. See [platform and packaging](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md) for the exact project targets.
 
 - **Reduced Learning Curve:** Offers a familiar interface tailored for LocalStack, ideal for developers acquainted with the AWS SDK for .NET.
 
@@ -146,9 +99,9 @@ LocalStack.NET is available through multiple package sources to support differen
 To install the latest version of LocalStack.NET with AWS SDK v4 support, use the following command:
 
 ```bash
-# Install v2.0.0 with AWS SDK v4 support
+# Install the published v2 releases with AWS SDK v4 support
 dotnet add package LocalStack.Client --version 2.0.0
-dotnet add package LocalStack.Client.Extensions --version 2.0.0
+dotnet add package LocalStack.Client.Extensions --version 2.0.1
 ```
 
 #### Development Builds (GitHub Packages)
@@ -183,14 +136,14 @@ public void ConfigureServices(IServiceCollection services)
     // Add framework services.
     services.AddMvc();
 
-    services.AddLocalStack(Configuration)
+    services.AddLocalStack(Configuration);
     services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
     services.AddAwsService<IAmazonS3>();
     services.AddAwsService<IAmazonDynamoDB>();
 }
 ```
 
-The `AddLocalStack` method integrates LocalStack.NET into your application, and the `AddAwsService` method allows you to specify which AWS services you want to use with LocalStack.
+`AddLocalStack` binds configuration and registers the library's services. `AddAwsService` registers the AWS service interface; `LocalStack:UseLocalStack` selects whether that interface is created through the LocalStack session or the ordinary AWS SDK factory. The default is `false`. See [client runtime and service support](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/client-runtime.md) for what the endpoint catalog does—and does not—promise.
 
 <e><b>(Alternatively, `AddAWSServiceLocalStack` method can be used to prevent mix-up with `AddAWSService`.)</b></e>
 
@@ -243,11 +196,7 @@ The `RegionName` is important as LocalStack creates resources based on the speci
 
 - **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest v3 series container from Docker Hub.
 
-- **AWS_SERVICE_URL Environment Variable:** Unexpected behaviors might occur in LocalStack.NET when the `AWS_SERVICE_URL` environment variable is set. This environment variable is typically set by LocalStack in the container when using AWS Lambda, and AWS also uses this environment variable in the live environment. Soon, just like in LocalStack's official Python library, this environment variable will be prioritized by LocalStack.NET when configuring the LocalStack host, and there will be a general simplification in the configuration. You can follow this in the issues [issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27) and [issue #32](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/32). You set the `AWS_SERVICE_URL` to empty string until this issue is resolved.
-
-```csharp
-Environment.SetEnvironmentVariable("AWS_SERVICE_URL", string.Empty);
-```
+- **Endpoint environment variables:** [Issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27#issuecomment-4937111791) records a 2026-07-10 SQS observation against Extensions 2.0.0. With `UseLocalStack=true`, a LocalStack proxy aimed at A and `AWS_ENDPOINT_URL` aimed at B sent traffic to A. With `UseLocalStack=false`, the proxy was unset and traffic followed B. This is a dated report, not a re-run against every SDK or service; the issue remains open and no general precedence fix is merged. `AWS_SERVICE_URL` can also appear in Lambda environments, but this library does not define a general override rule for it. Diagnose the actual SDK configuration before adopting an environment-variable workaround.
 
 - **IAmazonLambda Operations:** There's a general issue with `IAmazonLambda` operations. This matter is currently under investigation.
 
@@ -272,6 +221,8 @@ Linux
 ```bash
 ./build.sh
 ```
+
+On Unix, this Cake script runs an initialization task that changes your global Git `core.autocrlf` setting. Read the [quality gates](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/engineering/quality-gates.md) before running it on a shared machine.
 
 ### Sandbox Applications
 
@@ -301,8 +252,8 @@ Got questions or wild feature ideas?
 
 ## Changelog
 
-Please refer to [`CHANGELOG.md`](CHANGELOG.md) to see the complete list of changes for each release.
+Please refer to [`CHANGELOG.md`](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) to see the complete list of changes for each release.
 
 ## License
 
-Licensed under MIT, see [LICENSE](LICENSE) for the full text.
+Licensed under MIT, see [LICENSE](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/LICENSE) for the full text.

@@ -1,6 +1,6 @@
 # Quality gates and safe commands
 
-Date: 2026-10-17
+Date: 2026-10-19
 
 The project uses xUnit tests and Cake Frosting build tasks. A command's success is evidence only for the projects, target frameworks, and dependencies it actually exercised. The [workflow YAML](../../.github/workflows/) owns CI triggers; [project files](../../tests/) and [Cake tasks](../../build/LocalStack.Build/CakeTasks/) own the runner mechanics.
 
@@ -18,6 +18,8 @@ The project uses xUnit tests and Cake Frosting build tasks. A command's success 
 - `nuget-prepare-extensions` removes the Extensions project reference and adds a Core package reference to the tracked `.csproj`. Do not run it as a packaging dry run. An isolated `nuget-pack` task does not invoke that preparation automatically. The library projects' `PreBuild` targets also copy the root README and LICENSE into their package folders.
 
 ## Evidence and CI
+
+The repository-wide [`NuGetAuditMode`](../../Directory.Build.props) setting is `all`, so restore audits transitive packages in every project and target framework. `TreatWarningsAsErrors` in that file means audit findings can fail restore. `dotnet list package --vulnerable --include-transitive` can report vulnerable packages and still exit with code 0; read the report instead of treating that exit code as a clean audit.
 
 The [main CI workflow](../../.github/workflows/ci-cd.yml) ignores Markdown-only changes on its master push and eligible pull-request triggers. The [dependency-review workflow](../../.github/workflows/dependency-review.yml) still triggers for eligible pull requests, so “all CI skips Markdown” is false. Documentation changes need local link, source-claim, and copy-consistency checks even when the main build workflow does not run.
 

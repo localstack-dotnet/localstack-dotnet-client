@@ -13,6 +13,8 @@
         <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
         <AnalysisLevel>latest</AnalysisLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <!-- Audit transitive dependencies consistently across all frameworks and build tools. -->
+        <NuGetAuditMode Condition="'$(NuGetAuditMode)' == ''">all</NuGetAuditMode>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

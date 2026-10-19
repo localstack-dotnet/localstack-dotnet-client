@@ -1,6 +1,6 @@
 # Platform and packaging boundary
 
-Date: 2026-10-17
+Date: 2026-10-19
 
 The source of package versions, target frameworks, and dependencies is the project configuration, not a prose copy of their values:
 
@@ -13,7 +13,20 @@ The source of package versions, target frameworks, and dependencies is the proje
 | Development SDK selection | [`global.json`](../../global.json) |
 | Publication triggers and credentials mechanism | [GitHub Actions workflows](../../.github/workflows/) |
 
-At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, and `net9.0`; Extensions targets `netstandard2.0`, `net8.0`, and `net9.0`. The AWS SDK v4 migration changed the explicit .NET Framework target from 4.6.2 to 4.7.2. The two packages can have different versions: the [changelog](../../CHANGELOG.md) records the Extensions-only 2.0.1 release. For an installation instruction, consult the actual package feed as well as the declared project version.
+For Extensions' four target frameworks (`netstandard2.0`, `net8.0`, `net9.0`, and `net10.0`), the Microsoft.Extensions `VersionOverride` values in [LocalStack.Client.Extensions.csproj](../../src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj) define these existing consumer minimums:
+
+| Package | Declared minimum | Target frameworks |
+| --- | --- | --- |
+| `Microsoft.Extensions.Configuration.Abstractions` | 3.1.32 | All four |
+| `Microsoft.Extensions.Configuration.Binder` | 3.1.32 | All four |
+| `Microsoft.Extensions.Logging.Abstractions` | 3.1.32 | All four |
+| `Microsoft.Extensions.Options.ConfigurationExtensions` | 3.1.32 | All four |
+| `Microsoft.Extensions.DependencyInjection.Abstractions` | 3.1.32 | `netstandard2.0` |
+| `Microsoft.Extensions.DependencyInjection.Abstractions` | 8.0.0 | `net8.0`, `net9.0`, `net10.0` |
+
+These are this package's consumer minimums, not a copy of the selected [`AWSSDK.Extensions.NETCore.Setup` 4.0.102.4 package ranges](https://www.nuget.org/packages/AWSSDK.Extensions.NETCore.Setup/4.0.102.4). Setup 4.0.102.4 permits older 2.x configuration, logging, and legacy dependency-injection packages, and a `net8.0` dependency-injection package at 8.0.0; those permissive ranges do not lower or define Extensions' own contract. Central versions in [Directory.Packages.props](../../Directory.Packages.props) govern test and sandbox consumers separately. A consumer's resolved graph can select a higher version when another dependency requires it.
+
+At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, `net9.0`, and `net10.0`; Extensions targets `netstandard2.0`, `net8.0`, `net9.0`, and `net10.0`. The AWS SDK v4 migration changed the explicit .NET Framework target from 4.6.2 to 4.7.2. The two packages can have different versions: the [changelog](../../CHANGELOG.md) records the Extensions-only 2.0.1 release. For an installation instruction, consult the actual package feed as well as the declared project version.
 
 ## Native AOT and trimming
 

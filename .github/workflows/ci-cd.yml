@@ -69,6 +69,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
           global-json-file: global.json
 
       # The macOS runner image no longer ships Mono, and VSTest needs the real 'mono' host
@@ -163,6 +164,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
           global-json-file: global.json
 
       - name: "Cache NuGet packages"

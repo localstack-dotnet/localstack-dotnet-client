@@ -12,6 +12,7 @@ See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/loc
 - Set the development SDK baseline to 10.0.402 and configured test projects and CI workflows to cover `net10.0`.
 - Updated the eight unoverridden central Microsoft.Extensions versions and the test `System.Text.Json` version to 10.0.13; existing public library overrides and dependency floors remain in place.
 - Updated SourceLink to 10.0.402 and Testcontainers plus Testcontainers.LocalStack to 4.16.0; restore resolves Microsoft.Build.Tasks.Git 10.0.402 and SSH.NET 2026.0.0.
+- Raised the minimums for `AWSSDK.Core` and `AWSSDK.Extensions.NETCore.Setup` to 4.0.102.11 and 4.0.102.4, respectively; refreshed 112 existing AWS service SDK test-dependency pins, retained six already-latest entries, and made no catalog additions or removals.
 
 ## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
 

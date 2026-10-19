@@ -142,7 +142,6 @@
     <PackageVersion Include="AWSSDK.WAF" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.WAFV2" Version="4.0.101.13" />
     <PackageVersion Include="AWSSDK.XRay" Version="4.0.100.19" />
-    <PackageVersion Include="Cake.Docker" Version="1.5.0" />
     <PackageVersion Include="Cake.Frosting" Version="6.3.0" />
     <!-- Microsoft.Extensions dependencies share the .NET 10 servicing line.
          All consumers, including Extensions, use these central versions. -->

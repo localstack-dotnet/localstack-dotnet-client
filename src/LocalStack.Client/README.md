@@ -222,8 +222,6 @@ Linux
 ./build.sh
 ```
 
-On Unix, this Cake script runs an initialization task that changes your global Git `core.autocrlf` setting. Read the [quality gates](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/engineering/quality-gates.md) before running it on a shared machine.
-
 ### Sandbox Applications
 
 The LocalStack .NET repository includes several sandbox console applications located in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes). These applications serve both as testing tools and as examples. Refer to [the documentation](https://github.com/localstack-dotnet/localstack-dotnet-client/wiki/Developing#sandbox-applications) for more information

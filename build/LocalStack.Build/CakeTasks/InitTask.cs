@@ -7,12 +7,5 @@ public sealed class InitTask : FrostingTask<BuildContext>
         ConsoleHelper.WriteHeader();
 
         context.StartProcess("dotnet", new ProcessSettings { Arguments = "--info" });
-
-        if (!context.IsRunningOnUnix())
-        {
-            return;
-        }
-
-        context.StartProcess("git", new ProcessSettings { Arguments = "config --global core.autocrlf true" });
     }
 }

@@ -13,8 +13,7 @@ The project uses xUnit tests and Cake Frosting build tasks. A command's success 
 ## Before running a task
 
 - The Cake default target depends on `tests`, and `BuildContext.SkipFunctionalTest` defaults to `true`. The usual build/test scripts therefore **do not run the functional suite** unless explicitly opted in; do not label an unqualified run “all tests.”
-- **Do not opt into Cake functional tests on a shared Docker daemon.** [`TestTask`](../../build/LocalStack.Build/CakeTasks/TestTask.cs) lists *all* Docker containers, including stopped ones, and passes every returned ID to `DockerRm` without a project label filter. It can remove unrelated stopped containers and attempt to remove running ones. An isolated Docker daemon is a prerequisite for that Cake path. Running the functional test project directly avoids this particular Cake cleanup block, but still creates containers and requires its own environment check.
-- On Unix, [`InitTask`](../../build/LocalStack.Build/CakeTasks/InitTask.cs) executes `git config --global core.autocrlf true`; `BuildTask` depends on it. A Cake build is not a read-only probe of the developer machine.
+- Functional tests start LocalStack containers through Testcontainers, so they need a reachable Docker engine. [`TestContainers`](../../tests/LocalStack.Client.Functional.Tests/TestContainers.cs) gives each container a unique name and enables Testcontainers cleanup, so its resource reaper removes the containers a run started. Neither the Cake path nor a direct test run removes other containers.
 - `nuget-prepare-extensions` removes the Extensions project reference and adds a Core package reference to the tracked `.csproj`. Do not run it as a packaging dry run. An isolated `nuget-pack` task does not invoke that preparation automatically. The library projects' `PreBuild` targets also copy the root README and LICENSE into their package folders.
 
 ## Evidence and CI

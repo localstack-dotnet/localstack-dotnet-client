@@ -8,8 +8,8 @@ This public repository owns its current behavior, terminology, and accepted deci
 - Use the checked-in source, projects, workflows, and their pinned versions for implementation facts. Treat locally ignored `artifacts/` files and unmerged branches as dated leads, not current policy.
 - Keep the [root README](README.md) and the two tracked package README copies consistent; both packages include that text. Check the actual package feed before claiming a declared version is published.
 - Preserve intentional Extensions consumer minimums during routine dependency refreshes; follow the [maintenance policy](docs/engineering/maintenance-playbook.md#1-refresh-dependencies-deliberately) and [platform contract](docs/architecture/platform-and-packaging.md) for their ownership and evidence.
-- Before using Cake functional tests, read [quality gates](docs/engineering/quality-gates.md): their cleanup is not limited to this project's Docker containers. Cake builds on Unix and Extensions package preparation also change state outside the expected test outputs.
-- If sources conflict or a public support claim lacks evidence, follow the [deviation protocol](docs/engineering/deviation-protocol.md). Preserve the uncertainty rather than selecting a convenient answer.
+- Before running Cake packaging tasks, read [quality gates](docs/engineering/quality-gates.md): Extensions package preparation edits a tracked project file.
+- If sources conflict, follow the [deviation protocol](docs/engineering/deviation-protocol.md). Make a public support claim only as far as the evidence reaches, and say what you did not verify.
 
 ## Task routing
 
@@ -27,4 +27,4 @@ This public repository owns its current behavior, terminology, and accepted deci
 | Release changes | [Changelog](CHANGELOG.md) |
 | Security disclosure or support window | [Security policy](.github/SECURITY.md) |
 
-Current architecture documents describe `master`; a draft source-generator branch does not establish Native AOT support here. The private research archive, if created, cannot be required to understand this public canon.
+Current architecture documents describe `master`; a draft source-generator branch does not establish Native AOT support here.

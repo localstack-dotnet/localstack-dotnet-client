@@ -1,0 +1,7 @@
+# Store text with LF line endings in the repository; each checkout uses its platform's line endings.
+* text=auto
+
+# Shell scripts must keep LF line endings to run on Unix.
+*.sh text eol=lf
+
+*.png binary

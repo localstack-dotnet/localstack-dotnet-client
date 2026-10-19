@@ -61,8 +61,6 @@ New changes target v2.x on `master`. The v1.x branch is not accepting maintenanc
    ./build.sh
    ```
 
-   On Unix, the Cake initialization task changes your global Git `core.autocrlf` setting. Read the [quality gates](../docs/engineering/quality-gates.md) before using the script on a shared development machine.
-
 3. **Run Tests**
 
    ```bash
@@ -70,7 +68,7 @@ New changes target v2.x on `master`. The v1.x branch is not accepting maintenanc
    .\build.ps1 --target tests
    ```
 
-   Functional tests require LocalStack containers. The Cake opt-in task attempts to remove **every** Docker container returned by `docker ps --all`, not only this project's containers. Use an isolated Docker daemon before opting in; see [quality gates](../docs/engineering/quality-gates.md).
+   Functional tests are opt-in and start LocalStack containers through Testcontainers, so they need a running Docker engine; see [quality gates](../docs/engineering/quality-gates.md).
 
 ## 🐛 Reporting Issues
 

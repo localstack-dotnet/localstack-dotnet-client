@@ -37,28 +37,6 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 ConsoleHelper.WriteRule($"Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}");
                 settings.Framework = targetFramework;
 
-                if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
-                {
-                    ConsoleHelper.WriteProcessing("Deleting running docker containers");
-
-                    try
-                    {
-                        string psOutput = context.DockerPs(new DockerContainerPsSettings() { All = true, Quiet = true });
-
-                        if (!string.IsNullOrEmpty(psOutput))
-                        {
-                            ConsoleHelper.WriteInfo($"Found containers: {psOutput}");
-
-                            string[] containers = psOutput.Split([Environment.NewLine], StringSplitOptions.None);
-                            context.DockerRm(containers);
-                        }
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
-                }
-
                 // .NET Framework testing on non-Windows platforms
                 // - Modern .NET includes built-in Mono runtime
                 // - Test platform still requires external Mono installation on Linux

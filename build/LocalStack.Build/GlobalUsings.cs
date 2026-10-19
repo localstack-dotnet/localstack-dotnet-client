@@ -9,7 +9,6 @@ global using Cake.Common.Tools.NuGet;
 global using Cake.Common.Tools.NuGet.List;
 global using Cake.Core;
 global using Cake.Core.IO;
-global using Cake.Docker;
 global using Cake.Frosting;
 
 global using NuGet.Versioning;

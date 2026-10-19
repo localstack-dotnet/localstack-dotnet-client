@@ -9,7 +9,6 @@
 		</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Cake.Docker" />
 		<PackageReference Include="Cake.Frosting" />
 		<PackageReference Include="NuGet.Versioning" />
 		<!-- Keep a patched servicing floor until Cake's transitive Pkcs dependency is patched. -->

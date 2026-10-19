@@ -143,24 +143,24 @@
     <PackageVersion Include="AWSSDK.XRay" Version="4.0.100.7" />
     <PackageVersion Include="Cake.Docker" Version="1.5.0" />
     <PackageVersion Include="Cake.Frosting" Version="6.2.0" />
-    <!-- Highest TFM in the repo is net9.0, so these track the .NET 9 servicing line.
-         Microsoft.SourceLink.GitHub is the exception: it has no 9.x release at all. -->
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.18" />
+    <!-- Unoverridden test and sandbox consumers track the .NET 10 servicing line.
+         Library VersionOverride floors stay intentional; unused central entries retain their prior versions. -->
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.18" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.402" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="NuGet.Versioning" Version="7.6.0" />
-    <PackageVersion Include="System.Text.Json" Version="9.0.18" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.13" />
     <PackageVersion Include="System.ValueTuple" Version="4.6.2" />
     <!-- test packages -->
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
@@ -170,8 +170,8 @@
     </PackageVersion>
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
-    <PackageVersion Include="Testcontainers" Version="4.13.0" />
-    <PackageVersion Include="Testcontainers.LocalStack" Version="4.13.0" />
+    <PackageVersion Include="Testcontainers" Version="4.16.0" />
+    <PackageVersion Include="Testcontainers.LocalStack" Version="4.16.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
     <PackageVersion Include="xunit.runner.console" Version="2.9.3">

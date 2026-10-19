@@ -26,7 +26,7 @@ LocalStack.NET is a .NET client library for [LocalStack](https://github.com/loca
 
 ### Supported Platforms
 
-- [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0) | [.NET 9](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 8](https://dotnet.microsoft.com/download/dotnet/8.0) | [.NET 9](https://dotnet.microsoft.com/download/dotnet/9.0) | [.NET 10](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
 - [.NET Framework 4.7.2 and Above](https://dotnet.microsoft.com/download/dotnet-framework)
 
@@ -78,7 +78,7 @@ LocalStack.NET is a .NET client library for [LocalStack](https://github.com/loca
 
 - **Adaptable Environment Transition:** Easily switch between LocalStack and actual AWS services with minimal configuration changes.
 
-- **Versatile .NET Compatibility:** Both packages target .NET 8, .NET 9, and .NET Standard 2.0; Core also has an explicit .NET Framework 4.7.2 target. See [platform and packaging](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md) for the exact project targets.
+- **Versatile .NET Compatibility:** Both packages target .NET 8, .NET 9, .NET 10, and .NET Standard 2.0; Core also has an explicit .NET Framework 4.7.2 target. See [platform and packaging](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md) for the exact project targets.
 
 - **Reduced Learning Curve:** Offers a familiar interface tailored for LocalStack, ideal for developers acquainted with the AWS SDK for .NET.
 

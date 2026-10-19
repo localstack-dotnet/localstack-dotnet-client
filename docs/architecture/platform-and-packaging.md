@@ -1,6 +1,6 @@
 # Platform and packaging boundary
 
-Date: 2026-10-17
+Date: 2026-10-19
 
 The source of package versions, target frameworks, and dependencies is the project configuration, not a prose copy of their values:
 
@@ -13,7 +13,7 @@ The source of package versions, target frameworks, and dependencies is the proje
 | Development SDK selection | [`global.json`](../../global.json) |
 | Publication triggers and credentials mechanism | [GitHub Actions workflows](../../.github/workflows/) |
 
-At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, and `net9.0`; Extensions targets `netstandard2.0`, `net8.0`, and `net9.0`. The AWS SDK v4 migration changed the explicit .NET Framework target from 4.6.2 to 4.7.2. The two packages can have different versions: the [changelog](../../CHANGELOG.md) records the Extensions-only 2.0.1 release. For an installation instruction, consult the actual package feed as well as the declared project version.
+At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, `net9.0`, and `net10.0`; Extensions targets `netstandard2.0`, `net8.0`, `net9.0`, and `net10.0`. The AWS SDK v4 migration changed the explicit .NET Framework target from 4.6.2 to 4.7.2. The two packages can have different versions: the [changelog](../../CHANGELOG.md) records the Extensions-only 2.0.1 release. For an installation instruction, consult the actual package feed as well as the declared project version.
 
 ## Native AOT and trimming
 

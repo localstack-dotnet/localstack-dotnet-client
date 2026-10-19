@@ -4,6 +4,15 @@ This document outlines the changes, updates, and important notes for the LocalSt
 
 See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
 
+## [Unreleased]
+
+### General
+
+- Added explicit `net10.0` target assets to both packages while retaining their existing target frameworks.
+- Set the development SDK baseline to 10.0.402 and configured test projects and CI workflows to cover `net10.0`.
+- Updated the eight unoverridden central Microsoft.Extensions versions and the test `System.Text.Json` version to 10.0.13; existing public library overrides and dependency floors remain in place.
+- Updated SourceLink to 10.0.402 and Testcontainers plus Testcontainers.LocalStack to 4.16.0; restore resolves Microsoft.Build.Tasks.Git 10.0.402 and SSH.NET 2026.0.0.
+
 ## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
 
 > Maintenance release for **`LocalStack.Client.Extensions` only**. `LocalStack.Client` stays at 2.0.0.

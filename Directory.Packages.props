@@ -10,6 +10,7 @@
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
     <!-- third-party analyzers -->
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.134" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.6.0" />

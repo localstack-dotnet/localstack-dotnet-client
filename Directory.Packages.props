@@ -2,7 +2,7 @@
   <!-- The two packages we depend on structurally. $(AwsSetupTrack) floats them for the scheduled
        canary so AWS moving under us is caught early, as it was not for 4.0.4 (issue #52). -->
   <ItemGroup Condition="'$(AwsSetupTrack)' != 'latest'">
-    <PackageVersion Include="AWSSDK.Core" Version="4.0.102.11" />
+    <PackageVersion Include="AWSSDK.Core" Version="4.0.102.6" />
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.102.4" />
   </ItemGroup>
   <ItemGroup Condition="'$(AwsSetupTrack)' == 'latest'">
@@ -10,17 +10,17 @@
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <!-- third-party analyzers -->
-    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.134" />
+    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.312" />
     <PackageVersion Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.6.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.302" />
-    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.7.23" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="4.15.0" />
-    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="4.15.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.402" />
+    <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.12.1" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1" />
+    <PackageVersion Include="Roslynator.CodeAnalysis.Analyzers" Version="5.0.1" />
+    <PackageVersion Include="Roslynator.Formatting.Analyzers" Version="5.0.1" />
     <PackageVersion Include="SecurityCodeScan.VS2019" Version="5.6.7" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.30.0.144632" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.35.0.4138" />
     <PackageVersion Include="TestableIO.System.IO.Abstractions.Analyzers" Version="2022.0.0" />
     <!-- packages -->
     <!-- AWSSDK.Core and AWSSDK.Extensions.NETCore.Setup are declared above, switched by $(AwsSetupTrack) -->
@@ -143,34 +143,34 @@
     <PackageVersion Include="AWSSDK.WAFV2" Version="4.0.101.13" />
     <PackageVersion Include="AWSSDK.XRay" Version="4.0.100.19" />
     <PackageVersion Include="Cake.Docker" Version="1.5.0" />
-    <PackageVersion Include="Cake.Frosting" Version="6.2.0" />
-    <!-- Unoverridden test and sandbox consumers track the .NET 10 servicing line.
-         Library VersionOverride floors stay intentional; unused central entries retain their prior versions. -->
+    <PackageVersion Include="Cake.Frosting" Version="6.3.0" />
+    <!-- Microsoft.Extensions dependencies share the .NET 10 servicing line.
+         All consumers, including Extensions, use these central versions. -->
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.18" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.CommandLine" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.18" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.402" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="NuGet.Versioning" Version="7.6.0" />
+    <PackageVersion Include="NuGet.Versioning" Version="7.9.0" />
     <PackageVersion Include="System.Text.Json" Version="10.0.13" />
     <PackageVersion Include="System.ValueTuple" Version="4.6.2" />
     <!-- test packages -->
     <PackageVersion Include="AutoFixture" Version="4.18.1" />
-    <PackageVersion Include="coverlet.collector" Version="10.0.1">
+    <PackageVersion Include="coverlet.collector" Version="10.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="Moq" Version="4.21.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
     <PackageVersion Include="Testcontainers" Version="4.16.0" />
     <PackageVersion Include="Testcontainers.LocalStack" Version="4.16.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
@@ -179,12 +179,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageVersion>
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5">
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageVersion>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.8.1" />
+    <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.11.0" />
   </ItemGroup>
 </Project>

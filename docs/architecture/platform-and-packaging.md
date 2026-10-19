@@ -13,6 +13,8 @@ The source of package versions, target frameworks, and dependencies is the proje
 | Development SDK selection | [`global.json`](../../global.json) |
 | Publication triggers and credentials mechanism | [GitHub Actions workflows](../../.github/workflows/) |
 
+On all four target frameworks, Extensions declares its Microsoft.Extensions dependencies against centrally managed minimums; this raises its consumer dependency floors from the prior overrides. The package versions are owned by [Directory.Packages.props](../../Directory.Packages.props), and the actual references are in [LocalStack.Client.Extensions.csproj](../../src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj). Test and sandbox consumers use the same central versions. A consumer's resolved graph can select a higher version when another dependency requires it.
+
 At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, `net9.0`, and `net10.0`; Extensions targets `netstandard2.0`, `net8.0`, `net9.0`, and `net10.0`. The AWS SDK v4 migration changed the explicit .NET Framework target from 4.6.2 to 4.7.2. The two packages can have different versions: the [changelog](../../CHANGELOG.md) records the Extensions-only 2.0.1 release. For an installation instruction, consult the actual package feed as well as the declared project version.
 
 ## Native AOT and trimming

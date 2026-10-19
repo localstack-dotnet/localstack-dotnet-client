@@ -10,10 +10,11 @@ See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/loc
 
 - Added explicit `net10.0` target assets to both packages while retaining their existing target frameworks.
 - Set the development SDK baseline to 10.0.402 and configured test projects and CI workflows to cover `net10.0`.
-- Updated the eight unoverridden central Microsoft.Extensions versions and the test `System.Text.Json` version to 10.0.13; existing public library overrides and dependency floors remain in place.
+- Updated existing non-Core NuGet dependencies to their latest stable versions, including build, test, and analyzer tools. Build-tool updates include Cake.Frosting 6.3.0 and NuGet.Versioning 7.9.0.
+- Centralized Microsoft.Extensions package versions at 10.0.13 for Extensions, test, and sandbox consumers. Extensions now declares its Microsoft.Extensions dependencies at those central minimums; restore may resolve higher versions when another dependency requires them.
 - Updated SourceLink to 10.0.402 and Testcontainers plus Testcontainers.LocalStack to 4.16.0; restore resolves Microsoft.Build.Tasks.Git 10.0.402 and SSH.NET 2026.0.0.
-- Raised the minimums for `AWSSDK.Core` and `AWSSDK.Extensions.NETCore.Setup` to 4.0.102.11 and 4.0.102.4, respectively; refreshed 112 existing AWS service SDK test-dependency pins, retained six already-latest entries, and made no catalog additions or removals.
-- Added build-only `System.Security.Cryptography.Pkcs` 9.0.21 as a servicing floor for known transitive advisories and enabled repository-wide `NuGetAuditMode=all`; public runtime APIs and consumer dependency floors are unchanged.
+- Set the declared `AWSSDK.Core` minimum to 4.0.102.6, the recent compatible stable candidate with the highest version-level downloads among stable AWS SDK v4 releases in a six-week comparison of [NuGet.org releases](https://www.nuget.org/packages/AWSSDK.Core), checked 2026-10-19. Core-only projects resolve 4.0.102.6; Extensions and service-package consumers resolve 4.0.102.11 under their actual dependency ranges. `AWSSDK.Extensions.NETCore.Setup` remains at 4.0.102.4; refreshed 112 existing AWS service SDK test-dependency pins, retained six already-latest entries, and made no catalog additions or removals.
+- Updated the build dependency `System.Security.Cryptography.Pkcs` to 10.0.13; repository-wide `NuGetAuditMode=all` remains enabled.
 
 ## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
 

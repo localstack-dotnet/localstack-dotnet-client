@@ -18,6 +18,7 @@ This public repository owns its current behavior, terminology, and accepted deci
 | `AddLocalStack`, DI, AWS-mode factory, or Extensions | [Extensions and composition](docs/architecture/extensions-and-composition.md) |
 | Target frameworks, package versions, packaging, or Native AOT claims | [Platform and packaging](docs/architecture/platform-and-packaging.md); verify values in the linked project/configuration files |
 | Tests, build scripts, Docker, CI, or release-task safety | [Quality gates](docs/engineering/quality-gates.md) and the relevant task/workflow source |
+| Routine maintenance, catalog refreshes, image selection, or consumer dogfooding | [Maintenance playbook](docs/engineering/maintenance-playbook.md) |
 | Document placement, dates, relays, or historical evidence | [Documentation ownership](docs/engineering/documentation.md) |
 | An accepted, hard-to-reverse design choice | [ADR eligibility and records](docs/adr/README.md) |
 | Consumer setup and package installation | [README](README.md) |

@@ -1,6 +1,6 @@
 # Documentation ownership
 
-Date: 2026-10-18
+Date: 2026-10-19
 
 The public repository must explain its current behavior and accepted decisions without requiring access to a private archive. Give each current fact one owner. Other documents can briefly describe the fact for their reader and link to its owner; they must not become a second place to maintain the rule.
 
@@ -11,6 +11,7 @@ The public repository must explain its current behavior and accepted decisions w
 | What is shipped, on which frameworks, and what is the Native AOT boundary? | [Platform and packaging](../architecture/platform-and-packaging.md) |
 | Which words distinguish the library, emulator, service identity, and client? | [Root glossary](../../GLOSSARY.md) |
 | What checks and safety constraints apply to builds and tests? | [Quality gates](quality-gates.md); actual commands in the [build tasks](../../build/LocalStack.Build/CakeTasks/) and [workflows](../../.github/workflows/) |
+| How does a maintainer refresh dependencies, mappings, images, releases, and consumers? | [Maintenance playbook](maintenance-playbook.md) |
 | What happens when a current document conflicts with source or another rule? | [Deviation protocol](deviation-protocol.md) |
 | Why was a hard-to-reverse, surprising trade-off accepted? | [Decision records](../adr/README.md) |
 | How does a consumer install and configure the packages? | [Root README](../../README.md), also copied into both NuGet packages |

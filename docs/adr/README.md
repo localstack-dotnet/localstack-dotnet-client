@@ -1,10 +1,10 @@
 # Architecture Decision Records
 
-Date: 2026-10-17
+Date: 2026-10-19
 
 Each record in this directory describes one **accepted** decision: its context, the alternative that mattered, the chosen direction, and why. Name records `NNNN-slug.md` in sequence. The directory listing is the index; do not create a second list to maintain.
 
-Current rules live in [architecture](../architecture/) and [engineering](../engineering/). An ADR explains their historical rationale, not an additional current implementation or support policy. If a record and current source appear to disagree, check the decision's date and stop to resolve the discrepancy rather than treating the historical record as newer authority.
+Current rules live in [architecture](../architecture/) and [engineering](../engineering/). An ADR explains their historical rationale, not an additional current implementation or support policy. If a record and current source appear to disagree, check the decision's date and classify the discrepancy with the [deviation protocol](../engineering/deviation-protocol.md) rather than treating the historical record as newer authority.
 
 ## When to write an ADR
 

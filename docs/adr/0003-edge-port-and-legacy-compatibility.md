@@ -1,9 +1,7 @@
 # Use the LocalStack edge port by default and retain legacy ports
 
-Date: 2021-02-08
+`ConfigOptions` defaults to the shared LocalStack edge endpoint on port 4566 with `UseLegacyPorts=false`. Keep `UseLegacyPorts` as an explicit choice for consumers that need the per-service port mappings, so the standard configuration uses one endpoint while older integrations can retain their routing.
 
-LocalStack introduced a shared edge endpoint, while existing client configurations still used per-service ports. The project made port 4566 and non-legacy routing the `ConfigOptions` defaults, but retained `UseLegacyPorts` as an explicit choice for older setups rather than removing their port mapping during the transition. This changed the usual network destination without forcing every existing configuration to change at once.
+The selected route comes from `ConfigOptions`; a hostname choice does not select between edge and per-service ports. The [client runtime](../architecture/client-runtime.md) owns endpoint mapping behavior.
 
-**Scope:** The 2021 obsolete configuration constructor still had a legacy-port default; this record does not claim all historical constructors used edge routing. The 2023 change from `localhost` to `localhost.localstack.cloud` was a separate hostname change. [Issue #26](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/26) proposes removing legacy ports, but an open proposal is not a reversal of this accepted decision.
-
-**Evidence:** [Merged PR #7](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/7), [maintainer explanation in issue #5](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/5#issuecomment-775340238), and the [current endpoint configuration](../../src/LocalStack.Client/Config.cs).
+**References:** [Configuration options](../../src/LocalStack.Client/Options/ConfigOptions.cs), [endpoint configuration](../../src/LocalStack.Client/Config.cs), and [maintainer explanation](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/5#issuecomment-775340238).

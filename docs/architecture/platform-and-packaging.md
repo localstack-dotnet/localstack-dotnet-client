@@ -1,6 +1,6 @@
 # Platform and packaging boundary
 
-Date: 2026-10-19
+Date: 2026-10-20
 
 The source of package versions, target frameworks, and dependencies is the project configuration, not a prose copy of their values:
 
@@ -30,7 +30,7 @@ At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, `
 
 ## Native AOT and trimming
 
-The current Core and Extensions implementations reflect over AWS SDK internals. Their annotations warn consumers about dynamic code and trimming, and Extensions includes a linker descriptor for the internal AWS factory. Neither an annotation nor that descriptor establishes Native AOT compatibility for an application. Native AOT support is **not** a capability of the current published v2 line; the source-generator/`UnsafeAccessor` work in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) is not part of this `master` revision. Do not treat a proposed release number as a delivery date.
+Core client creation still reflects over AWS SDK internals, and Extensions' configuration binding still uses non-public setters. Their annotations warn consumers about dynamic code and trimming. The AWS-mode wrapper uses the SDK's public registration factory and no longer needs its own private reflection or linker descriptor; this bounded improvement does not make `AddLocalStack` or the Core session Native AOT compatible. Native AOT support is **not** a capability of the current published v2 line; the source-generator/`UnsafeAccessor` work in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) has not shipped. Do not treat a proposed release number as a delivery date.
 
 ## Consumer README and release channels
 

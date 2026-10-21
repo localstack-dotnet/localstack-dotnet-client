@@ -34,7 +34,7 @@ LocalStack.NET is a .NET client library for [LocalStack](https://github.com/loca
 
 > **Heads‑up for `dotnet publish -p:PublishAot=true` / `PublishTrimmed=true` users**
 
-- **The current v2 packages do not support Native AOT.** Both client-creation paths still use reflection over AWS SDK internals. Entry points carry `[RequiresDynamicCode]` and `[RequiresUnreferencedCode]` annotations where available, and Extensions embeds a linker descriptor for its internal AWS factory; neither guarantees that an application will trim or publish successfully with Native AOT.
+- **The current v2 packages do not support Native AOT.** Core client creation still uses reflection over AWS SDK internals, and Extensions' configuration binding uses non-public setters. The AWS-mode wrapper's public SDK factory path does not establish AOT compatibility for the complete application. Respect `[RequiresDynamicCode]` and `[RequiresUnreferencedCode]` annotations where present; do not suppress them to obtain a successful publish.
 - The reflection-free source-generator work is in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49), not in `master`. Do not suppress trimming/AOT warnings or adopt an unverified service descriptor on the assumption that this draft has shipped. See the [platform boundary](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md).
 
 ### Build & Test Matrix

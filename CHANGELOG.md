@@ -8,6 +8,7 @@ See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/loc
 
 ### General
 
+- Replaced the AWS-mode wrapper's private SDK reflection with the public `AddAWSService<T>` factory, preserving provider options fallback and client lifetimes. Removed its obsolete linker descriptor and reflection/AOT annotations; Core client creation and `AddLocalStack` configuration binding still do not support Native AOT.
 - Added explicit `net10.0` target assets to both packages while retaining their existing target frameworks.
 - Set the development SDK baseline to 10.0.402 and configured test projects and CI workflows to cover `net10.0`.
 - Updated all existing non-Core centrally managed NuGet versions to their latest stable releases, including build, test, and analyzer packages (Extensions' consumer minimums are preserved below). Build-tool updates include Cake.Frosting 6.3.0 and NuGet.Versioning 7.9.0.

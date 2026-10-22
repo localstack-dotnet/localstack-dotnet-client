@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+    <Analyzer Include="$(MSBuildThisFileDirectory)../tools/LocalStack.Client.Generators/LocalStack.Client.Generators.dll" />
+  </ItemGroup>
+</Project>

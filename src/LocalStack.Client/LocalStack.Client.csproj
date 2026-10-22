@@ -28,6 +28,10 @@
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+		<ProjectReference Include="../LocalStack.Client.Generators/LocalStack.Client.Generators.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+		<None Include="../LocalStack.Client.Generators/bin/$(Configuration)/netstandard2.0/LocalStack.Client.Generators.dll"
+		      Pack="true" PackagePath="tools/LocalStack.Client.Generators" Visible="false" />
+		<None Include="buildTransitive/LocalStack.Client.targets" Pack="true" PackagePath="buildTransitive" />
 	</ItemGroup>
 
 	<Target Name="PreBuild" AfterTargets="PreBuildEvent">

@@ -4,20 +4,15 @@ public static class ServiceCollectionExtensions
 {
     private const string LocalStackSectionName = "LocalStack";
 
-#if NET8_0_OR_GREATER
-    [RequiresUnreferencedCode("ConfigurationBinder.Bind() sets options via reflection; keep non‑public setters or suppress in AOT build.")]
-#endif
     public static IServiceCollection AddLocalStack(this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.Configure<LocalStackOptions>(options => configuration.GetSection(LocalStackSectionName).Bind(options, c => c.BindNonPublicProperties = true));
+        collection.Configure<LocalStackOptions>(options => LocalStackOptionsBinder.Bind(configuration.GetSection(LocalStackSectionName), options));
 
-        collection.Configure<SessionOptions>(options => configuration.GetSection(LocalStackSectionName)
-                                                                     .GetSection(nameof(LocalStackOptions.Session))
-                                                                     .Bind(options, c => c.BindNonPublicProperties = true));
+        collection.Configure<SessionOptions>(options => LocalStackOptionsBinder.Bind(configuration.GetSection(LocalStackSectionName)
+                                                                                               .GetSection(nameof(LocalStackOptions.Session)), options));
 
-        collection.Configure<ConfigOptions>(options => configuration.GetSection(LocalStackSectionName)
-                                                                    .GetSection(nameof(LocalStackOptions.Config))
-                                                                    .Bind(options, c => c.BindNonPublicProperties = true));
+        collection.Configure<ConfigOptions>(options => LocalStackOptionsBinder.Bind(configuration.GetSection(LocalStackSectionName)
+                                                                                              .GetSection(nameof(LocalStackOptions.Config)), options));
 
         return collection.AddLocalStackServices();
     }

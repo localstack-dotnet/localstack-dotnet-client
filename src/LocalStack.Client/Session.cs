@@ -8,6 +8,10 @@ public class Session : ISession
     private readonly ISessionOptions _sessionOptions;
     private readonly ISessionReflection _sessionReflection;
 
+#if NET8_0_OR_GREATER
+    [DynamicDependency(nameof(RegisterGeneratedClient), typeof(Session))]
+    [DynamicDependency(nameof(RegisterGeneratedConfig), typeof(Session))]
+#endif
     public Session(ISessionOptions sessionOptions, IConfig config, ISessionReflection sessionReflection)
     {
         _sessionOptions = sessionOptions;
@@ -15,10 +19,6 @@ public class Session : ISession
         _sessionReflection = sessionReflection;
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
     public TClient CreateClientByImplementation<TClient>(bool useServiceUrl = false) where TClient : AmazonServiceClient
     {
         Type clientType = typeof(TClient);
@@ -26,14 +26,7 @@ public class Session : ISession
         return (TClient)CreateClientByImplementation(clientType, useServiceUrl);
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
     public AmazonServiceClient CreateClientByImplementation(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]
-#endif
         Type implType,
         bool useServiceUrl = false)
     {
@@ -63,15 +56,11 @@ public class Session : ISession
             clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
         }
 
-        var clientInstance = (AmazonServiceClient)Activator.CreateInstance(implType, awsCredentials, clientConfig);
+        var clientInstance = CreateImplementation(implType, awsCredentials, clientConfig);
 
         return clientInstance;
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Uses Activator/CreateInstance and private‑field reflection; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
     public AmazonServiceClient CreateClientByInterface<TClient>(bool useServiceUrl = false) where TClient : IAmazonService
     {
         Type serviceInterfaceType = typeof(TClient);
@@ -80,9 +69,6 @@ public class Session : ISession
     }
 
     public AmazonServiceClient CreateClientByInterface(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicFields)]
-#endif
         Type serviceInterfaceType,
         bool useServiceUrl = false)
     {
@@ -92,7 +78,7 @@ public class Session : ISession
         }
 
         var clientTypeName = $"{serviceInterfaceType.Namespace}.{serviceInterfaceType.Name.Substring(1)}Client";
-        Type clientType = serviceInterfaceType.GetTypeInfo().Assembly.GetType(clientTypeName);
+        Type? clientType = FindClientType(serviceInterfaceType.GetTypeInfo().Assembly, clientTypeName);
 
         if (clientType == null)
         {
@@ -127,7 +113,7 @@ public class Session : ISession
             clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
         }
 
-        ConstructorInfo? constructor = clientType.GetConstructor(new[] { typeof(AWSCredentials), clientConfig.GetType() });
+        ConstructorInfo? constructor = FindClientConstructor(clientType, clientConfig.GetType());
 
         if (constructor == null)
         {
@@ -140,4 +126,75 @@ public class Session : ISession
 
         return client;
     }
+
+    private static Type? FindClientType(Assembly assembly, string name)
+    {
+#if NET8_0_OR_GREATER
+        Type? generated = GeneratedClientRegistry.FindClient(assembly, name);
+        if (generated != null || !System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        {
+            return generated;
+        }
+#endif
+        return FindLegacyClientType(assembly, name);
+    }
+
+    private static ConstructorInfo? FindClientConstructor(Type type, Type configType)
+    {
+#if NET8_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetClient(type, out GeneratedClientRegistry.ClientEntry? entry))
+        {
+            return entry.Constructor(configType);
+        }
+
+        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        {
+            return null;
+        }
+#endif
+        return FindLegacyClientConstructor(type, configType);
+    }
+
+    private static AmazonServiceClient CreateImplementation(Type type, AWSCredentials credentials, ClientConfig config)
+    {
+#if NET8_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetClient(type, out GeneratedClientRegistry.ClientEntry? entry))
+        {
+            return entry.Create(credentials, config);
+        }
+
+        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        {
+            throw new NotSupportedException($"Client type {type} was not present when the application was compiled.");
+        }
+#endif
+        return CreateLegacyImplementation(type, credentials, config);
+    }
+
+#if NET8_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded client types require their original reflection metadata.")]
+#endif
+    private static Type? FindLegacyClientType(Assembly assembly, string name) => assembly.GetType(name);
+
+#if NET8_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded client constructors require their original reflection metadata.")]
+#endif
+    private static ConstructorInfo? FindLegacyClientConstructor(Type type, Type configType) => type.GetConstructor(new[] { typeof(AWSCredentials), configType });
+
+#if NET8_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded client constructors require their original reflection metadata.")]
+#endif
+    private static AmazonServiceClient CreateLegacyImplementation(Type type, AWSCredentials credentials, ClientConfig config) =>
+        (AmazonServiceClient)Activator.CreateInstance(type, credentials, config)!;
+
+#if NET8_0_OR_GREATER
+    // The generated caller uses UnsafeAccessor. Only delegates cross this boundary: no DAM
+    // requirements are imposed on an accessor signature or on existing consumer Type APIs.
+    private static void RegisterGeneratedClient(Type type, Func<IServiceMetadata> metadata, Func<ClientConfig> config,
+                                                Func<Type, ConstructorInfo?> constructor, Func<AWSCredentials, ClientConfig, AmazonServiceClient> create) =>
+        GeneratedClientRegistry.RegisterClient(type, metadata, config, constructor, create);
+
+    private static void RegisterGeneratedConfig(Type type, Func<ClientConfig, bool, bool> style, Action<object, string> region) =>
+        GeneratedClientRegistry.RegisterConfig(type, style, region);
+#endif
 }

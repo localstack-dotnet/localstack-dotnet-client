@@ -32,10 +32,9 @@ LocalStack.NET is a .NET client library for [LocalStack](https://github.com/loca
 
 ## ⚡ Native AOT & Trimming Status
 
-> **Heads‑up for `dotnet publish -p:PublishAot=true` / `PublishTrimmed=true` users**
-
-- **The current v2 packages do not support Native AOT.** Core client creation still uses reflection over AWS SDK internals, and Extensions' configuration binding uses non-public setters. The AWS-mode wrapper's public SDK factory path does not establish AOT compatibility for the complete application. Respect `[RequiresDynamicCode]` and `[RequiresUnreferencedCode]` annotations where present; do not suppress them to obtain a successful publish.
-- The reflection-free source-generator work is in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49), not in `master`. Do not suppress trimming/AOT warnings or adopt an unverified service descriptor on the assumption that this draft has shipped. See the [platform boundary](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md).
+- **Unreleased:** Native AOT support preserves existing C# calls such as `AddLocalStack(configuration)`, `AddAwsService<IAmazonS3>()`, and Core `Session` calls. Source generation flows automatically through either package; no new registration or factory API is required. It roots existing reflection operations rather than removing reflection.
+- Local-package consumers have been validated with Native AOT and its mandatory trimming on .NET 10 for `win-x64` and `linux-x64`, including S3 `ListBucketsAsync` and JIT parity for endpoint, region, credentials, and configured values. This does not establish support for every service, operation, or native target, or for separately trimmed JIT deployments. Do not suppress trim/AOT warnings.
+- This implementation is **not part of the published Core 2.0.0 / Extensions 2.0.1 releases**. See the [platform boundary](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md#native-aot-and-trimming) for scope and the [Native AOT decision](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/adr/0004-native-aot-preserves-existing-consumer-code.md) for the unchanged-consumer contract.
 
 ### Build & Test Matrix
 

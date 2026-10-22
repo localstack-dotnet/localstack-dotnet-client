@@ -27,4 +27,12 @@ public class SessionOptions : ISessionOptions
     public string AwsSessionToken { get; private set; } = Constants.AwsSessionToken;
 
     public string RegionName { get; private set; } = Constants.RegionName;
+
+    internal void ApplyConfiguration(string? awsAccessKeyId = null, string? awsAccessKey = null, string? awsSessionToken = null, string? regionName = null)
+    {
+        AwsAccessKeyId = awsAccessKeyId ?? AwsAccessKeyId;
+        AwsAccessKey = awsAccessKey ?? AwsAccessKey;
+        AwsSessionToken = awsSessionToken ?? AwsSessionToken;
+        RegionName = regionName ?? RegionName;
+    }
 }

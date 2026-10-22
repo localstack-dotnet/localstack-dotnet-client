@@ -32,6 +32,8 @@ At this revision Core explicitly targets `netstandard2.0`, `net472`, `net8.0`, `
 
 Core client creation still reflects over AWS SDK internals, and Extensions' configuration binding still uses non-public setters. Their annotations warn consumers about dynamic code and trimming. The AWS-mode wrapper uses the SDK's public registration factory and no longer needs its own private reflection or linker descriptor; this bounded improvement does not make `AddLocalStack` or the Core session Native AOT compatible. Native AOT support is **not** a capability of the current published v2 line; the source-generator/`UnsafeAccessor` work in [draft PR #49](https://github.com/localstack-dotnet/localstack-dotnet-client/pull/49) has not shipped. Do not treat a proposed release number as a delivery date.
 
+The [Native AOT decision](../adr/0004-native-aot-preserves-existing-consumer-code.md) defines what support means. Existing consumer calls must publish and run under Native AOT unchanged, so an additive AOT-only API is not support on its own.
+
 ## Consumer README and release channels
 
 The [root README](../../README.md) is both the GitHub entry point and the source copied into each package project's tracked `README.md` by its `PreBuild` target. Those copies are package content, not independent documentation owners. Edit the root first and keep both copies byte-identical; a build can copy root content into them.

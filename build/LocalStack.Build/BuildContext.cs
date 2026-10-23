@@ -117,6 +117,9 @@ public sealed class BuildContext : FrostingContext
 
     public ConvertableFilePath LocalStackClientExtProjFile { get; }
 
+    public string LocalStackNetFrameworkTargetFramework =>
+        GetProjectProperties(LocalStackClientProjFile.ToString(), NetFrameworkTargetFrameworkProperty)[NetFrameworkTargetFrameworkProperty];
+
     /// <summary>
     /// Gets the effective package version for LocalStack.Client package.
     /// This value is cached to ensure consistency across pack and publish operations.
@@ -389,6 +392,7 @@ public sealed class BuildContext : FrostingContext
 
     // Test projects that set this property are published and run as native executables by CI, not by 'dotnet test'.
     private const string RunsAsPublishedExecutableProperty = "LocalStackTestRunsAsPublishedExecutable";
+    private const string NetFrameworkTargetFrameworkProperty = "LocalStackNetFrameworkTargetFramework";
 
     private static string[] GetProjectTargetFrameworks(string csprojPath) =>
         SplitTargetFrameworks(GetProjectProperties(csprojPath, "TargetFrameworks", "TargetFramework"));

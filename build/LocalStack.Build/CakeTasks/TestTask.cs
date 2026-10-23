@@ -17,6 +17,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
+        string netFrameworkTargetFramework = context.LocalStackNetFrameworkTargetFramework;
 
         foreach (ProjMetadata testProj in projMetadata)
         {
@@ -56,7 +57,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 }
 
                 // The .NET 11 SDK's test platform runs .NET Framework tests on Windows only; Mono is no longer supported.
-                if (targetFramework == "net472" && !context.IsRunningOnWindows())
+                if (targetFramework == netFrameworkTargetFramework && !context.IsRunningOnWindows())
                 {
                     ConsoleHelper.WriteWarning($"Skipping {targetFramework} tests for {testProj.AssemblyName}: .NET Framework tests run on Windows only");
 

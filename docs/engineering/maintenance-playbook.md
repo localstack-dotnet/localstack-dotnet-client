@@ -1,6 +1,6 @@
 # Maintenance playbook
 
-Date: 2026-10-23
+Date: 2026-10-24
 
 This living procedure records the maintainer's preferred maintenance flow adopted on this date. Use it for a routine refresh or select the applicable steps for a focused repair. The order below is present guidance; the representative Git history at the end does not establish a universal historical sequence.
 
@@ -98,4 +98,4 @@ These are sampled accepted commits, not an exhaustive audit or proof of local ed
 | [05ffff1795f92171b744bcea63fd0b3d2de14848](https://github.com/localstack-dotnet/localstack-dotnet-client/commit/05ffff1795f92171b744bcea63fd0b3d2de14848) | A 3.8.0 message/fixture label accompanies a 3.7.1 image constant: owning inputs matter. |
 | [f539bf439cfccbff6992643c13d042da085a54b5](https://github.com/localstack-dotnet/localstack-dotnet-client/commit/f539bf439cfccbff6992643c13d042da085a54b5) | Extensions-only repair release preparation with Core's version unchanged. |
 
-The unreleased 3.0.0 implementation includes Native AOT support on `net10.0`/`net11.0`, qualified by the separate native test lane. Consult [platform and packaging](../architecture/platform-and-packaging.md) and its linked projects for the exact boundary, legacy JIT assets, and SDK pin; a target list or successful build does not establish native execution or package publication.
+The 3.0.0 implementation includes Native AOT support on `net10.0`/`net11.0`, qualified by the separate native test lane. Consult [platform and packaging](../architecture/platform-and-packaging.md) and its linked projects for the exact boundary, legacy JIT assets, and SDK pin; a target list or successful build does not establish native execution or package publication.

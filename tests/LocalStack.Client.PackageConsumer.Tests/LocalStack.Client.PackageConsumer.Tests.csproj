@@ -4,10 +4,12 @@
     A consumer of the packed LocalStack.Client.Extensions package, published with Native AOT by the
     native-aot-tests CI job. It is deliberately outside the solution and isolated from the repository's
     build props, central package versions and generator wiring, so it sees only what a NuGet consumer sees.
+    CI passes LocalStackConsumerTargetFramework (each of LocalStackModernTargetFrameworks) and LocalStackVersion.
   -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>$(LocalStackConsumerTargetFramework)</TargetFramework>
+    <LocalStackTestRunsAsPublishedExecutable>true</LocalStackTestRunsAsPublishedExecutable>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <PublishAot>true</PublishAot>

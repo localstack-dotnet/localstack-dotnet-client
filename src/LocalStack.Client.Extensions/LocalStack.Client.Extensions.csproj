@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>$(LocalStackExtensionsTargetFrameworks)</TargetFrameworks>
+        <IsAotCompatible>$(IsLocalStackModernTarget)</IsAotCompatible>
         <AssemblyName>LocalStack.Client.Extensions</AssemblyName>
         <RootNamespace>LocalStack.Client.Extensions</RootNamespace>
         <Version>$(PackageExtensionVersion)</Version>

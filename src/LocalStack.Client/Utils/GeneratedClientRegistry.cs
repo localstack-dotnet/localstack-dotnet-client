@@ -1,4 +1,4 @@
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
 using System.Collections.Concurrent;
 
 namespace LocalStack.Client.Utils;
@@ -12,17 +12,17 @@ internal static class GeneratedClientRegistry
     private static readonly ConcurrentDictionary<Type, ConfigEntry> Configs = new();
 
     public static void RegisterClient(Type type, Func<IServiceMetadata> metadata, Func<ClientConfig> config,
-                                      Func<Type, ConstructorInfo?> constructor, Func<AWSCredentials, ClientConfig, AmazonServiceClient> create)
+                                      Func<AWSCredentials, ClientConfig, AmazonServiceClient?> create)
     {
-        Clients.TryAdd(type, new ClientEntry(metadata, config, constructor, create));
+        Clients.TryAdd(type, new ClientEntry(metadata, config, create));
         if (type.FullName is string name)
         {
             ClientNames.TryAdd((type.Assembly, name), type);
         }
     }
 
-    public static void RegisterConfig(Type type, Func<ClientConfig, bool, bool> style, Action<object, string> region) =>
-        Configs.TryAdd(type, new ConfigEntry(style, region));
+    public static void RegisterConfig(Type type, Func<ClientConfig, bool, bool>? style, bool plainRegion) =>
+        Configs.TryAdd(type, new ConfigEntry(style, plainRegion));
 
     public static Type? FindClient(Assembly assembly, string name) => ClientNames.TryGetValue((assembly, name), out Type? type) ? type : null;
 
@@ -34,9 +34,9 @@ internal static class GeneratedClientRegistry
 
     public static bool TryGetConfig(Type type, [NotNullWhen(true)] out ConfigEntry? entry) => Configs.TryGetValue(type, out entry);
 
-    internal sealed record ClientEntry(Func<IServiceMetadata> Metadata, Func<ClientConfig> Config, Func<Type, ConstructorInfo?> Constructor,
-                                       Func<AWSCredentials, ClientConfig, AmazonServiceClient> Create);
+    internal sealed record ClientEntry(Func<IServiceMetadata> Metadata, Func<ClientConfig> CreateConfig,
+                                       Func<AWSCredentials, ClientConfig, AmazonServiceClient?> Create);
 
-    internal sealed record ConfigEntry(Func<ClientConfig, bool, bool> Style, Action<object, string> Region);
+    internal sealed record ConfigEntry(Func<ClientConfig, bool, bool>? Style, bool PlainRegion);
 }
 #endif

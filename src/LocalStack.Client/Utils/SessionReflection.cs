@@ -17,21 +17,26 @@ public class SessionReflection : ISessionReflection
             throw new ArgumentNullException(nameof(clientType));
         }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
         if (GeneratedClientRegistry.TryGetClient(clientType, out GeneratedClientRegistry.ClientEntry? entry))
         {
             return entry.Metadata();
         }
 
-        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        if (ReflectionFallback.IsSupported)
+        {
+            return ExtractLegacyServiceMetadata(clientType);
+        }
+        else
         {
             throw new InvalidOperationException($"Invalid service type {clientType}");
         }
-#endif
+#else
         return ExtractLegacyServiceMetadata(clientType);
+#endif
     }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
     [RequiresUnreferencedCode("Dynamically loaded client metadata requires its original private fields.")]
 #endif
     private static IServiceMetadata ExtractLegacyServiceMetadata(Type clientType)
@@ -59,21 +64,26 @@ public class SessionReflection : ISessionReflection
             throw new ArgumentNullException(nameof(clientType));
         }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
         if (GeneratedClientRegistry.TryGetClient(clientType, out GeneratedClientRegistry.ClientEntry? entry))
         {
-            return entry.Config();
+            return entry.CreateConfig();
         }
 
-        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        if (ReflectionFallback.IsSupported)
+        {
+            return CreateLegacyClientConfig(clientType);
+        }
+        else
         {
             throw new InvalidOperationException("Sequence contains no matching element");
         }
-#endif
+#else
         return CreateLegacyClientConfig(clientType);
+#endif
     }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
     [RequiresUnreferencedCode("Dynamically loaded configurations require their original constructors.")]
 #endif
     private static ClientConfig CreateLegacyClientConfig(Type clientType)
@@ -91,22 +101,40 @@ public class SessionReflection : ISessionReflection
             throw new ArgumentNullException(nameof(amazonServiceClient));
         }
 
-#if NET8_0_OR_GREATER
-        if (GeneratedClientRegistry.TryGetConfig(amazonServiceClient.Config.GetType(), out GeneratedClientRegistry.ConfigEntry? entry))
+#if NET10_0_OR_GREATER
+        if (amazonServiceClient.Config is ClientConfig clientConfig &&
+            GeneratedClientRegistry.TryGetConfig(clientConfig.GetType(), out GeneratedClientRegistry.ConfigEntry? entry) && entry.PlainRegion)
         {
-            entry.Region(amazonServiceClient.Config, systemName);
+            SetPlainClientRegion(clientConfig, systemName);
             return;
         }
 
-        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        if (ReflectionFallback.IsSupported)
         {
-            throw new NotSupportedException($"Configuration type {amazonServiceClient.Config.GetType()} was not present when the application was compiled.");
+            SetLegacyClientRegion(amazonServiceClient, systemName);
         }
-#endif
+        else if (amazonServiceClient.Config is ClientConfig plainConfig)
+        {
+            SetPlainClientRegion(plainConfig, systemName);
+        }
+#else
         SetLegacyClientRegion(amazonServiceClient, systemName);
+#endif
     }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
+    private static void SetPlainClientRegion(ClientConfig config, string systemName)
+    {
+        try
+        {
+            config.RegionEndpoint = RegionEndpoint.GetBySystemName(systemName);
+        }
+        catch (Exception e)
+        {
+            throw new TargetInvocationException(e);
+        }
+    }
+
     [RequiresUnreferencedCode("Dynamically loaded configurations require their original properties.")]
 #endif
     private static void SetLegacyClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
@@ -130,21 +158,24 @@ public class SessionReflection : ISessionReflection
             return true;
         }
 #endif
-#if NET8_0_OR_GREATER
-        if (GeneratedClientRegistry.TryGetConfig(clientConfig.GetType(), out GeneratedClientRegistry.ConfigEntry? entry))
+#if NET10_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetConfig(clientConfig.GetType(), out GeneratedClientRegistry.ConfigEntry? entry) && entry.Style != null)
         {
             return entry.Style(clientConfig, value);
         }
 
-        if (!System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported)
+        if (ReflectionFallback.IsSupported)
         {
-            throw new NotSupportedException($"Configuration type {clientConfig.GetType()} was not present when the application was compiled.");
+            return SetLegacyForcePathStyle(clientConfig, value);
         }
-#endif
+
+        return false;
+#else
         return SetLegacyForcePathStyle(clientConfig, value);
+#endif
     }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
     [RequiresUnreferencedCode("Dynamically loaded configurations require their original properties.")]
 #endif
     private static bool SetLegacyForcePathStyle(ClientConfig clientConfig, bool value)
@@ -161,7 +192,7 @@ public class SessionReflection : ISessionReflection
         return true;
     }
 
-#if NET8_0_OR_GREATER
+#if NET10_0_OR_GREATER
     [RequiresUnreferencedCode("Dynamically loaded clients require their original constructors.")]
 #endif
     private static ConstructorInfo FindConstructorWithCredentialsAndClientConfig(Type clientType)

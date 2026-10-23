@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>$(LocalStackClientTargetFrameworks)</TargetFrameworks>
+		<IsAotCompatible>$(IsLocalStackModernTarget)</IsAotCompatible>
 		<AssemblyName>LocalStack.Client</AssemblyName>
 		<RootNamespace>LocalStack.Client</RootNamespace>
 

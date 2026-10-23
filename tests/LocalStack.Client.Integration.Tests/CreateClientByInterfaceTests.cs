@@ -23,6 +23,31 @@ public class CreateClientByInterfaceTests
         Assert.False(reflection.SetForcePathStyle(new AmazonSQSConfig()));
     }
 
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(false, false)]
+    public void CreateClientByInterface_Should_Use_Generated_Operations_For_Sdk_Interface_Types(bool s3, bool useServiceUrl)
+    {
+        System.Type implementation = s3 ? typeof(AmazonS3Client) : typeof(AmazonSQSClient);
+#if NET10_0_OR_GREATER
+        Assert.True(Utils.GeneratedClientRegistry.TryGetClient(implementation, out Utils.GeneratedClientRegistry.ClientEntry? entry));
+        Assert.Equal(s3 ? "S3" : "SQS", entry.Metadata().ServiceId);
+        Assert.True(Utils.GeneratedClientRegistry.TryGetConfig(s3 ? typeof(AmazonS3Config) : typeof(AmazonSQSConfig), out Utils.GeneratedClientRegistry.ConfigEntry? configEntry));
+        Assert.True(configEntry.PlainRegion);
+        Assert.NotNull(configEntry.Style);
+#endif
+        using AmazonServiceClient client = Session.CreateClientByInterface(s3 ? typeof(IAmazonS3) : typeof(IAmazonSQS), useServiceUrl);
+        Assert.Equal(implementation, client.GetType());
+        AssertAmazonClient.AssertClientConfiguration(client);
+        Assert.Equal(useServiceUrl, client.Config.ServiceURL != null);
+        if (s3)
+        {
+            Assert.True(((AmazonS3Config)client.Config).ForcePathStyle);
+        }
+    }
+
     [Fact]
     public void Should_Able_To_Create_AmazonAPIGatewayClient()
     {

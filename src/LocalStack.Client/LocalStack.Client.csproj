@@ -21,6 +21,11 @@
 		<NoWarn>$(NoWarn);MA0006;CA1510</NoWarn>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<!-- 3.0.0 drops the 2.0.0 net8.0/net9.0 assets (.NET 8/9 end of support); those apps use netstandard2.0. -->
+		<PackageValidationBaselineFrameworkToIgnore Include="net8.0;net9.0" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>

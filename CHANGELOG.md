@@ -6,6 +6,11 @@ See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/loc
 
 ## [Unreleased]
 
+### Documentation
+
+- The README prerequisites now explain that LocalStack images from 2026.03.0 on, including `latest`, need `LOCALSTACK_AUTH_TOKEN` to start. They show how to pass it with Docker and docker-compose and name 4.14.0 as the last token-free release, which gets no further updates ([#51](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/51)).
+- Known Issues now states that the SNS fix first shipped in LocalStack v4.0.0. Removed the LocalStack v2 routing, AWS SDK v3 `AWSSDK.SQS` and untracked `IAmazonLambda` notes; the v1.x README keeps the historical entries.
+
 ### General
 
 - Replaced the AWS-mode wrapper's private SDK reflection with the public `AddAWSService<T>` factory, preserving provider options fallback and client lifetimes. Removed its obsolete linker descriptor and reflection/AOT annotations; Core client creation and `AddLocalStack` configuration binding still do not support Native AOT.

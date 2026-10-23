@@ -63,6 +63,12 @@ public class Session : ISession
 
     public AmazonServiceClient CreateClientByInterface<TClient>(bool useServiceUrl = false) where TClient : IAmazonService
     {
+#if NET10_0_OR_GREATER
+        if (_sessionReflection.GetType() == typeof(SessionReflection))
+        {
+            return CreateClientByStaticFactory<TClient>(useServiceUrl);
+        }
+#endif
         Type serviceInterfaceType = typeof(TClient);
 
         return CreateClientByInterface(serviceInterfaceType, useServiceUrl);
@@ -126,6 +132,48 @@ public class Session : ISession
 
         return client;
     }
+
+#if NET10_0_OR_GREATER
+    private AmazonServiceClient CreateClientByStaticFactory<TClient>(bool useServiceUrl) where TClient : IAmazonService
+    {
+        if (!useServiceUrl && string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        {
+            throw new MisconfiguredClientException($"{nameof(_sessionOptions.RegionName)} must be set if {nameof(useServiceUrl)} is false.");
+        }
+
+        ClientConfig clientConfig = TClient.CreateDefaultClientConfig();
+        string serviceId = clientConfig.ServiceId;
+        AwsServiceEndpoint awsServiceEndpoint = _config.GetAwsServiceEndpoint(serviceId) ??
+                                                throw new NotSupportedClientException($"{serviceId} is not supported by this mock session.");
+        AWSCredentials awsCredentials = new SessionAWSCredentials(_sessionOptions.AwsAccessKeyId, _sessionOptions.AwsAccessKey, _sessionOptions.AwsSessionToken);
+
+        clientConfig.UseHttp = !_config.GetConfigOptions().UseSsl;
+        S3ForcePathStyle.TrySet(clientConfig, true);
+        clientConfig.ProxyHost = awsServiceEndpoint.Host;
+        clientConfig.ProxyPort = awsServiceEndpoint.Port;
+
+        if (useServiceUrl)
+        {
+            clientConfig.ServiceURL = awsServiceEndpoint.ServiceUrl.AbsoluteUri;
+        }
+        else if (!string.IsNullOrWhiteSpace(_sessionOptions.RegionName))
+        {
+            clientConfig.RegionEndpoint = RegionEndpoint.GetBySystemName(_sessionOptions.RegionName);
+        }
+
+        IAmazonService client;
+        try
+        {
+            client = TClient.CreateDefaultServiceClient(awsCredentials, clientConfig);
+        }
+        catch (Exception exception)
+        {
+            throw new TargetInvocationException(exception);
+        }
+
+        return (AmazonServiceClient)client;
+    }
+#endif
 
     private static Type? FindClientType(Assembly assembly, string name)
     {

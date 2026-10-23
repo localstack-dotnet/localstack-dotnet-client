@@ -33,7 +33,7 @@ public class MockAmazonServiceWithServiceMetadataClient : AmazonServiceClient, I
 
     public static IAmazonService CreateDefaultServiceClient(AWSCredentials awsCredentials, ClientConfig clientConfig)
     {
-        return new MockAmazonServiceWithServiceMetadataClient(awsCredentials, MockClientConfig.CreateDefaultMockClientConfig());
+        return new MockAmazonServiceWithServiceMetadataClient(awsCredentials, (MockClientConfig)clientConfig);
     }
 #endif
 }

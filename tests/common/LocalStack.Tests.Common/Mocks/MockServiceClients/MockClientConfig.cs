@@ -10,6 +10,7 @@ public class MockClientConfig : ClientConfig, IClientConfig
 
     public MockClientConfig(IDefaultConfigurationProvider configurationProvider) : base(configurationProvider)
     {
+        ServiceId = MockServiceMetadata.MockServiceId;
         ServiceURL = "http://localhost";
     }
 

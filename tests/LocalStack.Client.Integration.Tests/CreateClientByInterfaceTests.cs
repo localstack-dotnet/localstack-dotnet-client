@@ -12,6 +12,18 @@ public class CreateClientByInterfaceTests
     }
 
     [Fact]
+    public void Force_path_style_sets_s3_config_and_returns_false_for_sqs_config()
+    {
+        var reflection = new Utils.SessionReflection();
+        var s3Config = new AmazonS3Config();
+
+        Assert.False(s3Config.ForcePathStyle);
+        Assert.True(reflection.SetForcePathStyle(s3Config));
+        Assert.True(s3Config.ForcePathStyle);
+        Assert.False(reflection.SetForcePathStyle(new AmazonSQSConfig()));
+    }
+
+    [Fact]
     public void Should_Able_To_Create_AmazonAPIGatewayClient()
     {
         AmazonServiceClient amazonApiGatewayClient = Session.CreateClientByInterface<IAmazonAPIGateway>();

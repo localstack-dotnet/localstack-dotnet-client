@@ -16,6 +16,7 @@
 		<PackageReference Include="AWSSDK.AppConfig" />
 		<PackageReference Include="AWSSDK.AppConfigData" />
 		<PackageReference Include="AWSSDK.Appflow" />
+		<PackageReference Include="AWSSDK.ApplicationAutoScaling" />
 		<PackageReference Include="AWSSDK.AppSync" />
 		<PackageReference Include="AWSSDK.Athena" />
 		<PackageReference Include="AWSSDK.AutoScaling" />
@@ -24,6 +25,7 @@
 		<PackageReference Include="AWSSDK.Backup" />
 		<PackageReference Include="AWSSDK.Batch" />
 		<PackageReference Include="AWSSDK.Bedrock" />
+		<PackageReference Include="AWSSDK.BedrockRuntime" />
 		<PackageReference Include="AWSSDK.CertificateManager" />
 		<PackageReference Include="AWSSDK.CloudControlApi" />
 		<PackageReference Include="AWSSDK.CloudFormation" />
@@ -33,6 +35,7 @@
 		<PackageReference Include="AWSSDK.CloudWatch" />
 		<PackageReference Include="AWSSDK.CloudWatchEvents" />
 		<PackageReference Include="AWSSDK.CloudWatchLogs" />
+		<PackageReference Include="AWSSDK.CodeArtifact" />
 		<PackageReference Include="AWSSDK.CodeBuild" />
 		<PackageReference Include="AWSSDK.CodeConnections" />
 		<PackageReference Include="AWSSDK.CodeCommit" />
@@ -44,7 +47,10 @@
 		<PackageReference Include="AWSSDK.Keyspaces" />
 		<PackageReference Include="AWSSDK.MWAA" />
 		<PackageReference Include="AWSSDK.CostExplorer" />
+		<PackageReference Include="AWSSDK.DatabaseMigrationService" />
 		<PackageReference Include="AWSSDK.DocDB" />
+		<PackageReference Include="AWSSDK.DSQL" />
+		<PackageReference Include="AWSSDK.DynamoDBStreams" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" />
 		<PackageReference Include="AWSSDK.EC2" />
 		<PackageReference Include="AWSSDK.ECR" />
@@ -62,8 +68,10 @@
 		<PackageReference Include="AWSSDK.EMRServerless" />
 		<PackageReference Include="AWSSDK.FIS" />
 		<PackageReference Include="AWSSDK.OpenSearchService" />
+		<PackageReference Include="AWSSDK.Glacier" />
 		<PackageReference Include="AWSSDK.Glue" />
 		<PackageReference Include="AWSSDK.IdentityManagement" />
+		<PackageReference Include="AWSSDK.IdentityStore" />
 		<PackageReference Include="AWSSDK.IoT" />
 		<PackageReference Include="AWSSDK.IoTAnalytics" />
 		<PackageReference Include="AWSSDK.IotData" />
@@ -79,6 +87,8 @@
 		<PackageReference Include="AWSSDK.KinesisFirehose" />
 		<PackageReference Include="AWSSDK.LakeFormation" />
 		<PackageReference Include="AWSSDK.Lambda" />
+		<PackageReference Include="AWSSDK.LambdaWeb" />
+		<PackageReference Include="AWSSDK.ManagedBlockchain" />
 		<PackageReference Include="AWSSDK.MediaConvert" />
 		<PackageReference Include="AWSSDK.MediaStore" />
 		<PackageReference Include="AWSSDK.MediaStoreData" />
@@ -102,6 +112,8 @@
 		<PackageReference Include="AWSSDK.Route53Domains" />
 		<PackageReference Include="AWSSDK.S3" />
 		<PackageReference Include="AWSSDK.S3Control" />
+		<PackageReference Include="AWSSDK.S3Files" />
+		<PackageReference Include="AWSSDK.S3Tables" />
 		<PackageReference Include="AWSSDK.SageMaker" />
 		<PackageReference Include="AWSSDK.SageMakerRuntime" />
 		<PackageReference Include="AWSSDK.Scheduler" />
@@ -116,7 +128,9 @@
 		<PackageReference Include="AWSSDK.SimpleWorkflow" />
 		<PackageReference Include="AWSSDK.Shield" />
 		<PackageReference Include="AWSSDK.SQS" />
+		<PackageReference Include="AWSSDK.SSOAdmin" />
 		<PackageReference Include="AWSSDK.StepFunctions" />
+		<PackageReference Include="AWSSDK.Textract" />
 		<PackageReference Include="AWSSDK.TimestreamQuery" />
 		<PackageReference Include="AWSSDK.TimestreamWrite" />
 		<PackageReference Include="AWSSDK.Transfer" />

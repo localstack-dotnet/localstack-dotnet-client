@@ -127,6 +127,17 @@ public class AwsServiceEndpointMetadata
     public static readonly AwsServiceEndpointMetadata MemoryDb = new("MemoryDB", "memorydb", CommonEndpointPattern, 4567, AwsService.MemoryDb);
     public static readonly AwsServiceEndpointMetadata Shield = new("Shield", "shield", CommonEndpointPattern, 4567, AwsService.Shield);
     public static readonly AwsServiceEndpointMetadata VerifiedPermissions = new("VerifiedPermissions", "verifiedpermissions", CommonEndpointPattern, 4567, AwsService.VerifiedPermissions);
+    public static readonly AwsServiceEndpointMetadata Dsql = new("DSQL", "dsql", CommonEndpointPattern, 4566, AwsService.Dsql);
+    public static readonly AwsServiceEndpointMetadata S3Tables = new("S3Tables", "s3tables", CommonEndpointPattern, 4566, AwsService.S3Tables);
+    public static readonly AwsServiceEndpointMetadata BedrockRuntime = new("Bedrock Runtime", "bedrock-runtime", CommonEndpointPattern, 4566, AwsService.BedrockRuntime);
+    public static readonly AwsServiceEndpointMetadata CodeArtifact = new("codeartifact", "codeartifact", CommonEndpointPattern, 4566, AwsService.CodeArtifact);
+    public static readonly AwsServiceEndpointMetadata DatabaseMigrationService = new("Database Migration Service", "dms", CommonEndpointPattern, 4566, AwsService.DatabaseMigrationService);
+    public static readonly AwsServiceEndpointMetadata IdentityStore = new("identitystore", "identitystore", CommonEndpointPattern, 4566, AwsService.IdentityStore);
+    public static readonly AwsServiceEndpointMetadata ManagedBlockchain = new("ManagedBlockchain", "managedblockchain", CommonEndpointPattern, 4566, AwsService.ManagedBlockchain);
+    public static readonly AwsServiceEndpointMetadata SsoAdmin = new("SSO Admin", "sso-admin", CommonEndpointPattern, 4566, AwsService.SsoAdmin);
+    public static readonly AwsServiceEndpointMetadata Textract = new("Textract", "textract", CommonEndpointPattern, 4566, AwsService.Textract);
+    public static readonly AwsServiceEndpointMetadata LambdaWeb = new("Lambda Web", "lambda-web", CommonEndpointPattern, 4566, AwsService.LambdaWeb);
+    public static readonly AwsServiceEndpointMetadata S3Files = new("S3Files", "s3files", CommonEndpointPattern, 4566, AwsService.S3Files);
 
     public static readonly AwsServiceEndpointMetadata[] All =
     [
@@ -137,6 +148,7 @@ public class AwsServiceEndpointMetadata
         TimeStreamQuery, TimeStreamWrite, S3Control, ElbV2, Support, Neptune, DocDb, ServiceDiscovery, ServerlessApplicationRepository, AppConfig, CostExplorer, MediaConvert, ResourceGroupsTaggingApi,
         ResourceGroups, Efs, Backup, LakeFormation, Waf, WafV2, ConfigService, Mwaa, EventBridge, Fis, MarketplaceMetering, Transcribe, Mq, EmrServerless, Appflow, Route53Domains, Keyspaces, Scheduler, Ram, AppConfigData,
         Pinpoint, Pipes, Account, ACMPCA, Bedrock, CloudControl, CodeBuild, CodeConnections, CodeDeploy, CodePipeline, ElasticTranscoder, MemoryDb, Shield, VerifiedPermissions,
+        Dsql, S3Tables, BedrockRuntime, CodeArtifact, DatabaseMigrationService, IdentityStore, ManagedBlockchain, SsoAdmin, Textract, LambdaWeb, S3Files,
     ];
 
     private AwsServiceEndpointMetadata(string serviceId, string cliName, string endPointPattern, int port, AwsService @enum)

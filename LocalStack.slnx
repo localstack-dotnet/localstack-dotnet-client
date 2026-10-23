@@ -7,6 +7,7 @@
     <Project Path="tests\LocalStack.Client.Extensions.Tests\LocalStack.Client.Extensions.Tests.csproj" />
     <Project Path="tests\LocalStack.Client.Functional.Tests\LocalStack.Client.Functional.Tests.csproj" />
     <Project Path="tests\LocalStack.Client.Integration.Tests\LocalStack.Client.Integration.Tests.csproj" />
+    <Project Path="tests\LocalStack.Client.NativeAot.Tests\LocalStack.Client.NativeAot.Tests.csproj" />
     <Project Path="tests\LocalStack.Client.Tests\LocalStack.Client.Tests.csproj" />
   </Folder>
   <Folder Name="/test/common/">

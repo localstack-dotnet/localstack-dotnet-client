@@ -130,6 +130,55 @@ jobs:
             **/TestResults/**/*
           retention-days: 7
 
+  native-aot-tests:
+    name: "Native AOT Tests (${{ matrix.os }})"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-22.04]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v7
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            10.0.x
+          global-json-file: global.json
+
+      - name: "Start LocalStack (Linux)"
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          docker run -d -p 4566:4566 localstack/localstack:4.14.0
+          if ! timeout 120s bash -c 'until curl --fail --silent --max-time 1 http://localhost:4566/_localstack/health; do sleep 1; done'; then
+            echo "LocalStack did not become ready within 120 seconds"
+            exit 1
+          fi
+          echo "LOCALSTACK_NATIVE_AOT_HOST=localhost" >> "$GITHUB_ENV"
+
+      - name: "Publish and run net10.0 Native AOT tests"
+        shell: pwsh
+        run: |
+          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
+          dotnet publish tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj -c Release -f net10.0 -r $rid -o artifacts/nativeaot/net10.0
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $exe = if ($IsWindows) { 'LocalStack.Client.NativeAot.Tests.exe' } else { 'LocalStack.Client.NativeAot.Tests' }
+          & "./artifacts/nativeaot/net10.0/$exe"
+          exit $LASTEXITCODE
+
+      - name: "Publish and run net11.0 Native AOT tests"
+        shell: pwsh
+        run: |
+          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
+          dotnet publish tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj -c Release -f net11.0 -r $rid -o artifacts/nativeaot/net11.0
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $exe = if ($IsWindows) { 'LocalStack.Client.NativeAot.Tests.exe' } else { 'LocalStack.Client.NativeAot.Tests' }
+          & "./artifacts/nativeaot/net11.0/$exe"
+          exit $LASTEXITCODE
+
   continuous-deployment:
     name: "Continuous Deployment"
     runs-on: ubuntu-22.04

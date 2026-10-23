@@ -175,6 +175,7 @@
     <PackageVersion Include="Testcontainers" Version="4.16.0" />
     <PackageVersion Include="Testcontainers.LocalStack" Version="4.16.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.2" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
     <PackageVersion Include="xunit.runner.console" Version="2.9.3">
       <PrivateAssets>all</PrivateAssets>

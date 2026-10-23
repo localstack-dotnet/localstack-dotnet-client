@@ -1243,4 +1243,31 @@ public class CreateClientByImplementationTests
         Assert.NotNull(amazonS3FilesClient);
         AssertAmazonClient.AssertClientConfiguration(amazonS3FilesClient);
     }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonDynamoDBStreamsClient()
+    {
+        var amazonDynamoDBStreamsClient = Session.CreateClientByImplementation<AmazonDynamoDBStreamsClient>();
+
+        Assert.NotNull(amazonDynamoDBStreamsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonDynamoDBStreamsClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonGlacierClient()
+    {
+        var amazonGlacierClient = Session.CreateClientByImplementation<AmazonGlacierClient>();
+
+        Assert.NotNull(amazonGlacierClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonGlacierClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonApplicationAutoScalingClient()
+    {
+        var amazonApplicationAutoScalingClient = Session.CreateClientByImplementation<AmazonApplicationAutoScalingClient>();
+
+        Assert.NotNull(amazonApplicationAutoScalingClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonApplicationAutoScalingClient);
+    }
 }

@@ -1074,7 +1074,7 @@ public class CreateClientByInterfaceTests
         AssertAmazonClient.AssertClientConfiguration(amazonPipes);
     }
 
-        [Fact]
+    [Fact]
     public void Should_Able_To_Create_AmazonAccount()
     {
         AmazonServiceClient amazonAccount = Session.CreateClientByInterface<IAmazonAccount>();
@@ -1270,5 +1270,41 @@ public class CreateClientByInterfaceTests
 
         Assert.NotNull(amazonS3Files);
         AssertAmazonClient.AssertClientConfiguration(amazonS3Files);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeBuild()
+    {
+        AmazonServiceClient amazonCodeBuild = Session.CreateClientByInterface<IAmazonCodeBuild>();
+
+        Assert.NotNull(amazonCodeBuild);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeBuild);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonDynamoDBStreams()
+    {
+        AmazonServiceClient amazonDynamoDBStreams = Session.CreateClientByInterface<IAmazonDynamoDBStreams>();
+
+        Assert.NotNull(amazonDynamoDBStreams);
+        AssertAmazonClient.AssertClientConfiguration(amazonDynamoDBStreams);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonGlacier()
+    {
+        AmazonServiceClient amazonGlacier = Session.CreateClientByInterface<IAmazonGlacier>();
+
+        Assert.NotNull(amazonGlacier);
+        AssertAmazonClient.AssertClientConfiguration(amazonGlacier);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonApplicationAutoScaling()
+    {
+        AmazonServiceClient amazonApplicationAutoScaling = Session.CreateClientByInterface<IAmazonApplicationAutoScaling>();
+
+        Assert.NotNull(amazonApplicationAutoScaling);
+        AssertAmazonClient.AssertClientConfiguration(amazonApplicationAutoScaling);
     }
 }

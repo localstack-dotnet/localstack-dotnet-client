@@ -27,7 +27,7 @@ public sealed class NativeAotTests
     private static readonly Type SqsImplementation = typeof(AmazonSQSClient);
 
     [Fact]
-    public void ExistingConsumerCallsConfigureS3()
+    public void AddAwsService_Should_Configure_S3_For_LocalStack_With_Existing_Consumer_Calls()
     {
         using ConfigurationRoot configuration = LoadConfiguration();
         var services = new ServiceCollection();
@@ -58,7 +58,7 @@ public sealed class NativeAotTests
     [InlineData("try-alias", true)]
     [InlineData("try-alias-options", false)]
     [InlineData("try-alias-options", true)]
-    public static void EveryRegistrationOverloadConfiguresS3(string overload, bool useServiceUrl)
+    public static void Registration_Overloads_Should_Configure_S3_For_LocalStack(string overload, bool useServiceUrl)
     {
         using ConfigurationRoot configuration = LoadConfiguration();
         var services = new ServiceCollection();
@@ -110,7 +110,7 @@ public sealed class NativeAotTests
     [InlineData(false, true, true)]
     [InlineData(true, false, true)]
     [InlineData(true, true, true)]
-    public static void SessionPathsConfigureS3(bool useServiceUrl, bool useSsl, bool standalone)
+    public static void Session_Should_Configure_S3_Clients_On_Every_Creation_Path(bool useServiceUrl, bool useSsl, bool standalone)
     {
         var configOptions = new ConfigOptions(localStackHost: "native-aot-host", useSsl: useSsl, edgePort: 4566);
         var config = new Config(configOptions);
@@ -139,7 +139,7 @@ public sealed class NativeAotTests
     [InlineData(false, true, true)]
     [InlineData(true, false, true)]
     [InlineData(true, true, true)]
-    public static void SessionPathsConfigureSqs(bool useServiceUrl, bool useSsl, bool standalone)
+    public static void Session_Should_Configure_Sqs_Clients_On_Every_Creation_Path(bool useServiceUrl, bool useSsl, bool standalone)
     {
         var configOptions = new ConfigOptions(localStackHost: "native-aot-host", useSsl: useSsl, edgePort: 4566);
         var config = new Config(configOptions);
@@ -160,7 +160,7 @@ public sealed class NativeAotTests
     }
 
     [Fact]
-    public async Task S3BucketRoundTrip()
+    public async Task S3_Should_Create_And_List_A_Bucket_Against_LocalStack()
     {
         using ConfigurationRoot configuration = LoadLiveConfiguration();
         var services = new ServiceCollection();
@@ -176,7 +176,7 @@ public sealed class NativeAotTests
     }
 
     [Fact]
-    public async Task SqsQueueRoundTrip()
+    public async Task Sqs_Should_Create_And_List_A_Queue_Against_LocalStack()
     {
         using ConfigurationRoot configuration = LoadLiveConfiguration();
         var services = new ServiceCollection();

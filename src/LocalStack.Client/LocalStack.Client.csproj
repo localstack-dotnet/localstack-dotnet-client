@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;net472;net8.0;net9.0;net10.0</TargetFrameworks>
+		<TargetFrameworks>$(LocalStackClientTargetFrameworks)</TargetFrameworks>
+		<IsAotCompatible>$(IsLocalStackModernTarget)</IsAotCompatible>
 		<AssemblyName>LocalStack.Client</AssemblyName>
 		<RootNamespace>LocalStack.Client</RootNamespace>
 
@@ -14,12 +15,16 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<EnablePackageValidation>true</EnablePackageValidation>
-		<PackageValidationBaselineVersion>2.0.0</PackageValidationBaselineVersion>
+		<PackageValidationBaselineVersion>$(LocalStackPackageValidationBaselineVersion)</PackageValidationBaselineVersion>
 <!--		<GenerateCompatibilitySuppressionFile>true</GenerateCompatibilitySuppressionFile>-->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<NoWarn>$(NoWarn);MA0006;CA1510</NoWarn>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageValidationBaselineFrameworkToIgnore Include="$(LocalStackPackageValidationDroppedTargetFrameworks)" />
+	</ItemGroup>
 
 	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -28,7 +33,31 @@
 	<ItemGroup>
 		<PackageReference Include="AWSSDK.Core" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+		<ProjectReference Include="../LocalStack.Client.Generators/LocalStack.Client.Generators.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+		<None Include="../LocalStack.Client.Generators/bin/$(Configuration)/$(LocalStackAnalyzerTargetFramework)/LocalStack.Client.Generators.dll"
+		      Pack="true" PackagePath="tools/LocalStack.Client.Generators" Visible="false" />
+		<None Include="buildTransitive/LocalStack.Client.targets" Pack="true" PackagePath="buildTransitive" />
 	</ItemGroup>
+
+	<!-- Writes buildTransitive/LocalStack.Client.props so the packaged generator gate uses the same
+	     minimum framework as this repository (LocalStackModernMinimumTargetFramework). -->
+	<Target Name="GenerateBuildTransitiveProps" BeforeTargets="_GetPackageFiles">
+		<PropertyGroup>
+			<LocalStackBuildTransitivePropsPath>$(IntermediateOutputPath)buildTransitive/LocalStack.Client.props</LocalStackBuildTransitivePropsPath>
+		</PropertyGroup>
+		<ItemGroup>
+			<LocalStackBuildTransitivePropsLine Include="&lt;Project&gt;" />
+			<LocalStackBuildTransitivePropsLine Include="  &lt;PropertyGroup&gt;" />
+			<LocalStackBuildTransitivePropsLine Include="    &lt;LocalStackClientGeneratorMinimumTargetFramework Condition=&quot;'%24(LocalStackClientGeneratorMinimumTargetFramework)' == ''&quot;&gt;$(LocalStackModernMinimumTargetFramework)&lt;/LocalStackClientGeneratorMinimumTargetFramework&gt;" />
+			<LocalStackBuildTransitivePropsLine Include="  &lt;/PropertyGroup&gt;" />
+			<LocalStackBuildTransitivePropsLine Include="&lt;/Project&gt;" />
+		</ItemGroup>
+		<WriteLinesToFile File="$(LocalStackBuildTransitivePropsPath)" Lines="@(LocalStackBuildTransitivePropsLine)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+		<ItemGroup>
+			<None Include="$(LocalStackBuildTransitivePropsPath)" Pack="true" PackagePath="buildTransitive" />
+			<FileWrites Include="$(LocalStackBuildTransitivePropsPath)" />
+		</ItemGroup>
+	</Target>
 
 	<Target Name="PreBuild" AfterTargets="PreBuildEvent">
 		<ItemGroup>
@@ -51,7 +80,7 @@
 		<None Include="../../assets/localstack-dotnet-square.png" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+	<PropertyGroup Condition="'$(IsLocalStackNetFrameworkTarget)' == 'true'">
 		<DefineConstants>NET472</DefineConstants>
 	</PropertyGroup>
 

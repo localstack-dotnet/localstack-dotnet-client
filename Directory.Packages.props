@@ -10,6 +10,8 @@
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
     <!-- third-party analyzers -->
     <PackageVersion Include="Meziantou.Analyzer" Version="3.0.312" />
@@ -33,6 +35,7 @@
     <PackageVersion Include="AWSSDK.AppConfig" Version="4.0.101.16" />
     <PackageVersion Include="AWSSDK.AppConfigData" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.Appflow" Version="4.0.101.7" />
+    <PackageVersion Include="AWSSDK.ApplicationAutoScaling" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.AppSync" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.Athena" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.AutoScaling" Version="4.0.104.7" />
@@ -41,6 +44,7 @@
     <PackageVersion Include="AWSSDK.Backup" Version="4.0.101.13" />
     <PackageVersion Include="AWSSDK.Batch" Version="4.0.104.3" />
     <PackageVersion Include="AWSSDK.Bedrock" Version="4.0.103.3" />
+    <PackageVersion Include="AWSSDK.BedrockRuntime" Version="4.0.101.11" />
     <PackageVersion Include="AWSSDK.CertificateManager" Version="4.0.102.10" />
     <PackageVersion Include="AWSSDK.CloudControlApi" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.CloudFormation" Version="4.0.103.2" />
@@ -50,6 +54,7 @@
     <PackageVersion Include="AWSSDK.CloudWatch" Version="4.0.105.4" />
     <PackageVersion Include="AWSSDK.CloudWatchEvents" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.CloudWatchLogs" Version="4.0.105.3" />
+    <PackageVersion Include="AWSSDK.CodeArtifact" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.CodeBuild" Version="4.0.101.18" />
     <PackageVersion Include="AWSSDK.CodeConnections" Version="4.0.101.2" />
     <PackageVersion Include="AWSSDK.CodeCommit" Version="4.0.101.10" />
@@ -61,7 +66,10 @@
     <PackageVersion Include="AWSSDK.Keyspaces" Version="4.0.101.2" />
     <PackageVersion Include="AWSSDK.MWAA" Version="4.0.101.7" />
     <PackageVersion Include="AWSSDK.CostExplorer" Version="4.0.101.3" />
+    <PackageVersion Include="AWSSDK.DatabaseMigrationService" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.DocDB" Version="4.0.101.4" />
+    <PackageVersion Include="AWSSDK.DSQL" Version="4.0.103.7" />
+    <PackageVersion Include="AWSSDK.DynamoDBStreams" Version="4.0.101" />
     <PackageVersion Include="AWSSDK.DynamoDBv2" Version="4.0.107.3" />
     <PackageVersion Include="AWSSDK.EC2" Version="4.0.127" />
     <PackageVersion Include="AWSSDK.ECR" Version="4.0.101.10" />
@@ -79,8 +87,10 @@
     <PackageVersion Include="AWSSDK.EMRServerless" Version="4.0.101.2" />
     <PackageVersion Include="AWSSDK.FIS" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.OpenSearchService" Version="4.0.104.2" />
+    <PackageVersion Include="AWSSDK.Glacier" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.Glue" Version="4.0.115.1" />
     <PackageVersion Include="AWSSDK.IdentityManagement" Version="4.0.103.10" />
+    <PackageVersion Include="AWSSDK.IdentityStore" Version="4.0.101.5" />
     <PackageVersion Include="AWSSDK.IoT" Version="4.0.101.8" />
     <PackageVersion Include="AWSSDK.IoTAnalytics" Version="4.0.2.15" />
     <PackageVersion Include="AWSSDK.IotData" Version="4.0.100.19" />
@@ -96,6 +106,8 @@
     <PackageVersion Include="AWSSDK.KinesisFirehose" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.LakeFormation" Version="4.0.101.1" />
     <PackageVersion Include="AWSSDK.Lambda" Version="4.0.110" />
+    <PackageVersion Include="AWSSDK.LambdaWeb" Version="4.0.102.2" />
+    <PackageVersion Include="AWSSDK.ManagedBlockchain" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.MediaConvert" Version="4.0.105.4" />
     <PackageVersion Include="AWSSDK.MediaStore" Version="4.0.100.19" />
     <PackageVersion Include="AWSSDK.MediaStoreData" Version="4.0.100.19" />
@@ -119,6 +131,8 @@
     <PackageVersion Include="AWSSDK.Route53Domains" Version="4.0.101.1" />
     <PackageVersion Include="AWSSDK.S3" Version="4.0.104.4" />
     <PackageVersion Include="AWSSDK.S3Control" Version="4.0.101.6" />
+    <PackageVersion Include="AWSSDK.S3Files" Version="4.0.100.18" />
+    <PackageVersion Include="AWSSDK.S3Tables" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.SageMaker" Version="4.0.122.1" />
     <PackageVersion Include="AWSSDK.SageMakerRuntime" Version="4.0.101.12" />
     <PackageVersion Include="AWSSDK.Scheduler" Version="4.0.100.18" />
@@ -133,7 +147,9 @@
     <PackageVersion Include="AWSSDK.SimpleWorkflow" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.Shield" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.SQS" Version="4.0.100.18" />
+    <PackageVersion Include="AWSSDK.SSOAdmin" Version="4.0.103.5" />
     <PackageVersion Include="AWSSDK.StepFunctions" Version="4.0.100.19" />
+    <PackageVersion Include="AWSSDK.Textract" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.TimestreamQuery" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.TimestreamWrite" Version="4.0.100.18" />
     <PackageVersion Include="AWSSDK.Transfer" Version="4.0.105" />
@@ -173,6 +189,7 @@
     <PackageVersion Include="Testcontainers" Version="4.16.0" />
     <PackageVersion Include="Testcontainers.LocalStack" Version="4.16.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.v3.aot.mtp-v2" Version="4.0.2" />
     <PackageVersion Include="xunit.abstractions" Version="2.0.3" />
     <PackageVersion Include="xunit.runner.console" Version="2.9.3">
       <PrivateAssets>all</PrivateAssets>
@@ -183,7 +200,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageVersion>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(LocalStackNetFrameworkTargetFramework)'">
     <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.11.0" />
   </ItemGroup>
 </Project>

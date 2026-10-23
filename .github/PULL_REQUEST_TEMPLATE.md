@@ -26,9 +26,7 @@ Provide a clear and concise description of the changes.
 
 ## 🎯 Target Version Track
 
-- [ ] v2.x (AWS SDK v4) - Supported branch (`master`)
-
-The v1.x / AWS SDK v3 line is no longer supported; do not target new fixes to `sdkv3-lts`. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
+- [ ] 3.x (AWS SDK v4) - `master`
 
 ## 🧪 Testing
 

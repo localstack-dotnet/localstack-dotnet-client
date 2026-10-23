@@ -68,22 +68,8 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
             10.0.x
           global-json-file: global.json
-
-      # The macOS runner image no longer ships Mono, and VSTest needs the real 'mono' host
-      # on the PATH to execute the net472 test assemblies.
-      - name: "Install Mono (macOS)"
-        if: runner.os == 'macOS'
-        run: |
-          if command -v mono >/dev/null 2>&1; then
-            echo "✅ Mono already present: $(mono --version | head -1)"
-          else
-            brew install mono
-            echo "✅ Installed: $(mono --version | head -1)"
-          fi
 
       - name: "Cache NuGet packages"
         uses: actions/cache@v6
@@ -144,6 +130,73 @@ jobs:
             **/TestResults/**/*
           retention-days: 7
 
+  native-aot-tests:
+    name: "Native AOT Tests (${{ matrix.os }})"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-22.04]
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v7
+
+      - name: "Setup .NET SDK"
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            10.0.x
+          global-json-file: global.json
+
+      - name: "Start LocalStack (Linux)"
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          docker run -d -p 4566:4566 localstack/localstack:4.14.0
+          if ! timeout 120s bash -c 'until curl --fail --silent --max-time 1 http://localhost:4566/_localstack/health; do sleep 1; done'; then
+            echo "LocalStack did not become ready within 120 seconds"
+            exit 1
+          fi
+          echo "LOCALSTACK_NATIVE_AOT_HOST=localhost" >> "$GITHUB_ENV"
+
+      - name: "Publish and run Native AOT tests"
+        shell: pwsh
+        run: |
+          $project = 'tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj'
+          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
+          $exe = if ($IsWindows) { 'LocalStack.Client.NativeAot.Tests.exe' } else { 'LocalStack.Client.NativeAot.Tests' }
+          # Every modern target framework the project declares (from Directory.Build.props).
+          $frameworks = (dotnet msbuild $project -getProperty:TargetFrameworks).Split(';', [StringSplitOptions]::RemoveEmptyEntries)
+          foreach ($framework in $frameworks) {
+            dotnet publish $project -c Release -f $framework -r $rid -o "artifacts/nativeaot/$framework"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            & "./artifacts/nativeaot/$framework/$exe"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      # Packs both libraries and publishes the package consumer from those packages with Native AOT,
+      # so the source generator is proven to reach a consumer through the package (buildTransitive).
+      - name: "Pack and run the package consumer with Native AOT"
+        shell: pwsh
+        run: |
+          dotnet pack src/LocalStack.Client/LocalStack.Client.csproj -c Release -o artifacts/packages
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet pack src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj -c Release -o artifacts/packages
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $version = dotnet msbuild src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj -getProperty:Version
+          $frameworks = (dotnet msbuild src/LocalStack.Client/LocalStack.Client.csproj -getProperty:LocalStackModernTargetFrameworks).Split(';', [StringSplitOptions]::RemoveEmptyEntries)
+          # A fresh package cache, so a same-version package from an earlier run cannot be reused.
+          $env:NUGET_PACKAGES = Join-Path $env:RUNNER_TEMP 'package-consumer-nuget'
+          $project = 'tests/LocalStack.Client.PackageConsumer.Tests/LocalStack.Client.PackageConsumer.Tests.csproj'
+          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
+          $exe = if ($IsWindows) { 'LocalStack.Client.PackageConsumer.Tests.exe' } else { 'LocalStack.Client.PackageConsumer.Tests' }
+          foreach ($framework in $frameworks) {
+            dotnet publish $project -c Release -r $rid -o "artifacts/package-consumer/$framework" "-p:LocalStackConsumerTargetFramework=$framework" "-p:LocalStackVersion=$version"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            & "./artifacts/package-consumer/$framework/$exe"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
   continuous-deployment:
     name: "Continuous Deployment"
     runs-on: ubuntu-22.04
@@ -169,8 +222,6 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
-            8.0.x
-            9.0.x
             10.0.x
           global-json-file: global.json
 

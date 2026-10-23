@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <TargetFrameworks>$(LocalStackModernTargetFrameworks)</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <NoWarn>$(NoWarn);CA1707;MA0006;MA0004;CA1711;CA2007;MA0132;CA1848;CA2254;CA1873;S4144;CA1515</NoWarn>
+    <NoWarn>$(NoWarn);MA0004;CA1711;CA2007;MA0132;CA1848;CA2254;CA1873;S4144;CA1515</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,7 +38,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging" />
 
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Text.Json" />
 
     <PackageReference Include="AutoFixture" />
     <PackageReference Include="coverlet.collector" />

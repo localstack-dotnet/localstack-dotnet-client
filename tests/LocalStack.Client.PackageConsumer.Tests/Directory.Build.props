@@ -1,0 +1,3 @@
+<Project>
+  <!-- Stops the repository's Directory.Build.props from applying: this project must build like an external consumer. -->
+</Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net472;net8.0;net9.0;net10.0</TargetFrameworks>
+        <TargetFrameworks>$(LocalStackNetFrameworkAndModernTargetFrameworks)</TargetFrameworks>
         <NoWarn>$(NoWarn);CA1707;MA0006;CA1510</NoWarn>
     </PropertyGroup>
 
@@ -10,7 +10,7 @@
         <PackageReference Include="Moq" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <ItemGroup Condition="'$(IsLocalStackNetFrameworkTarget)' == 'true'">
       <PackageReference Include="System.ValueTuple"/>
     </ItemGroup>
 

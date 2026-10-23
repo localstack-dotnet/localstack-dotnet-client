@@ -25,5 +25,5 @@ The application-level choice between creating an AWS service client through this
 _Avoid_: LocalStack mode for the separate choice between an explicit service URL and a region-based client configuration.
 
 **LocalStack.NET version line**:
-A major-version family of this library's packages: v1.x targets AWS SDK v3, and v2.x targets AWS SDK v4. It is separate from the LocalStack emulator image version and the version of an individual AWS SDK package.
+A major-version family of this library's packages: v1.x targets AWS SDK v3; v2.x and v3.x target AWS SDK v4. The current line is v3.x; v2.x is superseded and v1.x is unmaintained. It is separate from the LocalStack emulator image version and the version of an individual AWS SDK package.
 _Avoid_: An unqualified “LocalStack version” when referring to the library.

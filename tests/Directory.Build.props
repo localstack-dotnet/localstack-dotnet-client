@@ -1,0 +1,10 @@
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <!-- Settings shared by every test project. -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <!-- CA1707: test names follow the Member_Should_Outcome_When_Condition convention.
+         MA0006: tests compare strings with ==. -->
+    <NoWarn>$(NoWarn);CA1707;MA0006</NoWarn>
+  </PropertyGroup>
+</Project>

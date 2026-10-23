@@ -74,7 +74,7 @@ public abstract class BaseSnsScenario : BaseScenario
 
     [Theory, InlineData("eu-central-1"), InlineData("us-west-1"), InlineData("af-south-1"), InlineData("ap-southeast-1"), InlineData("ca-central-1"),
      InlineData("eu-west-2"), InlineData("sa-east-1")]
-    public virtual async Task Multi_Region_Tests_Async(string systemName)
+    public virtual async Task SnsService_Should_Create_A_Sns_Topic_In_The_Configured_Region_Async(string systemName)
     {
         var sessionReflection = ServiceProvider.GetRequiredService<ISessionReflection>();
         var amazonSimpleNotificationService = ServiceProvider.GetRequiredService<IAmazonSimpleNotificationService>();

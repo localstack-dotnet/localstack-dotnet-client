@@ -27,4 +27,12 @@ public class ConfigOptions : IConfigOptions
     public bool UseLegacyPorts { get; private set;} = Constants.UseLegacyPorts;
 
     public int EdgePort { get; private set;} = Constants.EdgePort;
+
+    internal void ApplyConfiguration(string? localStackHost = null, bool? useSsl = null, bool? useLegacyPorts = null, int? edgePort = null)
+    {
+        LocalStackHost = localStackHost ?? LocalStackHost;
+        UseSsl = useSsl ?? UseSsl;
+        UseLegacyPorts = useLegacyPorts ?? UseLegacyPorts;
+        EdgePort = edgePort ?? EdgePort;
+    }
 }

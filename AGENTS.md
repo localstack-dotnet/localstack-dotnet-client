@@ -27,4 +27,4 @@ This public repository owns its current behavior, terminology, and accepted deci
 | Release changes | [Changelog](CHANGELOG.md) |
 | Security disclosure or support window | [Security policy](.github/SECURITY.md) |
 
-Current architecture documents describe `master`; a draft source-generator branch does not establish Native AOT support here.
+The [platform boundary](docs/architecture/platform-and-packaging.md#native-aot-and-trimming) documents Native AOT support, qualified by the [Native AOT test lane](docs/engineering/quality-gates.md).

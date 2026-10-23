@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup Condition="'$(TargetFramework)' != '' and '$(MSBuildProjectName)' != 'LocalStack.Client.Generators.Tests' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(LocalStackModernMinimumTargetFramework)'))">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../src/LocalStack.Client.Generators/LocalStack.Client.Generators.csproj"
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

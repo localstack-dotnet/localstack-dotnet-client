@@ -10,22 +10,37 @@ public class SessionReflection : ISessionReflection
         return ExtractServiceMetadata(clientType);
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Accesses private field 'serviceMetadata' with reflection; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
-    public IServiceMetadata ExtractServiceMetadata(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicFields)]
-#endif
-        Type clientType
-        )
+    public IServiceMetadata ExtractServiceMetadata(Type clientType)
     {
         if (clientType == null)
         {
             throw new ArgumentNullException(nameof(clientType));
         }
 
+#if NET10_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetClient(clientType, out GeneratedClientRegistry.ClientEntry? entry))
+        {
+            return entry.Metadata();
+        }
+
+        if (ReflectionFallback.IsSupported)
+        {
+            return ExtractLegacyServiceMetadata(clientType);
+        }
+        else
+        {
+            throw new InvalidOperationException($"Invalid service type {clientType}");
+        }
+#else
+        return ExtractLegacyServiceMetadata(clientType);
+#endif
+    }
+
+#if NET10_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded client metadata requires its original private fields.")]
+#endif
+    private static IServiceMetadata ExtractLegacyServiceMetadata(Type clientType)
+    {
         FieldInfo serviceMetadataField = clientType.GetField("serviceMetadata", BindingFlags.Static | BindingFlags.NonPublic) ??
                                          throw new InvalidOperationException($"Invalid service type {clientType}");
 
@@ -42,67 +57,129 @@ public class SessionReflection : ISessionReflection
         return CreateClientConfig(clientType);
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Uses Activator.CreateInstance on derived ClientConfig types; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
-    public ClientConfig CreateClientConfig(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
-#endif
-        Type clientType
-
-        )
+    public ClientConfig CreateClientConfig(Type clientType)
     {
         if (clientType == null)
         {
             throw new ArgumentNullException(nameof(clientType));
         }
 
+#if NET10_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetClient(clientType, out GeneratedClientRegistry.ClientEntry? entry))
+        {
+            return entry.CreateConfig();
+        }
+
+        if (ReflectionFallback.IsSupported)
+        {
+            return CreateLegacyClientConfig(clientType);
+        }
+        else
+        {
+            throw new InvalidOperationException("Sequence contains no matching element");
+        }
+#else
+        return CreateLegacyClientConfig(clientType);
+#endif
+    }
+
+#if NET10_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded configurations require their original constructors.")]
+#endif
+    private static ClientConfig CreateLegacyClientConfig(Type clientType)
+    {
         ConstructorInfo clientConstructorInfo = FindConstructorWithCredentialsAndClientConfig(clientType);
         ParameterInfo clientConfigParam = clientConstructorInfo.GetParameters()[1];
 
         return (ClientConfig)Activator.CreateInstance(clientConfigParam.ParameterType);
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Reflects over Config.RegionEndpoint property; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
-    public void SetClientRegion(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
-#endif
-        AmazonServiceClient amazonServiceClient,
-        string systemName)
+    public void SetClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
     {
         if (amazonServiceClient == null)
         {
             throw new ArgumentNullException(nameof(amazonServiceClient));
         }
 
+#if NET10_0_OR_GREATER
+        if (amazonServiceClient.Config is ClientConfig clientConfig &&
+            GeneratedClientRegistry.TryGetConfig(clientConfig.GetType(), out GeneratedClientRegistry.ConfigEntry? entry) && entry.PlainRegion)
+        {
+            SetPlainClientRegion(clientConfig, systemName);
+            return;
+        }
+
+        if (ReflectionFallback.IsSupported)
+        {
+            SetLegacyClientRegion(amazonServiceClient, systemName);
+        }
+        else if (amazonServiceClient.Config is ClientConfig plainConfig)
+        {
+            SetPlainClientRegion(plainConfig, systemName);
+        }
+#else
+        SetLegacyClientRegion(amazonServiceClient, systemName);
+#endif
+    }
+
+#if NET10_0_OR_GREATER
+    private static void SetPlainClientRegion(ClientConfig config, string systemName)
+    {
+        try
+        {
+            config.RegionEndpoint = RegionEndpoint.GetBySystemName(systemName);
+        }
+        catch (Exception e)
+        {
+            throw new TargetInvocationException(e);
+        }
+    }
+
+    [RequiresUnreferencedCode("Dynamically loaded configurations require their original properties.")]
+#endif
+    private static void SetLegacyClientRegion(AmazonServiceClient amazonServiceClient, string systemName)
+    {
         PropertyInfo? regionEndpointProperty = amazonServiceClient.Config.GetType()
                                                                   .GetProperty(nameof(amazonServiceClient.Config.RegionEndpoint),
                                                                                BindingFlags.Public | BindingFlags.Instance);
         regionEndpointProperty?.SetValue(amazonServiceClient.Config, RegionEndpoint.GetBySystemName(systemName));
     }
 
-#if NET8_0_OR_GREATER
-    [RequiresDynamicCode("Reflects over ForcePathStyle property; not safe for Native AOT."),
-     RequiresUnreferencedCode("Reflection may break when IL trimming removes private members. We’re migrating to a source‑generated path in vNext.")]
-#endif
-    public bool SetForcePathStyle(
-#if NET8_0_OR_GREATER
-        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
-#endif
-        ClientConfig clientConfig,
-        bool value = true)
+    public bool SetForcePathStyle(ClientConfig clientConfig, bool value = true)
     {
         if (clientConfig == null)
         {
             throw new ArgumentNullException(nameof(clientConfig));
         }
 
+#if NET10_0_OR_GREATER
+        if (S3ForcePathStyle.TrySet(clientConfig, value))
+        {
+            return true;
+        }
+#endif
+#if NET10_0_OR_GREATER
+        if (GeneratedClientRegistry.TryGetConfig(clientConfig.GetType(), out GeneratedClientRegistry.ConfigEntry? entry) && entry.Style != null)
+        {
+            return entry.Style(clientConfig, value);
+        }
+
+        if (ReflectionFallback.IsSupported)
+        {
+            return SetLegacyForcePathStyle(clientConfig, value);
+        }
+
+        return false;
+#else
+        return SetLegacyForcePathStyle(clientConfig, value);
+#endif
+    }
+
+#if NET10_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded configurations require their original properties.")]
+#endif
+    private static bool SetLegacyForcePathStyle(ClientConfig clientConfig, bool value)
+    {
         PropertyInfo? forcePathStyleProperty = clientConfig.GetType().GetProperty("ForcePathStyle", BindingFlags.Public | BindingFlags.Instance);
 
         if (forcePathStyleProperty == null)
@@ -115,6 +192,9 @@ public class SessionReflection : ISessionReflection
         return true;
     }
 
+#if NET10_0_OR_GREATER
+    [RequiresUnreferencedCode("Dynamically loaded clients require their original constructors.")]
+#endif
     private static ConstructorInfo FindConstructorWithCredentialsAndClientConfig(Type clientType)
     {
         return clientType.GetConstructors(BindingFlags.Instance | BindingFlags.Public)

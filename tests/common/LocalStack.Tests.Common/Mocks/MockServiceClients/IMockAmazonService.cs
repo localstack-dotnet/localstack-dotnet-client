@@ -8,7 +8,7 @@ public interface IMockAmazonService : IDisposable, IAmazonService
 
     static IAmazonService IAmazonService.CreateDefaultServiceClient(AWSCredentials awsCredentials, ClientConfig clientConfig)
     {
-        return new MockAmazonServiceClient(awsCredentials, MockClientConfig.CreateDefaultMockClientConfig());
+        return new MockAmazonServiceClient(awsCredentials, (MockClientConfig)clientConfig);
     }
 #pragma warning restore CA1033
 #endif

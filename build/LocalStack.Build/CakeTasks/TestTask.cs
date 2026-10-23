@@ -17,6 +17,7 @@ public sealed class TestTask : FrostingTask<BuildContext>
         };
 
         IEnumerable<ProjMetadata> projMetadata = context.GetProjMetadata();
+        string netFrameworkTargetFramework = context.LocalStackNetFrameworkTargetFramework;
 
         foreach (ProjMetadata testProj in projMetadata)
         {
@@ -25,8 +26,16 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
             ConsoleHelper.WriteInfo($"Target Frameworks: {targetFrameworks}");
 
+            if (testProj.RunsAsPublishedExecutable)
+            {
+                ConsoleHelper.WriteWarning($"Skipping {testProj.AssemblyName}: CI publishes and runs it as a native executable");
+
+                continue;
+            }
+
             foreach (string targetFramework in testProj.TargetFrameworks)
             {
+
                 if (context.SkipFunctionalTest && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {
                     ConsoleHelper.WriteWarning("Skipping Functional Tests");
@@ -47,13 +56,12 @@ public sealed class TestTask : FrostingTask<BuildContext>
                     settings.Filter = null;
                 }
 
-                // .NET Framework testing on non-Windows platforms
-                // - Modern .NET includes built-in Mono runtime
-                // - Test platform still requires external Mono installation on Linux
-                if (targetFramework == "net472" && !context.IsRunningOnWindows())
+                // The .NET 11 SDK's test platform runs .NET Framework tests on Windows only; Mono is no longer supported.
+                if (targetFramework == netFrameworkTargetFramework && !context.IsRunningOnWindows())
                 {
-                    string platform = context.IsRunningOnLinux() ? "Linux (with external Mono)" : "macOS (built-in Mono)";
-                    ConsoleHelper.WriteInfo($"Running .NET Framework tests on {platform}");
+                    ConsoleHelper.WriteWarning($"Skipping {targetFramework} tests for {testProj.AssemblyName}: .NET Framework tests run on Windows only");
+
+                    continue;
                 }
 
                 string testFilePrefix = targetFramework.Replace('.', '-');

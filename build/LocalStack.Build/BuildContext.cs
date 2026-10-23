@@ -117,6 +117,9 @@ public sealed class BuildContext : FrostingContext
 
     public ConvertableFilePath LocalStackClientExtProjFile { get; }
 
+    public string LocalStackNetFrameworkTargetFramework =>
+        GetProjectProperties(LocalStackClientProjFile.ToString(), NetFrameworkTargetFrameworkProperty)[NetFrameworkTargetFrameworkProperty];
+
     /// <summary>
     /// Gets the effective package version for LocalStack.Client package.
     /// This value is cached to ensure consistency across pack and publish operations.
@@ -174,11 +177,13 @@ public sealed class BuildContext : FrostingContext
         {
             string csProjPath = csProj.FullPath;
 
-            IEnumerable<string> targetFrameworks = GetProjectTargetFrameworks(csProjPath);
+            Dictionary<string, string> properties = GetProjectProperties(csProjPath, TargetFrameworksProperty, TargetFrameworkProperty, RunsAsPublishedExecutableProperty);
+            IEnumerable<string> targetFrameworks = SplitTargetFrameworks(properties);
             string directoryPath = csProj.GetDirectory().FullPath;
             string assemblyName = GetAssemblyName(csProjPath);
+            bool runsAsPublishedExecutable = string.Equals(properties[RunsAsPublishedExecutableProperty], "true", StringComparison.OrdinalIgnoreCase);
 
-            var testProjMetadata = new ProjMetadata(directoryPath, csProjPath, targetFrameworks, assemblyName);
+            var testProjMetadata = new ProjMetadata(directoryPath, csProjPath, targetFrameworks, assemblyName, runsAsPublishedExecutable);
             projMetadata.Add(testProjMetadata);
         }
 
@@ -385,21 +390,64 @@ public sealed class BuildContext : FrostingContext
         return NuGetVersion.TryParse($"0.0.0-{sanitised}", out NuGetVersion? _) ? sanitised : $"g{sanitised}";
     }
 
-    private string[] GetProjectTargetFrameworks(string csprojPath)
+    // Test projects that set this property are published and run as native executables by CI, not by 'dotnet test'.
+    private const string RunsAsPublishedExecutableProperty = "LocalStackTestRunsAsPublishedExecutable";
+    private const string TargetFrameworksProperty = "TargetFrameworks";
+    private const string TargetFrameworkProperty = "TargetFramework";
+    private const string NetFrameworkTargetFrameworkProperty = "LocalStackNetFrameworkTargetFramework";
+
+    private static string[] GetProjectTargetFrameworks(string csprojPath) =>
+        SplitTargetFrameworks(GetProjectProperties(csprojPath, TargetFrameworksProperty, TargetFrameworkProperty));
+
+    private static string[] SplitTargetFrameworks(Dictionary<string, string> properties)
     {
-        FilePath file = this.File(csprojPath);
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
+        string frameworks = string.IsNullOrWhiteSpace(properties[TargetFrameworksProperty]) ? properties[TargetFrameworkProperty] : properties[TargetFrameworksProperty];
 
-        bool multipleFrameworks = project.Contains("<TargetFrameworks>");
-        string startElement = multipleFrameworks ? "<TargetFrameworks>" : "<TargetFramework>";
-        string endElement = multipleFrameworks ? "</TargetFrameworks>" : "</TargetFramework>";
+        return frameworks.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    }
 
-        int startIndex = project.IndexOf(startElement, StringComparison.Ordinal) + startElement.Length;
-        int endIndex = project.IndexOf(endElement, startIndex, StringComparison.Ordinal);
+    // Asks MSBuild for evaluated property values, so values built from Directory.Build.props properties resolve.
+    private static Dictionary<string, string> GetProjectProperties(string csprojPath, params string[] propertyNames)
+    {
+        string dotnetHost = System.Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ??
+                            throw new InvalidOperationException("DOTNET_HOST_PATH is not set; run the build through the dotnet CLI.");
 
-        string targetFrameworks = project[startIndex..endIndex];
+        var startInfo = new System.Diagnostics.ProcessStartInfo(dotnetHost)
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        startInfo.ArgumentList.Add("msbuild");
+        startInfo.ArgumentList.Add(csprojPath);
 
-        return targetFrameworks.Split(';');
+        foreach (string propertyName in propertyNames)
+        {
+            startInfo.ArgumentList.Add($"-getProperty:{propertyName}");
+        }
+
+        using System.Diagnostics.Process process = System.Diagnostics.Process.Start(startInfo) ??
+                                                   throw new InvalidOperationException($"Could not start '{dotnetHost} msbuild'.");
+        string output = process.StandardOutput.ReadToEnd();
+        string error = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+
+        if (process.ExitCode != 0)
+        {
+            throw new InvalidOperationException($"'dotnet msbuild {csprojPath}' exited with code {process.ExitCode}: {output}{error}");
+        }
+
+        // With one property MSBuild prints the bare value; with several it prints JSON.
+        if (propertyNames.Length == 1)
+        {
+            return new Dictionary<string, string>(StringComparer.Ordinal) { [propertyNames[0]] = output.Trim() };
+        }
+
+        using var document = System.Text.Json.JsonDocument.Parse(output);
+        System.Text.Json.JsonElement properties = document.RootElement.GetProperty("Properties");
+
+        return propertyNames.ToDictionary(name => name, name => properties.GetProperty(name).GetString() ?? string.Empty, StringComparer.Ordinal);
     }
 
     private string GetAssemblyName(string csprojPath)

@@ -12,7 +12,7 @@ var sessionOptions = new SessionOptions();
 
 /*
  * ==== Default Values ====
- * LocalStackHost: localhost
+ * LocalStackHost: localhost.localstack.cloud
  * UseSsl: false
  * UseLegacyPorts: false (Set true if your LocalStack version is 0.11.4 or below)
  * EdgePort: 4566 (It doesn't matter if use legacy ports)

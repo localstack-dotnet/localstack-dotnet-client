@@ -30,23 +30,25 @@ A clear and concise description of what you expected to happen.
 
 ## 📋 Environment Information
 
-**LocalStack.Client Version:**
+**Package Versions:**
 
-- [ ] v1.x (AWS SDK v3) - Unsupported historical release
-- [ ] v2.x (AWS SDK v4) - Current Branch
-- Version:
+- LocalStack.Client version:
+- LocalStack.Client.Extensions version (if used):
 
-The v1.x maintenance window ended in July 2026; new fixes target v2.x. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
+Fixes target the supported 3.x line. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 **LocalStack Information:**
 
 - LocalStack Version:
-- LocalStack Image: (e.g., `localstack/localstack:4.14.0` or `localstack/localstack:2026.10.2`)
+- LocalStack image tag: (e.g., `localstack/localstack:4.14.0` or `localstack/localstack:2026.10.2`)
 - LocalStack Services Used: (e.g., S3, DynamoDB, SNS)
 
 **.NET Information:**
 
 - .NET Version: (e.g., .NET 8, .NET Framework 4.7.2)
+- Target framework (TFM): (e.g., `net10.0`, `net11.0`, `netstandard2.0`, `net472`)
+- Native AOT used: (yes/no)
+- Trimming used: (yes/no)
 - Operating System: (e.g., Windows 11, Ubuntu 22.04, macOS 14)
 - IDE/Editor: (e.g., Visual Studio 2022, Rider, VS Code)
 
@@ -60,10 +62,9 @@ The v1.x maintenance window ended in July 2026; new fixes target v2.x. See the [
 **Configuration (Optional):**
 
 ```json
-// Your LocalStack configuration (appsettings.json snippet)
 {
   "LocalStack": {
-    // ...
+    "UseLocalStack": true
   }
 }
 ```

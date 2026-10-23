@@ -24,4 +24,15 @@ public class LocalStackOptions : ILocalStackOptions
     public SessionOptions Session { get; private set; }
 
     public ConfigOptions Config { get; private set; }
+
+    internal void ApplyConfiguration(bool? useLocalStack = null, SessionOptions? session = null, ConfigOptions? config = null)
+    {
+        if (useLocalStack.HasValue)
+        {
+            UseLocalStack = useLocalStack.Value;
+        }
+
+        Session = session ?? Session;
+        Config = config ?? Config;
+    }
 }

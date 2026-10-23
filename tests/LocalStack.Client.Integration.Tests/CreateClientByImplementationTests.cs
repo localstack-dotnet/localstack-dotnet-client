@@ -1144,4 +1144,130 @@ public class CreateClientByImplementationTests
         Assert.NotNull(amazonVerifiedPermissionsClient);
         AssertAmazonClient.AssertClientConfiguration(amazonVerifiedPermissionsClient);
     }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonDSQLClient()
+    {
+        var amazonDSQLClient = Session.CreateClientByImplementation<AmazonDSQLClient>();
+
+        Assert.NotNull(amazonDSQLClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonDSQLClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonS3TablesClient()
+    {
+        var amazonS3TablesClient = Session.CreateClientByImplementation<AmazonS3TablesClient>();
+
+        Assert.NotNull(amazonS3TablesClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonS3TablesClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonBedrockRuntimeClient()
+    {
+        var amazonBedrockRuntimeClient = Session.CreateClientByImplementation<AmazonBedrockRuntimeClient>();
+
+        Assert.NotNull(amazonBedrockRuntimeClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonBedrockRuntimeClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonCodeArtifactClient()
+    {
+        var amazonCodeArtifactClient = Session.CreateClientByImplementation<AmazonCodeArtifactClient>();
+
+        Assert.NotNull(amazonCodeArtifactClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonCodeArtifactClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonDatabaseMigrationServiceClient()
+    {
+        var amazonDatabaseMigrationServiceClient = Session.CreateClientByImplementation<AmazonDatabaseMigrationServiceClient>();
+
+        Assert.NotNull(amazonDatabaseMigrationServiceClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonDatabaseMigrationServiceClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonIdentityStoreClient()
+    {
+        var amazonIdentityStoreClient = Session.CreateClientByImplementation<AmazonIdentityStoreClient>();
+
+        Assert.NotNull(amazonIdentityStoreClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonIdentityStoreClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonManagedBlockchainClient()
+    {
+        var amazonManagedBlockchainClient = Session.CreateClientByImplementation<AmazonManagedBlockchainClient>();
+
+        Assert.NotNull(amazonManagedBlockchainClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonManagedBlockchainClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonSSOAdminClient()
+    {
+        var amazonSSOAdminClient = Session.CreateClientByImplementation<AmazonSSOAdminClient>();
+
+        Assert.NotNull(amazonSSOAdminClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonSSOAdminClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonTextractClient()
+    {
+        var amazonTextractClient = Session.CreateClientByImplementation<AmazonTextractClient>();
+
+        Assert.NotNull(amazonTextractClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonTextractClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonLambdaWebClient()
+    {
+        var amazonLambdaWebClient = Session.CreateClientByImplementation<AmazonLambdaWebClient>();
+
+        Assert.NotNull(amazonLambdaWebClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonLambdaWebClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonS3FilesClient()
+    {
+        var amazonS3FilesClient = Session.CreateClientByImplementation<AmazonS3FilesClient>();
+
+        Assert.NotNull(amazonS3FilesClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonS3FilesClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonDynamoDBStreamsClient()
+    {
+        var amazonDynamoDBStreamsClient = Session.CreateClientByImplementation<AmazonDynamoDBStreamsClient>();
+
+        Assert.NotNull(amazonDynamoDBStreamsClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonDynamoDBStreamsClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonGlacierClient()
+    {
+        var amazonGlacierClient = Session.CreateClientByImplementation<AmazonGlacierClient>();
+
+        Assert.NotNull(amazonGlacierClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonGlacierClient);
+    }
+
+    [Fact]
+    public void Should_Able_To_Create_AmazonApplicationAutoScalingClient()
+    {
+        var amazonApplicationAutoScalingClient = Session.CreateClientByImplementation<AmazonApplicationAutoScalingClient>();
+
+        Assert.NotNull(amazonApplicationAutoScalingClient);
+        AssertAmazonClient.AssertClientConfiguration(amazonApplicationAutoScalingClient);
+    }
 }

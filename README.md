@@ -173,26 +173,14 @@ The `Type`-based overloads are `CreateClientByImplementation(Type implType, bool
 
 On `net10.0` and `net11.0`, both packages support Native AOT and trimming with no consumer code changes, zero trim/AOT warnings and no suppressions. They use no runtime reflection for AWS SDK service clients and configs, or for custom clients that follow the SDK's shape; other client types keep a reflection fallback that runs only under JIT. The `Type`-based APIs rely on a source generator that runs in C# projects, so F# and Visual Basic apps should use the generic APIs under Native AOT. These statements cover LocalStack.NET's own code; the AWS SDK and LocalStack's service coverage have their own status. See [platform and packaging](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/architecture/platform-and-packaging.md#native-aot-and-trimming) for the exact boundary.
 
-## Upgrading to 3.0
-
-Upgrading from 2.x needs no consumer source changes.
-3.0 drops `net8.0` and `net9.0` assets and adds `net10.0` and `net11.0`; .NET 8/9 apps use `netstandard2.0` under JIT, without Native AOT.
-`TryAddAwsService<TService>(lifetime, useServiceUrl)` now honors `useServiceUrl`: callers passing `true` get `ServiceURL` instead of a region endpoint ([#63](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/63)).
-See the [changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) for release details.
-
 ## Versions and support
 
-3.x (AWS SDK v4) is the current line on `master`.
-The 1.x line (AWS SDK v3) on `sdkv3-lts` is no longer maintained: its maintenance window ended in July 2026, after AWS SDK v3 reached end of support on June 1, 2026.
-2.x is superseded by 3.x and receives no further fixes; upgrading needs no source changes.
-See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md) for the patch policy.
+3.x (AWS SDK v4) is the supported line, developed on `master`; earlier versions are not supported. .NET 8 and .NET 9 apps use the `netstandard2.0` assets under JIT, without Native AOT. See the [changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) for release details and the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md) for the patch policy.
 
 ## Known issues
 
 - **SNS with LocalStack v3.7.2 through v3.8.1:** SNS operations failed on LocalStack v3.7.2 and v3.8.0 because of a request-forwarding bug ([issue #11652](https://github.com/localstack/localstack/issues/11652)). The fix ([PR #11653](https://github.com/localstack/localstack/pull/11653)) was merged after v3.8.1 shipped and first appears in **v4.0.0**; no 3.x release contains it. Use LocalStack v4.0.0 or later, or v3.7.1 if you must stay on the 3.x line.
 - **Endpoint environment variables:** With `UseLocalStack: true`, the LocalStack proxy settings took precedence over `AWS_ENDPOINT_URL` in a reported SQS case; with `UseLocalStack: false`, `AWS_ENDPOINT_URL` applied. The library defines no general precedence rule for `AWS_ENDPOINT_URL` or `AWS_SERVICE_URL`, so check the actual SDK configuration before relying on either. See [#27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27#issuecomment-4937111791).
-
-Older notes about LocalStack v1 and v2 releases and AWS SDK v3 packages remain in the [v1.x README](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/README.md#known-issues).
 
 ## Contributing
 

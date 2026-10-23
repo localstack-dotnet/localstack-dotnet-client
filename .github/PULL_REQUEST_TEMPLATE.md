@@ -28,8 +28,6 @@ Provide a clear and concise description of the changes.
 
 - [ ] 3.x (AWS SDK v4) - `master`
 
-The 1.x line (AWS SDK v3) on the `sdkv3-lts` branch is no longer supported; do not target new fixes there. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
-
 ## 🧪 Testing
 
 **How has this been tested?**

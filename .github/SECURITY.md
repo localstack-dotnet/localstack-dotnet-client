@@ -7,8 +7,7 @@ Security patches for the current 3.x line follow the CVSS v3.0 ratings below. Pr
 ### Version Tracks
 
 - **3.x (AWS SDK v4)**: Current development on [master](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master); receives patches according to the table below.
-- **2.x (AWS SDK v4)**: Superseded by 3.x when 3.0.0 is released and receives no further fixes. Upgrading to 3.x needs no source changes; apps on .NET 8 or .NET 9 keep working through the `netstandard2.0` assets.
-- **The 1.x line (AWS SDK v3)**: The [sdkv3-lts branch](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) is no longer supported. Its announced maintenance window ended in **July 2026**. We do not plan further bug fixes, security patches, or service updates for this line; migrate to 3.x. The upstream [AWS SDK for .NET v3 reached end of support on June 1, 2026](https://aws.amazon.com/blogs/devops/announcing-the-end-of-support-for-the-aws-sdk-for-net-v3/).
+- **Earlier versions**: Not supported and receive no fixes; upgrade to 3.x.
 
 ### Security Patch Policy
 

@@ -24,8 +24,7 @@ This project follows the [.NET Foundation Code of Conduct](CODE_OF_CONDUCT.md). 
 
 New work targets `master` (3.x):
 
-- **3.x (AWS SDK v4)** - Current development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master).
-- **The 1.x line (AWS SDK v3)** - The [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch is unmaintained and accepts no fixes; its maintenance window ended in July 2026. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
+- **3.x (AWS SDK v4)** - Current development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master). Earlier versions are not supported; see the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 
 ## 🚀 Getting Started

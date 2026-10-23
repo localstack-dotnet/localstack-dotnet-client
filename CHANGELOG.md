@@ -24,8 +24,8 @@ Planned as **3.0.0** for both packages; not yet published.
 ### Documentation
 
 - The README states that LocalStack images from 2026.03.0 on, including `latest`, need `LOCALSTACK_AUTH_TOKEN`, and links the official [auth-token](https://docs.localstack.cloud/aws/getting-started/auth-token/) and [CI documentation](https://docs.localstack.cloud/aws/ci-pipelines/). It names 4.14.0 as the last token-free release, which gets no further updates ([#51](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/51)).
-- Known issues now states that the SNS fix first shipped in LocalStack v4.0.0. Removed the LocalStack v2 routing, AWS SDK v3 `AWSSDK.SQS` and untracked `IAmazonLambda` notes; the 1.x README keeps the historical entries.
-- The security policy now marks 2.x as superseded by 3.x: once 3.0.0 is released, 2.x receives no further fixes.
+- Known issues now states that the SNS fix first shipped in LocalStack v4.0.0. Removed the LocalStack v2 routing, AWS SDK v3 `AWSSDK.SQS` and untracked `IAmazonLambda` notes.
+- The security policy, contribution guide and templates list 3.x as the only supported line.
 - Rewrote the README for 3.0.0 with package selection, configuration defaults, registration APIs, standalone usage, and upgrade guidance; moved contributor instructions to the contribution guide.
 
 ### Dependencies

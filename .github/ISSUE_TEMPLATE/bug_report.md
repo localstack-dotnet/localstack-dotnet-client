@@ -32,13 +32,10 @@ A clear and concise description of what you expected to happen.
 
 **Package Versions:**
 
-- [ ] 3.x (AWS SDK v4) - `master`
-- [ ] 2.x (AWS SDK v4)
-- [ ] The 1.x line (AWS SDK v3) - Unsupported historical release on `sdkv3-lts`
 - LocalStack.Client version:
 - LocalStack.Client.Extensions version (if used):
 
-The maintenance window for the 1.x line (AWS SDK v3) ended in July 2026; new fixes target 3.x. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
+Fixes target the supported 3.x line. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
 **LocalStack Information:**
 

@@ -1,30 +1,48 @@
-# LocalStack .NET Client v2.x Change Log
+# Changelog
 
-This document outlines the changes, updates, and important notes for the LocalStack .NET Client v2.x series, including the latest preview release.
-
-See v1.x change log for previous versions: [CHANGELOG.md](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md)
+This changelog covers 2.x and later; see the [1.x changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md) for earlier releases.
 
 ## [Unreleased]
 
+Planned as **3.0.0** for both packages; not yet published.
+
+### Breaking changes
+
+- Dropped the `net8.0` and `net9.0` assets. .NET 8 and .NET 9 apps still install both packages and use `netstandard2.0` under JIT, without Native AOT; both runtimes reach end of support on November 10, 2026.
+- `TryAddAwsService<TService>(lifetime, useServiceUrl)` now honors `useServiceUrl`. Callers that passed `true` now get `ServiceURL` instead of a region endpoint ([#63](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/63)).
+
+### Added
+
+- Added `net10.0` and `net11.0` assets to Core (`LocalStack.Client`) and Extensions (`LocalStack.Client.Extensions`). .NET 11 is not generally available yet; the `net11.0` assets are built with a .NET 11 preview SDK.
+- Both packages support Native AOT and trimming on these targets with zero trim/AOT warnings, no suppressions, and no consumer code changes. This includes `AddLocalStack(configuration)`, all Add/TryAdd/alias registration overloads, Core `Session` / `SessionStandalone`, and the `Type`-based APIs.
+- On `net10.0` and `net11.0`, both packages use no runtime reflection for AWS SDK service clients and configs, or for custom clients and configs that follow the SDK's shape (public or internal, concrete, non-generic, with the standard `(AWSCredentials, XConfig)` constructors). The generic APIs (`AddAwsService<T>` and every overload, `CreateClientByInterface<T>()`) use the AWS SDK v4 static factories and do not depend on source generation, so they also work in F# and Visual Basic. The `Type`-based APIs use a build-time source generator that ships in Core and turns itself on for C# projects targeting `net10.0` or later, with no setup or extra package. Other client shapes (private or generic custom clients, F# and Visual Basic projects for the `Type`-based APIs, assemblies loaded at run time) keep the previous behavior through a reflection fallback that runs only under JIT; trimmed and Native AOT apps do not include it. These claims cover LocalStack.NET's own code; the AWS SDK, dependency injection and BCL internals have their own AOT status, and LocalStack determines its own service coverage.
+
+### Changed
+
+- With `UseLocalStack: false`, Extensions now creates clients through the AWS SDK's public `AddAWSService<T>` factory instead of private SDK reflection. No consumer code changes are needed.
+
 ### Documentation
 
-- The README prerequisites now explain that LocalStack images from 2026.03.0 on, including `latest`, need `LOCALSTACK_AUTH_TOKEN` to start. They show how to pass it with Docker and docker-compose and name 4.14.0 as the last token-free release, which gets no further updates ([#51](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/51)).
-- Known Issues now states that the SNS fix first shipped in LocalStack v4.0.0. Removed the LocalStack v2 routing, AWS SDK v3 `AWSSDK.SQS` and untracked `IAmazonLambda` notes; the v1.x README keeps the historical entries.
+- The README states that LocalStack images from 2026.03.0 on, including `latest`, need `LOCALSTACK_AUTH_TOKEN`, and links the official [auth-token](https://docs.localstack.cloud/aws/getting-started/auth-token/) and [CI documentation](https://docs.localstack.cloud/aws/ci-pipelines/). It names 4.14.0 as the last token-free release, which gets no further updates ([#51](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/51)).
+- Known issues now states that the SNS fix first shipped in LocalStack v4.0.0. Removed the LocalStack v2 routing, AWS SDK v3 `AWSSDK.SQS` and untracked `IAmazonLambda` notes; the 1.x README keeps the historical entries.
+- The security policy now marks 2.x as superseded by 3.x: once 3.0.0 is released, 2.x receives no further fixes.
+- Rewrote the README for 3.0.0 with package selection, configuration defaults, registration APIs, standalone usage, and upgrade guidance; moved contributor instructions to the contribution guide.
 
-### General
+### Dependencies
 
-- Replaced the AWS-mode wrapper's private SDK reflection with the public `AddAWSService<T>` factory, preserving provider options fallback and client lifetimes. Removed its obsolete linker descriptor and reflection/AOT annotations.
-- Added automatic Core source generation that roots existing reflection operations, plus lazy fixed-schema configuration binding, preserving existing C# `AddLocalStack`, AWS service registration, and Core `Session` calls. Local-package Native AOT validation covers .NET 10 on `win-x64` and `linux-x64`, including S3 requests and endpoint, region, credentials, and configured-value parity with JIT; see the [scope boundary](docs/architecture/platform-and-packaging.md#native-aot-and-trimming).
-- Added `Microsoft.Extensions.Options` 8.0.2 only to modern Extensions assets for Native AOT, implying `Microsoft.Extensions.Primitives >= 8.0.0` there. Legacy dependency floors and existing intentional minimums are unchanged.
-- Added explicit `net10.0` target assets to both packages while retaining their existing target frameworks.
-- Set the development SDK baseline to 10.0.402 and configured test projects and CI workflows to cover `net10.0`.
-- Updated all existing non-Core centrally managed NuGet versions to their latest stable releases, including build, test, and analyzer packages (Extensions' consumer minimums are preserved below). Build-tool updates include Cake.Frosting 6.3.0 and NuGet.Versioning 7.9.0.
-- Updated centrally managed Microsoft.Extensions versions to 10.0.13 for test and sandbox consumers. Extensions retains its existing consumer minimums: `Microsoft.Extensions.Configuration.Abstractions`, `Microsoft.Extensions.Configuration.Binder`, `Microsoft.Extensions.Logging.Abstractions`, and `Microsoft.Extensions.Options.ConfigurationExtensions` at 3.1.32 on all targets; `Microsoft.Extensions.DependencyInjection.Abstractions` at 3.1.32 on `netstandard2.0` and 8.0.0 on `net8.0`, `net9.0`, and `net10.0`.
-- Updated SourceLink to 10.0.402 and Testcontainers plus Testcontainers.LocalStack to 4.16.0; restore resolves Microsoft.Build.Tasks.Git 10.0.402 and SSH.NET 2026.0.0.
-- Set the declared `AWSSDK.Core` minimum to 4.0.102.6, the recent compatible stable candidate with the highest version-level downloads among stable AWS SDK v4 releases in a six-week comparison of [NuGet.org releases](https://www.nuget.org/packages/AWSSDK.Core), checked 2026-10-19. Core-only projects resolve 4.0.102.6; Extensions and service-package consumers resolve 4.0.102.11 under their actual dependency ranges. `AWSSDK.Extensions.NETCore.Setup` remains at 4.0.102.4; refreshed 112 existing AWS service SDK test-dependency pins, retained six already-latest entries, and made no catalog additions or removals.
-- Updated the build dependency `System.Security.Cryptography.Pkcs` to 10.0.13; repository-wide `NuGetAuditMode=all` remains enabled.
-- The Cake build no longer changes the global Git `core.autocrlf` setting on Unix; a repository `.gitattributes` now normalizes line endings. The Cake test task no longer deletes every Docker container before functional tests, because Testcontainers removes the containers each run starts, and the `Cake.Docker` build dependency was removed.
-- Functional tests now run against two LocalStack images instead of 3.7.1 and 4.6.0: 4.14.0, the last release that starts without an auth token, and 2026.10.2, which needs `LOCALSTACK_AUTH_TOKEN`. Without that variable the 2026.10.2 tests fail with a message naming it; `--filter "LocalStackAuth!=Required"` or the Cake flag `--skipAuthenticatedFunctionalTest true` excludes them. CI passes the `LOCALSTACK_AUTH_TOKEN` Actions secret to the Linux functional run and skips those tests, with a warning, on pull requests that cannot read the secret.
+- Core: `AWSSDK.Core` >= 4.0.102.6.
+- Extensions: `AWSSDK.Extensions.NETCore.Setup` >= 4.0.102.4.
+- Extensions: `Microsoft.Extensions.Configuration.Abstractions`, `Microsoft.Extensions.Configuration.Binder`, `Microsoft.Extensions.Logging.Abstractions`, and `Microsoft.Extensions.Options.ConfigurationExtensions` >= 3.1.32 on all targets.
+- Extensions: `Microsoft.Extensions.DependencyInjection.Abstractions` >= 3.1.32 on `netstandard2.0` and >= 8.0.0 on `net10.0`/`net11.0`.
+- Extensions: `Microsoft.Extensions.Options` >= 8.0.2 on `net10.0`/`net11.0` only.
+
+### Build, tests and CI
+
+- The repository now builds with the .NET 11 SDK pinned in `global.json`; test projects and CI cover `net10.0` and `net11.0`.
+- Refreshed build, test, and analyzer dependencies, including Cake.Frosting 6.3.0, NuGet.Versioning 7.9.0, SourceLink 10.0.402, Testcontainers and Testcontainers.LocalStack 4.16.0, and `System.Security.Cryptography.Pkcs` 10.0.13. Restore resolves Microsoft.Build.Tasks.Git 10.0.402 and SSH.NET 2026.0.0; repository-wide `NuGetAuditMode=all` remains enabled.
+- Test and sandbox consumers use centrally managed Microsoft.Extensions 10.0.13. Refreshed 112 AWS service SDK pins and retained six already-latest entries, with no catalog additions or removals. Core-only projects resolve 4.0.102.6; Extensions and service-package consumers resolve 4.0.102.11 under their dependency ranges.
+- Cake no longer changes global Git `core.autocrlf` on Unix; `.gitattributes` normalizes line endings. The test task no longer deletes every Docker container; Testcontainers removes the containers each run starts. Removed `Cake.Docker`.
+- Functional tests now use LocalStack 4.14.0 and 2026.10.2 instead of 3.7.1 and 4.6.0. The 2026.10.2 tests require `LOCALSTACK_AUTH_TOKEN` and fail with a message naming it when absent; `--filter "LocalStackAuth!=Required"` or Cake's `--skipAuthenticatedFunctionalTest true` excludes them. CI passes the Actions secret to the Linux functional run and skips those tests with a warning on pull requests that cannot read it.
 
 ## [v2.0.1](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v2.0.1)
 

@@ -22,12 +22,11 @@ This project follows the [.NET Foundation Code of Conduct](CODE_OF_CONDUCT.md). 
 
 ## 🎯 Version Strategy
 
-We maintain a **dual-track versioning strategy**:
+New work targets `master` (3.x):
 
-- **v2.x (AWS SDK v4)** - Active development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master) branch
-- **v1.x (AWS SDK v3)** - The [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch preserves published releases but is no longer supported; its maintenance window ended in July 2026. See the [security policy](SECURITY.md).
+- **3.x (AWS SDK v4)** - Current development on [`master`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master).
+- **The 1.x line (AWS SDK v3)** - The [`sdkv3-lts`](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/sdkv3-lts) branch is unmaintained and accepts no fixes; its maintenance window ended in July 2026. See the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md).
 
-New changes target v2.x on `master`. The v1.x branch is not accepting maintenance fixes.
 
 ## 🚀 Getting Started
 
@@ -53,22 +52,33 @@ New changes target v2.x on `master`. The v1.x branch is not accepting maintenanc
 
 2. **Build the Project**
 
-   ```bash
+   ```powershell
    # Windows
    .\build.ps1
-   
-   # Linux/macOS  
+   ```
+
+   ```bash
+   # Linux/macOS
    ./build.sh
    ```
 
 3. **Run Tests**
 
-   ```bash
+   ```powershell
    # Default unit and client-construction tests (functional tests are skipped)
    .\build.ps1 --target tests
    ```
 
-   Functional tests are opt-in and start LocalStack containers through Testcontainers, so they need a running Docker engine. The tests against the current LocalStack image also need a `LOCALSTACK_AUTH_TOKEN` environment variable; without one, exclude them as [quality gates](../docs/engineering/quality-gates.md) describes.
+   ```bash
+   # Linux/macOS
+   ./build.sh --target tests
+   ```
+
+   Functional tests are opt-in and start LocalStack containers through Testcontainers, so they need a running Docker engine. The tests against the current LocalStack image also need a `LOCALSTACK_AUTH_TOKEN` environment variable; without one, exclude them as [quality gates](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/docs/engineering/quality-gates.md) describes.
+
+### Sandbox Applications
+
+The LocalStack .NET repository includes several sandbox console applications in [tests/sandboxes](https://github.com/localstack-dotnet/localstack-dotnet-client/tree/master/tests/sandboxes). These applications serve as testing tools and examples.
 
 ## 🐛 Reporting Issues
 
@@ -142,7 +152,7 @@ We love new ideas! Here's how to suggest features:
    - Use our [PR Template](https://github.com/localstack-dotnet/localstack-dotnet-client/compare)
    - Provide clear description of changes
    - Link related issues
-   - Target the supported v2.x line
+   - Target the current 3.x line on `master`
 
 ### Code Quality Standards
 

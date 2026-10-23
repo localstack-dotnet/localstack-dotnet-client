@@ -159,25 +159,20 @@ jobs:
           fi
           echo "LOCALSTACK_NATIVE_AOT_HOST=localhost" >> "$GITHUB_ENV"
 
-      - name: "Publish and run net10.0 Native AOT tests"
+      - name: "Publish and run Native AOT tests"
         shell: pwsh
         run: |
+          $project = 'tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj'
           $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
-          dotnet publish tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj -c Release -f net10.0 -r $rid -o artifacts/nativeaot/net10.0
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $exe = if ($IsWindows) { 'LocalStack.Client.NativeAot.Tests.exe' } else { 'LocalStack.Client.NativeAot.Tests' }
-          & "./artifacts/nativeaot/net10.0/$exe"
-          exit $LASTEXITCODE
-
-      - name: "Publish and run net11.0 Native AOT tests"
-        shell: pwsh
-        run: |
-          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
-          dotnet publish tests/LocalStack.Client.NativeAot.Tests/LocalStack.Client.NativeAot.Tests.csproj -c Release -f net11.0 -r $rid -o artifacts/nativeaot/net11.0
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $exe = if ($IsWindows) { 'LocalStack.Client.NativeAot.Tests.exe' } else { 'LocalStack.Client.NativeAot.Tests' }
-          & "./artifacts/nativeaot/net11.0/$exe"
-          exit $LASTEXITCODE
+          # Every modern target framework the project declares (from Directory.Build.props).
+          $frameworks = (dotnet msbuild $project -getProperty:TargetFrameworks).Split(';', [StringSplitOptions]::RemoveEmptyEntries)
+          foreach ($framework in $frameworks) {
+            dotnet publish $project -c Release -f $framework -r $rid -o "artifacts/nativeaot/$framework"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            & "./artifacts/nativeaot/$framework/$exe"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
 
   continuous-deployment:
     name: "Continuous Deployment"

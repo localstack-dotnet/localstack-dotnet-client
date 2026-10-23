@@ -25,14 +25,15 @@ public sealed class TestTask : FrostingTask<BuildContext>
 
             ConsoleHelper.WriteInfo($"Target Frameworks: {targetFrameworks}");
 
+            if (testProj.RunsAsPublishedExecutable)
+            {
+                ConsoleHelper.WriteWarning($"Skipping {testProj.AssemblyName}: CI publishes and runs it as a native executable");
+
+                continue;
+            }
+
             foreach (string targetFramework in testProj.TargetFrameworks)
             {
-                if (testProj.AssemblyName == "LocalStack.Client.NativeAot.Tests")
-                {
-                    ConsoleHelper.WriteWarning("Skipping Native AOT Tests (run as a published executable in CI)");
-
-                    continue;
-                }
 
                 if (context.SkipFunctionalTest && testProj.AssemblyName == "LocalStack.Client.Functional.Tests")
                 {

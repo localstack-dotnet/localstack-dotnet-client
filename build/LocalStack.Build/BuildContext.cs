@@ -174,11 +174,13 @@ public sealed class BuildContext : FrostingContext
         {
             string csProjPath = csProj.FullPath;
 
-            IEnumerable<string> targetFrameworks = GetProjectTargetFrameworks(csProjPath);
+            Dictionary<string, string> properties = GetProjectProperties(csProjPath, "TargetFrameworks", "TargetFramework", RunsAsPublishedExecutableProperty);
+            IEnumerable<string> targetFrameworks = SplitTargetFrameworks(properties);
             string directoryPath = csProj.GetDirectory().FullPath;
             string assemblyName = GetAssemblyName(csProjPath);
+            bool runsAsPublishedExecutable = string.Equals(properties[RunsAsPublishedExecutableProperty], "true", StringComparison.OrdinalIgnoreCase);
 
-            var testProjMetadata = new ProjMetadata(directoryPath, csProjPath, targetFrameworks, assemblyName);
+            var testProjMetadata = new ProjMetadata(directoryPath, csProjPath, targetFrameworks, assemblyName, runsAsPublishedExecutable);
             projMetadata.Add(testProjMetadata);
         }
 
@@ -385,8 +387,21 @@ public sealed class BuildContext : FrostingContext
         return NuGetVersion.TryParse($"0.0.0-{sanitised}", out NuGetVersion? _) ? sanitised : $"g{sanitised}";
     }
 
-    // Asks MSBuild for the evaluated frameworks, so lists built from Directory.Build.props properties resolve.
-    private static string[] GetProjectTargetFrameworks(string csprojPath)
+    // Test projects that set this property are published and run as native executables by CI, not by 'dotnet test'.
+    private const string RunsAsPublishedExecutableProperty = "LocalStackTestRunsAsPublishedExecutable";
+
+    private static string[] GetProjectTargetFrameworks(string csprojPath) =>
+        SplitTargetFrameworks(GetProjectProperties(csprojPath, "TargetFrameworks", "TargetFramework"));
+
+    private static string[] SplitTargetFrameworks(Dictionary<string, string> properties)
+    {
+        string frameworks = string.IsNullOrWhiteSpace(properties["TargetFrameworks"]) ? properties["TargetFramework"] : properties["TargetFrameworks"];
+
+        return frameworks.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    }
+
+    // Asks MSBuild for evaluated property values, so values built from Directory.Build.props properties resolve.
+    private static Dictionary<string, string> GetProjectProperties(string csprojPath, params string[] propertyNames)
     {
         string dotnetHost = System.Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ??
                             throw new InvalidOperationException("DOTNET_HOST_PATH is not set; run the build through the dotnet CLI.");
@@ -400,8 +415,11 @@ public sealed class BuildContext : FrostingContext
         };
         startInfo.ArgumentList.Add("msbuild");
         startInfo.ArgumentList.Add(csprojPath);
-        startInfo.ArgumentList.Add("-getProperty:TargetFrameworks");
-        startInfo.ArgumentList.Add("-getProperty:TargetFramework");
+
+        foreach (string propertyName in propertyNames)
+        {
+            startInfo.ArgumentList.Add($"-getProperty:{propertyName}");
+        }
 
         using System.Diagnostics.Process process = System.Diagnostics.Process.Start(startInfo) ??
                                                    throw new InvalidOperationException($"Could not start '{dotnetHost} msbuild'.");
@@ -414,16 +432,16 @@ public sealed class BuildContext : FrostingContext
             throw new InvalidOperationException($"'dotnet msbuild {csprojPath}' exited with code {process.ExitCode}: {output}{error}");
         }
 
-        using var document = System.Text.Json.JsonDocument.Parse(output);
-        System.Text.Json.JsonElement properties = document.RootElement.GetProperty("Properties");
-        string? frameworks = properties.GetProperty("TargetFrameworks").GetString();
-
-        if (string.IsNullOrWhiteSpace(frameworks))
+        // With one property MSBuild prints the bare value; with several it prints JSON.
+        if (propertyNames.Length == 1)
         {
-            frameworks = properties.GetProperty("TargetFramework").GetString();
+            return new Dictionary<string, string>(StringComparer.Ordinal) { [propertyNames[0]] = output.Trim() };
         }
 
-        return (frameworks ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        using var document = System.Text.Json.JsonDocument.Parse(output);
+        System.Text.Json.JsonElement properties = document.RootElement.GetProperty("Properties");
+
+        return propertyNames.ToDictionary(name => name, name => properties.GetProperty(name).GetString() ?? string.Empty, StringComparer.Ordinal);
     }
 
     private string GetAssemblyName(string csprojPath)

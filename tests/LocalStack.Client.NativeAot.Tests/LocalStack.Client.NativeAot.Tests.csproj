@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
+    <TargetFrameworks>$(LocalStackModernTargetFrameworks)</TargetFrameworks>
     <OutputType>Exe</OutputType>
+    <LocalStackTestRunsAsPublishedExecutable>true</LocalStackTestRunsAsPublishedExecutable>
     <PublishAot>true</PublishAot>
     <IsPackable>false</IsPackable>
   </PropertyGroup>

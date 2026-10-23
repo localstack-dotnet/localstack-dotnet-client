@@ -1,7 +1,5 @@
 # Changelog
 
-This changelog covers 2.x and later; see the [1.x changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/CHANGELOG.md) for earlier releases.
-
 ## [Unreleased]
 
 Planned as **3.0.0** for both packages; not yet published.

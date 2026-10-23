@@ -46,6 +46,8 @@
         <LocalStackModernMinimumTargetFramework>net10.0</LocalStackModernMinimumTargetFramework>
         <LocalStackModernTargetFrameworks>$(LocalStackModernMinimumTargetFramework);net11.0</LocalStackModernTargetFrameworks>
         <LocalStackNetStandardTargetFramework>netstandard2.0</LocalStackNetStandardTargetFramework>
+        <!-- Roslyn loads source generators only from netstandard2.0. -->
+        <LocalStackAnalyzerTargetFramework>netstandard2.0</LocalStackAnalyzerTargetFramework>
         <LocalStackNetFrameworkTargetFramework>net472</LocalStackNetFrameworkTargetFramework>
 
         <LocalStackClientTargetFrameworks>$(LocalStackNetStandardTargetFramework);$(LocalStackNetFrameworkTargetFramework);$(LocalStackModernTargetFrameworks)</LocalStackClientTargetFrameworks>

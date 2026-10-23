@@ -186,7 +186,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageVersion>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(LocalStackNetFrameworkTargetFramework)'">
     <PackageVersion Include="Microsoft.TestPlatform.ObjectModel" Version="18.11.0" />
   </ItemGroup>
 </Project>

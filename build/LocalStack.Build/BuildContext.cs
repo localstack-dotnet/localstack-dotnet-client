@@ -26,6 +26,7 @@ public sealed class BuildContext : FrostingContext
         PackageSecret = context.Argument("package-secret", default(string));
         PackageSource = context.Argument("package-source", GitHubPackageSource);
         SkipFunctionalTest = context.Argument("skipFunctionalTest", defaultValue: true);
+        SkipAuthenticatedFunctionalTest = context.Argument("skipAuthenticatedFunctionalTest", defaultValue: false);
 
         // New version generation arguments
         UseDirectoryPropsVersion = context.Argument("use-directory-props-version", defaultValue: false);
@@ -69,6 +70,8 @@ public sealed class BuildContext : FrostingContext
     public bool ForceRestore { get; }
 
     public bool SkipFunctionalTest { get; }
+
+    public bool SkipAuthenticatedFunctionalTest { get; }
 
     public string PackageVersion { get; }
 

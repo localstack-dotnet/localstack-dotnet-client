@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.DynamoDb;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class DynamoDbScenarioV37 : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class DynamoDbScenarioV414 : BaseDynamoDbScenario
 {
-    public DynamoDbScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public DynamoDbScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class DynamoDbScenarioV46 : BaseDynamoDbScenario
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class DynamoDbScenarioCurrent : BaseDynamoDbScenario
 {
-    public DynamoDbScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public DynamoDbScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

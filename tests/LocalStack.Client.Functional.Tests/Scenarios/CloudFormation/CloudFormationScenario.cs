@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.CloudFormation;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class CloudFormationScenarioV37 : BaseCloudFormationScenario
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class CloudFormationScenarioV414 : BaseCloudFormationScenario
 {
-    public CloudFormationScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public CloudFormationScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class CloudFormationScenarioV46 : BaseCloudFormationScenario
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class CloudFormationScenarioCurrent : BaseCloudFormationScenario
 {
-    public CloudFormationScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public CloudFormationScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

@@ -1,6 +1,6 @@
 # Maintenance playbook
 
-Date: 2026-10-19
+Date: 2026-10-23
 
 This living procedure records the maintainer's preferred maintenance flow adopted on this date. Use it for a routine refresh or select the applicable steps for a focused repair. The order below is present guidance; the representative Git history at the end does not establish a universal historical sequence.
 
@@ -37,22 +37,22 @@ Keep three evidence layers explicit: a Python mapping informs the comparison; a 
 
 ## 3. Select the image and authentication matrix
 
-Choose image versions deliberately for this cycle: identify the regression baseline, the newer release under evaluation, and why each remains useful. Derive the actual inputs from [TestConstants.cs](../../tests/LocalStack.Client.Functional.Tests/TestConstants.cs), [TestContainers.cs](../../tests/LocalStack.Client.Functional.Tests/TestContainers.cs), [LocalStackFixtures.cs](../../tests/LocalStack.Client.Functional.Tests/Fixtures/LocalStackFixtures.cs), and the [container sandbox](../../tests/sandboxes/LocalStack.Container/Program.cs). Fixture names, commit titles, and a green build are insufficient evidence of the image used.
+The functional suite runs every scenario against exactly two LocalStack images:
+
+1. **The last token-free release.** LocalStack's semantic-version line ended at v4.14.0 ([FAQ](https://docs.localstack.cloud/getting-started/faq)); the [4.14.0 announcement](https://blog.localstack.cloud/localstack-for-aws-release-v-4-14-0/) labels that tag Community Edition, and no 4.14.x patch exists on Docker Hub. The [2026.03.0 announcement](https://blog.localstack.cloud/localstack-for-aws-release-2026-03-0/) requires an auth token from that release on, while the vendor's [earlier-image guidance](https://blog.localstack.cloud/the-road-ahead-for-localstack/) keeps prior tags runnable without authentication, locally and in CI, with no further service or security updates. This leg is therefore frozen: it proves that the library still works for consumers who stay on a token-free image, and it stays until the maintainer drops that audience.
+2. **The current release.** The newest exact calendar-versioned tag (`YYYY.MM.patch`) on [Docker Hub](https://hub.docker.com/r/localstack/localstack/tags). Move it to the newest exact tag in each maintenance cycle; never pin a moving tag such as `latest`, `stable`, or `YYYY.MM`.
+
+The exact tags live only in [TestConstants.cs](../../tests/LocalStack.Client.Functional.Tests/TestConstants.cs); [TestContainers.cs](../../tests/LocalStack.Client.Functional.Tests/TestContainers.cs) and [LocalStackFixtures.cs](../../tests/LocalStack.Client.Functional.Tests/Fixtures/LocalStackFixtures.cs) turn them into containers, and the [container sandbox](../../tests/sandboxes/LocalStack.Container/Program.cs) pins the token-free image. Adding a third image is a maintainer decision, not a routine refresh. Fixture names, commit titles, and a green build are insufficient evidence of the image used.
 
 Record image repository, exact tag and resolved digest where available, host OS/architecture, target frameworks, resolved SDK packages, configuration mode, services, and scenarios. Pin reproducible inputs; label any moving-image experiment separately. A tested matrix is evidence for that scope, not a new support promise.
 
-### Authentication decision for newer images
+### Authentication for the current image
 
-The official [March 23, 2026 release announcement](https://blog.localstack.cloud/localstack-for-aws-release-2026-03-0/) places the startup auth-token requirement at **LocalStack 2026.03.0** and makes service availability depend on token entitlements. The vendor's [earlier-image guidance](https://blog.localstack.cloud/the-road-ahead-for-localstack/) retains unauthenticated local and CI use for prior Community tags, without future service/security updates. Do not apply the newer-image requirement retroactively to every historical tag or treat older-tag documentation as proof that an image starts on today's host.
+- The token reaches the container only through the `LOCALSTACK_AUTH_TOKEN` environment variable, the name the [Auth Token documentation](https://docs.localstack.cloud/aws/getting-started/auth-token/) and Testcontainers use. Locally, set it in the shell for the run. In CI, the organization Actions secret of the same name feeds the test step; LocalStack requires a workspace CI Auth Token there, not a developer's personal token. Token ownership, the license it consumes, and rotation stay with the maintainer; recheck [current plan and entitlement information](https://www.localstack.cloud/pricing), because this playbook establishes no Hobby, open-source-program, or commercial eligibility for this repository.
+- A missing token never passes. The current-image fixture fails with a message that names the variable; a deliberate run without a token excludes those tests by trait. [Quality gates](quality-gates.md) owns the commands and the CI behavior for pull requests that cannot read the secret. Report an excluded leg as not run, with the reason.
+- The Testcontainers.LocalStack version in [Directory.Packages.props](../../Directory.Packages.props) refuses to build a container for a tag newer than 4.14 without the variable, but accepts an empty value; the fixture's own blank check covers that gap. Recheck that module's source when you update it. A present token is not proof of validity or entitlement: without a valid token the current image exits at startup with code 55 ("License activation failed").
 
-Before introducing an authenticated matrix leg, resolve and record:
-
-- The exact image/architecture/scenario scope and the actual account or workspace entitlement needed. Recheck [current plan and entitlement information](https://www.localstack.cloud/pricing); this playbook establishes no Hobby, open-source-program, or commercial eligibility for this repository.
-- The appropriate local developer identity and CI workspace/token ownership, license assignment, provisioning/rotation, and runtime injection. Consult the current [Auth Token documentation](https://docs.localstack.cloud/aws/getting-started/auth-token/); a token's presence does not prove validity or entitlement.
-- Which checks run without secrets on fork pull requests, which trusted revisions/events can run authenticated checks, and what happens when authentication is unavailable. Report an omitted matrix leg as not run, with the reason.
-- The behavior of the selected Testcontainers version, including its image-version parsing and auth validation. Inspect the module source for that dependency version; a builder guard is not a runtime or entitlement test.
-
-LocalStack platform authentication activates the emulator. [AWS credentials](https://docs.localstack.cloud/aws/connecting/credentials/) identify/sign AWS-compatible API requests; keep these separate from the platform token and the client's AWS credential fields. This checkpoint does not choose or implement a CI profile, credential injection mechanism, or new client authentication API. Those remain future implementation choices. Official authentication sources above were checked on 2026-10-19; recheck them when changing the matrix.
+LocalStack platform authentication activates the emulator. [AWS credentials](https://docs.localstack.cloud/aws/connecting/credentials/) identify/sign AWS-compatible API requests; keep these separate from the platform token and the client's AWS credential fields. The library itself gains no LocalStack authentication API from this test setup. Official authentication and image sources above were checked on 2026-10-23; recheck them when changing the matrix.
 
 ## 4. Validate safely and prepare release evidence
 
@@ -95,4 +95,4 @@ These are sampled accepted commits, not an exhaustive audit or proof of local ed
 | [05ffff1795f92171b744bcea63fd0b3d2de14848](https://github.com/localstack-dotnet/localstack-dotnet-client/commit/05ffff1795f92171b744bcea63fd0b3d2de14848) | A 3.8.0 message/fixture label accompanies a 3.7.1 image constant: owning inputs matter. |
 | [f539bf439cfccbff6992643c13d042da085a54b5](https://github.com/localstack-dotnet/localstack-dotnet-client/commit/f539bf439cfccbff6992643c13d042da085a54b5) | Extensions-only repair release preparation with Core's version unchanged. |
 
-Native AOT friendliness and authenticated CI design remain separate candidate priorities for discussion. They are not delivered capabilities or mandatory additions to every routine release. Consult [platform and packaging](../architecture/platform-and-packaging.md) and its linked projects for the actual target frameworks and Native AOT boundary; the target list does not by itself establish package publication.
+Native AOT friendliness remains a separate candidate priority for discussion. It is not a delivered capability or a mandatory addition to every routine release. Consult [platform and packaging](../architecture/platform-and-packaging.md) and its linked projects for the actual target frameworks and Native AOT boundary; the target list does not by itself establish package publication.

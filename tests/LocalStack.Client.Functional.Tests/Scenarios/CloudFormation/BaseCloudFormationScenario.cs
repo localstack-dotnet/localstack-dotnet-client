@@ -112,8 +112,8 @@ public abstract class BaseCloudFormationScenario : BaseScenario
     /// and service errors, reporting a clean teardown while the stack - and the SNS topic and SQS queue its template
     /// owns - stayed behind in the shared container for the next test.
     /// <para>
-    /// The error code below is measured, not assumed. Against both LocalStack versions these scenarios run on, creating
-    /// a stack, deleting it and then describing it by name gives:
+    /// The error code below is measured, not assumed. Against LocalStack 3.7.1 and 4.6.0, the versions these scenarios ran
+    /// on when it was measured, creating a stack, deleting it and then describing it by name gives:
     /// </para>
     /// <code>
     /// AmazonCloudFormationException

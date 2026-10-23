@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.RealLife;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class SnsToSqsScenarioV37 : BaseRealLife
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class SnsToSqsScenarioV414 : BaseRealLife
 {
-    public SnsToSqsScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public SnsToSqsScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class SnsToSqsScenarioV46 : BaseRealLife
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class SnsToSqsScenarioCurrent : BaseRealLife
 {
-    public SnsToSqsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public SnsToSqsScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.SNS;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class SnsScenarioV37 : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class SnsScenarioV414 : BaseSnsScenario
 {
-    public SnsScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public SnsScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class SnsScenarioV46 : BaseSnsScenario
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class SnsScenarioCurrent : BaseSnsScenario
 {
-    public SnsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public SnsScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

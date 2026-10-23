@@ -10,7 +10,7 @@ namespace LocalStack.Client.Extensions.Tests;
 public class ReflectionFreeAssemblyTests
 {
     [Fact]
-    public void Runtime_reflection_is_confined_to_requires_unreferenced_code_methods()
+    public void Libraries_Should_Call_Runtime_Reflection_Only_From_RequiresUnreferencedCode_Methods()
     {
         var violations = new List<string>();
         var allowedCoreCalls = new List<string>();

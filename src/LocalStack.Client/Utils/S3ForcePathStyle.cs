@@ -10,7 +10,7 @@ internal static class S3ForcePathStyle
 
     internal static bool TrySet(ClientConfig clientConfig, bool value)
     {
-        if (string.Equals(clientConfig.ServiceId, "S3", StringComparison.Ordinal))
+        if (string.Equals(clientConfig.ServiceId, AwsServiceEndpointMetadata.S3.ServiceId, StringComparison.Ordinal))
         {
             SetForcePathStyle(clientConfig, value);
             return true;

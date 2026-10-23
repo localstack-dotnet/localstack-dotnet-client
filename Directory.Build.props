@@ -41,6 +41,31 @@
         <!-- Floating versions are opt-in under central package management (NU1011). -->
         <CentralPackageFloatingVersionsEnabled Condition="'$(AwsSetupTrack)' == 'latest'">true</CentralPackageFloatingVersionsEnabled>
 
+        <!-- Target frameworks. "Modern" targets get Native AOT support, the source generator and the
+             reflection-free client creation paths; add a new .NET version here and everything follows. -->
+        <LocalStackModernMinimumTargetFramework>net10.0</LocalStackModernMinimumTargetFramework>
+        <LocalStackModernTargetFrameworks>$(LocalStackModernMinimumTargetFramework);net11.0</LocalStackModernTargetFrameworks>
+        <LocalStackNetStandardTargetFramework>netstandard2.0</LocalStackNetStandardTargetFramework>
+        <LocalStackNetFrameworkTargetFramework>net472</LocalStackNetFrameworkTargetFramework>
+
+        <LocalStackClientTargetFrameworks>$(LocalStackNetStandardTargetFramework);$(LocalStackNetFrameworkTargetFramework);$(LocalStackModernTargetFrameworks)</LocalStackClientTargetFrameworks>
+        <LocalStackExtensionsTargetFrameworks>$(LocalStackNetStandardTargetFramework);$(LocalStackModernTargetFrameworks)</LocalStackExtensionsTargetFrameworks>
+        <!-- Test projects that also run on .NET Framework. -->
+        <LocalStackNetFrameworkAndModernTargetFrameworks>$(LocalStackNetFrameworkTargetFramework);$(LocalStackModernTargetFrameworks)</LocalStackNetFrameworkAndModernTargetFrameworks>
+
+        <!-- Package validation compares each package with this published version. -->
+        <LocalStackPackageValidationBaselineVersion>2.0.0</LocalStackPackageValidationBaselineVersion>
+        <!-- Assets the baseline has and this release drops on purpose (.NET 8/9 end of support; those apps use netstandard2.0). -->
+        <LocalStackPackageValidationDroppedTargetFrameworks>net8.0;net9.0</LocalStackPackageValidationDroppedTargetFrameworks>
+
+    </PropertyGroup>
+
+    <!-- True in the inner build of a modern target framework; false elsewhere (including the outer build). -->
+    <PropertyGroup>
+        <IsLocalStackModernTarget>false</IsLocalStackModernTarget>
+        <IsLocalStackModernTarget Condition="'$(TargetFramework)' != '' and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '$(LocalStackModernMinimumTargetFramework)'))">true</IsLocalStackModernTarget>
+        <IsLocalStackNetFrameworkTarget>false</IsLocalStackNetFrameworkTarget>
+        <IsLocalStackNetFrameworkTarget Condition="'$(TargetFramework)' == '$(LocalStackNetFrameworkTargetFramework)'">true</IsLocalStackNetFrameworkTarget>
     </PropertyGroup>
 
     <!-- third-party analyzers -->

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net10.0;net11.0</TargetFrameworks>
+        <TargetFrameworks>$(LocalStackExtensionsTargetFrameworks)</TargetFrameworks>
         <AssemblyName>LocalStack.Client.Extensions</AssemblyName>
         <RootNamespace>LocalStack.Client.Extensions</RootNamespace>
         <Version>$(PackageExtensionVersion)</Version>
@@ -14,7 +14,7 @@
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <EnablePackageValidation>true</EnablePackageValidation>
-        <PackageValidationBaselineVersion>2.0.0</PackageValidationBaselineVersion>
+        <PackageValidationBaselineVersion>$(LocalStackPackageValidationBaselineVersion)</PackageValidationBaselineVersion>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <NoWarn>$(NoWarn);CA1510</NoWarn>
@@ -35,14 +35,12 @@
         <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     </ItemGroup>
 
-    <!-- Net 8 and anything newer you explicitly list -->
-    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0' Or  '$(TargetFramework)' == 'net11.0'">
+    <ItemGroup Condition="'$(IsLocalStackModernTarget)' == 'true'">
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" VersionOverride="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options" />
     </ItemGroup>
 
-    <!-- Fallback for legacy TFMs (netstandard2.x, net461, etc.) -->
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <ItemGroup Condition="'$(TargetFramework)' == '$(LocalStackNetStandardTargetFramework)'">
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" VersionOverride="3.1.32" />
     </ItemGroup>
 

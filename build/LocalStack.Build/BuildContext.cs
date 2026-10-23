@@ -385,21 +385,45 @@ public sealed class BuildContext : FrostingContext
         return NuGetVersion.TryParse($"0.0.0-{sanitised}", out NuGetVersion? _) ? sanitised : $"g{sanitised}";
     }
 
-    private string[] GetProjectTargetFrameworks(string csprojPath)
+    // Asks MSBuild for the evaluated frameworks, so lists built from Directory.Build.props properties resolve.
+    private static string[] GetProjectTargetFrameworks(string csprojPath)
     {
-        FilePath file = this.File(csprojPath);
-        string project = File.ReadAllText(file.FullPath, Encoding.UTF8);
+        string dotnetHost = System.Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ??
+                            throw new InvalidOperationException("DOTNET_HOST_PATH is not set; run the build through the dotnet CLI.");
 
-        bool multipleFrameworks = project.Contains("<TargetFrameworks>");
-        string startElement = multipleFrameworks ? "<TargetFrameworks>" : "<TargetFramework>";
-        string endElement = multipleFrameworks ? "</TargetFrameworks>" : "</TargetFramework>";
+        var startInfo = new System.Diagnostics.ProcessStartInfo(dotnetHost)
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        startInfo.ArgumentList.Add("msbuild");
+        startInfo.ArgumentList.Add(csprojPath);
+        startInfo.ArgumentList.Add("-getProperty:TargetFrameworks");
+        startInfo.ArgumentList.Add("-getProperty:TargetFramework");
 
-        int startIndex = project.IndexOf(startElement, StringComparison.Ordinal) + startElement.Length;
-        int endIndex = project.IndexOf(endElement, startIndex, StringComparison.Ordinal);
+        using System.Diagnostics.Process process = System.Diagnostics.Process.Start(startInfo) ??
+                                                   throw new InvalidOperationException($"Could not start '{dotnetHost} msbuild'.");
+        string output = process.StandardOutput.ReadToEnd();
+        string error = process.StandardError.ReadToEnd();
+        process.WaitForExit();
 
-        string targetFrameworks = project[startIndex..endIndex];
+        if (process.ExitCode != 0)
+        {
+            throw new InvalidOperationException($"'dotnet msbuild {csprojPath}' exited with code {process.ExitCode}: {output}{error}");
+        }
 
-        return targetFrameworks.Split(';');
+        using var document = System.Text.Json.JsonDocument.Parse(output);
+        System.Text.Json.JsonElement properties = document.RootElement.GetProperty("Properties");
+        string? frameworks = properties.GetProperty("TargetFrameworks").GetString();
+
+        if (string.IsNullOrWhiteSpace(frameworks))
+        {
+            frameworks = properties.GetProperty("TargetFramework").GetString();
+        }
+
+        return (frameworks ?? string.Empty).Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     private string GetAssemblyName(string csprojPath)

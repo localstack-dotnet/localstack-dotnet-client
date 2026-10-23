@@ -41,7 +41,7 @@ The v1.x maintenance window ended in July 2026; new fixes target v2.x. See the [
 **LocalStack Information:**
 
 - LocalStack Version:
-- LocalStack Image: (e.g., `localstack/localstack:3.0`)
+- LocalStack Image: (e.g., `localstack/localstack:4.14.0` or `localstack/localstack:2026.10.2`)
 - LocalStack Services Used: (e.g., S3, DynamoDB, SNS)
 
 **.NET Information:**

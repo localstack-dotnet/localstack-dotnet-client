@@ -88,7 +88,29 @@ LocalStack.NET is a .NET client library for [LocalStack](https://github.com/loca
 
 To utilize this library, you need to have LocalStack running. While LocalStack can be installed directly on your machine and accessed via the localstack cli, the recommended approach is to run LocalStack using [Docker](https://docs.docker.com/get-docker/) or [docker-compose](https://docs.docker.com/compose/install/).
 
-For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/getting-started/installation/).
+**LocalStack needs an auth token.** From release 2026.03.0 on, every LocalStack for AWS image, including `localstack/localstack:latest`, requires a `LOCALSTACK_AUTH_TOKEN` to start ([announcement](https://blog.localstack.cloud/localstack-for-aws-release-2026-03-0/)). Without one, the container exits with a "License activation failed" error and LocalStack.NET has nothing to connect to. A free account is available: create it at [localstack.cloud](https://localstack.cloud/), copy your token from the LocalStack Web App, and pass it to the container:
+
+```bash
+docker run --rm -it \
+  -e LOCALSTACK_AUTH_TOKEN=$LOCALSTACK_AUTH_TOKEN \
+  -p 4566:4566 \
+  localstack/localstack
+```
+
+With docker-compose, add it under the LocalStack service:
+
+```yaml
+environment:
+  - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN}
+```
+
+In CI, use a CI Auth Token stored in your CI provider's secret store; see the [Auth Token documentation](https://docs.localstack.cloud/aws/getting-started/auth-token/).
+
+The token is a LocalStack platform credential for the container. LocalStack.NET does not read it, and it does not replace the AWS credentials in the `LocalStack:Session` configuration.
+
+If you cannot use a token, `localstack/localstack:4.14.0` is the last release that starts without one. LocalStack keeps such earlier tags runnable without authentication but gives them no further service or security updates ([details](https://blog.localstack.cloud/the-road-ahead-for-localstack/)).
+
+For detailed installation and setup instructions, please refer to the [official LocalStack installation guide](https://docs.localstack.cloud/aws/getting-started/installation/).
 
 ## Getting Started
 
@@ -192,15 +214,11 @@ The `RegionName` is important as LocalStack creates resources based on the speci
 
   See [issue #52](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/52) for the full analysis.
 
-- **SNS with LocalStack v3.7.2 and v3.8.0:** During development on the new version, it was discovered that SNS functional tests are not working in LocalStack versions v3.7.2 and v3.8.0. This issue was reported in LocalStack [issue #11652](https://github.com/localstack/localstack/issues/11652). The LocalStack team identified a bug related to handling SNS URIs and resolved it in [PR #11653](https://github.com/localstack/localstack/pull/11653). The fix will be included in an upcoming release of LocalStack. In the meantime, if you're using SNS, it is recommended to stick to version v3.7.1 of LocalStack until the fix is available.
-
-- **LocalStack Versions v2.0.1 - v2.2:** In versions v2.0.1 through v2.2 of LocalStack, the URL routing logic was changed, causing issues with SQS and S3 operations. Two issues were opened in LocalStack regarding this: [issue #8928](https://github.com/localstack/localstack/issues/8928) and [issue #8924](https://github.com/localstack/localstack/issues/8924). LocalStack addressed this problem with [PR #8962](https://github.com/localstack/localstack/pull/8962). Therefore, when using LocalStack.NET, either use version v2.0 of LocalStack (there are no issues with the v1 series as well) or the upcoming v2.3 version, or use the latest v3 series container from Docker Hub.
+- **SNS with LocalStack v3.7.2 through v3.8.1:** SNS operations failed on LocalStack v3.7.2 and v3.8.0 because of a request-forwarding bug ([issue #11652](https://github.com/localstack/localstack/issues/11652)). The fix ([PR #11653](https://github.com/localstack/localstack/pull/11653)) was merged after v3.8.1 shipped and first appears in **v4.0.0**; no 3.x release contains it. Use LocalStack v4.0.0 or later, or v3.7.1 if you must stay on the 3.x line.
 
 - **Endpoint environment variables:** [Issue #27](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/27#issuecomment-4937111791) records a 2026-07-10 SQS observation against Extensions 2.0.0. With `UseLocalStack=true`, a LocalStack proxy aimed at A and `AWS_ENDPOINT_URL` aimed at B sent traffic to A. With `UseLocalStack=false`, the proxy was unset and traffic followed B. This is a dated report, not a re-run against every SDK or service; the issue remains open and no general precedence fix is merged. `AWS_SERVICE_URL` can also appear in Lambda environments, but this library does not define a general override rule for it. Diagnose the actual SDK configuration before adopting an environment-variable workaround.
 
-- **IAmazonLambda Operations:** There's a general issue with `IAmazonLambda` operations. This matter is currently under investigation.
-
-- **AWSSDK.SQS Compatibility:** Starting from version `3.7.300.*` of `AWSSDK.SQS`, there are compatibility issues with LocalStack v1 and v2 series versions. The [v3](https://hub.docker.com/r/localstack/localstack/tags?page=&page_size=&ordering=&name=3.4) series of LocalStack does not have these issues. Therefore, it is recommended to either update your LocalStack container to the v3 series or downgrade your `AWSSDK.SQS` to version `3.7.200.*` if you are using LocalStack v1 or v2 series containers. It is important to note that this is not a problem related to LocalStack.NET, but rather an issue with the LocalStack container and the AWS SDK for .NET.
+Older notes about LocalStack v1 and v2 releases and AWS SDK v3 packages remain in the [v1.x README](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/sdkv3-lts/README.md#known-issues).
 
 ## Developing
 

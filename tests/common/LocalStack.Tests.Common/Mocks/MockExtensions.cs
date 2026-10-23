@@ -1,6 +1,6 @@
 ﻿namespace LocalStack.Tests.Common.Mocks;
 
-public static class Extensions
+public static class MockExtensions
 {
     public static (string awsAccessKeyId, string awsAccessKey, string awsSessionToken, string regionName) SetupDefault(
         this Mock<ISessionOptions> mock, string awsAccessKeyId = "AwsAccessKeyId", string awsAccessKey = "AwsAccessKey", string awsSessionToken = "AwsSessionToken",

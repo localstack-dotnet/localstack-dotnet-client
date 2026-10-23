@@ -20,6 +20,8 @@ Current behavior remains owned by [client runtime](../architecture/client-runtim
 
 Inspect the official [LocalStack Python client](https://github.com/localstack/localstack-python-client) at a recorded commit. Compare its catalog with this library and the selected AWS SDK; record relevant additions, removals, renames, and intentional differences. Do not copy an upstream name without checking its meaning.
 
+Record the inspected Python client commit and the added services in [CHANGELOG.md](../../CHANGELOG.md).
+
 For each applicable mapping change, review these locations together:
 
 | Concern | Source to review |

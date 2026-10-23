@@ -41,11 +41,24 @@ public class SessionReflectionTests
         var reflection = new Mock<Contracts.ISessionReflection>(MockBehavior.Strict);
         Type expectedType = typeof(MockAmazonServiceClient);
         reflection.Setup(helper => helper.ExtractServiceMetadata(expectedType))
-            .Returns(() => { calls.Add("metadata"); return metadata.Object; });
+            .Returns(() =>
+            {
+                calls.Add("metadata");
+                return metadata.Object;
+            });
         reflection.Setup(helper => helper.CreateClientConfig(expectedType))
-            .Returns(() => { calls.Add("config"); return config; });
+            .Returns(() =>
+            {
+                calls.Add("config");
+                return config;
+            });
         reflection.Setup(helper => helper.SetForcePathStyle(config, true))
-            .Returns(() => { calls.Add("style"); config.ForcePathStyle = true; return true; });
+            .Returns(() =>
+            {
+                calls.Add("style");
+                config.ForcePathStyle = true;
+                return true;
+            });
         var session = new Session(new SessionOptions(regionName: "eu-west-2"), new Config(new ConfigOptions()), reflection.Object);
         using AmazonServiceClient client = byInterface
             ? session.CreateClientByInterface<IMockAmazonService>()

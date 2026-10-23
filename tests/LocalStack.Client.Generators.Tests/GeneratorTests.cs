@@ -333,7 +333,7 @@ public class GeneratorTests
         Assert.True(Operation<bool>(Entry(plain, "TryGetConfig"), "PlainRegion"));
         Assert.False(Operation<bool>(Entry(shadow, "TryGetConfig"), "PlainRegion"));
         var reflection = new Utils.SessionReflection();
-        using var plainClient = new AmazonS3Client(new AnonymousAWSCredentials(), new AmazonS3Config());
+        using var plainClient = new AmazonS3Client(new AnonymousAWSCredentials(), new AmazonS3Config { RegionEndpoint = Amazon.RegionEndpoint.USEast1 });
         reflection.SetClientRegion(plainClient, "eu-west-2");
         Assert.Equal("eu-west-2", plainClient.Config.RegionEndpoint.SystemName);
         var config = (ClientConfig)Activator.CreateInstance(shadow)!;

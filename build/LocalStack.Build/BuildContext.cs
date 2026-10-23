@@ -177,7 +177,7 @@ public sealed class BuildContext : FrostingContext
         {
             string csProjPath = csProj.FullPath;
 
-            Dictionary<string, string> properties = GetProjectProperties(csProjPath, "TargetFrameworks", "TargetFramework", RunsAsPublishedExecutableProperty);
+            Dictionary<string, string> properties = GetProjectProperties(csProjPath, TargetFrameworksProperty, TargetFrameworkProperty, RunsAsPublishedExecutableProperty);
             IEnumerable<string> targetFrameworks = SplitTargetFrameworks(properties);
             string directoryPath = csProj.GetDirectory().FullPath;
             string assemblyName = GetAssemblyName(csProjPath);
@@ -392,14 +392,16 @@ public sealed class BuildContext : FrostingContext
 
     // Test projects that set this property are published and run as native executables by CI, not by 'dotnet test'.
     private const string RunsAsPublishedExecutableProperty = "LocalStackTestRunsAsPublishedExecutable";
+    private const string TargetFrameworksProperty = "TargetFrameworks";
+    private const string TargetFrameworkProperty = "TargetFramework";
     private const string NetFrameworkTargetFrameworkProperty = "LocalStackNetFrameworkTargetFramework";
 
     private static string[] GetProjectTargetFrameworks(string csprojPath) =>
-        SplitTargetFrameworks(GetProjectProperties(csprojPath, "TargetFrameworks", "TargetFramework"));
+        SplitTargetFrameworks(GetProjectProperties(csprojPath, TargetFrameworksProperty, TargetFrameworkProperty));
 
     private static string[] SplitTargetFrameworks(Dictionary<string, string> properties)
     {
-        string frameworks = string.IsNullOrWhiteSpace(properties["TargetFrameworks"]) ? properties["TargetFramework"] : properties["TargetFrameworks"];
+        string frameworks = string.IsNullOrWhiteSpace(properties[TargetFrameworksProperty]) ? properties[TargetFrameworkProperty] : properties[TargetFrameworksProperty];
 
         return frameworks.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }

@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [v3.0.0](https://github.com/localstack-dotnet/localstack-dotnet-client/releases/tag/v3.0.0)
 
-Planned as **3.0.0** for both packages; not yet published.
+> Major release of **both packages**: `LocalStack.Client` 3.0.0 and `LocalStack.Client.Extensions` 3.0.0.
 
 ### Breaking changes
 

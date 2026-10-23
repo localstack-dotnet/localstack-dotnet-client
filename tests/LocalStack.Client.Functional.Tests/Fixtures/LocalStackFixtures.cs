@@ -24,17 +24,28 @@ public abstract class LocalStackFixtureBase : IAsyncLifetime, ILocalStackFixture
     }
 }
 
-public sealed class LocalStackFixtureV37 : LocalStackFixtureBase
+public sealed class LocalStackFixtureV414 : LocalStackFixtureBase
 {
-    public LocalStackFixtureV37() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV37))
+    public LocalStackFixtureV414() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV414))
     {
     }
 }
 
-public sealed class LocalStackFixtureV46 : LocalStackFixtureBase
+public sealed class LocalStackFixtureCurrent : LocalStackFixtureBase
 {
-    public LocalStackFixtureV46() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackV46))
+    public LocalStackFixtureCurrent() : base(TestContainers.LocalStackBuilder(TestConstants.LocalStackCurrent, GetAuthToken()))
     {
+    }
+
+    private static string GetAuthToken()
+    {
+        string? authToken = Environment.GetEnvironmentVariable(TestConstants.LocalStackAuthTokenVariable);
+        if (string.IsNullOrWhiteSpace(authToken))
+        {
+            throw new System.InvalidOperationException($"LocalStack {TestConstants.LocalStackCurrent} needs an auth token. Set the {TestConstants.LocalStackAuthTokenVariable} environment variable, or exclude these tests with --filter \"LocalStackAuth!=Required\".");
+        }
+
+        return authToken;
     }
 }
 

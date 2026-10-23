@@ -68,7 +68,7 @@ New changes target v2.x on `master`. The v1.x branch is not accepting maintenanc
    .\build.ps1 --target tests
    ```
 
-   Functional tests are opt-in and start LocalStack containers through Testcontainers, so they need a running Docker engine; see [quality gates](../docs/engineering/quality-gates.md).
+   Functional tests are opt-in and start LocalStack containers through Testcontainers, so they need a running Docker engine. The tests against the current LocalStack image also need a `LOCALSTACK_AUTH_TOKEN` environment variable; without one, exclude them as [quality gates](../docs/engineering/quality-gates.md) describes.
 
 ## 🐛 Reporting Issues
 

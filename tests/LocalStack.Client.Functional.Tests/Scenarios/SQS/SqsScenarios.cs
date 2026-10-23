@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.SQS;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class SqsScenarioV37 : BaseSqsScenario
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class SqsScenarioV414 : BaseSqsScenario
 {
-    public SqsScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public SqsScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class SqsScenarioV46 : BaseSqsScenario
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class SqsScenarioCurrent : BaseSqsScenario
 {
-    public SqsScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public SqsScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

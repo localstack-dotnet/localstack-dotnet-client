@@ -37,6 +37,16 @@ public sealed class TestTask : FrostingTask<BuildContext>
                 ConsoleHelper.WriteRule($"Running {targetFramework.ToUpper(System.Globalization.CultureInfo.CurrentCulture)} tests for {testProj.AssemblyName}");
                 settings.Framework = targetFramework;
 
+                if (testProj.AssemblyName == "LocalStack.Client.Functional.Tests" && context.SkipAuthenticatedFunctionalTest)
+                {
+                    settings.Filter = "LocalStackAuth!=Required";
+                    ConsoleHelper.WriteWarning("Skipping functional tests that need LOCALSTACK_AUTH_TOKEN (trait LocalStackAuth=Required)");
+                }
+                else
+                {
+                    settings.Filter = null;
+                }
+
                 // .NET Framework testing on non-Windows platforms
                 // - Modern .NET includes built-in Mono runtime
                 // - Test platform still requires external Mono installation on Linux

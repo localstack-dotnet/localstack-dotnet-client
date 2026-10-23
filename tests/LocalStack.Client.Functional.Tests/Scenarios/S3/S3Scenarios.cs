@@ -2,18 +2,19 @@
 
 namespace LocalStack.Client.Functional.Tests.Scenarios.S3;
 
-[Collection(nameof(LocalStackCollectionV37))]
-public sealed class S3ScenarioV37 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionV414))]
+public sealed class S3ScenarioV414 : BaseS3Scenario
 {
-    public S3ScenarioV37(TestFixture testFixture, LocalStackFixtureV37 localStackFixtureV37) : base(testFixture, localStackFixtureV37)
+    public S3ScenarioV414(TestFixture testFixture, LocalStackFixtureV414 localStackFixtureV414) : base(testFixture, localStackFixtureV414)
     {
     }
 }
 
-[Collection(nameof(LocalStackCollectionV46))]
-public sealed class S3ScenarioV46 : BaseS3Scenario
+[Collection(nameof(LocalStackCollectionCurrent))]
+[Trait("LocalStackAuth", "Required")]
+public sealed class S3ScenarioCurrent : BaseS3Scenario
 {
-    public S3ScenarioV46(TestFixture testFixture, LocalStackFixtureV46 localStackFixtureV46) : base(testFixture, localStackFixtureV46)
+    public S3ScenarioCurrent(TestFixture testFixture, LocalStackFixtureCurrent localStackFixtureCurrent) : base(testFixture, localStackFixtureCurrent)
     {
     }
 }

@@ -8,7 +8,7 @@ public class SessionCompatibilityTests
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public void Injected_reflection_controls_metadata_config_style_and_credentials(bool byInterface)
+    public void CreateClient_Should_Use_Injected_Reflection_For_Metadata_Config_Style_And_Credentials(bool byInterface)
     {
         var reflection = new RecordingReflection();
         var session = new Session(new SessionOptions("fixture-id", "fixture-secret", "fixture-token", "eu-west-2"),
@@ -32,7 +32,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Region_validation_precedes_injected_metadata_for_implementation_calls()
+    public void CreateClientByImplementation_Should_Validate_Region_Before_Calling_Injected_Reflection()
     {
         var reflection = new RecordingReflection();
         var session = new Session(new SessionOptions(regionName: ""), new Config(new ConfigOptions()), reflection);
@@ -44,7 +44,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Injected_failure_identity_and_no_later_calls_are_preserved()
+    public void CreateClientByImplementation_Should_Rethrow_Injected_Failure_And_Make_No_Later_Calls()
     {
         var reflection = new RecordingReflection { Failure = new InvalidOperationException("fixture metadata failure") };
         var session = new Session(new SessionOptions(), new Config(new ConfigOptions()), reflection);
@@ -54,7 +54,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Default_reflection_uses_actual_properties_including_private_inherited_setters_and_shadowing()
+    public void SessionReflection_Should_Use_Actual_Properties_Including_Private_Inherited_Setters_And_Shadowing()
     {
         var reflection = new SessionReflection();
         var config = new StyleConfig();
@@ -68,7 +68,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Property_type_errors_and_setter_wrapping_are_not_replaced_by_casts()
+    public void SetForcePathStyle_Should_Keep_Property_Type_Errors_And_Setter_Exception_Wrapping()
     {
         var reflection = new SessionReflection();
         var wrong = new WrongStyleConfig { ForcePathStyle = "initial" };
@@ -82,7 +82,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Metadata_does_not_inherit_a_private_base_field()
+    public void ExtractServiceMetadata_Should_Not_Read_A_Private_Base_Class_Field()
     {
         var reflection = new SessionReflection();
         Assert.Same(MetadataClient.Metadata, reflection.ExtractServiceMetadata<MetadataClient>());
@@ -92,7 +92,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Constructor_filter_preserves_parameter_names_and_single_match_failure()
+    public void CreateClientConfig_Should_Match_Constructor_Parameter_Names_And_Fail_On_Zero_Or_Many_Matches()
     {
         var reflection = new SessionReflection();
         var credentials = new BasicAWSCredentials("fixture-id", "fixture-secret");
@@ -108,7 +108,7 @@ public class SessionCompatibilityTests
     }
 
     [Fact]
-    public void Client_constructor_exception_retains_reflection_boundary()
+    public void CreateClientByImplementation_Should_Wrap_Client_Constructor_Exceptions_In_TargetInvocationException()
     {
         var session = new Session(new SessionOptions(), new Config(new ConfigOptions()), new RecordingReflection { ExpectedType = typeof(ThrowingClient) });
         Assert.Same(ThrowingClient.Failure, Assert.Throws<InvalidOperationException>(() => new ThrowingClient(new BasicAWSCredentials("fixture-id", "fixture-secret"), new MockClientConfig())));

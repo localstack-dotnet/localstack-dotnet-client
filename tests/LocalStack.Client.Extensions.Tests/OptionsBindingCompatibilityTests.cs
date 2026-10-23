@@ -3,7 +3,7 @@ namespace LocalStack.Client.Extensions.Tests;
 public class OptionsBindingCompatibilityTests
 {
     [Fact]
-    public void Binding_is_lazy_and_preserves_independent_nested_options()
+    public void AddLocalStack_Should_Bind_Options_Lazily_And_Keep_Nested_Options_Independent()
     {
         IConfigurationRoot configuration = Configuration(new Dictionary<string, string?>(StringComparer.Ordinal)
         {
@@ -58,7 +58,7 @@ public class OptionsBindingCompatibilityTests
     [InlineData("#10", 16)]
     [InlineData(" +17 ", 17)]
     [InlineData("-17", -17)]
-    public void Integers_use_the_invariant_converter(string text, int expected)
+    public void AddLocalStack_Should_Convert_Integers_With_The_Invariant_Converter(string text, int expected)
     {
         CultureInfo previous = CultureInfo.CurrentCulture;
         try
@@ -81,7 +81,7 @@ public class OptionsBindingCompatibilityTests
     [InlineData("LocalStack:Config:EdgePort", "1,2", typeof(int))]
     [InlineData("LocalStack:Config:UseSsl", "", typeof(bool))]
     [InlineData("LocalStack:Config:UseSsl", "yes", typeof(bool))]
-    public void Conversion_errors_retain_path_type_and_converter_exception(string path, string text, Type type)
+    public void AddLocalStack_Should_Report_Path_Type_And_Converter_Exception_When_Conversion_Fails(string path, string text, Type type)
     {
         var services = new ServiceCollection();
         services.AddLocalStack(Configuration(new Dictionary<string, string?>(StringComparer.Ordinal) { [path] = text }));
@@ -98,7 +98,7 @@ public class OptionsBindingCompatibilityTests
     }
 
     [Fact]
-    public void Missing_null_and_child_only_scalars_preserve_prior_values_but_empty_strings_bind()
+    public void AddLocalStack_Should_Keep_Prior_Values_For_Missing_Null_Or_Child_Only_Scalars_And_Bind_Empty_Strings()
     {
         var services = new ServiceCollection();
         services.Configure<SessionOptions>(options => SetPrivate(options, nameof(SessionOptions.RegionName), "earlier"));
@@ -121,7 +121,7 @@ public class OptionsBindingCompatibilityTests
     }
 
     [Fact]
-    public void Configure_postconfigure_validation_and_monitor_keep_framework_order()
+    public void AddLocalStack_Should_Keep_Framework_Order_For_Configure_PostConfigure_Validation_And_Monitor()
     {
         var observed = new List<string>();
         var services = new ServiceCollection();
@@ -140,7 +140,7 @@ public class OptionsBindingCompatibilityTests
     }
 
     [Fact]
-    public void Missing_sections_retain_all_defaults()
+    public void AddLocalStack_Should_Keep_All_Defaults_When_Sections_Are_Missing()
     {
         var services = new ServiceCollection();
         services.AddLocalStack(Configuration(new Dictionary<string, string?>(StringComparer.Ordinal)));
@@ -162,7 +162,7 @@ public class OptionsBindingCompatibilityTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public void Previously_null_nested_options_are_created_only_when_the_section_has_children(bool hasChildren)
+    public void AddLocalStack_Should_Create_Null_Nested_Options_Only_When_The_Section_Has_Children(bool hasChildren)
     {
         IConfigurationRoot configuration = Configuration(hasChildren
             ? new Dictionary<string, string?>(StringComparer.Ordinal) { ["LocalStack:Session:RegionName"] = "bound", ["LocalStack:Config:UseSsl"] = "true" }
@@ -201,7 +201,7 @@ public class OptionsBindingCompatibilityTests
     }
 
     [Fact]
-    public void A_failed_new_nested_binding_does_not_publish_the_partially_bound_object()
+    public void AddLocalStack_Should_Not_Publish_A_Partially_Bound_Nested_Object_When_Binding_Fails()
     {
         IConfigurationRoot configuration = Configuration(new Dictionary<string, string?>(StringComparer.Ordinal)
         {

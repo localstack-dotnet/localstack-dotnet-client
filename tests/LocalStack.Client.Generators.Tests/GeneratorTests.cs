@@ -16,7 +16,7 @@ namespace LocalStack.Client.Generators.Tests;
 public class GeneratorTests
 {
     [Fact]
-    public void ReferencedSdkIsDiscoveredWithoutRegistrationSyntax()
+    public void Generator_Should_Discover_Referenced_Sdk_Clients_Without_Registration_Code()
     {
         (GeneratorDriverRunResult result, Compilation output) = Generate("internal class Consumer { }");
         Assert.Empty(result.Diagnostics);
@@ -31,7 +31,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void ConsumerGlobalImportsCannotChangeGeneratedTypeIdentity()
+    public void Generator_Should_Keep_Type_Identity_When_Consumer_Declares_Global_Usings()
     {
         (_, Compilation output) = Generate("global using Collision; namespace Collision { internal class Type { } }");
         AssertNoCompilationErrors(output);
@@ -52,7 +52,7 @@ public class GeneratorTests
         }
         internal enum DynamicallyAccessedMemberTypes { NonPublicFields, PublicConstructors, PublicProperties }
         """)]
-    public void ConsumerGlobalDelegateAndAttributeNamesCannotBreakGeneratedCompilation(string declarations)
+    public void Generator_Should_Compile_When_Consumer_Declares_Global_Delegate_And_Attribute_Names(string declarations)
     {
         (_, Compilation output) = Generate("global using Collision; namespace Collision { " + declarations + " }");
         AssertNoCompilationErrors(output);
@@ -61,7 +61,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void PrivateClosedGenericClientsRemainLazyAndUseTheirOwnMetadataAndConfig()
+    public void Generator_Should_Register_Private_Closed_Generic_Clients_Lazily_With_Their_Own_Metadata_And_Config()
     {
         (_, Compilation output) = Generate(PrivateGenericFixture);
         AssertNoCompilationErrors(output);
@@ -91,7 +91,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void MultipleInitializersDoNotEvaluateClientOrConfigOperations()
+    public void Generator_Should_Not_Evaluate_Client_Or_Config_Operations_During_Registration()
     {
         (_, Compilation output) = Generate(PrivateGenericFixture);
         Assembly assembly = Load(output);
@@ -105,7 +105,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void ReferencedConfigsWithTheSameFullNameKeepActualAssemblyIdentity()
+    public void Generator_Should_Keep_Assembly_Identity_For_Referenced_Configs_With_The_Same_Full_Name()
     {
         const string configSource = "namespace Shared { public class Config : Amazon.S3.AmazonS3Config { } }";
         Compilation first = CreateCompilation(configSource);
@@ -146,7 +146,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void InaccessibleReferencedConfigsAreDiscoveredWithoutConsumerTypeSyntax()
+    public void Generator_Should_Discover_Inaccessible_Referenced_Configs_Without_Consumer_Syntax()
     {
         Compilation library = CreateCompilation("""
             public static class Factory {
@@ -169,7 +169,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void ReferencedClosedSignaturesAreRegisteredWithoutConsumerGenericSyntaxAndRemainLazy()
+    public void Generator_Should_Register_Closed_Signature_Types_Lazily_Without_Consumer_Generic_Syntax()
     {
         Compilation library = CreateCompilation(ReferencedSignatureFixture);
         Assembly libraryAssembly = Load(library);
@@ -218,7 +218,7 @@ public class GeneratorTests
     }
 
     [Fact]
-    public void UnconstrainedTypeConfigCreationDoesNotRequireAClientBaseClassOrMetadata()
+    public void CreateClientConfig_Should_Accept_Types_Without_A_Client_Base_Class_Or_Metadata()
     {
         (_, Compilation output) = Generate("""
             public class Ordinary {

@@ -21,6 +21,10 @@ Planned as **3.0.0** for both packages; not yet published.
 
 - With `UseLocalStack: false`, Extensions now creates clients through the AWS SDK's public `AddAWSService<T>` factory instead of private SDK reflection. No consumer code changes are needed.
 
+### Fixed
+
+- With `UseLegacyPorts: true`, Account, ACM PCA, Bedrock, CloudControl, CodeBuild, CodeConnections, CodeDeploy, CodePipeline, Elastic Transcoder, MemoryDB, Shield and Verified Permissions now use port 4566, matching the LocalStack Python client. They used 4567, the legacy API Gateway port. The default edge-port mode is unchanged.
+
 ### Documentation
 
 - The README states that LocalStack images from 2026.03.0 on, including `latest`, need `LOCALSTACK_AUTH_TOKEN`, and links the official [auth-token](https://docs.localstack.cloud/aws/getting-started/auth-token/) and [CI documentation](https://docs.localstack.cloud/aws/ci-pipelines/). It names 4.14.0 as the last token-free release, which gets no further updates ([#51](https://github.com/localstack-dotnet/localstack-dotnet-client/issues/51)).

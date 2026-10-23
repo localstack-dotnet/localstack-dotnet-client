@@ -1,0 +1,6 @@
+<Project>
+  <!-- Stops the repository's central package management from applying to this external-consumer project. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+</Project>

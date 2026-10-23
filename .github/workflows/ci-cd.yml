@@ -174,6 +174,25 @@ jobs:
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
 
+      # Packs both libraries and publishes tests/package-consumer from those packages with Native AOT,
+      # so the source generator is proven to reach a consumer through the package (buildTransitive).
+      - name: "Pack and run the package consumer with Native AOT"
+        shell: pwsh
+        run: |
+          dotnet pack src/LocalStack.Client/LocalStack.Client.csproj -c Release -o artifacts/packages
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet pack src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj -c Release -o artifacts/packages
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $version = dotnet msbuild src/LocalStack.Client.Extensions/LocalStack.Client.Extensions.csproj -getProperty:Version
+          # A fresh package cache, so a same-version package from an earlier run cannot be reused.
+          $env:NUGET_PACKAGES = Join-Path $env:RUNNER_TEMP 'package-consumer-nuget'
+          $rid = '${{ runner.os == 'Windows' && 'win-x64' || 'linux-x64' }}'
+          dotnet publish tests/package-consumer/Consumer.csproj -c Release -r $rid -o artifacts/package-consumer "-p:LocalStackVersion=$version"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $exe = if ($IsWindows) { 'Consumer.exe' } else { 'Consumer' }
+          & "./artifacts/package-consumer/$exe"
+          exit $LASTEXITCODE
+
   continuous-deployment:
     name: "Continuous Deployment"
     runs-on: ubuntu-22.04

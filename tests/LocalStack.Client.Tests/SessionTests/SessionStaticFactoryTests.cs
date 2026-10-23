@@ -4,7 +4,7 @@ namespace LocalStack.Client.Tests.SessionTests;
 public class SessionStaticFactoryTests
 {
     [Fact]
-    public void Default_reflection_uses_static_factory_without_client_naming_convention()
+    public void CreateClientByInterface_Should_Use_The_Static_Factory_When_The_Client_Name_Does_Not_Follow_The_Convention()
     {
         Session session = CreateSession();
 
@@ -18,7 +18,7 @@ public class SessionStaticFactoryTests
     }
 
     [Fact]
-    public void Default_reflection_wraps_static_factory_failure_preserving_exception_identity()
+    public void CreateClientByInterface_Should_Wrap_Static_Factory_Failures_In_TargetInvocationException()
     {
         Session session = CreateSession();
 
@@ -28,7 +28,7 @@ public class SessionStaticFactoryTests
     }
 
     [Fact]
-    public void Static_factory_receives_the_configured_instance_with_service_url()
+    public void CreateClientByInterface_Should_Pass_The_Configured_ClientConfig_To_The_Static_Factory()
     {
         Session session = CreateSession();
         FactoryCreatedMockClient.RecordedConfig = null;

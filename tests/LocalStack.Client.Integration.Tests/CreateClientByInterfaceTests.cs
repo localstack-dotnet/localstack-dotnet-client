@@ -12,7 +12,7 @@ public class CreateClientByInterfaceTests
     }
 
     [Fact]
-    public void Force_path_style_sets_s3_config_and_returns_false_for_sqs_config()
+    public void SetForcePathStyle_Should_Set_S3_Config_And_Return_False_For_Sqs_Config()
     {
         var reflection = new Utils.SessionReflection();
         var s3Config = new AmazonS3Config();

@@ -121,7 +121,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection TryAddAwsService<TService>(this IServiceCollection collection, ServiceLifetime lifetime = ServiceLifetime.Singleton,
                                                                 bool useServiceUrl = false) where TService : IAmazonService
     {
-        return TryAddAwsService<TService>(collection, null, lifetime);
+        return TryAddAwsService<TService>(collection, null, lifetime, useServiceUrl);
     }
 
     /// <summary>

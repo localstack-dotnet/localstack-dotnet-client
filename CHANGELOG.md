@@ -35,7 +35,8 @@
 ### Dependencies
 
 - Core: `AWSSDK.Core` >= 4.0.102.6.
-- Extensions: `AWSSDK.Extensions.NETCore.Setup` >= 4.0.102.4.
+- Extensions: `AWSSDK.Extensions.NETCore.Setup` >= 4.0.102.4, which itself needs `AWSSDK.Core` >= 4.0.102.11, so Extensions apps resolve at least that Core version.
+- Projects that pin `AWSSDK.Core` or `AWSSDK.Extensions.NETCore.Setup` below these versions (for example in `Directory.Packages.props`) get `NU1605` (package downgrade) on restore and must raise the pins. This showed up when upgrading three consumer repositories; no code changes were needed.
 - Extensions: `Microsoft.Extensions.Configuration.Abstractions`, `Microsoft.Extensions.Configuration.Binder`, `Microsoft.Extensions.Logging.Abstractions`, and `Microsoft.Extensions.Options.ConfigurationExtensions` >= 3.1.32 on all targets.
 - Extensions: `Microsoft.Extensions.DependencyInjection.Abstractions` >= 3.1.32 on `netstandard2.0` and >= 8.0.0 on `net10.0`/`net11.0`.
 - Extensions: `Microsoft.Extensions.Options` >= 8.0.2 on `net10.0`/`net11.0` only.

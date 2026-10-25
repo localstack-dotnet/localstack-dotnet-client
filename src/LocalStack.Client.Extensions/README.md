@@ -175,7 +175,7 @@ On `net10.0` and `net11.0`, both packages support Native AOT and trimming with n
 
 ## Versions and support
 
-3.x (AWS SDK v4) is the supported line, developed on `master`; earlier versions are not supported. .NET 8 and .NET 9 apps use the `netstandard2.0` assets under JIT, without Native AOT. See the [changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) for release details and the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md) for the patch policy.
+3.x (AWS SDK v4) is the supported line, developed on `master`; earlier versions are not supported. .NET 8 and .NET 9 apps use the `netstandard2.0` assets under JIT, without Native AOT. If you pin AWS packages yourself, use at least `AWSSDK.Core` 4.0.102.6 with Core and 4.0.102.11 with Extensions, and `AWSSDK.Extensions.NETCore.Setup` 4.0.102.4; lower pins fail restore with `NU1605`. See the [changelog](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/CHANGELOG.md) for release details and the [security policy](https://github.com/localstack-dotnet/localstack-dotnet-client/blob/master/.github/SECURITY.md) for the patch policy.
 
 ## Known issues
 

@@ -1,6 +1,6 @@
 # Client runtime and service mapping
 
-Date: 2026-10-23
+Date: 2026-10-24
 
 The core package creates AWS SDK service clients configured for LocalStack. The [glossary](../../GLOSSARY.md) distinguishes an AWS service, an SDK client, and a configured LocalStack endpoint.
 
@@ -20,4 +20,4 @@ For the modern `Type` APIs and default helper, the [slim generator](../../src/Lo
 
 Registry misses and unusual shapes use the previous reflection code only while [`ReflectionFallback.IsSupported`](../../src/LocalStack.Client/Utils/ReflectionFallback.cs) is true. Its feature guard removes that fallback under trimming/Native AOT; the [platform boundary](platform-and-packaging.md#native-aot-and-trimming) lists miss behavior and compiler/type limits. The `netstandard2.0`/`net472` assets keep their previous reflection paths.
 
-[`SessionStandalone`](../../src/LocalStack.Client/SessionStandalone.cs) creates this session without dependency injection. The optional Extensions package owns the application-level mode switch in [Extensions and composition](extensions-and-composition.md). See [platform and packaging](platform-and-packaging.md#native-aot-and-trimming) for the unreleased 3.0.0 Native AOT qualification lane and compiler-asset packaging.
+[`SessionStandalone`](../../src/LocalStack.Client/SessionStandalone.cs) creates this session without dependency injection. The optional Extensions package owns the application-level mode switch in [Extensions and composition](extensions-and-composition.md). See [platform and packaging](platform-and-packaging.md#native-aot-and-trimming) for the 3.0.0 Native AOT qualification lane and compiler-asset packaging.

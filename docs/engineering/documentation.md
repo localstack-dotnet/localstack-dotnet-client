@@ -1,6 +1,6 @@
 # Documentation ownership
 
-Date: 2026-10-20
+Date: 2026-11-05
 
 The public repository must explain its current behavior and accepted decisions without requiring access to a private archive. Give each current fact one owner. Other documents can briefly describe the fact for their reader and link to its owner; they must not become a second place to maintain the rule.
 
@@ -26,6 +26,16 @@ The public repository must explain its current behavior and accepted decisions w
 - **ADRs** are evergreen descriptions of current accepted decisions and their rationale. When a decision changes, rewrite its existing ADR in place. Do not add dates, dated entries, amendments, supersession notices, or a replacement record for the same decision. Git retains the history; the [ADR guide](../adr/README.md) owns the format and eligibility rules.
 - **Release history** belongs to `CHANGELOG.md`. An announced future release or a tag is not a test result or proof of a package feed upload.
 - **Research, temporary plans, handoffs, and ledgers** are dated evidence, not current policy. An organization-wide private archive now retains individually reviewed historical copies; its access and retention rules live there, while this public repository remains complete without it. Locally ignored `artifacts/` files remain local unless individually admitted and are not a canonical source. Classify and validate each one before considering transfer; never treat a title such as “APPROVED” as acceptance without the corresponding decision event.
-- **Open work** has no dedicated tracked roadmap in this revision. GitHub issues and the relevant source are leads; do not create a roadmap by copying checkboxes from an ignored plan.
+- **Open work** lives in the [organization roadmap](https://github.com/localstack-dotnet/.github/blob/main/ROADMAP.md), not in this repository. GitHub issues and the relevant source are leads; do not create a roadmap by copying checkboxes from an ignored plan.
 
 Useful information survives a documentation move: verify each unique claim, put it under its correct owner or retain it as dated evidence outside the ADR, then replace old current-text copies with short pointers. Shortening alone is not a reason to discard rationale. Public ADRs state the current decision and reason in full without depending on private evidence. `AGENTS.md` routes agents to the relevant public owner rather than repeating its contents.
+
+## Companion repositories
+
+Documentation is part of the change, not follow-up work. The client's documentation spans three repositories, and a change keeps each of them current:
+
+- **This repository** holds current canon and consumer documentation, complete for a reader without access to the private archive.
+- **`localstack-dotnet/localstack-internal`** (private) holds individually reviewed dated evidence under `products/localstack-dotnet-client/`. New research, plans, and handoffs that are worth keeping go there under its ingestion policy, in the same working session as the change they support; archived text is never current policy or approval.
+- **`localstack-dotnet/.github`** holds the [organization roadmap](https://github.com/localstack-dotnet/.github/blob/main/ROADMAP.md). When work starts, lands, or is deferred, update it in a companion pull request.
+
+Cite private evidence from public canon by date and title, never by a private path.

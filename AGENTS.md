@@ -9,6 +9,7 @@ This public repository owns its current behavior, terminology, and accepted deci
 - Keep the [root README](README.md) and the two tracked package README copies consistent; both packages include that text. Check the actual package feed before claiming a declared version is published.
 - Preserve intentional Extensions consumer minimums during routine dependency refreshes; follow the [maintenance policy](docs/engineering/maintenance-playbook.md#1-refresh-dependencies-deliberately) and [platform contract](docs/architecture/platform-and-packaging.md) for their ownership and evidence.
 - Before running Cake packaging tasks, read [quality gates](docs/engineering/quality-gates.md): Extensions package preparation edits a tracked project file.
+- Docs are first-class: a change is not complete until its documentation is. In the same change, update the owner of every fact it alters, here or in a [companion repository](docs/engineering/documentation.md#companion-repositories): dated research, plans, and handoffs go to the private `localstack-dotnet/localstack-internal` archive under `products/localstack-dotnet-client/`, and open work to the [organization roadmap](https://github.com/localstack-dotnet/.github/blob/main/ROADMAP.md) in `localstack-dotnet/.github`. Public canon stays complete without the archive.
 - If sources conflict, follow the [deviation protocol](docs/engineering/deviation-protocol.md). Make a public support claim only as far as the evidence reaches, and say what you did not verify.
 
 ## Task routing
@@ -21,6 +22,7 @@ This public repository owns its current behavior, terminology, and accepted deci
 | Tests, build scripts, Docker, CI, or release-task safety | [Quality gates](docs/engineering/quality-gates.md) and the relevant task/workflow source |
 | Routine maintenance, catalog refreshes, image selection, or consumer dogfooding | [Maintenance playbook](docs/engineering/maintenance-playbook.md) |
 | Document placement, dates, relays, or historical evidence | [Documentation ownership](docs/engineering/documentation.md) |
+| Open work, priorities, or proposals | [Organization roadmap](https://github.com/localstack-dotnet/.github/blob/main/ROADMAP.md) |
 | An accepted, hard-to-reverse design choice | [ADR eligibility and records](docs/adr/README.md) |
 | Consumer setup and package installation | [README](README.md) |
 | Contributions and PRs | [Contribution guide](.github/CONTRIBUTING.md) |
